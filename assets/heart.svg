@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="80 20 440 400">
+  <!-- the MilkLove heart: Milk's green "m" on top, Love's pink "L" below with its two dashes; a white sticker edge -->
+  <g fill="none" stroke-linejoin="round">
+    <g stroke="#fff" stroke-width="46">
+      <path d="M127 186 A 88 88 0 0 1 303 176 A 84 84 0 0 1 471 176 L 471 166"/>
+      <path d="M126 208 L 300 374 L 374 302"/><path d="M393 284 L 410 267"/><path d="M428 250 L 468 210"/>
+    </g>
+    <path d="M127 186 A 88 88 0 0 1 303 176 A 84 84 0 0 1 471 176 L 471 166" stroke="#a8e27c" stroke-width="29"/>
+    <g stroke="#f08db0" stroke-width="27">
+      <path d="M126 208 L 300 374 L 374 302"/><path d="M393 284 L 410 267"/><path d="M428 250 L 468 210"/>
+    </g>
+  </g>
+</svg>

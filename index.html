@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML WorkHelp</title>
+<meta name="description" content="陪你工作的 MilkLove 夥伴：桌面夥伴、工作時鐘、番茄鐘、提醒與活動、數據。A MilkLove work buddy for your desktop.">
+<link rel="icon" href="assets/heart.svg" type="image/svg+xml">
+<style>
+:root { --bg:#f4f7f2; --card:#fff; --ink:#1e2a22; --muted:#66746a; --line:#dfe6dc; --green:#7fc79a; --green-ink:#0f2416; --pink:#ef8fb0; --soft:#eaf3ec; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#171c19; --card:#212824; --ink:#e8efe9; --muted:#9aa89e; --line:#2f3a33; --green:#8fd0a8; --green-ink:#0e1a12; --pink:#f3a3c0; --soft:#26302a; } }
+:root[data-theme="dark"] { --bg:#171c19; --card:#212824; --ink:#e8efe9; --muted:#9aa89e; --line:#2f3a33; --green:#8fd0a8; --green-ink:#0e1a12; --pink:#f3a3c0; --soft:#26302a; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 -apple-system, "PingFang TC", "Noto Sans TC", "Segoe UI", sans-serif; }
+a { color:inherit; }
+.wrap { max-width:1040px; margin:0 auto; padding:0 16px; }
+header.top { display:flex; align-items:center; gap:10px; padding:14px 0; }
+header.top img { width:30px; } header.top b { font-size:17px; margin-right:auto; }
+.chip { border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px; padding:4px 12px; font:inherit; font-size:14px; cursor:pointer; }
+.hero { display:grid; grid-template-columns:1.2fr 1fr; gap:28px; align-items:center; padding:36px 0 30px; }
+.hero h1 { font-size:42px; line-height:1.15; margin:0 0 10px; }
+.hero p { color:var(--muted); font-size:18px; margin:0 0 20px; }
+.hero .art { justify-self:center; width:min(300px, 80%); filter:drop-shadow(0 18px 30px rgba(0,0,0,.18)); }
+.dl { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.btn { display:inline-flex; align-items:center; gap:8px; border:0; border-radius:12px; padding:12px 18px; font:inherit; font-weight:650; text-decoration:none; cursor:pointer; background:var(--soft); color:var(--ink); }
+.btn.main { background:var(--green); color:var(--green-ink); font-size:17px; padding:14px 22px; }
+.btn[aria-disabled="true"] { opacity:.55; cursor:default; }
+.small { font-size:13.5px; } .muted { color:var(--muted); }
+section { padding:34px 0; border-top:1px solid var(--line); }
+section h2 { font-size:26px; margin:0 0 14px; }
+.grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 18px; }
+.card b { display:block; font-size:17px; margin-bottom:4px; }
+.card p { margin:0; color:var(--muted); font-size:15px; }
+.plat { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+.plat .card.mine { outline:2px solid var(--green); }
+.plat .card .dl { margin-top:10px; }
+.pics { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.pics figure { margin:0; } .pics img { width:100%; border-radius:12px; border:1px solid var(--line); display:block; }
+.pics figcaption { font-size:14px; color:var(--muted); margin-top:4px; }
+form.sign { display:grid; gap:10px; max-width:560px; }
+form.sign .row { display:flex; gap:8px; flex-wrap:wrap; }
+form.sign input[type=email] { flex:1; min-width:220px; font:inherit; padding:11px 14px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--ink); }
+form.sign label { display:flex; gap:8px; align-items:flex-start; font-size:15px; }
+.promise { background:var(--soft); border-radius:14px; padding:12px 16px; font-size:14.5px; }
+.promise ul { margin:6px 0 0; padding-left:20px; }
+.hist .v { display:grid; grid-template-columns:110px 1fr; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line); }
+.hist .v b { font-size:17px; }
+footer { padding:28px 0 50px; color:var(--muted); font-size:14px; border-top:1px solid var(--line); }
+.note { border-left:3px solid var(--pink); padding:4px 0 4px 12px; margin:12px 0 0; font-size:14.5px; }
+#thanks { color:var(--green); font-weight:650; }
+@media (max-width:820px) { .hero { grid-template-columns:1fr; } .hero .art { order:-1; width:180px; } .hero h1 { font-size:32px; } .grid, .plat, .pics { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><img src="assets/heart.svg" alt=""><b>ML WorkHelp</b>
+    <button class="chip" id="lang" type="button">English</button></header>
+
+  <div class="hero">
+    <div>
+      <h1 data-en="A MilkLove buddy for your work day">陪你工作的 MilkLove 夥伴</h1>
+      <p data-en="Milk and Love keep you company on your desktop: a work clock, the Pomodoro, reminders and events, and your week, month and year in data. Free, and everything stays on your computer.">Milk 和 Love 在桌面上陪你：工作時鐘、番茄鐘、提醒與活動，還有一週、一個月、一年的數據。免費，資料都只留在你的電腦裡。</p>
+      <div class="dl" id="hero-dl"></div>
+      <p class="small muted" id="ver"></p>
+    </div>
+    <img class="art" src="assets/heart.svg" alt="">
+  </div>
+
+  <section id="what">
+    <h2 data-en="What it does">可以做什麼</h2>
+    <div class="grid">
+      <div class="card"><b data-en="🧸 Buddies on your desktop">🧸 桌面夥伴</b><p data-en="Milk and Love walk along your screen, nap when you're away, and hold up your reminders with a Thai word. Pick the stickers they use.">Milk 和 Love 在螢幕上走來走去、你離開時打瞌睡，提醒時舉牌，附一個泰文單字。可以選她們用哪些貼圖。</p></div>
+      <div class="card"><b data-en="⏱ A work clock">⏱ 工作時鐘</b><p data-en="It counts while you're at the computer, task by task. Fix anything later, even past days.">你在電腦前時就計時，一件事一件事記下來。之後都可以改，連以前的日子也可以。</p></div>
+      <div class="card"><b data-en="🍅 The Pomodoro">🍅 番茄鐘</b><p data-en="Classic 25 · 5 or your own lengths, a little timer in the menu bar, and a MilkLove video on the break.">經典 25 · 5 或自訂長度，選單列小倒數，休息時推薦一支 MilkLove 影片。</p></div>
+      <div class="card"><b data-en="⏰ Reminders & events">⏰ 提醒與活動</b><p data-en="In step with Apple Reminders and Calendar. It rings with the chime, or with Milk and Love calling each other.">和 Apple 提醒事項、行事曆同步。時間到會響：內建的叮，或 Milk 和 Love 互相叫名字。</p></div>
+      <div class="card"><b data-en="📊 Data">📊 數據</b><p data-en="A week, a month or a year: what stands out, a calendar of your days, the ranking of what you did most.">一週、一個月或一年：重點觀察、每天的日曆、做最多的事排行榜。</p></div>
+      <div class="card"><b data-en="✂️ Your own stickers">✂️ 你自己的貼圖</b><p data-en="Add photos you're allowed to use and the app cuts them out. Every photo shows who took it.">加入你有權使用的照片，App 會自動去背。每張照片都標明拍攝者。</p></div>
+    </div>
+    <div class="pics" style="margin-top:16px">
+      <figure><img data-src-zh="assets/welcome-data-cal-zh.jpg" data-src-en="assets/welcome-data-cal-en.jpg" src="assets/welcome-data-cal-zh.jpg" alt=""><figcaption data-en="Data · a month: each day's focus and hours">數據 · 月：每天的主題和時數</figcaption></figure>
+      <figure><img data-src-zh="assets/welcome-data-day-zh.jpg" data-src-en="assets/welcome-data-day-en.jpg" src="assets/welcome-data-day-zh.jpg" alt=""><figcaption data-en="Click a day: its log, to change">點一天：那天的紀錄，可以改</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="download">
+    <h2 data-en="Download">下載</h2>
+    <div class="plat" id="plats"></div>
+    <p class="note" data-en="On a Mac, the first time you open it macOS may say it can't check the developer: right-click the app, choose Open, then Open again. (This goes away once the app is signed.)">Mac 第一次打開時，可能會說「無法確認開發者」：在 App 上按右鍵 → 打開，再按一次打開。（App 簽署之後就不會再出現。）</p>
+  </section>
+
+  <section id="news">
+    <h2 data-en="New versions &amp; important notices">新版本與重要通知</h2>
+    <p class="muted" data-en="The app asks for your email when you first open it. Haven't got it yet, or want news before you install? Leave it here: we write when there's a new version, or something you need to know (for example, if a rights holder asks for a photo or sticker to be removed). That's all.">App 第一次打開時會請你留下 email。還沒裝、或想先收到消息？也可以在這裡留下：有新版本、或有需要你注意的事（例如照片或貼圖的權利人要求移除內容），我們會寫信告訴你。就這樣。</p>
+    <form class="sign" id="sign">
+      <div class="row"><input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email">
+        <button class="btn main" type="submit" data-en="Tell me">通知我</button></div>
+      <label><input type="checkbox" name="ok" required> <span data-en="I'd like emails about ML WorkHelp's new versions and important updates.">我想收到 ML WorkHelp 新版本和重要更新的 email。</span></label>
+      <div class="promise"><b data-en="Our promise">我們的承諾</b>
+        <ul>
+          <li data-en="Only about ML WorkHelp: new versions and important updates. No ads, no spam.">只寄 ML WorkHelp 的新版本和重要更新。沒有廣告、不會寄垃圾信。</li>
+          <li data-en="Never shared, sold or given to anyone, and never used for anything else.">絕不分享、出售或提供給任何人，也不會拿來做其他用途。</li>
+          <li data-en="Stop any time: reply &quot;stop&quot; to any of our emails and we'll delete your address.">隨時可以取消：回覆任何一封信說「取消」，我們就會刪除你的 email。</li>
+        </ul></div>
+      <p id="thanks" hidden data-en="Thank you! We'll write when there's news.">謝謝你！有消息時我們會寫信給你。</p>
+    </form>
+  </section>
+
+  <section id="versions">
+    <h2 data-en="Versions">版本紀錄</h2>
+    <div class="hist" id="hist"></div>
+    <p class="small muted" data-en="The app looks for a new version once a day by reading a small file on this page; nothing about you is sent. You can switch it off in Settings › About.">App 每天會讀取這個網頁上的一個小檔案，看看有沒有新版本；不會送出任何關於你的資料。可以在 設定 › 關於 關掉。</p>
+  </section>
+
+  <section id="privacy">
+    <h2 data-en="Privacy">隱私</h2>
+    <p data-en="Your work log, reminders, photos and settings stay on your computer. The app doesn't have an account, doesn't track you and doesn't send your work anywhere. Apple Reminders and Calendar are only read and written on your own Mac.">你的工作紀錄、提醒、照片和設定都只留在你的電腦裡。App 沒有帳號、不追蹤你，也不會把你的工作資料送到任何地方。Apple 提醒事項和行事曆只在你自己的 Mac 上讀寫。</p>
+    <p data-en="The one thing that leaves your computer is the email you give when you first open the app: it goes to our mailing list (Buttondown), only so we can tell you about new versions and things you need to know, like a photo's rights holder asking for it to be removed. It's never shared, sold or used for anything else, and every email has an unsubscribe link.">唯一會離開你電腦的，是第一次打開 App 時填的 email：它會加到我們的通知名單（Buttondown），只用來告訴你新版本和需要注意的事，例如照片的權利人要求移除照片。絕不分享、出售或做其他用途，每封信都有取消訂閱的連結。</p>
+  </section>
+</div>
+<footer><div class="wrap">
+  <p data-en="ML WorkHelp is an unofficial fan project, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app; to have one removed or its credit fixed, write to us.">ML WorkHelp 是非官方的粉絲作品，和 GMMTV、Milk、Love 都沒有關係。每張照片都屬於它的拍攝者，App 裡都有標明；想移除照片或修正來源，請寫信給我們。</p>
+  <p><span data-en="Contact">聯絡</span>: <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> · <a href="https://x.com/alitasdepollos0" rel="noopener">@alitasdepollos0</a></p>
+</div></footer>
+<script>
+// Where the sign-up goes: a form service's address (Google Forms, Formspree, Buttondown…). Until it's set,
+// the form opens an email to us instead.
+const SIGNUP_URL = "https://buttondown.com/api/emails/embed-subscribe/alitasdepollos";
+const CONTACT = "alitasdepollos01@gmail.com";
+let zh = !/^en/i.test(navigator.language);
+try { const l = localStorage.getItem("lang"); if (l) zh = l === "zh"; } catch { /* (no storage) */ }
+const T = (en, z) => (zh ? z : en);
+let latest = null;
+const os = /Windows/i.test(navigator.userAgent) ? "windows" : /Mac/i.test(navigator.userAgent) ? "mac" : "other";
+const PLATS = [
+  { id: "mac", name: () => "Mac", sub: () => T("macOS 12 or later", "macOS 12 以上"), files: [["mac-arm64", () => T("Apple Silicon (M1–M4)", "Apple 晶片（M1–M4）")], ["mac-x64", () => T("Intel", "Intel 處理器")]] },
+  { id: "windows", name: () => "Windows", sub: () => T("Windows 10 or 11", "Windows 10 或 11"), files: [["windows", () => T("Download", "下載")]] },
+  { id: "vscode", name: () => T("VS Code buddies", "VS Code 夥伴"), sub: () => T("The buddies around your editor", "在編輯器旁邊陪你"), files: [["vscode", () => T("Get the extension", "安裝擴充功能")]] },
+];
+function link(key, label, main) {
+  const url = latest?.files?.[key];
+  return url ? `<a class="btn${main ? " main" : ""}" href="${url}">⬇︎ ${label}</a>` : `<span class="btn" aria-disabled="true">${label} · ${T("coming soon", "即將推出")}</span>`;
+}
+function draw() {
+  document.documentElement.lang = zh ? "zh-Hant" : "en";
+  document.querySelectorAll("[data-en]").forEach((e) => { if (!e.dataset.zh) e.dataset.zh = e.innerHTML; e.innerHTML = zh ? e.dataset.zh : e.dataset.en; });
+  document.querySelectorAll("[data-src-zh]").forEach((e) => { e.src = zh ? e.dataset.srcZh : e.dataset.srcEn; });
+  document.getElementById("lang").textContent = zh ? "English" : "繁體中文";
+  const mac = os !== "windows", arm = true; // (a Mac's chip can't be told from a page reliably: Apple Silicon first)
+  document.getElementById("hero-dl").innerHTML = os === "windows" ? link("windows", T("Download for Windows", "下載 Windows 版"), true)
+    : link("mac-arm64", T("Download for Mac", "下載 Mac 版"), true) + `<a class="btn" href="#download">${T("Intel Mac, Windows, VS Code", "Intel Mac、Windows、VS Code")}</a>`;
+  document.getElementById("ver").textContent = latest ? T(`Version ${latest.version} · ${latest.released}`, `版本 ${latest.version} · ${latest.released}`) : "";
+  document.getElementById("plats").innerHTML = PLATS.map((p) => `<div class="card${p.id === os || (p.id === "mac" && os === "mac") ? " mine" : ""}"><b>${p.name()}</b><p>${p.sub()}</p>
+    <div class="dl">${p.files.map(([k, l], i) => link(k, l(), i === 0 && p.id === os)).join("")}</div></div>`).join("");
+  document.getElementById("hist").innerHTML = (latest?.history || []).map((h) => `<div class="v"><div><b>${h.version}</b><div class="small muted">${h.date}</div></div><div>${zh ? h.zh : h.en}</div></div>`).join("");
+}
+document.getElementById("lang").addEventListener("click", () => { zh = !zh; try { localStorage.setItem("lang", zh ? "zh" : "en"); } catch { /* fine */ } draw(); });
+document.getElementById("sign").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = e.target.email.value.trim();
+  if (!SIGNUP_URL) { location.href = `mailto:${CONTACT}?subject=${encodeURIComponent("ML WorkHelp: new versions")}&body=${encodeURIComponent(T("Please tell me about new versions: ", "有新版本時請通知我：") + email)}`; return; }
+  try { await fetch(SIGNUP_URL, { method: "POST", mode: "no-cors", body: new URLSearchParams({ email, tag: "page" }) }); } catch { /* (still thank them: a no-cors post can't be read back) */ }
+  document.getElementById("thanks").hidden = false; e.target.email.value = "";
+});
+fetch("latest.json", { cache: "no-store" }).then((r) => r.json()).then((j) => { latest = j; draw(); }).catch(() => draw());
+draw();
+</script>
+</body>
+</html>
