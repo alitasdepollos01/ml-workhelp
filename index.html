@@ -1,166 +1,445 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ML WorkHelp</title>
-<meta name="description" content="陪你工作的 MilkLove 夥伴：桌面夥伴、工作時鐘、番茄鐘、提醒與活動、數據。A MilkLove work buddy for your desktop.">
+<meta name="description" content="A MilkLove work buddy for your desktop: a work clock or the Pomodoro, a focus screen, reminders and events, and your week, month and year in data. 陪你工作的 MilkLove 夥伴。">
 <link rel="icon" href="assets/heart.svg" type="image/svg+xml">
 <style>
-:root { --bg:#f4f7f2; --card:#fff; --ink:#1e2a22; --muted:#66746a; --line:#dfe6dc; --green:#7fc79a; --green-ink:#0f2416; --pink:#ef8fb0; --soft:#eaf3ec; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#171c19; --card:#212824; --ink:#e8efe9; --muted:#9aa89e; --line:#2f3a33; --green:#8fd0a8; --green-ink:#0e1a12; --pink:#f3a3c0; --soft:#26302a; } }
-:root[data-theme="dark"] { --bg:#171c19; --card:#212824; --ink:#e8efe9; --muted:#9aa89e; --line:#2f3a33; --green:#8fd0a8; --green-ink:#0e1a12; --pink:#f3a3c0; --soft:#26302a; }
+:root { --bg:#f4f7f2; --card:#fff; --ink:#1e2a22; --muted:#5f6d63; --line:#dfe6dc; --green:#7fc79a; --green-d:#3f7d58; --green-ink:#0f2416; --pink:#ef8fb0; --pink-soft:#fbe6ee; --soft:#eaf3ec; --shadow:0 18px 40px -18px rgba(20,40,28,.35); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#151a17; --card:#1f2622; --ink:#e8efe9; --muted:#9aa89e; --line:#2f3a33; --green:#8fd0a8; --green-d:#8fd0a8; --green-ink:#0e1a12; --pink:#f3a3c0; --pink-soft:#3a2730; --soft:#253029; --shadow:0 18px 40px -18px rgba(0,0,0,.7); } }
+:root[data-theme="dark"] { --bg:#151a17; --card:#1f2622; --ink:#e8efe9; --muted:#9aa89e; --line:#2f3a33; --green:#8fd0a8; --green-d:#8fd0a8; --green-ink:#0e1a12; --pink:#f3a3c0; --pink-soft:#3a2730; --soft:#253029; }
 * { box-sizing:border-box; }
-body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 -apple-system, "PingFang TC", "Noto Sans TC", "Segoe UI", sans-serif; }
+html { scroll-behavior:smooth; scroll-padding-top:70px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } *, *::before, *::after { animation:none !important; transition:none !important; } }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 -apple-system, "PingFang TC", "Noto Sans TC", "Noto Sans Thai", "Segoe UI", sans-serif; }
 a { color:inherit; }
-.wrap { max-width:1040px; margin:0 auto; padding:0 16px; }
-header.top { display:flex; align-items:center; gap:10px; padding:14px 0; }
-header.top img { width:30px; } header.top b { font-size:17px; margin-right:auto; }
-.chip { border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px; padding:4px 12px; font:inherit; font-size:14px; cursor:pointer; }
-.hero { display:grid; grid-template-columns:1.2fr 1fr; gap:28px; align-items:center; padding:36px 0 30px; }
-.hero h1 { font-size:42px; line-height:1.15; margin:0 0 10px; }
-.hero p { color:var(--muted); font-size:18px; margin:0 0 20px; }
-.hero .art { justify-self:center; width:min(300px, 80%); filter:drop-shadow(0 18px 30px rgba(0,0,0,.18)); }
-.dl { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+img { max-width:100%; }
+.wrap { max-width:1100px; margin:0 auto; padding:0 16px; }
+/* top bar */
+header.top { position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+header.top .wrap { display:flex; align-items:center; gap:18px; padding-top:10px; padding-bottom:10px; }
+header.top .brand { display:flex; align-items:center; gap:8px; font-weight:700; text-decoration:none; margin-right:auto; }
+header.top .brand img { width:26px; }
+header.top nav { display:flex; gap:16px; font-size:14.5px; }
+header.top nav a { text-decoration:none; color:var(--muted); } header.top nav a:hover { color:var(--ink); }
+.langs { display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--card); }
+.langs button { border:0; background:none; font:inherit; font-size:13.5px; padding:4px 10px; cursor:pointer; color:var(--muted); }
+.langs button.on { background:var(--green); color:var(--green-ink); font-weight:650; }
+@media (max-width:820px) { header.top nav { display:none; } }
+/* buttons */
 .btn { display:inline-flex; align-items:center; gap:8px; border:0; border-radius:12px; padding:12px 18px; font:inherit; font-weight:650; text-decoration:none; cursor:pointer; background:var(--soft); color:var(--ink); }
 .btn.main { background:var(--green); color:var(--green-ink); font-size:17px; padding:14px 22px; }
-.btn[aria-disabled="true"] { opacity:.55; cursor:default; }
+.btn[aria-disabled="true"] { opacity:.6; cursor:default; }
+.dl { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
 .small { font-size:13.5px; } .muted { color:var(--muted); }
-section { padding:34px 0; border-top:1px solid var(--line); }
-section h2 { font-size:26px; margin:0 0 14px; }
-.grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
-.card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 18px; }
-.card b { display:block; font-size:17px; margin-bottom:4px; }
-.card p { margin:0; color:var(--muted); font-size:15px; }
-.plat { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+/* hero */
+.hero { display:grid; grid-template-columns:1fr 1.15fr; gap:40px; align-items:center; padding:48px 0 40px; }
+.hero h1 { font-size:46px; line-height:1.12; margin:0 0 14px; letter-spacing:-.01em; }
+.hero .tag { color:var(--muted); font-size:18.5px; margin:0 0 22px; }
+.hero .facts { display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:14px; font-size:14px; color:var(--muted); }
+.hero .facts span::before { content:""; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-right:7px; vertical-align:1px; }
+.stage { position:relative; }
+.win { border-radius:14px; overflow:hidden; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); }
+.win .bar { height:26px; display:flex; gap:6px; align-items:center; padding:0 10px; background:color-mix(in srgb, var(--card) 80%, var(--line)); border-bottom:1px solid var(--line); }
+.win .bar i { width:10px; height:10px; border-radius:50%; background:#f06b5f; } .win .bar i:nth-child(2) { background:#f5bd4f; } .win .bar i:nth-child(3) { background:#5fc455; }
+.win img { display:block; width:100%; }
+.stage .buddy { position:absolute; left:-34px; bottom:-34px; width:46%; border-radius:16px; overflow:hidden; border:4px solid var(--card); box-shadow:var(--shadow); transform:rotate(-3deg); }
+.stage .buddy img { display:block; }
+@media (max-width:880px) { .hero { grid-template-columns:1fr; padding-top:28px; } .hero h1 { font-size:34px; } .stage .buddy { left:-6px; bottom:-24px; width:42%; } }
+/* sections */
+section { padding:64px 0; border-top:1px solid var(--line); }
+section > .wrap > h2, .sec-h { font-size:32px; line-height:1.2; margin:0 0 10px; letter-spacing:-.01em; }
+.lead { color:var(--muted); font-size:17.5px; max-width:760px; margin:0 0 30px; }
+.eyebrow { text-transform:uppercase; letter-spacing:.09em; font-size:12.5px; font-weight:700; color:var(--green-d); margin:0 0 8px; }
+/* the day, step by step */
+.steps { display:grid; gap:64px; counter-reset:step; }
+.step { display:grid; grid-template-columns:1fr 1.25fr; gap:44px; align-items:center; }
+.step:nth-child(even) { grid-template-columns:1.25fr 1fr; } .step:nth-child(even) .txt { order:2; }
+.step .txt h3 { font-size:25px; line-height:1.25; margin:0 0 10px; }
+.step .txt h3::before { counter-increment:step; content:counter(step); display:inline-grid; place-items:center; width:30px; height:30px; border-radius:50%; background:var(--green); color:var(--green-ink); font-size:15px; margin-right:10px; vertical-align:3px; }
+.step .txt p { color:var(--muted); margin:0 0 10px; }
+.step ul { margin:0; padding-left:20px; color:var(--muted); } .step li { margin:4px 0; } .step li b { color:var(--ink); }
+.badge { display:inline-block; font-size:12px; font-weight:700; letter-spacing:.02em; padding:2px 9px; border-radius:999px; background:var(--pink-soft); color:var(--pink); margin-left:8px; vertical-align:4px; }
+.tabs { display:flex; gap:6px; margin:0 0 10px; }
+.tabs button { border:1px solid var(--line); background:var(--card); color:var(--muted); border-radius:999px; padding:4px 12px; font:inherit; font-size:14px; cursor:pointer; }
+.tabs button.on { background:var(--green); color:var(--green-ink); border-color:transparent; font-weight:650; }
+@media (max-width:880px) { .step, .step:nth-child(even) { grid-template-columns:1fr; gap:18px; } .step:nth-child(even) .txt { order:0; } }
+.more { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:56px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; }
+.card b { display:block; font-size:17px; margin-bottom:4px; } .card p { margin:0; color:var(--muted); font-size:15px; }
+@media (max-width:880px) { .more { grid-template-columns:1fr; } }
+/* two apps */
+.pair { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.app { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:24px; display:grid; gap:12px; align-content:start; }
+.app.ml { border:2px solid var(--green); }
+.app h3 { margin:0; font-size:24px; } .app .for { color:var(--muted); margin:0; }
+.app .who { font-weight:650; font-size:14px; display:inline-block; padding:3px 10px; border-radius:999px; background:var(--soft); justify-self:start; }
+.app ul { margin:0; padding-left:20px; } .app li { margin:3px 0; }
+.app .rec { background:var(--soft); border-radius:12px; padding:10px 14px; font-size:15px; }
+.sep { margin:18px 0 0; padding:14px 18px; border-left:4px solid var(--pink); background:var(--card); border-radius:0 12px 12px 0; }
+.cmp { width:100%; border-collapse:collapse; margin-top:22px; font-size:15px; background:var(--card); border-radius:14px; overflow:hidden; border:1px solid var(--line); }
+.cmp th, .cmp td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+.cmp thead th { background:var(--soft); } .cmp tbody th { font-weight:600; color:var(--muted); width:24%; }
+.cmp td.no { color:var(--muted); }
+@media (max-width:880px) { .pair { grid-template-columns:1fr; } .cmp { font-size:14px; } .cmp th, .cmp td { padding:8px; } }
+/* DevHelp picture: an editor with its buddy */
+.dev { display:grid; grid-template-columns:1.25fr 1fr; gap:40px; align-items:center; }
+@media (max-width:880px) { .dev { grid-template-columns:1fr; } }
+.editor { position:relative; border-radius:14px; overflow:hidden; background:#1e2228; color:#c9d1d9; box-shadow:var(--shadow); font:13px/1.7 ui-monospace, Menlo, monospace; aspect-ratio:16/10.5; display:grid; grid-template-columns:34% 1fr; grid-template-rows:26px 1fr 22px; }
+.editor .tb { grid-column:1/-1; background:#2a2f37; display:flex; gap:6px; align-items:center; padding:0 10px; }
+.editor .tb i { width:10px; height:10px; border-radius:50%; background:#f06b5f; } .editor .tb i:nth-child(2) { background:#f5bd4f; } .editor .tb i:nth-child(3) { background:#5fc455; }
+.editor .side { background:#252a31; border-right:1px solid #333a44; padding:10px; display:grid; align-content:start; gap:8px; font:12px/1.4 -apple-system, sans-serif; }
+.editor .side .h { color:#8b96a3; font-size:10.5px; letter-spacing:.08em; }
+.editor .scene { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:480/150; background:#eaf0f7; }
+.editor .scene img.bg { width:100%; height:100%; object-fit:cover; display:block; }
+.editor .scene img.m { position:absolute; bottom:6%; left:38%; height:78%; }
+.editor .word { background:#fff8e6; color:#3a3022; border-radius:8px; padding:7px 9px; }
+.editor .word b { font-size:15px; display:block; } .editor .word span { font-size:11px; color:#6b5d48; }
+.editor .code { padding:12px 16px; white-space:pre; overflow:hidden; }
+.editor .code .k { color:#ff7b72; } .editor .code .s { color:#a5d6ff; } .editor .code .f { color:#d2a8ff; } .editor .code .c { color:#6e7781; }
+.editor .status { grid-column:1/-1; background:#3f7d58; color:#fff; display:flex; gap:16px; align-items:center; padding:0 10px; font:11.5px/1 -apple-system, sans-serif; }
+.editor .walker { position:absolute; bottom:22px; height:16%; left:36%; animation:walk 14s linear infinite alternate; }
+.editor .walker img { height:100%; animation:bob .5s ease-in-out infinite alternate; }
+@keyframes walk { from { left:36%; } to { left:86%; } }
+@keyframes bob { from { transform:translateY(0); } to { transform:translateY(-6%); } }
+.mascots { display:flex; gap:6px; flex-wrap:wrap; margin:12px 0 0; }
+.mascots img { height:58px; }
+.soon { display:inline-block; font-weight:700; font-size:13px; padding:4px 11px; border-radius:999px; background:var(--pink-soft); color:var(--pink); }
+/* download */
+.plat { display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; }
 .plat .card.mine { outline:2px solid var(--green); }
 .plat .card .dl { margin-top:10px; }
-.pics { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-.pics figure { margin:0; } .pics img { width:100%; border-radius:12px; border:1px solid var(--line); display:block; }
-.pics figcaption { font-size:14px; color:var(--muted); margin-top:4px; }
-form.sign { display:grid; gap:10px; max-width:560px; }
+@media (max-width:880px) { .plat { grid-template-columns:1fr; } }
+.note { border-left:3px solid var(--pink); padding:4px 0 4px 12px; margin:14px 0 0; font-size:14.5px; }
+/* photos */
+.perm { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 22px; }
+.perm p { margin:0 0 10px; }
+.credits { columns:3; column-gap:24px; padding:0; margin:14px 0 0; list-style:none; font-size:15px; }
+.credits li { break-inside:avoid; margin:0 0 6px; } .credits a { color:var(--green-d); }
+@media (max-width:700px) { .credits { columns:1; } }
+/* sign-up */
+form.sign { display:grid; gap:10px; max-width:600px; }
 form.sign .row { display:flex; gap:8px; flex-wrap:wrap; }
 form.sign input[type=email] { flex:1; min-width:220px; font:inherit; padding:11px 14px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--ink); }
 form.sign label { display:flex; gap:8px; align-items:flex-start; font-size:15px; }
-.promise { background:var(--soft); border-radius:14px; padding:12px 16px; font-size:14.5px; }
-.promise ul { margin:6px 0 0; padding-left:20px; }
+.promise { background:var(--soft); border-radius:14px; padding:12px 16px; font-size:14.5px; } .promise ul { margin:6px 0 0; padding-left:20px; }
+#thanks { color:var(--green-d); font-weight:650; }
 .hist .v { display:grid; grid-template-columns:110px 1fr; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line); }
 .hist .v b { font-size:17px; }
-footer { padding:28px 0 50px; color:var(--muted); font-size:14px; border-top:1px solid var(--line); }
-.note { border-left:3px solid var(--pink); padding:4px 0 4px 12px; margin:12px 0 0; font-size:14.5px; }
-#thanks { color:var(--green); font-weight:650; }
-@media (max-width:820px) { .hero { grid-template-columns:1fr; } .hero .art { order:-1; width:180px; } .hero h1 { font-size:32px; } .grid, .plat, .pics { grid-template-columns:1fr; } }
+.th-note { background:var(--pink-soft); border-radius:12px; padding:10px 14px; font-size:14px; margin:18px 0 0; }
+footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px solid var(--line); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top"><img src="assets/heart.svg" alt=""><b>ML WorkHelp</b>
-    <button class="chip" id="lang" type="button">English</button></header>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#"><img src="assets/heart.svg" alt="">ML WorkHelp</a>
+  <nav>
+    <a href="#day" data-en="Features" data-zh="功能" data-th="ฟีเจอร์">Features</a>
+    <a href="#two" data-en="ML WorkHelp or DevHelp?" data-zh="ML WorkHelp 還是 DevHelp？" data-th="ML WorkHelp หรือ DevHelp?">ML WorkHelp or DevHelp?</a>
+    <a href="#download" data-en="Download" data-zh="下載" data-th="ดาวน์โหลด">Download</a>
+    <a href="#photos" data-en="Photos" data-zh="照片" data-th="ภาพถ่าย">Photos</a>
+  </nav>
+  <div class="langs" role="group" aria-label="Language"><button type="button" data-l="en">EN</button><button type="button" data-l="zh">中文</button><button type="button" data-l="th">ไทย</button></div>
+</div></header>
 
+<main>
+<div class="wrap">
   <div class="hero">
     <div>
-      <h1 data-en="A MilkLove buddy for your work day">陪你工作的 MilkLove 夥伴</h1>
-      <p data-en="Milk and Love keep you company on your desktop: a work clock, the Pomodoro, reminders and events, and your week, month and year in data. Free, and everything stays on your computer.">Milk 和 Love 在桌面上陪你：工作時鐘、番茄鐘、提醒與活動，還有一週、一個月、一年的數據。免費，資料都只留在你的電腦裡。</p>
+      <h1 data-en="A MilkLove buddy for your work day" data-zh="陪你工作的 MilkLove 夥伴" data-th="MilkLove เพื่อนคู่ใจในวันทำงาน">A MilkLove buddy for your work day</h1>
+      <p class="tag" data-en="A work clock or the Pomodoro, a focus screen, reminders and events, and your week, month and year in numbers, with Milk and Love keeping you company on your screen."
+        data-zh="工作時鐘或番茄鐘、專注全螢幕、提醒與活動，還有一週、一個月、一年的數據，Milk 和 Love 在螢幕上陪你。"
+        data-th="นาฬิกาทำงานหรือโพโมโดโร่ หน้าจอโฟกัส แจ้งเตือนและกิจกรรม และสถิติรายสัปดาห์ เดือน ปี โดยมีมิลค์กับเลิฟอยู่เป็นเพื่อนบนหน้าจอ">A work clock or the Pomodoro, a focus screen, reminders and events, and your week, month and year in numbers, with Milk and Love keeping you company on your screen.</p>
       <div class="dl" id="hero-dl"></div>
+      <div class="facts"><span data-en="Free" data-zh="免費" data-th="ฟรี">Free</span><span data-en="Mac (Windows coming)" data-zh="Mac（Windows 即將推出）" data-th="Mac (Windows เร็ว ๆ นี้)">Mac (Windows coming)</span><span data-en="Everything stays on your computer" data-zh="資料只留在你的電腦裡" data-th="ข้อมูลอยู่ในเครื่องของคุณเท่านั้น">Everything stays on your computer</span><span>English · 繁中 · ไทย</span></div>
       <p class="small muted" id="ver"></p>
     </div>
-    <img class="art" src="assets/heart.svg" alt="">
+    <div class="stage">
+      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="today" alt="" width="1440" height="891"></div>
+      <div class="buddy"><img src="assets/shots/buddy.jpg" alt="" width="494" height="454"></div>
+    </div>
+  </div>
+</div>
+
+<!-- A day with ML WorkHelp -->
+<section id="day"><div class="wrap">
+  <p class="eyebrow" data-en="How it works" data-zh="怎麼用" data-th="ใช้งานอย่างไร">How it works</p>
+  <h2 data-en="A day with ML WorkHelp" data-zh="和 ML WorkHelp 一起的一天" data-th="หนึ่งวันกับ ML WorkHelp">A day with ML WorkHelp</h2>
+  <p class="lead" data-en="From the morning's first task to the end of the day: here's what it does, in the order you'll meet it."
+    data-zh="從早上的第一件事到收工：照你會遇到的順序，看看它做什麼。" data-th="ตั้งแต่งานแรกตอนเช้าจนเลิกงาน นี่คือสิ่งที่แอปทำ เรียงตามลำดับที่คุณจะได้เจอ">From the morning's first task to the end of the day: here's what it does, in the order you'll meet it.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="txt">
+        <h3><span data-en="Start your day, your way" data-zh="用你的方式開始一天" data-th="เริ่มวันในแบบของคุณ">Start your day, your way</span><span class="badge" data-new></span></h3>
+        <p data-en="Pick how you keep time at the top of Today, and switch with one tap; nothing is lost, and you can undo." data-zh="在「今天」最上面選計時方式，點一下就能切換；時間不會少算，也可以復原。" data-th="เลือกวิธีจับเวลาที่ด้านบนของหน้าวันนี้ และสลับได้ในคลิกเดียว เวลาไม่หาย และย้อนกลับได้">Pick how you keep time at the top of Today, and switch with one tap; nothing is lost, and you can undo.</p>
+        <ul>
+          <li data-en="<b>Work clock</b>: counts while you're at the computer, task by task, and notices when you step away." data-zh="<b>工作時鐘</b>：你在電腦前就計時，一件事一件事記下來，離開時會發現。" data-th="<b>นาฬิกาทำงาน</b>: นับเวลาตอนที่คุณอยู่หน้าคอมทีละงาน และรู้เมื่อคุณลุกไป"><b>Work clock</b>: counts while you're at the computer, task by task, and notices when you step away.</li>
+          <li data-en="<b>Pomodoro</b>: focus rounds with breaks between; every round counts as today's work." data-zh="<b>番茄鐘</b>：一輪輪專注，中間休息；每一輪都算今天的工作。" data-th="<b>โพโมโดโร่</b>: โฟกัสเป็นรอบ มีพักระหว่างรอบ ทุกรอบนับเป็นงานของวันนี้"><b>Pomodoro</b>: focus rounds with breaks between; every round counts as today's work.</li>
+          <li data-en="Set a <b>focus of the day</b>, and fix any part of today's timeline later." data-zh="設定<b>本日主題</b>，今天的時間軸之後都可以改。" data-th="ตั้ง<b>ธีมของวัน</b> และแก้ไขไทม์ไลน์ของวันนี้ได้ภายหลัง">Set a <b>focus of the day</b>, and fix any part of today's timeline later.</li>
+        </ul>
+      </div>
+      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="today" alt="" loading="lazy" width="1440" height="891"></div>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <h3><span data-en="A focus screen for work away from the keyboard" data-zh="不在電腦前也能用的專注全螢幕" data-th="หน้าจอโฟกัส สำหรับงานที่ไม่ได้ใช้คีย์บอร์ด">A focus screen for work away from the keyboard</span><span class="badge" data-new></span></h3>
+        <p data-en="Reading, studying on paper, drawing? The clock fills the screen, and sitting still isn't counted as away." data-zh="看書、讀紙本、畫畫？時鐘放大到整個螢幕，不碰電腦也不會算成離開。" data-th="อ่านหนังสือ เรียนจากกระดาษ วาดรูป? นาฬิกาขยายเต็มจอ และการนั่งนิ่ง ๆ ไม่นับว่าไม่อยู่">Reading, studying on paper, drawing? The clock fills the screen, and sitting still isn't counted as away.</p>
+        <ul>
+          <li data-en="Your colours (mint &amp; pink, or five more), where it sits, its size and opacity." data-zh="顏色（薄荷與粉紅，還有另外五種）、位置、大小和不透明度都能自己選。" data-th="เลือกสี (มิ้นต์และชมพู หรืออีกห้าแบบ) ตำแหน่ง ขนาด และความทึบได้เอง">Your colours (mint &amp; pink, or five more), where it sits, its size and opacity.</li>
+          <li data-en="One sticker walking the edges, the photographers' photos, or nothing behind it." data-zh="後面可以放一張沿著邊走的貼圖、攝影師的照片，或什麼都不放。" data-th="ด้านหลังเป็นสติกเกอร์เดินรอบขอบจอ ภาพจากช่างภาพ หรือไม่มีอะไรเลยก็ได้">One sticker walking the edges, the photographers' photos, or nothing behind it.</li>
+        </ul>
+      </div>
+      <div class="win"><img data-shot="focus" alt="" loading="lazy" width="1440" height="900"></div>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <h3 data-en="Reminders &amp; events, just typed" data-zh="提醒與活動，直接打字就好" data-th="แจ้งเตือนและกิจกรรม แค่พิมพ์">Reminders &amp; events, just typed</h3>
+        <p data-en="Type &ldquo;Stretch in 25 min&rdquo; or &ldquo;Fan meeting Sat 14:00&ndash;17:00&rdquo; and the time is picked for you." data-zh="打「25 分鐘後 伸展」或「見面會 週六 14:00–17:00」，時間就幫你選好。" data-th="พิมพ์ &ldquo;ยืดเส้นอีก 25 นาที&rdquo; หรือ &ldquo;แฟนมีตวันเสาร์ 14:00–17:00&rdquo; แล้วแอปจะเลือกเวลาให้">Type &ldquo;Stretch in 25 min&rdquo; or &ldquo;Fan meeting Sat 14:00&ndash;17:00&rdquo; and the time is picked for you.</p>
+        <ul>
+          <li data-en="Works on its own, or in step both ways with <b>Apple Reminders</b> and <b>Apple Calendar</b>." data-zh="自己就能用，也能和 <b>Apple 提醒事項</b>、<b>Apple 行事曆</b>雙向同步。" data-th="ใช้ได้ด้วยตัวเอง หรือซิงก์สองทางกับ <b>Apple Reminders</b> และ <b>Apple Calendar</b>">Works on its own, or in step both ways with <b>Apple Reminders</b> and <b>Apple Calendar</b>.</li>
+          <li data-en="When it's time: a chime, or Milk and Love calling each other; the buddy holds it up for you." data-zh="時間到：叮一聲，或 Milk 和 Love 互相叫名字；夥伴會舉牌給你看。" data-th="เมื่อถึงเวลา: เสียงกริ่ง หรือมิลค์กับเลิฟเรียกชื่อกัน และเพื่อนจะชูป้ายให้คุณดู">When it's time: a chime, or Milk and Love calling each other; the buddy holds it up for you.</li>
+        </ul>
+      </div>
+      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="reminders" alt="" loading="lazy" width="1440" height="891"></div>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <h3 data-en="Milk &amp; Love, on your desktop" data-zh="Milk 和 Love，在你的桌面上" data-th="มิลค์กับเลิฟ บนเดสก์ท็อปของคุณ">Milk &amp; Love, on your desktop</h3>
+        <p data-en="The desktop buddy walks along your screen, naps when you're away, and shows your clock underneath." data-zh="桌面夥伴在螢幕上走來走去，你離開時打瞌睡，下面顯示你的計時。" data-th="เพื่อนบนเดสก์ท็อปเดินไปมาบนจอ งีบตอนคุณไม่อยู่ และแสดงเวลาของคุณไว้ด้านล่าง">The desktop buddy walks along your screen, naps when you're away, and shows your clock underneath.</p>
+        <ul>
+          <li data-en="Gentle break reminders, and a MilkLove video (GMMTV OFFICIAL) on your break." data-zh="溫和的休息提醒，休息時推薦一支 MilkLove 影片（GMMTV OFFICIAL）。" data-th="เตือนให้พักแบบนุ่มนวล และแนะนำคลิป MilkLove (GMMTV OFFICIAL) ตอนพัก">Gentle break reminders, and a MilkLove video (GMMTV OFFICIAL) on your break.</li>
+          <li data-en="A Thai word now and then, with how to say it." data-zh="偶爾教你一個泰文單字，附上怎麼念。" data-th="สอนคำศัพท์ภาษาไทยเป็นครั้งคราว พร้อมคำอ่าน">A Thai word now and then, with how to say it.</li>
+          <li data-en="Choose who, which stickers, how big, and how often they change." data-zh="可以選是誰、用哪些貼圖、多大、多久換一張。" data-th="เลือกได้ว่าเป็นใคร ใช้สติกเกอร์ไหน ขนาดเท่าไร และเปลี่ยนบ่อยแค่ไหน">Choose who, which stickers, how big, and how often they change.</li>
+        </ul>
+      </div>
+      <div class="win" style="max-width:460px;justify-self:center"><img src="assets/shots/buddy.jpg" alt="" loading="lazy" width="494" height="454"></div>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <h3><span data-en="Your week, month and year" data-zh="你的一週、一個月、一年" data-th="สัปดาห์ เดือน และปีของคุณ">Your week, month and year</span><span class="badge" data-new></span></h3>
+        <p data-en="Three tabs, the same period:" data-zh="三個分頁，看同一段時間：" data-th="สามแท็บ ดูช่วงเวลาเดียวกัน:">Three tabs, the same period:</p>
+        <ul>
+          <li data-en="<b>Summary</b>: the numbers with their trend, goal days, and each day by category (work, breaks or both)." data-zh="<b>總覽</b>：數字和趨勢、達標天數，還有每天依分類的長條圖（工作、休息或兩者）。" data-th="<b>สรุป</b>: ตัวเลขพร้อมแนวโน้ม วันที่ถึงเป้า และแต่ละวันแยกตามหมวด (งาน การพัก หรือทั้งสองอย่าง)"><b>Summary</b>: the numbers with their trend, goal days, and each day by category (work, breaks or both).</li>
+          <li data-en="<b>Analysis</b>: where the time went, when you work, your typical day, focus quality, side by side with before." data-zh="<b>分析</b>：時間花在哪裡、什麼時候工作、平常的一天、專注程度，和之前並排比較。" data-th="<b>การวิเคราะห์</b>: เวลาหมดไปกับอะไร ทำงานช่วงไหน วันปกติ คุณภาพการโฟกัส และเทียบกับก่อนหน้า"><b>Analysis</b>: where the time went, when you work, your typical day, focus quality, side by side with before.</li>
+          <li data-en="<b>Calendar</b>: click any day to see and change it. Make a picture of it, or export a CSV." data-zh="<b>日曆</b>：點任何一天就能看和改。可以做成圖片，或匯出 CSV。" data-th="<b>ปฏิทิน</b>: คลิกวันไหนก็ได้เพื่อดูและแก้ไข ทำเป็นรูปภาพ หรือส่งออกเป็น CSV"><b>Calendar</b>: click any day to see and change it. Make a picture of it, or export a CSV.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="tabs" role="tablist"><button type="button" class="on" data-data="data-summary" data-en="Summary" data-zh="總覽" data-th="สรุป">Summary</button><button type="button" data-data="data-analysis" data-en="Analysis" data-zh="分析" data-th="การวิเคราะห์">Analysis</button><button type="button" data-data="data-calendar" data-en="Calendar" data-zh="日曆" data-th="ปฏิทิน">Calendar</button></div>
+        <div class="win"><div class="bar"><i></i><i></i><i></i></div><img id="data-shot" data-shot="data-summary" alt="" loading="lazy" width="1440" height="891"></div>
+      </div>
+    </div>
   </div>
 
-  <section id="what">
-    <h2 data-en="What it does">可以做什麼</h2>
-    <div class="grid">
-      <div class="card"><b data-en="🧸 Buddies on your desktop">🧸 桌面夥伴</b><p data-en="Milk and Love walk along your screen, nap when you're away, and hold up your reminders with a Thai word. Pick the stickers they use.">Milk 和 Love 在螢幕上走來走去、你離開時打瞌睡，提醒時舉牌，附一個泰文單字。可以選她們用哪些貼圖。</p></div>
-      <div class="card"><b data-en="⏱ A work clock">⏱ 工作時鐘</b><p data-en="It counts while you're at the computer, task by task. Fix anything later, even past days.">你在電腦前時就計時，一件事一件事記下來。之後都可以改，連以前的日子也可以。</p></div>
-      <div class="card"><b data-en="🍅 The Pomodoro">🍅 番茄鐘</b><p data-en="Classic 25 · 5 or your own lengths, a little timer in the menu bar, and a MilkLove video on the break.">經典 25 · 5 或自訂長度，選單列小倒數，休息時推薦一支 MilkLove 影片。</p></div>
-      <div class="card"><b data-en="⏰ Reminders & events">⏰ 提醒與活動</b><p data-en="In step with Apple Reminders and Calendar. It rings with the chime, or with Milk and Love calling each other.">和 Apple 提醒事項、行事曆同步。時間到會響：內建的叮，或 Milk 和 Love 互相叫名字。</p></div>
-      <div class="card"><b data-en="📊 Data">📊 數據</b><p data-en="A week, a month or a year: what stands out, a calendar of your days, the ranking of what you did most.">一週、一個月或一年：重點觀察、每天的日曆、做最多的事排行榜。</p></div>
-      <div class="card"><b data-en="✂️ Your own stickers">✂️ 你自己的貼圖</b><p data-en="Add photos you're allowed to use and the app cuts them out. Every photo shows who took it.">加入你有權使用的照片，App 會自動去背。每張照片都標明拍攝者。</p></div>
+  <div class="more">
+    <div class="card"><b data-en="Your own stickers, credited" data-zh="你自己的貼圖，都有標註" data-th="สติกเกอร์ของคุณเอง พร้อมเครดิต">Your own stickers, credited</b><p data-en="Add photos you're allowed to use; the people are cut out for you. Say who took each one, change it any time." data-zh="加入你有權使用的照片，照片裡的人會自動去背。標註每張是誰拍的，隨時可以改。" data-th="เพิ่มรูปที่คุณได้รับอนุญาตให้ใช้ แอปจะตัดคนออกมาให้ ระบุว่าใครถ่าย และแก้ไขได้ทุกเมื่อ">Add photos you're allowed to use; the people are cut out for you. Say who took each one, change it any time.</p></div>
+    <div class="card"><b data-en="Help from Muv" data-zh="Muv 來幫忙" data-th="Muv ช่วยได้">Help from Muv</b><p data-en="Click Muv at the bottom left: answers, a short tour of each part, and a way to write to us." data-zh="點左下角的 Muv：常見問題、每個部分的簡短導覽，還有寫信給我們的方法。" data-th="คลิก Muv ที่มุมล่างซ้าย: คำตอบ ทัวร์สั้น ๆ ของแต่ละส่วน และช่องทางเขียนถึงเรา">Click Muv at the bottom left: answers, a short tour of each part, and a way to write to us.</p></div>
+    <div class="card"><b data-en="Three languages" data-zh="三種語言" data-th="สามภาษา">Three languages</b><p data-en="English, Traditional Chinese, and Thai (beta), everywhere in the app." data-zh="英文、繁體中文和泰文（測試版），整個 App 都有。" data-th="อังกฤษ จีนตัวเต็ม และไทย (ทดลอง) ทั่วทั้งแอป">English, Traditional Chinese, and Thai (beta), everywhere in the app.</p></div>
+  </div>
+</div></section>
+
+<!-- ML WorkHelp or DevHelp -->
+<section id="two"><div class="wrap">
+  <p class="eyebrow" data-en="Two apps" data-zh="兩個 App" data-th="สองแอป">Two apps</p>
+  <h2 data-en="ML WorkHelp or DevHelp?" data-zh="ML WorkHelp 還是 DevHelp？" data-th="ML WorkHelp หรือ DevHelp?">ML WorkHelp or DevHelp?</h2>
+  <p class="lead" data-en="Two separate apps for two kinds of day. Each works on its own; you can use either one, or both." data-zh="兩個獨立的 App，給兩種不同的一天。各自都能單獨使用；用其中一個或兩個都用都可以。" data-th="สองแอปที่แยกกัน สำหรับวันทำงานสองแบบ แต่ละแอปใช้ได้ด้วยตัวเอง จะใช้แอปเดียวหรือทั้งสองก็ได้">Two separate apps for two kinds of day. Each works on its own; you can use either one, or both.</p>
+  <div class="pair">
+    <div class="app ml">
+      <span class="who" data-en="For your whole work day" data-zh="給你整個工作日" data-th="สำหรับทั้งวันทำงานของคุณ">For your whole work day</span>
+      <h3>ML WorkHelp</h3>
+      <p class="for" data-en="A desktop app for Mac (Windows coming)." data-zh="Mac 的桌面 App（Windows 即將推出）。" data-th="แอปเดสก์ท็อปสำหรับ Mac (Windows เร็ว ๆ นี้)">A desktop app for Mac (Windows coming).</p>
+      <ul>
+        <li data-en="Work clock and Pomodoro, the focus screen" data-zh="工作時鐘和番茄鐘、專注全螢幕" data-th="นาฬิกาทำงานและโพโมโดโร่ หน้าจอโฟกัส">Work clock and Pomodoro, the focus screen</li>
+        <li data-en="Reminders &amp; events, with Apple Reminders and Calendar" data-zh="提醒與活動，可同步 Apple 提醒事項和行事曆" data-th="แจ้งเตือนและกิจกรรม ซิงก์กับ Apple Reminders และ Calendar">Reminders &amp; events, with Apple Reminders and Calendar</li>
+        <li data-en="Data: summary, analysis and an editable calendar" data-zh="數據：總覽、分析和可以修改的日曆" data-th="สถิติ: สรุป การวิเคราะห์ และปฏิทินที่แก้ไขได้">Data: summary, analysis and an editable calendar</li>
+        <li data-en="Milk &amp; Love on your desktop, your own stickers" data-zh="Milk 和 Love 在桌面上，自己的貼圖" data-th="มิลค์กับเลิฟบนเดสก์ท็อป และสติกเกอร์ของคุณเอง">Milk &amp; Love on your desktop, your own stickers</li>
+      </ul>
+      <p class="rec" data-en="<b>Recommended</b> for planning your days, the full calendar, and seeing how you work over weeks and months." data-zh="想規劃每天、用完整的日曆、看幾週幾個月的工作情況，<b>推薦用這個</b>。" data-th="<b>แนะนำ</b>สำหรับวางแผนแต่ละวัน ใช้ปฏิทินเต็มรูปแบบ และดูว่าคุณทำงานอย่างไรตลอดหลายสัปดาห์และหลายเดือน"><b>Recommended</b> for planning your days, the full calendar, and seeing how you work over weeks and months.</p>
+      <div class="dl"><a class="btn main" href="#download" data-en="Get ML WorkHelp" data-zh="下載 ML WorkHelp" data-th="ดาวน์โหลด ML WorkHelp">Get ML WorkHelp</a></div>
     </div>
-    <div class="pics" style="margin-top:16px">
-      <figure><img data-src-zh="assets/welcome-data-cal-zh.jpg" data-src-en="assets/welcome-data-cal-en.jpg" src="assets/welcome-data-cal-zh.jpg" alt=""><figcaption data-en="Data · a month: each day's focus and hours">數據 · 月：每天的主題和時數</figcaption></figure>
-      <figure><img data-src-zh="assets/welcome-data-day-zh.jpg" data-src-en="assets/welcome-data-day-en.jpg" src="assets/welcome-data-day-zh.jpg" alt=""><figcaption data-en="Click a day: its log, to change">點一天：那天的紀錄，可以改</figcaption></figure>
+    <div class="app">
+      <span class="who" data-en="For developers, light" data-zh="給開發者，輕量" data-th="สำหรับนักพัฒนา แบบเบา ๆ">For developers, light</span>
+      <h3>DevHelp</h3>
+      <p class="for" data-en="An extension for VS Code and Kiro." data-zh="VS Code 和 Kiro 的擴充功能。" data-th="ส่วนขยายสำหรับ VS Code และ Kiro">An extension for VS Code and Kiro.</p>
+      <ul>
+        <li data-en="A tiny panel with a GMMTV mascot in a scene, and a Thai word" data-zh="小小的面板：GMMTV 吉祥物在場景裡，還有一個泰文單字" data-th="แผงเล็ก ๆ มีมาสคอต GMMTV ในฉาก และคำศัพท์ภาษาไทย">A tiny panel with a GMMTV mascot in a scene, and a Thai word</li>
+        <li data-en="A dev buddy walking round your editor, and a desktop buddy" data-zh="開發夥伴沿著編輯器走，還有桌面夥伴" data-th="เพื่อนนักพัฒนาเดินรอบเอดิเตอร์ และเพื่อนบนเดสก์ท็อป">A dev buddy walking round your editor, and a desktop buddy</li>
+        <li data-en="Work clock, Pomodoro, break and work reminders" data-zh="工作計時、番茄鐘、休息和工作提醒" data-th="นาฬิกาทำงาน โพโมโดโร่ และการเตือนให้พักและทำงาน">Work clock, Pomodoro, break and work reminders</li>
+        <li data-en="A few Milk &amp; Love stickers and animals" data-zh="幾張 Milk 和 Love 貼圖，還有小動物" data-th="สติกเกอร์มิลค์กับเลิฟและสัตว์น่ารักไม่กี่ตัว">A few Milk &amp; Love stickers and animals</li>
+      </ul>
+      <p class="rec" data-en="For lightweight use while you code. No calendar sync or data dashboards: for those, use ML WorkHelp." data-zh="寫程式時輕鬆用。沒有行事曆同步和數據分析；需要的話請用 ML WorkHelp。" data-th="สำหรับใช้แบบเบา ๆ ระหว่างเขียนโค้ด ไม่มีการซิงก์ปฏิทินหรือแดชบอร์ดสถิติ ถ้าต้องการให้ใช้ ML WorkHelp">For lightweight use while you code. No calendar sync or data dashboards: for those, use ML WorkHelp.</p>
+      <div class="dl"><a class="btn" href="#devhelp" data-en="Meet DevHelp" data-zh="認識 DevHelp" data-th="ทำความรู้จัก DevHelp">Meet DevHelp</a><span class="soon" data-en="Coming soon" data-zh="即將推出" data-th="เร็ว ๆ นี้">Coming soon</span></div>
     </div>
-  </section>
+  </div>
+  <table class="cmp">
+    <thead><tr><th></th><th>ML WorkHelp</th><th>DevHelp</th></tr></thead>
+    <tbody>
+      <tr><th data-en="Where" data-zh="在哪裡" data-th="ใช้ที่ไหน">Where</th><td data-en="Its own app on your desktop" data-zh="桌面上的獨立 App" data-th="แอปของตัวเองบนเดสก์ท็อป">Its own app on your desktop</td><td data-en="Inside VS Code and Kiro" data-zh="在 VS Code 和 Kiro 裡" data-th="ภายใน VS Code และ Kiro">Inside VS Code and Kiro</td></tr>
+      <tr><th data-en="Buddies" data-zh="夥伴" data-th="เพื่อน">Buddies</th><td data-en="Milk &amp; Love on your desktop" data-zh="Milk 和 Love 在桌面上" data-th="มิลค์กับเลิฟบนเดสก์ท็อป">Milk &amp; Love on your desktop</td><td data-en="GMMTV mascots round your editor, a desktop buddy" data-zh="GMMTV 吉祥物在編輯器旁，加上桌面夥伴" data-th="มาสคอต GMMTV รอบเอดิเตอร์ และเพื่อนบนเดสก์ท็อป">GMMTV mascots round your editor, a desktop buddy</td></tr>
+      <tr><th data-en="Keeping time" data-zh="計時" data-th="การจับเวลา">Keeping time</th><td data-en="Work clock, Pomodoro, focus screen" data-zh="工作時鐘、番茄鐘、專注全螢幕" data-th="นาฬิกาทำงาน โพโมโดโร่ หน้าจอโฟกัส">Work clock, Pomodoro, focus screen</td><td data-en="Work clock and Pomodoro" data-zh="工作計時和番茄鐘" data-th="นาฬิกาทำงานและโพโมโดโร่">Work clock and Pomodoro</td></tr>
+      <tr><th data-en="Reminders" data-zh="提醒" data-th="การแจ้งเตือน">Reminders</th><td data-en="Reminders and events, Apple sync" data-zh="提醒與活動，Apple 同步" data-th="แจ้งเตือนและกิจกรรม ซิงก์กับ Apple">Reminders and events, Apple sync</td><td data-en="Simple reminders and break nudges" data-zh="簡單的提醒和休息提示" data-th="การแจ้งเตือนง่าย ๆ และการเตือนให้พัก">Simple reminders and break nudges</td></tr>
+      <tr><th data-en="Calendar &amp; data" data-zh="日曆與數據" data-th="ปฏิทินและสถิติ">Calendar &amp; data</th><td data-en="Summary, analysis, editable calendar" data-zh="總覽、分析、可以修改的日曆" data-th="สรุป การวิเคราะห์ ปฏิทินที่แก้ไขได้">Summary, analysis, editable calendar</td><td class="no" data-en="Not included" data-zh="沒有" data-th="ไม่มี">Not included</td></tr>
+      <tr><th data-en="Thai words" data-zh="泰文單字" data-th="คำศัพท์ภาษาไทย">Thai words</th><td data-en="With reminders and breaks" data-zh="跟著提醒和休息" data-th="มาพร้อมการแจ้งเตือนและการพัก">With reminders and breaks</td><td data-en="A word card in the panel" data-zh="面板上的單字卡" data-th="การ์ดคำศัพท์ในแผง">A word card in the panel</td></tr>
+    </tbody>
+  </table>
+  <p class="sep" data-en="They don't share data and don't need each other. If you use both, each keeps its own time." data-zh="兩者不共用資料，也不需要彼此。兩個都用的話，各自計各自的時間。" data-th="ทั้งสองไม่แชร์ข้อมูลกันและไม่ต้องพึ่งกัน ถ้าใช้ทั้งสองแอป แต่ละแอปจะจับเวลาของตัวเอง">They don't share data and don't need each other. If you use both, each keeps its own time.</p>
+</div></section>
 
-  <section id="download">
-    <h2 data-en="Download">下載</h2>
-    <div class="plat" id="plats"></div>
-    <p class="note" data-en="On a Mac, the first time you open it macOS may say it can't check the developer: right-click the app, choose Open, then Open again. (This goes away once the app is signed.)">Mac 第一次打開時，可能會說「無法確認開發者」：在 App 上按右鍵 → 打開，再按一次打開。（App 簽署之後就不會再出現。）</p>
-  </section>
+<!-- DevHelp -->
+<section id="devhelp"><div class="wrap">
+  <div class="dev">
+    <div class="editor" aria-hidden="true">
+      <div class="tb"><i></i><i></i><i></i></div>
+      <div class="side">
+        <span class="h">DEVHELP</span>
+        <div class="scene"><img class="bg" src="assets/devhelp/office.svg" alt=""><img class="m" src="assets/devhelp/muvmuv.svg" alt=""></div>
+        <div class="word"><b>ทำงาน</b><span>tham ngaan · to work</span></div>
+      </div>
+      <div class="code"><span class="c">// today's task</span>
+<span class="k">function</span> <span class="f">ship</span>() {
+  <span class="k">const</span> v = <span class="s">"0.3"</span>;
+  <span class="k">return</span> build(v);
+}</div>
+      <div class="status"><span>DevHelp</span><span>Pomodoro 18:42</span><span>ทำงาน · to work</span></div>
+      <div class="walker"><img src="assets/devhelp/lunar.svg" alt=""></div>
+    </div>
+    <div>
+      <p class="eyebrow">DevHelp · VS Code &amp; Kiro</p>
+      <h2 class="sec-h" data-en="DevHelp: a light buddy while you code" data-zh="DevHelp：寫程式時的輕巧夥伴" data-th="DevHelp: เพื่อนตัวเล็กระหว่างเขียนโค้ด">DevHelp: a light buddy while you code</h2>
+      <p class="muted" data-en="A GMMTV mascot walks round the edges of your editor, a tiny panel shows a scene and a Thai word, and the status bar keeps your Pomodoro. A desktop buddy can count your work time and remind you to rest. That's it: small on purpose." data-zh="GMMTV 吉祥物沿著編輯器的邊緣走，小面板上是場景和一個泰文單字，狀態列顯示番茄鐘。桌面夥伴可以幫你計時、提醒你休息。就這樣：刻意做得很小。" data-th="มาสคอต GMMTV เดินรอบขอบเอดิเตอร์ แผงเล็ก ๆ แสดงฉากและคำศัพท์ภาษาไทย แถบสถานะแสดงโพโมโดโร่ เพื่อนบนเดสก์ท็อปช่วยนับเวลาทำงานและเตือนให้พัก แค่นั้น ตั้งใจให้เล็ก">A GMMTV mascot walks round the edges of your editor, a tiny panel shows a scene and a Thai word, and the status bar keeps your Pomodoro. A desktop buddy can count your work time and remind you to rest. That's it: small on purpose.</p>
+      <div class="mascots"><img src="assets/devhelp/muvmuv.svg" alt="MuvMuv"><img src="assets/devhelp/lunar.svg" alt="Lunar"><img src="assets/devhelp/any.svg" alt="Any"><img src="assets/devhelp/jewel.svg" alt="Jewel"><img src="assets/devhelp/vimmy.svg" alt="Vimmy"><img src="assets/devhelp/wesley.svg" alt="Wesley"><img src="assets/devhelp/goldie_brown.svg" alt="Goldie"><img src="assets/devhelp/lolo.svg" alt="LOLO"></div>
+      <p class="small muted" data-en="Mac and Windows, English or 繁體中文. The mascots belong to GMMTV; our drawings follow the official art." data-zh="Mac 和 Windows，英文或繁體中文。吉祥物屬於 GMMTV；我們的插畫依照官方造型繪製。" data-th="Mac และ Windows ภาษาอังกฤษหรือจีนตัวเต็ม มาสคอตเป็นของ GMMTV ภาพวาดของเราอิงจากภาพทางการ">Mac and Windows, English or 繁體中文. The mascots belong to GMMTV; our drawings follow the official art.</p>
+      <div class="dl"><span class="soon" data-en="Coming soon to VS Code and Kiro" data-zh="即將登上 VS Code 和 Kiro" data-th="เร็ว ๆ นี้บน VS Code และ Kiro">Coming soon to VS Code and Kiro</span><a class="btn" href="#news" data-en="Tell me when it's out" data-zh="推出時通知我" data-th="แจ้งฉันเมื่อเปิดตัว">Tell me when it's out</a></div>
+    </div>
+  </div>
+</div></section>
 
-  <section id="news">
-    <h2 data-en="New versions &amp; important notices">新版本與重要通知</h2>
-    <p class="muted" data-en="The app asks for your email when you first open it. Haven't got it yet, or want news before you install? Leave it here: we write when there's a new version, or something you need to know (for example, if a rights holder asks for a photo or sticker to be removed). That's all.">App 第一次打開時會請你留下 email。還沒裝、或想先收到消息？也可以在這裡留下：有新版本、或有需要你注意的事（例如照片或貼圖的權利人要求移除內容），我們會寫信告訴你。就這樣。</p>
-    <form class="sign" id="sign">
-      <div class="row"><input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email">
-        <button class="btn main" type="submit" data-en="Tell me">通知我</button></div>
-      <label><input type="checkbox" name="ok" required> <span data-en="I'd like emails about ML WorkHelp's new versions and important updates.">我想收到 ML WorkHelp 新版本和重要更新的 email。</span></label>
-      <div class="promise"><b data-en="Our promise">我們的承諾</b>
-        <ul>
-          <li data-en="Only about ML WorkHelp: new versions and important updates. No ads, no spam.">只寄 ML WorkHelp 的新版本和重要更新。沒有廣告、不會寄垃圾信。</li>
-          <li data-en="Never shared, sold or given to anyone, and never used for anything else.">絕不分享、出售或提供給任何人，也不會拿來做其他用途。</li>
-          <li data-en="Stop any time: reply &quot;stop&quot; to any of our emails and we'll delete your address.">隨時可以取消：回覆任何一封信說「取消」，我們就會刪除你的 email。</li>
-        </ul></div>
-      <p id="thanks" hidden data-en="Thank you! We'll write when there's news.">謝謝你！有消息時我們會寫信給你。</p>
-    </form>
-  </section>
+<!-- Download -->
+<section id="download"><div class="wrap">
+  <h2 data-en="Download ML WorkHelp" data-zh="下載 ML WorkHelp" data-th="ดาวน์โหลด ML WorkHelp">Download ML WorkHelp</h2>
+  <p class="lead" id="whatsnew"></p>
+  <div class="plat" id="plats"></div>
+  <p class="note" data-en="On a Mac, the first time you open it macOS may say it can't check the developer: right-click the app, choose Open, then Open again." data-zh="Mac 第一次打開時，可能會說「無法確認開發者」：在 App 上按右鍵 → 打開，再按一次打開。" data-th="บน Mac ครั้งแรกที่เปิด macOS อาจบอกว่าตรวจสอบผู้พัฒนาไม่ได้: คลิกขวาที่แอป เลือกเปิด แล้วกดเปิดอีกครั้ง">On a Mac, the first time you open it macOS may say it can't check the developer: right-click the app, choose Open, then Open again.</p>
+</div></section>
 
-  <section id="versions">
-    <h2 data-en="Versions">版本紀錄</h2>
-    <div class="hist" id="hist"></div>
-    <p class="small muted" data-en="The app looks for a new version once a day by reading a small file on this page; nothing about you is sent. You can switch it off in Settings › About.">App 每天會讀取這個網頁上的一個小檔案，看看有沒有新版本；不會送出任何關於你的資料。可以在 設定 › 關於 關掉。</p>
-  </section>
+<!-- Photos -->
+<section id="photos"><div class="wrap">
+  <h2 data-en="Photos and permission" data-zh="照片與授權" data-th="ภาพถ่ายและการขออนุญาต">Photos and permission</h2>
+  <div class="perm">
+    <p data-en="We've been given permission to use photos in the app by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b>, and the cartoon drawings by <b>wanwannjeab</b>. For the other photos we tried to reach the photographers but haven't heard back. We've done our best to tag and identify who took every photo; if a photo is yours and you'd like it credited or taken down, please tell us any time. We'll make the change in the next update and let our users know."
+      data-zh="App 裡的照片已獲得 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 授權使用，卡通插畫已獲得 <b>wanwannjeab</b> 授權。其他照片我們有試著聯絡拍攝者，但還沒有收到回覆。我們已盡力標註並找出每張照片的拍攝者；如果有照片是你拍的，想要被標註或下架，隨時告訴我們，我們會在下一次更新修改，並通知使用者。"
+      data-th="เราได้รับอนุญาตให้ใช้ภาพถ่ายในแอปจาก <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> และ <b>otter</b> และภาพวาดการ์ตูนจาก <b>wanwannjeab</b> สำหรับภาพอื่น ๆ เราได้พยายามติดต่อช่างภาพแล้วแต่ยังไม่ได้รับคำตอบ เราพยายามอย่างเต็มที่ในการแท็กและระบุเจ้าของภาพทุกภาพ หากมีภาพใดเป็นของคุณ และต้องการให้ใส่เครดิตหรือนำภาพออก แจ้งเราได้ตลอดเวลา เราจะแก้ไขในการอัปเดตครั้งถัดไปและแจ้งให้ผู้ใช้ทราบ">We've been given permission to use photos in the app by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b>, and the cartoon drawings by <b>wanwannjeab</b>. For the other photos we tried to reach the photographers but haven't heard back. We've done our best to tag and identify who took every photo; if a photo is yours and you'd like it credited or taken down, please tell us any time. We'll make the change in the next update and let our users know.</p>
+    <p class="muted" data-en="In the app, click any sticker to see its original photo and who took it. Thank you to:" data-zh="在 App 裡點任何一張貼圖，就能看到原始照片和拍攝者。謝謝：" data-th="ในแอป คลิกสติกเกอร์ไหนก็ได้เพื่อดูรูปต้นฉบับและคนถ่าย ขอบคุณ:">In the app, click any sticker to see its original photo and who took it. Thank you to:</p>
+    <ul class="credits">
+      <li><b>GMMTV</b> <a href="https://x.com/GMMTV" rel="noopener">@GMMTV</a></li>
+      <li><b>Blumoon</b> <a href="https://x.com/blumoonfoto" rel="noopener">@blumoonfoto</a></li>
+      <li><b>NGMin</b> <a href="https://x.com/ngmin" rel="noopener">@ngmin</a></li>
+      <li><b>otter</b> <a href="https://x.com/Miiiichstabe" rel="noopener">@Miiiichstabe</a></li>
+      <li><b>Lyrac</b> <a href="https://x.com/loveminiheartph" rel="noopener">@loveminiheartph</a></li>
+      <li><b>Sflove0523</b> <a href="https://x.com/sflove0523" rel="noopener">@sflove0523</a></li>
+      <li><b>KIU</b> <a href="https://x.com/kiu_628ML" rel="noopener">@kiu_628ML</a></li>
+      <li><b>MilkPansaFamily</b> <a href="https://x.com/milkfamily__" rel="noopener">@milkfamily__</a></li>
+      <li><b>wanwannjeab</b> <a href="https://x.com/wanwannjeab" rel="noopener">@wanwannjeab</a> <span class="muted small" data-en="(cartoon Muv drawings)" data-zh="（卡通 Muv 插畫）" data-th="(ภาพวาดการ์ตูน Muv)">(cartoon Muv drawings)</span></li>
+      <li><b>Milk Pansa Vosbein</b> <a href="https://x.com/panlyyy" rel="noopener">@panlyyy</a></li>
+      <li><b>Love Pattranite Limpatiyakorn</b> <a href="https://x.com/loverrukk" rel="noopener">@loverrukk</a></li>
+    </ul>
+  </div>
+</div></section>
 
-  <section id="privacy">
-    <h2 data-en="Privacy">隱私</h2>
-    <p data-en="Your work log, reminders, photos and settings stay on your computer. The app doesn't have an account, doesn't track you and doesn't send your work anywhere. Apple Reminders and Calendar are only read and written on your own Mac.">你的工作紀錄、提醒、照片和設定都只留在你的電腦裡。App 沒有帳號、不追蹤你，也不會把你的工作資料送到任何地方。Apple 提醒事項和行事曆只在你自己的 Mac 上讀寫。</p>
-    <p data-en="The one thing that leaves your computer is the email you give when you first open the app: it goes to our mailing list (Buttondown), only so we can tell you about new versions and things you need to know, like a photo's rights holder asking for it to be removed. It's never shared, sold or used for anything else, and every email has an unsubscribe link.">唯一會離開你電腦的，是第一次打開 App 時填的 email：它會加到我們的通知名單（Buttondown），只用來告訴你新版本和需要注意的事，例如照片的權利人要求移除照片。絕不分享、出售或做其他用途，每封信都有取消訂閱的連結。</p>
-  </section>
-</div>
+<!-- News -->
+<section id="news"><div class="wrap">
+  <h2 data-en="New versions &amp; important notices" data-zh="新版本與重要通知" data-th="เวอร์ชันใหม่และประกาศสำคัญ">New versions &amp; important notices</h2>
+  <p class="lead" data-en="We write when there's a new version, when DevHelp is out, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all." data-zh="有新版本、DevHelp 推出，或有需要你注意的事（例如權利人要求移除照片或貼圖）時，我們會寫信告訴你。就這樣。" data-th="เราจะเขียนถึงคุณเมื่อมีเวอร์ชันใหม่ เมื่อ DevHelp เปิดตัว หรือเมื่อมีเรื่องที่คุณต้องรู้ (เช่น เจ้าของสิทธิ์ขอให้นำภาพหรือสติกเกอร์ออก) แค่นั้น">We write when there's a new version, when DevHelp is out, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all.</p>
+  <form class="sign" id="sign">
+    <div class="row"><input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email">
+      <button class="btn main" type="submit" data-en="Tell me" data-zh="通知我" data-th="แจ้งฉัน">Tell me</button></div>
+    <label><input type="checkbox" name="ml" checked> <span data-en="ML WorkHelp: new versions and important updates" data-zh="ML WorkHelp：新版本和重要更新" data-th="ML WorkHelp: เวอร์ชันใหม่และอัปเดตสำคัญ">ML WorkHelp: new versions and important updates</span></label>
+    <label><input type="checkbox" name="dev"> <span data-en="DevHelp: tell me when it's out" data-zh="DevHelp：推出時通知我" data-th="DevHelp: แจ้งเมื่อเปิดตัว">DevHelp: tell me when it's out</span></label>
+    <div class="promise"><b data-en="Our promise" data-zh="我們的承諾" data-th="สัญญาของเรา">Our promise</b>
+      <ul>
+        <li data-en="Only about ML WorkHelp and DevHelp. No ads, no spam." data-zh="只寄 ML WorkHelp 和 DevHelp 的消息。沒有廣告、不會寄垃圾信。" data-th="เฉพาะเรื่อง ML WorkHelp และ DevHelp ไม่มีโฆษณา ไม่มีสแปม">Only about ML WorkHelp and DevHelp. No ads, no spam.</li>
+        <li data-en="Never shared, sold or given to anyone, and never used for anything else." data-zh="絕不分享、出售或提供給任何人，也不會拿來做其他用途。" data-th="ไม่แชร์ ไม่ขาย ไม่ให้ใคร และไม่ใช้ทำอย่างอื่น">Never shared, sold or given to anyone, and never used for anything else.</li>
+        <li data-en="Stop any time: every email has an unsubscribe link." data-zh="隨時可以取消：每封信都有取消訂閱的連結。" data-th="ยกเลิกได้ทุกเมื่อ: ทุกอีเมลมีลิงก์ยกเลิกการรับ">Stop any time: every email has an unsubscribe link.</li>
+      </ul></div>
+    <p id="thanks" hidden data-en="Thank you! We'll write when there's news." data-zh="謝謝你！有消息時我們會寫信給你。" data-th="ขอบคุณ! เราจะเขียนถึงคุณเมื่อมีข่าว">Thank you! We'll write when there's news.</p>
+  </form>
+</div></section>
+
+<section id="versions"><div class="wrap">
+  <h2 data-en="Versions" data-zh="版本紀錄" data-th="ประวัติเวอร์ชัน">Versions</h2>
+  <div class="hist" id="hist"></div>
+  <p class="small muted" data-en="The app looks for a new version once a day by reading a small file on this page; nothing about you is sent. You can switch it off in Settings › About &amp; updates." data-zh="App 每天會讀取這個網頁上的一個小檔案，看看有沒有新版本；不會送出任何關於你的資料。可以在「設定 › 關於與更新」關掉。" data-th="แอปจะตรวจหาเวอร์ชันใหม่วันละครั้งโดยอ่านไฟล์เล็ก ๆ บนหน้านี้ ไม่มีข้อมูลของคุณถูกส่งออกไป ปิดได้ที่การตั้งค่า › เกี่ยวกับและอัปเดต">The app looks for a new version once a day by reading a small file on this page; nothing about you is sent. You can switch it off in Settings › About &amp; updates.</p>
+</div></section>
+
+<section id="privacy"><div class="wrap">
+  <h2 data-en="Privacy" data-zh="隱私" data-th="ความเป็นส่วนตัว">Privacy</h2>
+  <p data-en="Your work log, reminders, photos and settings stay on your computer. There's no account, no tracking, and your work isn't sent anywhere. Apple Reminders and Calendar are only read and written on your own Mac." data-zh="你的工作紀錄、提醒、照片和設定都只留在你的電腦裡。沒有帳號、不追蹤你，也不會把你的工作資料送到任何地方。Apple 提醒事項和行事曆只在你自己的 Mac 上讀寫。" data-th="บันทึกการทำงาน การแจ้งเตือน รูป และการตั้งค่าของคุณอยู่ในเครื่องของคุณ ไม่มีบัญชี ไม่มีการติดตาม และงานของคุณไม่ถูกส่งไปที่ไหน Apple Reminders และ Calendar อ่านและเขียนเฉพาะบน Mac ของคุณเอง">Your work log, reminders, photos and settings stay on your computer. There's no account, no tracking, and your work isn't sent anywhere. Apple Reminders and Calendar are only read and written on your own Mac.</p>
+  <p data-en="The one thing that leaves your computer is the email you give when you first open the app: it goes to our mailing list (Buttondown), only so we can tell you about new versions and things you need to know. It's never shared, sold or used for anything else." data-zh="唯一會離開你電腦的，是第一次打開 App 時填的 email：它會加到我們的通知名單（Buttondown），只用來告訴你新版本和需要注意的事。絕不分享、出售或做其他用途。" data-th="สิ่งเดียวที่ออกจากเครื่องของคุณคืออีเมลที่คุณให้ตอนเปิดแอปครั้งแรก ซึ่งจะไปอยู่ในรายชื่อรับข่าวของเรา (Buttondown) เพื่อแจ้งเวอร์ชันใหม่และเรื่องที่คุณต้องรู้เท่านั้น ไม่แชร์ ไม่ขาย และไม่ใช้ทำอย่างอื่น">The one thing that leaves your computer is the email you give when you first open the app: it goes to our mailing list (Buttondown), only so we can tell you about new versions and things you need to know. It's never shared, sold or used for anything else.</p>
+  <p class="th-note" data-l-only="th">คำแปลภาษาไทยอาจยังไม่ถูกต้องทั้งหมด หากคุณอยากช่วยปรับปรุงคำแปล ติดต่อเราได้ที่ alitasdepollos01@gmail.com หรือ X @alitasdepollos0 ขอบคุณค่ะ</p>
+</div></section>
+</main>
+
 <footer><div class="wrap">
-  <p data-en="ML WorkHelp is an unofficial fan project, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app; to have one removed or its credit fixed, write to us.">ML WorkHelp 是非官方的粉絲作品，和 GMMTV、Milk、Love 都沒有關係。每張照片都屬於它的拍攝者，App 裡都有標明；想移除照片或修正來源，請寫信給我們。</p>
-  <p><span data-en="Contact">聯絡</span>: <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> · <a href="https://x.com/alitasdepollos0" rel="noopener">@alitasdepollos0</a></p>
+  <p data-en="ML WorkHelp and DevHelp are unofficial fan projects, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app; to have one removed or its credit fixed, write to us." data-zh="ML WorkHelp 和 DevHelp 是非官方的粉絲作品，並非由 GMMTV、Milk 或 Love 製作，也和他們沒有關係。每張照片都屬於它的拍攝者，App 裡都有標明；想移除照片或修正來源，請寫信給我們。" data-th="ML WorkHelp และ DevHelp เป็นผลงานของแฟนคลับ ไม่ได้จัดทำโดยหรือเกี่ยวข้องกับ GMMTV มิลค์ หรือเลิฟ ทุกภาพเป็นของช่างภาพที่ระบุไว้ในแอป หากต้องการให้นำภาพออกหรือแก้เครดิต เขียนถึงเราได้">ML WorkHelp and DevHelp are unofficial fan projects, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app; to have one removed or its credit fixed, write to us.</p>
+  <p><span data-en="Contact" data-zh="聯絡" data-th="ติดต่อ">Contact</span>: <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> · <a href="https://x.com/alitasdepollos0" rel="noopener">@alitasdepollos0</a></p>
 </div></footer>
+
 <script>
-// Where the sign-up goes: a form service's address (Google Forms, Formspree, Buttondown…). Until it's set,
-// the form opens an email to us instead.
 const SIGNUP_URL = "https://buttondown.com/api/emails/embed-subscribe/alitasdepollos";
-const CONTACT = "alitasdepollos01@gmail.com";
-let zh = !/^en/i.test(navigator.language);
-try { const l = localStorage.getItem("lang"); if (l) zh = l === "zh"; } catch { /* (no storage) */ }
-const T = (en, z) => (zh ? z : en);
+const nav = (navigator.language || "en").toLowerCase();
+let lang = /^zh/.test(nav) ? "zh" : /^th/.test(nav) ? "th" : "en";
+try { const l = localStorage.getItem("lang"); if (["en", "zh", "th"].includes(l)) lang = l; } catch { /* (no storage) */ }
+{ const q = new URLSearchParams(location.search).get("lang"); if (["en", "zh", "th"].includes(q)) lang = q; } // (a link in one language: ?lang=th)
+const T = (en, zh, th) => ({ en, zh, th: th || en }[lang]);
 let latest = null;
-const os = /Windows/i.test(navigator.userAgent) ? "windows" : /Mac/i.test(navigator.userAgent) ? "mac" : "other";
-const PLATS = [
-  { id: "mac", name: () => "Mac", sub: () => T("macOS 12 or later", "macOS 12 以上"), files: [["mac-arm64", () => T("Apple Silicon (M1–M4)", "Apple 晶片（M1–M4）")], ["mac-x64", () => T("Intel", "Intel 處理器")]] },
-  { id: "windows", name: () => "Windows", sub: () => T("Windows 10 or 11", "Windows 10 或 11"), files: [["windows", () => T("Download", "下載")]] },
-  { id: "vscode", name: () => T("VS Code buddies", "VS Code 夥伴"), sub: () => T("The buddies around your editor", "在編輯器旁邊陪你"), files: [["vscode", () => T("Get the extension", "安裝擴充功能")]] },
-];
+const os = /Windows/i.test(navigator.userAgent) ? "windows" : "mac";
+// The newest features: "New" once the version with them is out, "Coming in 0.3" until then.
+const NEW_IN = "0.3.0";
+const newer = (a, b) => { const x = String(a).split(".").map(Number), y = String(b).split(".").map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); } return true; };
 function link(key, label, main) {
   const url = latest?.files?.[key];
-  return url ? `<a class="btn${main ? " main" : ""}" href="${url}">⬇︎ ${label}</a>` : `<span class="btn" aria-disabled="true">${label} · ${T("coming soon", "即將推出")}</span>`;
+  return url ? `<a class="btn${main ? " main" : ""}" href="${url}">${label}</a>` : `<span class="btn" aria-disabled="true">${label} · ${T("coming soon", "即將推出", "เร็ว ๆ นี้")}</span>`;
 }
 function draw() {
-  document.documentElement.lang = zh ? "zh-Hant" : "en";
-  document.querySelectorAll("[data-en]").forEach((e) => { if (!e.dataset.zh) e.dataset.zh = e.innerHTML; e.innerHTML = zh ? e.dataset.zh : e.dataset.en; });
-  document.querySelectorAll("[data-src-zh]").forEach((e) => { e.src = zh ? e.dataset.srcZh : e.dataset.srcEn; });
-  document.getElementById("lang").textContent = zh ? "English" : "繁體中文";
-  const mac = os !== "windows", arm = true; // (a Mac's chip can't be told from a page reliably: Apple Silicon first)
-  document.getElementById("hero-dl").innerHTML = os === "windows" ? link("windows", T("Download for Windows", "下載 Windows 版"), true)
-    : link("mac-arm64", T("Download for Mac", "下載 Mac 版"), true) + `<a class="btn" href="#download">${T("Intel Mac, Windows, VS Code", "Intel Mac、Windows、VS Code")}</a>`;
-  document.getElementById("ver").textContent = latest ? T(`Version ${latest.version} · ${latest.released}`, `版本 ${latest.version} · ${latest.released}`) : "";
-  document.getElementById("plats").innerHTML = PLATS.map((p) => `<div class="card${p.id === os || (p.id === "mac" && os === "mac") ? " mine" : ""}"><b>${p.name()}</b><p>${p.sub()}</p>
-    <div class="dl">${p.files.map(([k, l], i) => link(k, l(), i === 0 && p.id === os)).join("")}</div></div>`).join("");
-  document.getElementById("hist").innerHTML = (latest?.history || []).map((h) => `<div class="v"><div><b>${h.version}</b><div class="small muted">${h.date}</div></div><div>${zh ? h.zh : h.en}</div></div>`).join("");
+  document.documentElement.lang = { en: "en", zh: "zh-Hant", th: "th" }[lang];
+  document.querySelectorAll("[data-en]").forEach((e) => { e.innerHTML = e.dataset[lang] || e.dataset.en; });
+  document.querySelectorAll("[data-l-only]").forEach((e) => { e.hidden = e.dataset.lOnly !== lang; });
+  document.querySelectorAll(".langs button").forEach((b) => b.classList.toggle("on", b.dataset.l === lang));
+  document.querySelectorAll("img[data-shot]").forEach((i) => { i.src = `assets/shots/${i.dataset.shot}-${lang}.jpg`; });
+  const out = latest && newer(latest.version, NEW_IN);
+  document.querySelectorAll("[data-new]").forEach((b) => { b.textContent = out ? T("New", "新功能", "ใหม่") : T("Coming in 0.3", "0.3 版推出", "มาในเวอร์ชัน 0.3"); });
+  document.getElementById("hero-dl").innerHTML = os === "windows" ? link("windows", T("Download for Windows", "下載 Windows 版", "ดาวน์โหลดสำหรับ Windows"), true)
+    : link("mac-arm64", T("Download for Mac", "下載 Mac 版", "ดาวน์โหลดสำหรับ Mac"), true) + `<a class="btn" href="#download">${T("Intel Mac, Windows", "Intel Mac、Windows", "Mac Intel, Windows")}</a>`;
+  document.getElementById("ver").textContent = latest ? T(`Version ${latest.version} · ${latest.released}`, `版本 ${latest.version} · ${latest.released}`, `เวอร์ชัน ${latest.version} · ${latest.released}`) : "";
+  const notes = latest?.notes;
+  document.getElementById("whatsnew").textContent = notes ? `${T("New in", "新版本", "ใหม่ใน")} ${latest.version}: ${notes[lang] || notes.en}` : "";
+  const PLATS = [
+    { id: "mac", name: "Mac", sub: T("macOS 12 or later", "macOS 12 以上", "macOS 12 ขึ้นไป"), files: [["mac-arm64", T("Apple silicon (M1–M4)", "Apple 晶片（M1–M4）", "Apple silicon (M1–M4)")], ["mac-x64", T("Intel", "Intel 處理器", "Intel")]] },
+    { id: "windows", name: "Windows", sub: T("Windows 10 or 11", "Windows 10 或 11", "Windows 10 หรือ 11"), files: [["windows", T("Download", "下載", "ดาวน์โหลด")]] },
+  ];
+  document.getElementById("plats").innerHTML = PLATS.map((p) => `<div class="card${p.id === os ? " mine" : ""}"><b>${p.name}</b><p>${p.sub}</p>
+    <div class="dl">${p.files.map(([k, l], i) => link(k, l, i === 0 && p.id === os)).join("")}</div></div>`).join("");
+  document.getElementById("hist").innerHTML = (latest?.history || []).map((h) => `<div class="v"><div><b>${h.version}</b><div class="small muted">${h.date}</div></div><div>${h[lang] || h.en}</div></div>`).join("");
 }
-document.getElementById("lang").addEventListener("click", () => { zh = !zh; try { localStorage.setItem("lang", zh ? "zh" : "en"); } catch { /* fine */ } draw(); });
+document.querySelectorAll(".langs button").forEach((b) => b.addEventListener("click", () => { lang = b.dataset.l; try { localStorage.setItem("lang", lang); } catch { /* fine */ } draw(); }));
+document.querySelectorAll("[data-data]").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-data]").forEach((x) => x.classList.toggle("on", x === b));
+  const img = document.getElementById("data-shot"); img.dataset.shot = b.dataset.data; img.src = `assets/shots/${b.dataset.data}-${lang}.jpg`;
+}));
 document.getElementById("sign").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = e.target.email.value.trim();
-  if (!SIGNUP_URL) { location.href = `mailto:${CONTACT}?subject=${encodeURIComponent("ML WorkHelp: new versions")}&body=${encodeURIComponent(T("Please tell me about new versions: ", "有新版本時請通知我：") + email)}`; return; }
-  try { await fetch(SIGNUP_URL, { method: "POST", mode: "no-cors", body: new URLSearchParams({ email, tag: "page" }) }); } catch { /* (still thank them: a no-cors post can't be read back) */ }
-  document.getElementById("thanks").hidden = false; e.target.email.value = "";
+  const f = e.target, email = f.email.value.trim();
+  const tags = [f.ml.checked ? "page" : null, f.dev.checked ? "devhelp" : null].filter(Boolean);
+  const body = new URLSearchParams({ email }); for (const t of tags.length ? tags : ["page"]) body.append("tag", t);
+  try { await fetch(SIGNUP_URL, { method: "POST", mode: "no-cors", body }); } catch { /* (a no-cors post can't be read back) */ }
+  document.getElementById("thanks").hidden = false; f.email.value = "";
 });
 fetch("latest.json", { cache: "no-store" }).then((r) => r.json()).then((j) => { latest = j; draw(); }).catch(() => draw());
 draw();

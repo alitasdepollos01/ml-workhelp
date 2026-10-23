@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -14 120 136"><defs><radialGradient id="gd-fur" cx="45%" cy="35%" r="72%"><stop offset="0" stop-color="#f8e6c4"/><stop offset="1" stop-color="#e6c792"/></radialGradient></defs>
+<ellipse id="foot-l" cx="46" cy="114" rx="10" ry="6.5" fill="url(#gd-fur)" stroke="#c9a874" stroke-width="2"/><ellipse id="foot-r" cx="74" cy="114" rx="10" ry="6.5" fill="url(#gd-fur)" stroke="#c9a874" stroke-width="2"/>
+<ellipse cx="60" cy="98" rx="28" ry="20" fill="#8a5a33" stroke="#6f4526" stroke-width="2"/><rect x="52" y="96" width="16" height="11" rx="3" fill="#caa877"/><path d="M44 82V96M76 82V96" stroke="#6f4526" stroke-width="4" stroke-linecap="round"/><circle cx="44" cy="94" r="2" fill="#f2d28a"/><circle cx="76" cy="94" r="2" fill="#f2d28a"/>
+<ellipse cx="14" cy="72" rx="14" ry="30" fill="#dcbd8a" stroke="#c9a874" stroke-width="2" transform="rotate(10 14 72)"/>
+<ellipse cx="106" cy="72" rx="14" ry="30" fill="#dcbd8a" stroke="#c9a874" stroke-width="2" transform="rotate(-10 106 72)"/>
+<ellipse cx="60" cy="60" rx="46" ry="40" fill="url(#gd-fur)" stroke="#c9a874" stroke-width="2"/>
+<path d="M48 24Q50 14 56 20Q60 10 64 20Q70 14 72 24" fill="url(#gd-fur)" stroke="#c9a874" stroke-width="2" stroke-linejoin="round"/>
+<g id="eyes-open"><ellipse cx="42" cy="62" rx="7.5" ry="8.5" fill="#2a2234"/><ellipse cx="78" cy="62" rx="7.5" ry="8.5" fill="#2a2234"/><circle cx="39.0" cy="58.345" r="3.15" fill="#fff"/><circle cx="45.0" cy="66.08" r="1.5" fill="#fff"/><circle cx="75.0" cy="58.345" r="3.15" fill="#fff"/><circle cx="81.0" cy="66.08" r="1.5" fill="#fff"/></g><g id="eyes-closed" visibility="hidden" fill="none" stroke="#2a2234" stroke-width="2.8" stroke-linecap="round"><path d="M34.5 63Q42 69 49.5 63"/><path d="M70.5 63Q78 69 85.5 63"/></g>
+<ellipse cx="60" cy="74" rx="6" ry="4.4" fill="#5b4a3a"/>
+<path d="M54 80Q57 84 60 80Q63 84 66 80" fill="none" stroke="#5b4a3a" stroke-width="1.8" stroke-linecap="round"/>
+<ellipse cx="30" cy="76" rx="6" ry="3.5" fill="#f0a27a" opacity=".75"/>
+<ellipse cx="90" cy="76" rx="6" ry="3.5" fill="#f0a27a" opacity=".75"/>
+<ellipse cx="31" cy="99" rx="13" ry="10.5" fill="url(#gd-fur)" stroke="#c9a874" stroke-width="2"/><ellipse cx="89" cy="99" rx="13" ry="10.5" fill="url(#gd-fur)" stroke="#c9a874" stroke-width="2"/></svg>

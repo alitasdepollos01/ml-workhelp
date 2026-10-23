@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 150" preserveAspectRatio="xMidYMax slice"><defs></defs>
+<rect width="480" height="150" fill="#f7e8d4"/>
+<rect y="92" width="480" height="36" fill="#ecd3b2"/><path d="M14 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M36 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M58 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M80 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M102 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M124 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M146 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M168 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M190 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M212 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M234 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M256 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M278 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M300 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M322 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M344 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M366 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M388 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M410 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M432 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M454 96V128" stroke="#d9bb93" stroke-width="1.2"/><path d="M476 96V128" stroke="#d9bb93" stroke-width="1.2"/>
+<rect x="28" y="34" width="70" height="52" rx="3" fill="#bfe6f3" stroke="#fffaf3" stroke-width="4"/>
+<circle cx="80" cy="52" r="9" fill="#fff4c2"/>
+<circle cx="44" cy="76" r="14" fill="#8fd08a"/><circle cx="60" cy="80" r="10" fill="#7cc27a"/>
+<path d="M63 34V86M28 60H98" stroke="#fffaf3" stroke-width="3"/>
+<path d="M22 24h10v10q-5 5-10 0Z" fill="#fff7f0"/><path d="M32 24h10v10q-5 5-10 0Z" fill="#f4a3b5"/><path d="M42 24h10v10q-5 5-10 0Z" fill="#fff7f0"/><path d="M52 24h10v10q-5 5-10 0Z" fill="#f4a3b5"/><path d="M62 24h10v10q-5 5-10 0Z" fill="#fff7f0"/><path d="M72 24h10v10q-5 5-10 0Z" fill="#f4a3b5"/><path d="M82 24h10v10q-5 5-10 0Z" fill="#fff7f0"/><path d="M92 24h10v10q-5 5-10 0Z" fill="#f4a3b5"/><path d="M200 0V18" stroke="#8a6a4f" stroke-width="1"/><path d="M191 26L200 16 209 26Z" fill="#f2b46b"/><circle cx="200" cy="28" r="6" fill="#fff3c4" opacity=".7"/><path d="M262 0V18" stroke="#8a6a4f" stroke-width="1"/><path d="M253 26L262 16 271 26Z" fill="#f2b46b"/><circle cx="262" cy="28" r="6" fill="#fff3c4" opacity=".7"/><path d="M420 0V18" stroke="#8a6a4f" stroke-width="1"/><path d="M411 26L420 16 429 26Z" fill="#f2b46b"/><circle cx="420" cy="28" r="6" fill="#fff3c4" opacity=".7"/>
+<rect x="126" y="40" width="62" height="40" rx="2" fill="#33413a" stroke="#a77b4f" stroke-width="3"/>
+<text x="157" y="52" fill="#fff" font-size="8" text-anchor="middle" font-family="sans-serif">เมนู</text>
+<text x="132" y="64" fill="#f6e7c8" font-size="6.5" font-family="sans-serif">กาแฟ ··· 45</text>
+<text x="132" y="74" fill="#f6e7c8" font-size="6.5" font-family="sans-serif">ชาไทย ··· 40</text>
+<rect x="328" y="50" width="66" height="3.5" rx="1" fill="#a5713f"/><rect x="334" y="42" width="7" height="8" rx="1.5" fill="#fff"/><rect x="344" y="42" width="7" height="8" rx="1.5" fill="#f4a3b5"/><rect x="354" y="42" width="7" height="8" rx="1.5" fill="#9fd9c0"/><rect x="364" y="42" width="7" height="8" rx="1.5" fill="#fff"/><rect x="374" y="42" width="7" height="8" rx="1.5" fill="#ffe08a"/>
+<path d="M386 50q-2-10 4-12q6 2 4 12Z" fill="#6fbf73"/>
+<rect x="232" y="88" width="64" height="40" rx="3" fill="#a5713f"/><rect x="228" y="84" width="72" height="6" rx="2" fill="#c08850"/>
+<rect x="244" y="72" width="12" height="12" rx="2" fill="#5a4a42"/><rect x="246" y="66" width="8" height="6" fill="#3a2f2a"/>
+<path d="M276 84l2-10h10l2 10Z" fill="#fff" stroke="#e0d0c0" stroke-width="1"/>
+<ellipse cx="420" cy="108" rx="26" ry="4.5" fill="#a5713f"/>
+<rect x="417" y="110" width="6" height="18" fill="#8a5a33"/><rect x="408" y="126" width="24" height="3" rx="1.5" fill="#8a5a33"/>
+<rect x="412" y="98" width="10" height="9" rx="2" fill="#fff"/><path d="M422 100q4 0 4 3t-4 3" fill="none" stroke="#fff" stroke-width="1.6"/>
+<path d="M415 95q-2-3 0-6M419 95q-2-3 0-6" stroke="#c9b9a8" stroke-width="1.2" fill="none"/>
+<rect y="128" width="480" height="22" fill="#c8935f"/><path d="M0 136H480" stroke="#b07f52" stroke-width="1"/><path d="M0 144H480" stroke="#b07f52" stroke-width="1"/></svg>
