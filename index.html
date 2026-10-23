@@ -15,7 +15,7 @@ html { scroll-behavior:smooth; scroll-padding-top:70px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } *, *::before, *::after { animation:none !important; transition:none !important; } }
 body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 -apple-system, "PingFang TC", "Noto Sans TC", "Noto Sans Thai", "Segoe UI", sans-serif; }
 a { color:inherit; }
-img { max-width:100%; }
+img { max-width:100%; height:auto; } /* (pictures keep their shape) */
 .wrap { max-width:1100px; margin:0 auto; padding:0 16px; }
 /* top bar */
 header.top { position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
@@ -55,8 +55,8 @@ section > .wrap > h2, .sec-h { font-size:32px; line-height:1.2; margin:0 0 10px;
 .eyebrow { text-transform:uppercase; letter-spacing:.09em; font-size:12.5px; font-weight:700; color:var(--green-d); margin:0 0 8px; }
 /* the day, step by step */
 .steps { display:grid; gap:64px; counter-reset:step; }
-.step { display:grid; grid-template-columns:1fr 1.25fr; gap:44px; align-items:center; }
-.step:nth-child(even) { grid-template-columns:1.25fr 1fr; } .step:nth-child(even) .txt { order:2; }
+.step { display:grid; grid-template-columns:1fr 1.4fr; gap:44px; align-items:center; }
+.step:nth-child(even) { grid-template-columns:1.4fr 1fr; } .step:nth-child(even) .txt { order:2; }
 .step .txt h3 { font-size:25px; line-height:1.25; margin:0 0 10px; }
 .step .txt h3::before { counter-increment:step; content:counter(step); display:inline-grid; place-items:center; width:30px; height:30px; border-radius:50%; background:var(--green); color:var(--green-ink); font-size:15px; margin-right:10px; vertical-align:3px; }
 .step .txt p { color:var(--muted); margin:0 0 10px; }
@@ -157,7 +157,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
       <p class="small muted" id="ver"></p>
     </div>
     <div class="stage">
-      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="today" alt="" width="1440" height="891"></div>
+      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="today-full" src="assets/shots/today-full-en.jpg?v=3" alt="" width="1440" height="891"></div>
       <div class="buddy"><img src="assets/shots/buddy.jpg" alt="" width="494" height="454"></div>
     </div>
   </div>
@@ -181,7 +181,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
           <li data-en="Set a <b>focus of the day</b>, and fix any part of today's timeline later." data-zh="設定<b>本日主題</b>，今天的時間軸之後都可以改。" data-th="ตั้ง<b>ธีมของวัน</b> และแก้ไขไทม์ไลน์ของวันนี้ได้ภายหลัง">Set a <b>focus of the day</b>, and fix any part of today's timeline later.</li>
         </ul>
       </div>
-      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="today" alt="" loading="lazy" width="1440" height="891"></div>
+      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="today" src="assets/shots/today-en.jpg?v=3" alt="" width="1280" height="929"></div>
     </div>
 
     <div class="step">
@@ -193,7 +193,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
           <li data-en="One sticker walking the edges, the photographers' photos, or nothing behind it." data-zh="後面可以放一張沿著邊走的貼圖、攝影師的照片，或什麼都不放。" data-th="ด้านหลังเป็นสติกเกอร์เดินรอบขอบจอ ภาพจากช่างภาพ หรือไม่มีอะไรเลยก็ได้">One sticker walking the edges, the photographers' photos, or nothing behind it.</li>
         </ul>
       </div>
-      <div class="win"><img data-shot="focus" alt="" loading="lazy" width="1440" height="900"></div>
+      <div class="win"><img data-shot="focus" src="assets/shots/focus-en.jpg?v=3" alt="" width="1280" height="1014"></div>
     </div>
 
     <div class="step">
@@ -205,7 +205,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
           <li data-en="When it's time: a chime, or Milk and Love calling each other; the buddy holds it up for you." data-zh="時間到：叮一聲，或 Milk 和 Love 互相叫名字；夥伴會舉牌給你看。" data-th="เมื่อถึงเวลา: เสียงกริ่ง หรือมิลค์กับเลิฟเรียกชื่อกัน และเพื่อนจะชูป้ายให้คุณดู">When it's time: a chime, or Milk and Love calling each other; the buddy holds it up for you.</li>
         </ul>
       </div>
-      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="reminders" alt="" loading="lazy" width="1440" height="891"></div>
+      <div class="win"><div class="bar"><i></i><i></i><i></i></div><img data-shot="reminders" src="assets/shots/reminders-en.jpg?v=3" alt="" width="1280" height="929"></div>
     </div>
 
     <div class="step">
@@ -218,7 +218,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
           <li data-en="Choose who, which stickers, how big, and how often they change." data-zh="可以選是誰、用哪些貼圖、多大、多久換一張。" data-th="เลือกได้ว่าเป็นใคร ใช้สติกเกอร์ไหน ขนาดเท่าไร และเปลี่ยนบ่อยแค่ไหน">Choose who, which stickers, how big, and how often they change.</li>
         </ul>
       </div>
-      <div class="win" style="max-width:460px;justify-self:center"><img src="assets/shots/buddy.jpg" alt="" loading="lazy" width="494" height="454"></div>
+      <div class="win" style="max-width:460px;justify-self:center"><img src="assets/shots/buddy.jpg?v=3" alt="" width="494" height="454"></div>
     </div>
 
     <div class="step">
@@ -233,7 +233,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
       </div>
       <div>
         <div class="tabs" role="tablist"><button type="button" class="on" data-data="data-summary" data-en="Summary" data-zh="總覽" data-th="สรุป">Summary</button><button type="button" data-data="data-analysis" data-en="Analysis" data-zh="分析" data-th="การวิเคราะห์">Analysis</button><button type="button" data-data="data-calendar" data-en="Calendar" data-zh="日曆" data-th="ปฏิทิน">Calendar</button></div>
-        <div class="win"><div class="bar"><i></i><i></i><i></i></div><img id="data-shot" data-shot="data-summary" alt="" loading="lazy" width="1440" height="891"></div>
+        <div class="win"><div class="bar"><i></i><i></i><i></i></div><img id="data-shot" data-shot="data-summary" src="assets/shots/data-summary-en.jpg?v=3" alt="" width="1280" height="929"></div>
       </div>
     </div>
   </div>
@@ -412,7 +412,7 @@ function draw() {
   document.querySelectorAll("[data-en]").forEach((e) => { e.innerHTML = e.dataset[lang] || e.dataset.en; });
   document.querySelectorAll("[data-l-only]").forEach((e) => { e.hidden = e.dataset.lOnly !== lang; });
   document.querySelectorAll(".langs button").forEach((b) => b.classList.toggle("on", b.dataset.l === lang));
-  document.querySelectorAll("img[data-shot]").forEach((i) => { i.src = `assets/shots/${i.dataset.shot}-${lang}.jpg`; });
+  document.querySelectorAll("img[data-shot]").forEach((i) => { i.src = `assets/shots/${i.dataset.shot}-${lang}.jpg?v=3`; });
   const out = latest && newer(latest.version, NEW_IN);
   document.querySelectorAll("[data-new]").forEach((b) => { b.textContent = out ? T("New", "新功能", "ใหม่") : T("Coming in 0.3", "0.3 版推出", "มาในเวอร์ชัน 0.3"); });
   document.getElementById("hero-dl").innerHTML = os === "windows" ? link("windows", T("Download for Windows", "下載 Windows 版", "ดาวน์โหลดสำหรับ Windows"), true)
@@ -431,7 +431,7 @@ function draw() {
 document.querySelectorAll(".langs button").forEach((b) => b.addEventListener("click", () => { lang = b.dataset.l; try { localStorage.setItem("lang", lang); } catch { /* fine */ } draw(); }));
 document.querySelectorAll("[data-data]").forEach((b) => b.addEventListener("click", () => {
   document.querySelectorAll("[data-data]").forEach((x) => x.classList.toggle("on", x === b));
-  const img = document.getElementById("data-shot"); img.dataset.shot = b.dataset.data; img.src = `assets/shots/${b.dataset.data}-${lang}.jpg`;
+  const img = document.getElementById("data-shot"); img.dataset.shot = b.dataset.data; img.src = `assets/shots/${b.dataset.data}-${lang}.jpg?v=3`;
 }));
 document.getElementById("sign").addEventListener("submit", async (e) => {
   e.preventDefault();

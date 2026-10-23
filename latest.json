@@ -10,7 +10,8 @@
   },
   "notes": {
     "en": "Data for a week, a month or a year, with a calendar you can edit; Reminders and Events apart; a reminder sound; a little timer in the menu bar; walkthroughs for Settings and Data.",
-    "zh": "數據可以看一週、一個月或一年，日曆裡可以直接改；提醒和活動分開看；提醒音效；選單列小倒數；設定和數據導覽。"
+    "zh": "數據可以看一週、一個月或一年，日曆裡可以直接改；提醒和活動分開看；提醒音效；選單列小倒數；設定和數據導覽。",
+    "th": "สถิติรายสัปดาห์ เดือน หรือปี พร้อมปฏิทินที่แก้ไขได้ แยกการแจ้งเตือนกับกิจกรรม เสียงแจ้งเตือน นาฬิกานับถอยหลังเล็ก ๆ บนแถบเมนู และทัวร์แนะนำการตั้งค่าและสถิติ"
   },
   "min": "0.1.0",
   "history": [
@@ -18,13 +19,15 @@
       "version": "0.2.0",
       "date": "2026-10-21",
       "en": "Data: week, month, year, an editable calendar and a ranking. Reminders: All / Reminders / Events, other days folded. A reminder sound (Milk and Love calling each other). The menu-bar timer. Settings and Data walkthroughs, a menu that opens each tab's parts, Find a setting. Pick the stickers the buddies use. The Photos tab: filters by who's in it and who took it.",
-      "zh": "數據：週、月、年，可以修改的日曆和排行榜。提醒與活動：全部／提醒／活動，其他天收起來。提醒音效（Milk 和 Love 互相叫名字）。選單列小倒數。設定和數據導覽、左邊選單展開各分頁的內容、找設定。選擇夥伴用的貼圖。照片分頁：依照片裡是誰和拍攝者篩選。"
+      "zh": "數據：週、月、年，可以修改的日曆和排行榜。提醒與活動：全部／提醒／活動，其他天收起來。提醒音效（Milk 和 Love 互相叫名字）。選單列小倒數。設定和數據導覽、左邊選單展開各分頁的內容、找設定。選擇夥伴用的貼圖。照片分頁：依照片裡是誰和拍攝者篩選。",
+      "th": "สถิติ: สัปดาห์ เดือน ปี ปฏิทินที่แก้ไขได้ และอันดับ แจ้งเตือนและกิจกรรม: ทั้งหมด / แจ้งเตือน / กิจกรรม วันอื่นพับไว้ เสียงแจ้งเตือน (มิลค์กับเลิฟเรียกชื่อกัน) นาฬิกานับถอยหลังบนแถบเมนู ทัวร์การตั้งค่าและสถิติ เมนูที่เปิดส่วนต่าง ๆ ของแต่ละแท็บ ค้นหาการตั้งค่า เลือกสติกเกอร์ที่เพื่อนใช้ แท็บรูป: กรองตามคนในรูปและคนถ่าย"
     },
     {
       "version": "0.1.0",
       "date": "2026-10-18",
       "en": "The first version: the desktop buddies, the work clock, reminders and events, the Pomodoro, the week's data, your own stickers.",
-      "zh": "第一版：桌面夥伴、工作時鐘、提醒與活動、番茄鐘、一週數據、自己的貼圖。"
+      "zh": "第一版：桌面夥伴、工作時鐘、提醒與活動、番茄鐘、一週數據、自己的貼圖。",
+      "th": "เวอร์ชันแรก: เพื่อนบนเดสก์ท็อป นาฬิกาทำงาน แจ้งเตือนและกิจกรรม โพโมโดโร่ สถิติรายสัปดาห์ และสติกเกอร์ของคุณเอง"
     }
   ],
   "signup": {
