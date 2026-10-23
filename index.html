@@ -109,7 +109,8 @@ section > .wrap > h2, .sec-h { font-size:32px; line-height:1.2; margin:0 0 10px;
 .soon { display:inline-block; font-weight:700; font-size:13px; padding:4px 11px; border-radius:999px; background:var(--pink-soft); color:var(--pink); }
 /* step that spans the width: the focus screen demo */
 .step.wide, .step.wide:nth-child(even) { grid-template-columns:1fr; gap:18px; } .step.wide .txt { order:0; max-width:820px; }
-.fdemo { display:grid; grid-template-columns:1fr 300px; gap:20px; align-items:start; }
+.fdemo { display:grid; grid-template-columns:1fr 300px; gap:8px 20px; align-items:start; } .fdemo .credit-line { grid-column:1; grid-row:2; margin:0; } .fdemo .fctl { grid-column:2; grid-row:1 / span 2; }
+@media (max-width:880px) { .fdemo .credit-line, .fdemo .fctl { grid-column:auto; grid-row:auto; } }
 @media (max-width:880px) { .fdemo { grid-template-columns:1fr; } }
 .fsd { --ring:#f7b8cf; --track:#3a3236; --inner:#101614; --digits:#b5ead7; --s:1; --op:1; position:relative; aspect-ratio:16/10; border-radius:14px; overflow:hidden; background:#0e1311; box-shadow:var(--shadow); container-type:size; display:flex; padding:5% 6%; }
 .fsd.soft { background:#f6f1ec; }
@@ -159,6 +160,10 @@ section > .wrap > h2, .sec-h { font-size:32px; line-height:1.2; margin:0 0 10px;
 .editor .side img.realpanel { width:100%; border-radius:8px; display:block; }
 .desktop { position:relative; border-radius:14px; min-height:360px; background:linear-gradient(160deg, #a9c8e8, #e7cfe3 60%, #f3dcc6); box-shadow:var(--shadow); display:flex; align-items:flex-end; justify-content:center; gap:40px; padding:24px; overflow:hidden; }
 .desktop img { max-height:300px; width:auto; } .desktop.pop { align-items:center; } .desktop.pop img { max-width:100%; max-height:none; }
+.install { margin-top:26px; background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px 24px; display:grid; grid-template-columns:1fr 1.2fr; gap:10px 32px; }
+.install h3 { margin:0 0 6px; font-size:22px; } .install .how { margin:0; padding-left:22px; } .install .how li { margin:0 0 8px; }
+.install .cmdline, .install > p:last-child { grid-column:1 / -1; margin:0; } .install code { background:var(--soft); padding:1px 6px; border-radius:6px; font-size:12.5px; }
+@media (max-width:880px) { .install { grid-template-columns:1fr; } }
 /* download */
 .plat { display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; }
 .plat .card.mine { outline:2px solid var(--green); }
@@ -243,7 +248,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
       </div>
       <div class="fdemo">
         <div class="fsd" id="fsd" aria-label="Focus screen preview">
-          <img class="ph on" src="assets/focus/photos-1.jpg" alt=""><img class="ph" src="assets/focus/photos-2.jpg" alt="">
+          <img class="ph on" src="assets/focus/blumoon-1.jpg" alt=""><img class="ph" src="assets/focus/blumoon-2.jpg" alt=""><img class="ph" src="assets/focus/blumoon-3.jpg" alt=""><img class="ph" src="assets/focus/blumoon-4.jpg" alt=""><img class="ph" src="assets/focus/blumoon-5.jpg" alt="">
           <img class="stk" src="assets/focus/sticker-1.png" alt="">
           <div class="fclock" id="fclock">
             <div class="task" data-en="Working on <b>Thesis, chapter 3</b>" data-zh="正在做 <b>論文第三章</b>" data-th="กำลังทำ <b>วิทยานิพนธ์ บทที่ 3</b>">Working on <b>Thesis, chapter 3</b></div>
@@ -251,6 +256,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
             <div class="sub" data-en="Round 2" data-zh="第 2 輪" data-th="รอบที่ 2">Round 2</div>
           </div>
         </div>
+        <p class="credit-line small muted" data-en="The photos in this preview belong to <b>Blumoon</b> (<a href=&quot;https://x.com/blumoonfoto&quot; rel=&quot;noopener&quot;>@blumoonfoto</a>), used with permission." data-zh="這個預覽裡的照片屬於 <b>Blumoon</b>（<a href=&quot;https://x.com/blumoonfoto&quot; rel=&quot;noopener&quot;>@blumoonfoto</a>），已獲授權使用。" data-th="ภาพถ่ายในตัวอย่างนี้เป็นของ <b>Blumoon</b> (<a href=&quot;https://x.com/blumoonfoto&quot; rel=&quot;noopener&quot;>@blumoonfoto</a>) ใช้โดยได้รับอนุญาต">The photos in this preview belong to <b>Blumoon</b> (<a href="https://x.com/blumoonfoto" rel="noopener">@blumoonfoto</a>), used with permission.</p>
         <div class="fctl">
           <div><span class="lbl" data-en="Behind the clock" data-zh="時鐘後面" data-th="หลังนาฬิกา">Behind the clock</span>
             <div class="seg" data-k="bg"><button type="button" data-v="sticker" data-en="A sticker" data-zh="一張貼圖" data-th="สติกเกอร์">A sticker</button><button type="button" data-v="photos" class="on" data-en="Photos" data-zh="照片" data-th="ภาพถ่าย">Photos</button><button type="button" data-v="none" data-en="Nothing" data-zh="什麼都不放" data-th="ไม่มี">Nothing</button></div></div>
@@ -345,7 +351,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
         <li data-en="A few Milk &amp; Love stickers and animals" data-zh="幾張 Milk 和 Love 貼圖，還有小動物" data-th="สติกเกอร์มิลค์กับเลิฟและสัตว์น่ารักไม่กี่ตัว">A few Milk &amp; Love stickers and animals</li>
       </ul>
       <p class="rec" data-en="For lightweight use while you code. No calendar sync or data dashboards: for those, use ML WorkHelp." data-zh="寫程式時輕鬆用。沒有行事曆同步和數據分析；需要的話請用 ML WorkHelp。" data-th="สำหรับใช้แบบเบา ๆ ระหว่างเขียนโค้ด ไม่มีการซิงก์ปฏิทินหรือแดชบอร์ดสถิติ ถ้าต้องการให้ใช้ ML WorkHelp">For lightweight use while you code. No calendar sync or data dashboards: for those, use ML WorkHelp.</p>
-      <div class="dl"><a class="btn" href="#devhelp" data-en="Meet DevHelp" data-zh="認識 DevHelp" data-th="ทำความรู้จัก DevHelp">Meet DevHelp</a><span class="soon" data-en="Coming soon" data-zh="即將推出" data-th="เร็ว ๆ นี้">Coming soon</span></div>
+      <div class="dl"><a class="btn" href="#devhelp" data-en="Meet DevHelp" data-zh="認識 DevHelp" data-th="ทำความรู้จัก DevHelp">Meet DevHelp</a><a class="btn" href="#devhelp-get" data-en="Get DevHelp" data-zh="下載 DevHelp" data-th="ดาวน์โหลด DevHelp">Get DevHelp</a></div>
     </div>
   </div>
   <table class="cmp">
@@ -448,7 +454,22 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
 
   <p class="sep" data-en="DevHelp keeps it light: no calendar, no data dashboards. For your whole work day, the calendar and seeing how you work over weeks and months, use ML WorkHelp." data-zh="DevHelp 保持輕巧：沒有行事曆、沒有數據分析。想管理整個工作日、用行事曆、看幾週幾個月的工作情況，請用 ML WorkHelp。" data-th="DevHelp เน้นความเบา ไม่มีปฏิทิน ไม่มีแดชบอร์ดสถิติ สำหรับทั้งวันทำงาน ปฏิทิน และดูว่าคุณทำงานอย่างไรตลอดหลายสัปดาห์และเดือน ให้ใช้ ML WorkHelp">DevHelp keeps it light: no calendar, no data dashboards. For your whole work day, the calendar and seeing how you work over weeks and months, use ML WorkHelp.</p>
   <p class="small muted" data-en="Mac and Windows, English or 繁體中文. The mascots belong to GMMTV; our drawings follow the official art." data-zh="Mac 和 Windows，英文或繁體中文。吉祥物屬於 GMMTV；我們的插畫依照官方造型繪製。" data-th="Mac และ Windows ภาษาอังกฤษหรือจีนตัวเต็ม มาสคอตเป็นของ GMMTV ภาพวาดของเราอิงจากภาพทางการ">Mac and Windows, English or 繁體中文. The mascots belong to GMMTV; our drawings follow the official art.</p>
-  <div class="dl"><span class="soon" data-en="Coming soon to VS Code and Kiro" data-zh="即將登上 VS Code 和 Kiro" data-th="เร็ว ๆ นี้บน VS Code และ Kiro">Coming soon to VS Code and Kiro</span><a class="btn" href="#news" data-en="Tell me when it's out" data-zh="推出時通知我" data-th="แจ้งฉันเมื่อเปิดตัว">Tell me when it's out</a></div>
+  <div class="install" id="devhelp-get">
+    <div>
+      <h3 data-en="Get DevHelp" data-zh="下載 DevHelp" data-th="ดาวน์โหลด DevHelp">Get DevHelp</h3>
+      <p class="muted" data-en="DevHelp isn't in the extension store: you download one file and add it to VS Code or Kiro yourself. It takes a minute." data-zh="DevHelp 不在擴充功能商店裡：下載一個檔案，自己加進 VS Code 或 Kiro 就好，大約一分鐘。" data-th="DevHelp ไม่ได้อยู่ในสโตร์ส่วนขยาย ให้ดาวน์โหลดไฟล์เดียวแล้วเพิ่มเข้า VS Code หรือ Kiro เอง ใช้เวลาประมาณหนึ่งนาที">DevHelp isn't in the extension store: you download one file and add it to VS Code or Kiro yourself. It takes a minute.</p>
+      <div class="dl"><a class="btn main" id="devhelp-dl" href="https://github.com/alitasdepollos01/ml-workhelp/releases/download/devhelp-v1.0.0/devhelp-1.0.0.vsix" data-en="Download DevHelp 1.0.0 (.vsix)" data-zh="下載 DevHelp 1.0.0（.vsix）" data-th="ดาวน์โหลด DevHelp 1.0.0 (.vsix)">Download DevHelp 1.0.0 (.vsix)</a></div>
+      <p class="small muted" data-en="One file for Mac and Windows · VS Code 1.85 or later, or Kiro." data-zh="Mac 和 Windows 同一個檔案 · VS Code 1.85 以上，或 Kiro。" data-th="ไฟล์เดียวใช้ได้ทั้ง Mac และ Windows · VS Code 1.85 ขึ้นไป หรือ Kiro">One file for Mac and Windows · VS Code 1.85 or later, or Kiro.</p>
+    </div>
+    <ol class="how">
+      <li data-en="Open VS Code or Kiro, and go to <b>Extensions</b> (the squares on the left, or ⇧⌘X / Ctrl+Shift+X)." data-zh="打開 VS Code 或 Kiro，到<b>擴充功能</b>（左邊的方塊圖示，或 ⇧⌘X / Ctrl+Shift+X）。" data-th="เปิด VS Code หรือ Kiro แล้วไปที่ <b>Extensions</b> (ไอคอนสี่เหลี่ยมด้านซ้าย หรือ ⇧⌘X / Ctrl+Shift+X)">Open VS Code or Kiro, and go to <b>Extensions</b> (the squares on the left, or ⇧⌘X / Ctrl+Shift+X).</li>
+      <li data-en="Click <b>…</b> at the top of the Extensions list, then <b>Install from VSIX…</b>" data-zh="點擴充功能清單最上面的 <b>…</b>，再選 <b>從 VSIX 安裝…</b>（Install from VSIX…）" data-th="คลิก <b>…</b> ด้านบนของรายการ Extensions แล้วเลือก <b>Install from VSIX…</b>">Click <b>…</b> at the top of the Extensions list, then <b>Install from VSIX…</b></li>
+      <li data-en="Pick the <b>devhelp-1.0.0.vsix</b> you downloaded (usually in Downloads)." data-zh="選你下載的 <b>devhelp-1.0.0.vsix</b>（通常在「下載」資料夾）。" data-th="เลือกไฟล์ <b>devhelp-1.0.0.vsix</b> ที่ดาวน์โหลดมา (ปกติอยู่ในโฟลเดอร์ Downloads)">Pick the <b>devhelp-1.0.0.vsix</b> you downloaded (usually in Downloads).</li>
+      <li data-en="When it asks, press <b>Reload</b>. DevHelp's panel appears in the Explorer, and the buddy starts walking." data-zh="出現提示時按<b>重新載入</b>（Reload）。DevHelp 的面板會出現在檔案總管，夥伴就開始走了。" data-th="เมื่อมีข้อความถาม ให้กด <b>Reload</b> แผงของ DevHelp จะปรากฏใน Explorer และเพื่อนจะเริ่มเดิน">When it asks, press <b>Reload</b>. DevHelp's panel appears in the Explorer, and the buddy starts walking.</li>
+    </ol>
+    <p class="small muted cmdline"><span data-en="Or in a terminal:" data-zh="或在終端機輸入：" data-th="หรือพิมพ์ในเทอร์มินัล:">Or in a terminal:</span> <code>code --install-extension devhelp-1.0.0.vsix</code> · <code>kiro --install-extension devhelp-1.0.0.vsix</code></p>
+    <p class="small muted" data-en="New versions don't install by themselves: leave your email below and we'll tell you, then install the new file the same way. To remove DevHelp: Extensions › DevHelp › Uninstall." data-zh="新版本不會自動安裝：在下面留下 email，我們會通知你，再用一樣的方法裝新檔案。移除 DevHelp：擴充功能 › DevHelp › 解除安裝。" data-th="เวอร์ชันใหม่จะไม่ติดตั้งเอง ฝากอีเมลไว้ด้านล่างแล้วเราจะแจ้ง จากนั้นติดตั้งไฟล์ใหม่ด้วยวิธีเดิม หากต้องการลบ DevHelp: Extensions › DevHelp › Uninstall">New versions don't install by themselves: leave your email below and we'll tell you, then install the new file the same way. To remove DevHelp: Extensions › DevHelp › Uninstall.</p>
+  </div>
 </div></section>
 
 <!-- Download -->
@@ -486,12 +507,12 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
 <!-- News -->
 <section id="news"><div class="wrap">
   <h2 data-en="New versions &amp; important notices" data-zh="新版本與重要通知" data-th="เวอร์ชันใหม่และประกาศสำคัญ">New versions &amp; important notices</h2>
-  <p class="lead" data-en="We write when there's a new version, when DevHelp is out, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all." data-zh="有新版本、DevHelp 推出，或有需要你注意的事（例如權利人要求移除照片或貼圖）時，我們會寫信告訴你。就這樣。" data-th="เราจะเขียนถึงคุณเมื่อมีเวอร์ชันใหม่ เมื่อ DevHelp เปิดตัว หรือเมื่อมีเรื่องที่คุณต้องรู้ (เช่น เจ้าของสิทธิ์ขอให้นำภาพหรือสติกเกอร์ออก) แค่นั้น">We write when there's a new version, when DevHelp is out, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all.</p>
+  <p class="lead" data-en="We write when there's a new version of ML WorkHelp or DevHelp, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all." data-zh="ML WorkHelp 或 DevHelp 有新版本，或有需要你注意的事（例如權利人要求移除照片或貼圖）時，我們會寫信告訴你。就這樣。" data-th="เราจะเขียนถึงคุณเมื่อ ML WorkHelp หรือ DevHelp มีเวอร์ชันใหม่ หรือเมื่อมีเรื่องที่คุณต้องรู้ (เช่น เจ้าของสิทธิ์ขอให้นำภาพหรือสติกเกอร์ออก) แค่นั้น">We write when there's a new version of ML WorkHelp or DevHelp, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all.</p>
   <form class="sign" id="sign">
     <div class="row"><input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email">
       <button class="btn main" type="submit" data-en="Tell me" data-zh="通知我" data-th="แจ้งฉัน">Tell me</button></div>
     <label><input type="checkbox" name="ml" checked> <span data-en="ML WorkHelp: new versions and important updates" data-zh="ML WorkHelp：新版本和重要更新" data-th="ML WorkHelp: เวอร์ชันใหม่และอัปเดตสำคัญ">ML WorkHelp: new versions and important updates</span></label>
-    <label><input type="checkbox" name="dev"> <span data-en="DevHelp: tell me when it's out" data-zh="DevHelp：推出時通知我" data-th="DevHelp: แจ้งเมื่อเปิดตัว">DevHelp: tell me when it's out</span></label>
+    <label><input type="checkbox" name="dev"> <span data-en="DevHelp: new versions" data-zh="DevHelp：新版本" data-th="DevHelp: เวอร์ชันใหม่">DevHelp: new versions</span></label>
     <div class="promise"><b data-en="Our promise" data-zh="我們的承諾" data-th="สัญญาของเรา">Our promise</b>
       <ul>
         <li data-en="Only about ML WorkHelp and DevHelp. No ads, no spam." data-zh="只寄 ML WorkHelp 和 DevHelp 的消息。沒有廣告、不會寄垃圾信。" data-th="เฉพาะเรื่อง ML WorkHelp และ DevHelp ไม่มีโฆษณา ไม่มีสแปม">Only about ML WorkHelp and DevHelp. No ads, no spam.</li>
@@ -531,7 +552,7 @@ const T = (en, zh, th) => ({ en, zh, th: th || en }[lang]);
 let latest = null;
 const os = /Windows/i.test(navigator.userAgent) ? "windows" : "mac";
 // The newest features: "New" once the version with them is out, "Coming in 0.3" until then.
-const NEW_IN = "0.3.0";
+const NEW_IN = "1.0.0";
 const newer = (a, b) => { const x = String(a).split(".").map(Number), y = String(b).split(".").map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); } return true; };
 function link(key, label, main) {
   const url = latest?.files?.[key];
@@ -544,7 +565,7 @@ function draw() {
   document.querySelectorAll(".langs button").forEach((b) => b.classList.toggle("on", b.dataset.l === lang));
   document.querySelectorAll("img[data-shot]").forEach((i) => { i.src = `assets/shots/${i.dataset.shot}-${lang}.jpg?v=3`; });
   const out = latest && newer(latest.version, NEW_IN);
-  document.querySelectorAll("[data-new]").forEach((b) => { b.textContent = out ? T("New", "新功能", "ใหม่") : T("Coming in 0.3", "0.3 版推出", "มาในเวอร์ชัน 0.3"); });
+  document.querySelectorAll("[data-new]").forEach((b) => { b.textContent = out ? T("New", "新功能", "ใหม่") : T("Coming soon", "即將推出", "เร็ว ๆ นี้"); });
   document.getElementById("hero-dl").innerHTML = os === "windows" ? link("windows", T("Download for Windows", "下載 Windows 版", "ดาวน์โหลดสำหรับ Windows"), true)
     : link("mac-arm64", T("Download for Mac", "下載 Mac 版", "ดาวน์โหลดสำหรับ Mac"), true) + `<a class="btn" href="#download">${T("Intel Mac, Windows", "Intel Mac、Windows", "Mac Intel, Windows")}</a>`;
   document.getElementById("ver").textContent = latest ? T(`Version ${latest.version} · ${latest.released}`, `版本 ${latest.version} · ${latest.released}`, `เวอร์ชัน ${latest.version} · ${latest.released}`) : "";

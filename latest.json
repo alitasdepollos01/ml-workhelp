@@ -1,20 +1,27 @@
 {
-  "version": "0.2.0",
-  "released": "2026-10-21",
+  "version": "1.0.0",
+  "released": "2026-10-23",
   "download": "https://alitasdepollos01.github.io/ml-workhelp/#download",
   "files": {
-    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v0.2.0/ML.WorkHelp-0.2.0-arm64.dmg",
-    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v0.2.0/ML.WorkHelp-0.2.0.dmg",
+    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.0.0/ML.WorkHelp-1.0.0-arm64.dmg",
+    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.0.0/ML.WorkHelp-1.0.0.dmg",
     "windows": null,
-    "vscode": null
+    "vscode": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/devhelp-v1.0.0/devhelp-1.0.0.vsix"
   },
   "notes": {
-    "en": "Data for a week, a month or a year, with a calendar you can edit; Reminders and Events apart; a reminder sound; a little timer in the menu bar; walkthroughs for Settings and Data.",
-    "zh": "數據可以看一週、一個月或一年，日曆裡可以直接改；提醒和活動分開看；提醒音效；選單列小倒數；設定和數據導覽。",
-    "th": "สถิติรายสัปดาห์ เดือน หรือปี พร้อมปฏิทินที่แก้ไขได้ แยกการแจ้งเตือนกับกิจกรรม เสียงแจ้งเตือน นาฬิกานับถอยหลังเล็ก ๆ บนแถบเมนู และทัวร์แนะนำการตั้งค่าและสถิติ"
+    "en": "The work clock or the Pomodoro, switched in one tap; a focus screen with your own clock; type a reminder (“Stretch in 25 min”); Data as Summary, Analysis and Calendar; credit your own photos; Help from Muv; ไทย (beta).",
+    "zh": "工作時鐘或番茄鐘，一鍵切換；可以自己設計時鐘的專注全螢幕；直接打字加提醒（「25 分鐘後伸展」）；數據分成總覽、分析和日曆；標註自己照片的來源；Muv 的幫助；ไทย（測試版）。",
+    "th": "นาฬิกาทำงานหรือโพโมโดโร่ สลับได้ในคลิกเดียว หน้าจอโฟกัสพร้อมนาฬิกาที่ปรับเองได้ พิมพ์แจ้งเตือนได้เลย (“ยืดเส้นอีก 25 นาที”) สถิติแบ่งเป็นสรุป การวิเคราะห์ และปฏิทิน ให้เครดิตรูปของคุณเอง ความช่วยเหลือจาก Muv และภาษาไทย (ทดลอง)"
   },
   "min": "0.1.0",
   "history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-23",
+      "en": "Today: the work clock or the Pomodoro, one tap to switch (with Undo); Done for today with a sticker celebration. The focus screen: a full-screen clock for work away from the computer, with your choice of colours, place, size and opacity, and a sticker or photos behind it. Reminders and events: just type them. Data: Summary (trends, goal ring, each day by category), Analysis (where the time went, your typical day, focus quality, side by side) and Calendar; make a picture of it. Your own photos: credit them, change the credit or delete them; Photo sources in Settings. Help from Muv, and email that opens your mail app. Thai (beta). Fewer emoji, line icons. The reminder sound rings reliably.",
+      "zh": "今天：工作時鐘或番茄鐘，一鍵切換（可以復原）；收工有貼圖慶祝。專注全螢幕：不在電腦前工作時的全螢幕時鐘，顏色、位置、大小、不透明度都能自己選，後面可以放貼圖或照片。提醒與活動：直接打字就好。數據：總覽（趨勢、達標圓環、每天依分類）、分析（時間花在哪裡、平常的一天、專注程度、前後比較）和日曆；可以做成圖片。自己的照片：標註來源、修改或刪除；設定裡有照片來源。Muv 的幫助，寫信會打開你的郵件 App。泰文（測試版）。表情符號變少，改用線條圖示。提醒音效穩定響起。",
+      "th": "วันนี้: นาฬิกาทำงานหรือโพโมโดโร่ สลับในคลิกเดียว (ย้อนกลับได้) เลิกงานพร้อมสติกเกอร์ฉลอง หน้าจอโฟกัส: นาฬิกาเต็มจอสำหรับงานที่ไม่ได้ใช้คอม เลือกสี ตำแหน่ง ขนาด และความทึบได้เอง พร้อมสติกเกอร์หรือภาพถ่ายด้านหลัง แจ้งเตือนและกิจกรรม: แค่พิมพ์ สถิติ: สรุป (แนวโน้ม วงกลมเป้าหมาย แต่ละวันแยกตามหมวด) การวิเคราะห์ (เวลาหมดไปกับอะไร วันปกติ คุณภาพการโฟกัส เทียบกับก่อนหน้า) และปฏิทิน ทำเป็นรูปภาพได้ รูปของคุณเอง: ให้เครดิต แก้ไข หรือลบ และแหล่งที่มาของรูปในการตั้งค่า ความช่วยเหลือจาก Muv และอีเมลที่เปิดแอปอีเมลของคุณ ภาษาไทย (ทดลอง) อีโมจิน้อยลง ใช้ไอคอนเส้น เสียงแจ้งเตือนดังได้แน่นอน"
+    },
     {
       "version": "0.2.0",
       "date": "2026-10-21",
@@ -36,5 +43,10 @@
     "extra": {
       "tag": "app"
     }
+  },
+  "devhelp": {
+    "version": "1.0.0",
+    "released": "2026-10-23",
+    "file": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/devhelp-v1.0.0/devhelp-1.0.0.vsix"
   }
 }
