@@ -1,20 +1,32 @@
 {
-  "version": "1.0.1",
+  "version": "1.1.0",
   "released": "2026-10-24",
   "download": "https://alitasdepollos01.github.io/ml-workhelp/#download",
   "files": {
-    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.0.1/ML.WorkHelp-1.0.1-arm64.dmg",
-    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.0.1/ML.WorkHelp-1.0.1.dmg",
+    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.1.0/ML.WorkHelp-1.1.0-arm64.dmg",
+    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.1.0/ML.WorkHelp-1.1.0.dmg",
     "windows": null,
     "vscode": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp"
   },
   "notes": {
-    "en": "Help: the title in the middle, with a bigger sticker above it.",
-    "zh": "幫助頁：標題置中，貼圖放大放在標題上方。",
-    "th": "หน้าความช่วยเหลือ: หัวข้ออยู่ตรงกลาง พร้อมสติกเกอร์ที่ใหญ่ขึ้นด้านบน"
+    "en": "Right-click the desktop buddy for a small card with the everyday things; a much shorter menu-bar menu (the rest is in Settings); the buddy tells you about new versions, and Today shows what's new after updating.",
+    "zh": "在桌面夥伴上按右鍵，會出現一張放常用功能的小卡片；選單列的選單變短了（其他都在「設定」）；有新版本時夥伴會告訴你，更新後「今天」會顯示新功能。",
+    "th": "คลิกขวาที่เพื่อนบนเดสก์ท็อปจะมีการ์ดเล็ก ๆ รวมสิ่งที่ใช้บ่อย เมนูบนแถบเมนูสั้นลงมาก (ที่เหลืออยู่ในการตั้งค่า) เพื่อนจะบอกเมื่อมีเวอร์ชันใหม่ และหน้าวันนี้จะแสดงสิ่งใหม่หลังอัปเดต"
   },
   "min": "0.1.0",
   "history": [
+    {
+      "version": "1.1.0",
+      "date": "2026-10-24",
+      "en": "Right-click the desktop buddy for a small card with the everyday things; a much shorter menu-bar menu (the rest is in Settings); the buddy tells you about new versions, and Today shows what's new after updating.",
+      "zh": "在桌面夥伴上按右鍵，會出現一張放常用功能的小卡片；選單列的選單變短了（其他都在「設定」）；有新版本時夥伴會告訴你，更新後「今天」會顯示新功能。",
+      "th": "คลิกขวาที่เพื่อนบนเดสก์ท็อปจะมีการ์ดเล็ก ๆ รวมสิ่งที่ใช้บ่อย เมนูบนแถบเมนูสั้นลงมาก (ที่เหลืออยู่ในการตั้งค่า) เพื่อนจะบอกเมื่อมีเวอร์ชันใหม่ และหน้าวันนี้จะแสดงสิ่งใหม่หลังอัปเดต",
+      "short": {
+        "en": "A small card when you right-click the buddy, a shorter menu, and update news from your buddy.",
+        "zh": "按右鍵出現的小卡片、更短的選單，有新版本時夥伴會告訴你。",
+        "th": "การ์ดเล็กเมื่อคลิกขวาที่เพื่อน เมนูที่สั้นลง และเพื่อนบอกข่าวเวอร์ชันใหม่"
+      }
+    },
     {
       "version": "1.0.1",
       "date": "2026-10-24",
