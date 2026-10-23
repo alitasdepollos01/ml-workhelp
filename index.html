@@ -932,7 +932,7 @@ document.getElementById("fop").addEventListener("input", (e) => { fs.op = Number
 
 { const h = location.hash.slice(1), id = OLD[h] || h; const s = id && document.getElementById(id); if (s) prod = s.dataset.g === "start" ? "home" : s.dataset.g === "about" ? "home" : s.dataset.g; }
 draw();
-if (location.hash) requestAnimationFrame(() => go(location.hash.slice(1), false));
+if (location.hash) setTimeout(() => go(location.hash.slice(1), false), 0);
 fetch("latest.json", { cache: "no-store" }).then((r) => r.json()).then((j) => { latest = j; draw(); }).catch(() => {});
 </script>
 </body>
