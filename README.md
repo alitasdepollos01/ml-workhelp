@@ -5,10 +5,10 @@ A MilkLove buddy for your work day: desktop buddies, a work clock, the Pomodoro,
 
 **下載 / Download:** https://alitasdepollos01.github.io/ml-workhelp/ (or the latest release on this page)
 
-**DevHelp**（下載 / download: https://alitasdepollos01.github.io/ml-workhelp/#devhelp-get）：VS Code 和 Kiro 的輕量擴充功能，給寫程式的人：GMMTV 吉祥物、幾張貼圖、番茄鐘和提醒。兩個 App 各自獨立；完整的日曆和數據請用 ML WorkHelp。
-A light extension for VS Code and Kiro, for developers: GMMTV mascots, a few stickers, the Pomodoro and reminders. The two apps are separate; for the full calendar and data, use ML WorkHelp.
+**Thai Mascot Buddy**（下載 / install: https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp ）：VS Code 的輕量擴充功能：不同場景的面板和相關泰文字、沿著編輯器走的夥伴、番茄鐘、休息提醒，還可以選你喜歡的 GMMTV 吉祥物。Kiro 版本開發中。
+A light extension for VS Code: a panel with different scenery and the Thai words that go with it, a buddy walking round your editor, a Pomodoro clock, break reminders, and the GMMTV mascot of your choice. The Kiro marketplace version is in development.
 
-ML WorkHelp 和 DevHelp 是非官方的粉絲作品，和 GMMTV、Milk、Love 都沒有關係。每張照片都屬於它的拍攝者，App 裡都有標明。
-ML WorkHelp and DevHelp are unofficial fan projects, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app.
+ML WorkHelp 和 Thai Mascot Buddy 是非官方的粉絲作品，和 GMMTV、Milk、Love 都沒有關係。每張照片都屬於它的拍攝者，App 裡都有標明。
+ML WorkHelp and Thai Mascot Buddy are unofficial fan projects, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app.
 
 聯絡 / Contact: alitasdepollos01@gmail.com · [@alitasdepollos0](https://x.com/alitasdepollos0)

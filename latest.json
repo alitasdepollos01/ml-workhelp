@@ -6,7 +6,7 @@
     "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.0.0/ML.WorkHelp-1.0.0-arm64.dmg",
     "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.0.0/ML.WorkHelp-1.0.0.dmg",
     "windows": null,
-    "vscode": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/devhelp-v1.0.0/devhelp-1.0.0.vsix"
+    "vscode": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp"
   },
   "notes": {
     "en": "The work clock or the Pomodoro, switched in one tap; a focus screen with your own clock; type a reminder (“Stretch in 25 min”); Data as Summary, Analysis and Calendar; credit your own photos; Help from Muv; ไทย (beta).",
@@ -45,8 +45,9 @@
     }
   },
   "devhelp": {
-    "version": "1.0.0",
-    "released": "2026-10-23",
-    "file": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/devhelp-v1.0.0/devhelp-1.0.0.vsix"
+    "name": "Thai Mascot Buddy",
+    "version": "1.0.8",
+    "marketplace": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp",
+    "kiro": "in development"
   }
 }

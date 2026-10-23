@@ -106,6 +106,7 @@ section > .wrap > h2, .sec-h { font-size:32px; line-height:1.2; margin:0 0 10px;
 @keyframes bob { from { transform:translateY(0); } to { transform:translateY(-6%); } }
 .mascots { display:flex; gap:6px; flex-wrap:wrap; margin:12px 0 0; }
 .mascots img { height:58px; }
+.mascots.big { gap:14px; justify-content:center; align-content:center; } .mascots.big img { height:120px; }
 .soon { display:inline-block; font-weight:700; font-size:13px; padding:4px 11px; border-radius:999px; background:var(--pink-soft); color:var(--pink); }
 /* step that spans the width: the focus screen demo */
 .step.wide, .step.wide:nth-child(even) { grid-template-columns:1fr; gap:18px; } .step.wide .txt { order:0; max-width:820px; }
@@ -194,7 +195,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
   <a class="brand" href="#"><img src="assets/heart.svg" alt="">ML WorkHelp</a>
   <nav>
     <a href="#day" data-en="Features" data-zh="功能" data-th="ฟีเจอร์">Features</a>
-    <a href="#two" data-en="ML WorkHelp or DevHelp?" data-zh="ML WorkHelp 還是 DevHelp？" data-th="ML WorkHelp หรือ DevHelp?">ML WorkHelp or DevHelp?</a>
+    <a href="#two" data-en="ML WorkHelp or Thai Mascot Buddy?" data-zh="ML WorkHelp 還是 Thai Mascot Buddy？" data-th="ML WorkHelp หรือ Thai Mascot Buddy?">ML WorkHelp or Thai Mascot Buddy?</a>
     <a href="#download" data-en="Download" data-zh="下載" data-th="ดาวน์โหลด">Download</a>
     <a href="#photos" data-en="Photos" data-zh="照片" data-th="ภาพถ่าย">Photos</a>
   </nav>
@@ -324,7 +325,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
 <!-- ML WorkHelp or DevHelp -->
 <section id="two"><div class="wrap">
   <p class="eyebrow" data-en="Two apps" data-zh="兩個 App" data-th="สองแอป">Two apps</p>
-  <h2 data-en="ML WorkHelp or DevHelp?" data-zh="ML WorkHelp 還是 DevHelp？" data-th="ML WorkHelp หรือ DevHelp?">ML WorkHelp or DevHelp?</h2>
+  <h2 data-en="ML WorkHelp or Thai Mascot Buddy?" data-zh="ML WorkHelp 還是 Thai Mascot Buddy？" data-th="ML WorkHelp หรือ Thai Mascot Buddy?">ML WorkHelp or Thai Mascot Buddy?</h2>
   <p class="lead" data-en="Two separate apps for two kinds of day. Each works on its own; you can use either one, or both." data-zh="兩個獨立的 App，給兩種不同的一天。各自都能單獨使用；用其中一個或兩個都用都可以。" data-th="สองแอปที่แยกกัน สำหรับวันทำงานสองแบบ แต่ละแอปใช้ได้ด้วยตัวเอง จะใช้แอปเดียวหรือทั้งสองก็ได้">Two separate apps for two kinds of day. Each works on its own; you can use either one, or both.</p>
   <div class="pair">
     <div class="app ml">
@@ -342,59 +343,57 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
     </div>
     <div class="app">
       <span class="who" data-en="For developers, light" data-zh="給開發者，輕量" data-th="สำหรับนักพัฒนา แบบเบา ๆ">For developers, light</span>
-      <h3>DevHelp</h3>
-      <p class="for" data-en="An extension for VS Code and Kiro." data-zh="VS Code 和 Kiro 的擴充功能。" data-th="ส่วนขยายสำหรับ VS Code และ Kiro">An extension for VS Code and Kiro.</p>
+      <h3>Thai Mascot Buddy</h3>
+      <p class="for" data-en="An extension for VS Code. Kiro&#39;s version is in development." data-zh="VS Code 的擴充功能。Kiro 版本開發中。" data-th="ส่วนขยายสำหรับ VS Code (เวอร์ชัน Kiro กำลังพัฒนา)">An extension for VS Code. Kiro&#39;s version is in development.</p>
       <ul>
-        <li data-en="A tiny panel with a GMMTV mascot in a scene, and a Thai word" data-zh="小小的面板：GMMTV 吉祥物在場景裡，還有一個泰文單字" data-th="แผงเล็ก ๆ มีมาสคอต GMMTV ในฉาก และคำศัพท์ภาษาไทย">A tiny panel with a GMMTV mascot in a scene, and a Thai word</li>
-        <li data-en="A dev buddy walking round your editor, and a desktop buddy" data-zh="開發夥伴沿著編輯器走，還有桌面夥伴" data-th="เพื่อนนักพัฒนาเดินรอบเอดิเตอร์ และเพื่อนบนเดสก์ท็อป">A dev buddy walking round your editor, and a desktop buddy</li>
-        <li data-en="Work clock, Pomodoro, break and work reminders" data-zh="工作計時、番茄鐘、休息和工作提醒" data-th="นาฬิกาทำงาน โพโมโดโร่ และการเตือนให้พักและทำงาน">Work clock, Pomodoro, break and work reminders</li>
-        <li data-en="A few Milk &amp; Love stickers and animals" data-zh="幾張 Milk 和 Love 貼圖，還有小動物" data-th="สติกเกอร์มิลค์กับเลิฟและสัตว์น่ารักไม่กี่ตัว">A few Milk &amp; Love stickers and animals</li>
+        <li data-en="A panel with a mascot in different scenes, and the Thai words that go with them" data-zh="面板裡，吉祥物在不同的場景中，旁邊有相關的泰文字" data-th="แพเนลที่มีมาสคอตในฉากต่าง ๆ พร้อมคำไทยที่เกี่ยวข้อง">A panel with a mascot in different scenes, and the Thai words that go with them</li>
+        <li data-en="A buddy walking round your editor" data-zh="一個沿著編輯器走的開發夥伴" data-th="เพื่อนที่เดินรอบ ๆ ตัวแก้ไขโค้ดของคุณ">A buddy walking round your editor</li>
+        <li data-en="A Pomodoro clock and a break reminder pop-up" data-zh="番茄鐘和休息提醒跳出視窗" data-th="นาฬิกาโพโมโดโร่และป๊อปอัปเตือนพัก">A Pomodoro clock and a break reminder pop-up</li>
+        <li data-en="Pick the mascot you like" data-zh="選你喜歡的吉祥物" data-th="เลือกมาสคอตที่คุณชอบ">Pick the mascot you like</li>
       </ul>
       <p class="rec" data-en="For lightweight use while you code. No calendar sync or data dashboards: for those, use ML WorkHelp." data-zh="寫程式時輕鬆用。沒有行事曆同步和數據分析；需要的話請用 ML WorkHelp。" data-th="สำหรับใช้แบบเบา ๆ ระหว่างเขียนโค้ด ไม่มีการซิงก์ปฏิทินหรือแดชบอร์ดสถิติ ถ้าต้องการให้ใช้ ML WorkHelp">For lightweight use while you code. No calendar sync or data dashboards: for those, use ML WorkHelp.</p>
-      <div class="dl"><a class="btn" href="#devhelp" data-en="Meet DevHelp" data-zh="認識 DevHelp" data-th="ทำความรู้จัก DevHelp">Meet DevHelp</a><a class="btn" href="#devhelp-get" data-en="Get DevHelp" data-zh="下載 DevHelp" data-th="ดาวน์โหลด DevHelp">Get DevHelp</a></div>
+      <div class="dl"><a class="btn" href="#devhelp" data-en="Meet Thai Mascot Buddy" data-zh="認識 Thai Mascot Buddy" data-th="ทำความรู้จัก Thai Mascot Buddy">Meet Thai Mascot Buddy</a><a class="btn main" href="https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp" target="_blank" rel="noopener" data-en="Get it on VS Code Marketplace" data-zh="到 VS Code 市集安裝" data-th="ติดตั้งจาก VS Code Marketplace">Get it on VS Code Marketplace</a></div>
     </div>
   </div>
   <table class="cmp">
-    <thead><tr><th></th><th>ML WorkHelp</th><th>DevHelp</th></tr></thead>
+    <thead><tr><th></th><th>ML WorkHelp</th><th>Thai Mascot Buddy</th></tr></thead>
     <tbody>
-      <tr><th data-en="Where" data-zh="在哪裡" data-th="ใช้ที่ไหน">Where</th><td data-en="Its own app on your desktop" data-zh="桌面上的獨立 App" data-th="แอปของตัวเองบนเดสก์ท็อป">Its own app on your desktop</td><td data-en="Inside VS Code and Kiro" data-zh="在 VS Code 和 Kiro 裡" data-th="ภายใน VS Code และ Kiro">Inside VS Code and Kiro</td></tr>
-      <tr><th data-en="Buddies" data-zh="夥伴" data-th="เพื่อน">Buddies</th><td data-en="Milk &amp; Love on your desktop" data-zh="Milk 和 Love 在桌面上" data-th="มิลค์กับเลิฟบนเดสก์ท็อป">Milk &amp; Love on your desktop</td><td data-en="GMMTV mascots round your editor, a desktop buddy" data-zh="GMMTV 吉祥物在編輯器旁，加上桌面夥伴" data-th="มาสคอต GMMTV รอบเอดิเตอร์ และเพื่อนบนเดสก์ท็อป">GMMTV mascots round your editor, a desktop buddy</td></tr>
-      <tr><th data-en="Keeping time" data-zh="計時" data-th="การจับเวลา">Keeping time</th><td data-en="Work clock, Pomodoro, focus screen" data-zh="工作時鐘、番茄鐘、專注全螢幕" data-th="นาฬิกาทำงาน โพโมโดโร่ หน้าจอโฟกัส">Work clock, Pomodoro, focus screen</td><td data-en="Work clock and Pomodoro" data-zh="工作計時和番茄鐘" data-th="นาฬิกาทำงานและโพโมโดโร่">Work clock and Pomodoro</td></tr>
-      <tr><th data-en="Reminders" data-zh="提醒" data-th="การแจ้งเตือน">Reminders</th><td data-en="Reminders and events, Apple sync" data-zh="提醒與活動，Apple 同步" data-th="แจ้งเตือนและกิจกรรม ซิงก์กับ Apple">Reminders and events, Apple sync</td><td data-en="Simple reminders and break nudges" data-zh="簡單的提醒和休息提示" data-th="การแจ้งเตือนง่าย ๆ และการเตือนให้พัก">Simple reminders and break nudges</td></tr>
+      <tr><th data-en="Where" data-zh="在哪裡" data-th="ใช้ที่ไหน">Where</th><td data-en="Its own app on your desktop" data-zh="桌面上的獨立 App" data-th="แอปของตัวเองบนเดสก์ท็อป">Its own app on your desktop</td><td data-en="Inside VS Code (Kiro: in development)" data-zh="在 VS Code 裡面（Kiro：開發中）" data-th="ใน VS Code (Kiro: กำลังพัฒนา)">Inside VS Code (Kiro: in development)</td></tr>
+      <tr><th data-en="Buddies" data-zh="夥伴" data-th="เพื่อน">Buddies</th><td data-en="Milk &amp; Love on your desktop" data-zh="Milk 和 Love 在桌面上" data-th="มิลค์กับเลิฟบนเดสก์ท็อป">Milk &amp; Love on your desktop</td><td data-en="GMMTV mascots and animals round your editor" data-zh="GMMTV 吉祥物和動物沿著編輯器走" data-th="มาสคอต GMMTV และสัตว์เดินรอบตัวแก้ไขโค้ด">GMMTV mascots and animals round your editor</td></tr>
+      <tr><th data-en="Keeping time" data-zh="計時" data-th="จับเวลา">Keeping time</th><td data-en="Work clock, Pomodoro, focus screen" data-zh="工作時鐘、番茄鐘、專注全螢幕" data-th="นาฬิกาทำงาน โพโมโดโร่ หน้าจอโฟกัส">Work clock, Pomodoro, focus screen</td><td data-en="Work clock and Pomodoro" data-zh="工作時鐘和番茄鐘" data-th="นาฬิกาทำงานและโพโมโดโร่">Work clock and Pomodoro</td></tr>
+      <tr><th data-en="Reminders" data-zh="提醒" data-th="แจ้งเตือน">Reminders</th><td data-en="Reminders and events, Apple sync" data-zh="提醒與活動，同步 Apple" data-th="แจ้งเตือนและกิจกรรม ซิงก์กับ Apple">Reminders and events, Apple sync</td><td data-en="Simple reminders and break nudges" data-zh="簡單的提醒和休息提示" data-th="แจ้งเตือนง่าย ๆ และเตือนให้พัก">Simple reminders and break nudges</td></tr>
       <tr><th data-en="Calendar &amp; data" data-zh="日曆與數據" data-th="ปฏิทินและสถิติ">Calendar &amp; data</th><td data-en="Summary, analysis, editable calendar" data-zh="總覽、分析、可以修改的日曆" data-th="สรุป การวิเคราะห์ ปฏิทินที่แก้ไขได้">Summary, analysis, editable calendar</td><td class="no" data-en="Not included" data-zh="沒有" data-th="ไม่มี">Not included</td></tr>
-      <tr><th data-en="Thai words" data-zh="泰文單字" data-th="คำศัพท์ภาษาไทย">Thai words</th><td data-en="With reminders and breaks" data-zh="跟著提醒和休息" data-th="มาพร้อมการแจ้งเตือนและการพัก">With reminders and breaks</td><td data-en="A word card in the panel" data-zh="面板上的單字卡" data-th="การ์ดคำศัพท์ในแผง">A word card in the panel</td></tr>
+      <tr><th data-en="Thai words" data-zh="泰文單字" data-th="คำไทย">Thai words</th><td data-en="With reminders and breaks" data-zh="跟提醒和休息一起出現" data-th="มาพร้อมแจ้งเตือนและช่วงพัก">With reminders and breaks</td><td data-en="Word cards that match the panel&#39;s scene" data-zh="配合面板場景的單字卡" data-th="การ์ดคำศัพท์ที่เข้ากับฉากในแพเนล">Word cards that match the panel&#39;s scene</td></tr>
     </tbody>
   </table>
   <p class="sep" data-en="They don't share data and don't need each other. If you use both, each keeps its own time." data-zh="兩者不共用資料，也不需要彼此。兩個都用的話，各自計各自的時間。" data-th="ทั้งสองไม่แชร์ข้อมูลกันและไม่ต้องพึ่งกัน ถ้าใช้ทั้งสองแอป แต่ละแอปจะจับเวลาของตัวเอง">They don't share data and don't need each other. If you use both, each keeps its own time.</p>
 </div></section>
 
-<!-- DevHelp -->
+<!-- Thai Mascot Buddy -->
 <section id="devhelp"><div class="wrap">
-  <p class="eyebrow">DevHelp · VS Code &amp; Kiro</p>
-  <h2 data-en="DevHelp: a light buddy while you code" data-zh="DevHelp：寫程式時的輕巧夥伴" data-th="DevHelp: เพื่อนตัวเล็กระหว่างเขียนโค้ด">DevHelp: a light buddy while you code</h2>
-  <p class="lead" data-en="An extension for VS Code and Kiro, small on purpose: GMMTV mascots and a few stickers keep you company, teach you Thai, keep your Pomodoro and remind you to rest. Here's each part." data-zh="VS Code 和 Kiro 的擴充功能，刻意做得很小：GMMTV 吉祥物和幾張貼圖陪著你，教你泰文、幫你計番茄鐘、提醒你休息。以下是每個部分。" data-th="ส่วนขยายสำหรับ VS Code และ Kiro ตั้งใจให้เล็ก มาสคอต GMMTV และสติกเกอร์ไม่กี่ชิ้นอยู่เป็นเพื่อน สอนภาษาไทย นับโพโมโดโร่ และเตือนให้พัก นี่คือแต่ละส่วน">An extension for VS Code and Kiro, small on purpose: GMMTV mascots and a few stickers keep you company, teach you Thai, keep your Pomodoro and remind you to rest. Here's each part.</p>
+  <p class="eyebrow">Thai Mascot Buddy · VS Code</p>
+  <h2 data-en="Thai Mascot Buddy: a light buddy while you code" data-zh="Thai Mascot Buddy：寫程式時的輕巧夥伴" data-th="Thai Mascot Buddy: เพื่อนตัวเล็กระหว่างเขียนโค้ด">Thai Mascot Buddy: a light buddy while you code</h2>
+  <p class="lead" data-en="An extension for VS Code, small on purpose: GMMTV mascots keep you company, teach you Thai words that match the scene, keep your Pomodoro and remind you to rest. Here&#39;s each part." data-zh="VS Code 的擴充功能，刻意做得很輕巧：GMMTV 吉祥物陪著你，教你配合場景的泰文字、幫你計番茄鐘、提醒你休息。下面是每個部分。" data-th="ส่วนขยายสำหรับ VS Code ที่ตั้งใจให้เล็กและเบา: มาสคอต GMMTV อยู่เป็นเพื่อน สอนคำไทยที่เข้ากับฉาก จับเวลาโพโมโดโร่ และเตือนให้พัก นี่คือแต่ละส่วน">An extension for VS Code, small on purpose: GMMTV mascots keep you company, teach you Thai words that match the scene, keep your Pomodoro and remind you to rest. Here&#39;s each part.</p>
   <div class="dtabs" role="tablist">
-    <button type="button" class="on" data-dt="panel" data-en="The panel" data-zh="面板" data-th="แผง">The panel</button>
-    <button type="button" data-dt="dev" data-en="Dev buddy" data-zh="開發夥伴" data-th="เพื่อนนักพัฒนา">Dev buddy</button>
-    <button type="button" data-dt="desk" data-en="Desktop buddy" data-zh="桌面夥伴" data-th="เพื่อนบนเดสก์ท็อป">Desktop buddy</button>
-    <button type="button" data-dt="time" data-en="Pomodoro, breaks &amp; reminders" data-zh="番茄鐘、休息與提醒" data-th="โพโมโดโร่ การพัก และการแจ้งเตือน">Pomodoro, breaks &amp; reminders</button>
+    <button type="button" class="on" data-dt="panel" data-en="The panel" data-zh="面板" data-th="แพเนล">The panel</button>
+    <button type="button" data-dt="dev" data-en="Walking buddy" data-zh="走路的夥伴" data-th="เพื่อนที่เดิน">Walking buddy</button>
+    <button type="button" data-dt="time" data-en="Pomodoro &amp; break reminders" data-zh="番茄鐘與休息提醒" data-th="โพโมโดโร่และเตือนพัก">Pomodoro &amp; break reminders</button>
+    <button type="button" data-dt="pick" data-en="Pick your mascot" data-zh="選你的吉祥物" data-th="เลือกมาสคอตของคุณ">Pick your mascot</button>
   </div>
 
   <div class="dpane on" data-dp="panel">
     <div class="dev">
       <div>
-        <div class="panelbox"><div class="ptitle">DEVHELP</div><img id="pimg" src="assets/devhelp/panel-office.jpg" alt="" width="660" height="520"></div>
+        <div class="panelbox"><div class="ptitle">THAI MASCOT BUDDY</div><img id="pimg" src="assets/devhelp/panel-office.jpg" alt="" width="660" height="520"></div>
         <div class="pthumbs"><button type="button" class="on" data-p="office"><img src="assets/devhelp/panel-office.jpg" alt=""></button><button type="button" data-p="cafe"><img src="assets/devhelp/panel-cafe.jpg" alt=""></button><button type="button" data-p="stage"><img src="assets/devhelp/panel-stage.jpg" alt=""></button></div>
       </div>
       <div>
-        <h3 data-en="A tiny panel in the Explorer" data-zh="檔案總管裡的小面板" data-th="แผงเล็ก ๆ ใน Explorer">A tiny panel in the Explorer</h3>
+        <h3 data-en="A panel with different scenery" data-zh="不同場景的面板" data-th="แพเนลที่มีฉากต่าง ๆ">A panel with different scenery</h3>
         <ul>
-          <li data-en="A GMMTV mascot in a scene (the office, a café, Wat Arun, Songkran, the fanmeet stage… 14 in all), doing little activities, sometimes with friends." data-zh="GMMTV 吉祥物在場景裡（辦公室、咖啡廳、鄭王廟、潑水節、見面會舞台⋯共 14 個），做些小活動，有時還有朋友來。" data-th="มาสคอต GMMTV ในฉาก (ออฟฟิศ คาเฟ่ วัดอรุณ สงกรานต์ เวทีแฟนมีต… ทั้งหมด 14 ฉาก) ทำกิจกรรมเล็ก ๆ บางทีมีเพื่อนมาด้วย">A GMMTV mascot in a scene (the office, a café, Wat Arun, Songkran, the fanmeet stage… 14 in all), doing little activities, sometimes with friends.</li>
-          <li data-en="A Thai word card on top, with how to say it: click it for the next word, or mark one you already know." data-zh="上面是泰文單字卡，附上念法：點一下換下一個，學會的可以標起來。" data-th="การ์ดคำศัพท์ภาษาไทยด้านบน พร้อมคำอ่าน คลิกเพื่อดูคำถัดไป หรือทำเครื่องหมายคำที่รู้แล้ว">A Thai word card on top, with how to say it: click it for the next word, or mark one you already know.</li>
-          <li data-en="Underneath: your Pomodoro and today's work time." data-zh="下面：番茄鐘和今天的工作時間。" data-th="ด้านล่าง: โพโมโดโร่และเวลาทำงานของวันนี้">Underneath: your Pomodoro and today's work time.</li>
+        <li data-en="A GMMTV mascot in a different scene each time (the office, a café, Wat Arun, Songkran, the fanmeet stage… 14 in all), doing little activities, sometimes with friends." data-zh="GMMTV 吉祥物在不同的場景裡（辦公室、咖啡廳、鄭王廟、潑水節、粉絲見面會舞台⋯共 14 個），做著小活動，有時和朋友一起。" data-th="มาสคอต GMMTV ในฉากที่ต่างกันไป (ออฟฟิศ คาเฟ่ วัดอรุณ สงกรานต์ เวทีแฟนมีท… รวม 14 ฉาก) ทำกิจกรรมเล็ก ๆ บางครั้งมีเพื่อนมาด้วย">A GMMTV mascot in a different scene each time (the office, a café, Wat Arun, Songkran, the fanmeet stage… 14 in all), doing little activities, sometimes with friends.</li>
+        <li data-en="A Thai word card on top that goes with the scene, with how to say it: click it for the next word, or mark one you already know." data-zh="上面有一張配合場景的泰文單字卡，附發音：點一下換下一個字，或標記你已經會的字。" data-th="การ์ดคำไทยด้านบนที่เข้ากับฉาก พร้อมวิธีอ่าน: คลิกเพื่อดูคำถัดไป หรือทำเครื่องหมายคำที่รู้แล้ว">A Thai word card on top that goes with the scene, with how to say it: click it for the next word, or mark one you already know.</li>
+        <li data-en="Underneath: your Pomodoro and today&#39;s work time." data-zh="下面是你的番茄鐘和今天的工作時間。" data-th="ด้านล่าง: โพโมโดโร่ของคุณและเวลาทำงานวันนี้">Underneath: your Pomodoro and today&#39;s work time.</li>
         </ul>
-        <div class="mascots"><img src="assets/devhelp/muvmuv.svg" alt="MuvMuv"><img src="assets/devhelp/lunar.svg" alt="Lunar"><img src="assets/devhelp/any.svg" alt="Any"><img src="assets/devhelp/jewel.svg" alt="Jewel"><img src="assets/devhelp/vimmy.svg" alt="Vimmy"><img src="assets/devhelp/wesley.svg" alt="Wesley"><img src="assets/devhelp/goldie_brown.svg" alt="Goldie"><img src="assets/devhelp/lolo.svg" alt="LOLO"></div>
-        <p class="small muted" data-en="Eight mascots, in cartoon or pixel style." data-zh="八個吉祥物，卡通或像素風格。" data-th="มาสคอตแปดตัว แบบการ์ตูนหรือพิกเซล">Eight mascots, in cartoon or pixel style.</p>
       </div>
     </div>
   </div>
@@ -403,35 +402,21 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
     <div class="dev">
       <div class="editor" aria-hidden="true">
         <div class="tb"><i></i><i></i><i></i></div>
-        <div class="side"><span class="h">DEVHELP</span><img class="realpanel" src="assets/devhelp/panel-office.jpg" alt=""></div>
+        <div class="side"><span class="h">THAI MASCOT BUDDY</span><img class="realpanel" src="assets/devhelp/panel-office.jpg" alt=""></div>
         <div class="code"><span class="c">// today's task</span>
 <span class="k">function</span> <span class="f">ship</span>() {
   <span class="k">const</span> v = <span class="s">"0.3"</span>;
   <span class="k">return</span> build(v);
 }</div>
-        <div class="status"><span>🐾 DevHelp</span><span>🍅 18:42</span><span>ทำงาน · to work</span></div>
+        <div class="status"><span>🐾 Thai Mascot Buddy</span><span>🍅 18:42</span><span>ทำงาน · to work</span></div>
         <div class="walker"><img src="assets/devhelp/lunar.svg" alt=""></div>
       </div>
       <div>
-        <h3 data-en="One buddy walks round your editor" data-zh="一個夥伴沿著編輯器走" data-th="เพื่อนหนึ่งตัวเดินรอบเอดิเตอร์">One buddy walks round your editor</h3>
+        <h3 data-en="One buddy walks round your editor" data-zh="一個夥伴沿著編輯器走" data-th="เพื่อนหนึ่งตัวเดินรอบตัวแก้ไขโค้ด">One buddy walks round your editor</h3>
         <ul>
-          <li data-en="Along the edges of the editor window, head pointing in: it pauses to show off a gesture, makes the odd dash, naps when you're away and hops when you're back." data-zh="沿著編輯器視窗的邊緣走，頭朝裡：偶爾停下來比個動作、衝一小段，你離開時打瞌睡，回來時跳一下。" data-th="เดินไปตามขอบหน้าต่างเอดิเตอร์ หันหัวเข้าด้านใน หยุดทำท่าทาง วิ่งเร็วบ้างบางที งีบตอนคุณไม่อยู่ และกระโดดเมื่อคุณกลับมา">Along the edges of the editor window, head pointing in: it pauses to show off a gesture, makes the odd dash, naps when you're away and hops when you're back.</li>
-          <li data-en="Click it for a Thai word; pick it up and drop it on any edge." data-zh="點它會教你一個泰文單字；可以拿起來放到任何一邊。" data-th="คลิกเพื่อดูคำศัพท์ภาษาไทย หยิบแล้ววางที่ขอบไหนก็ได้">Click it for a Thai word; pick it up and drop it on any edge.</li>
-          <li data-en="A mascot, Milk &amp; Love stickers, or the animals: you choose, and how big." data-zh="吉祥物、Milk 和 Love 貼圖，或小動物：你決定，大小也可以調。" data-th="มาสคอต สติกเกอร์มิลค์กับเลิฟ หรือสัตว์น่ารัก เลือกได้ และปรับขนาดได้">A mascot, Milk &amp; Love stickers, or the animals: you choose, and how big.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="dpane" data-dp="desk">
-    <div class="dev">
-      <div class="desktop"><img class="dw" src="assets/devhelp/desk-word.png" alt="" width="264" height="426"><img class="db" src="assets/devhelp/desk-buddy.png" alt="" width="209" height="292"></div>
-      <div>
-        <h3 data-en="A desktop buddy, if you'd like one" data-zh="想要的話，還有桌面夥伴" data-th="เพื่อนบนเดสก์ท็อป ถ้าคุณต้องการ">A desktop buddy, if you'd like one</h3>
-        <ul>
-          <li data-en="Sits anywhere on your desktop, on any screen, even when the editor is away." data-zh="放在桌面上任何地方、任何螢幕上，編輯器沒開著也在。" data-th="นั่งที่ไหนก็ได้บนเดสก์ท็อป บนจอไหนก็ได้ แม้ไม่ได้เปิดเอดิเตอร์">Sits anywhere on your desktop, on any screen, even when the editor is away.</li>
-          <li data-en="Does little activities (working, coffee, music, noodles…), and the line underneath counts your Pomodoro or today's work." data-zh="做些小活動（工作、喝咖啡、聽音樂、吃麵⋯），下面那行顯示番茄鐘或今天的工作時間。" data-th="ทำกิจกรรมเล็ก ๆ (ทำงาน กาแฟ ฟังเพลง กินบะหมี่…) และบรรทัดด้านล่างนับโพโมโดโร่หรือเวลาทำงานของวันนี้">Does little activities (working, coffee, music, noodles…), and the line underneath counts your Pomodoro or today's work.</li>
-          <li data-en="Holds up a Thai word now and then, and your reminders when it's time. Off until you switch it on." data-zh="偶爾舉一個泰文單字給你看，時間到時舉起你的提醒。預設關閉，打開才會出現。" data-th="ชูคำศัพท์ภาษาไทยเป็นครั้งคราว และชูการแจ้งเตือนเมื่อถึงเวลา ปิดไว้จนกว่าคุณจะเปิด">Holds up a Thai word now and then, and your reminders when it's time. Off until you switch it on.</li>
+        <li data-en="Along the edges of the editor window, head pointing in: it pauses to show off a gesture, makes the odd dash, naps when you&#39;re away and hops when you&#39;re back." data-zh="沿著編輯器視窗的邊緣走，頭朝向裡面：會停下來做個手勢、偶爾衝刺一下，你離開時它會睡覺，你回來時會跳起來。" data-th="เดินตามขอบหน้าต่างตัวแก้ไขโค้ด หันหัวเข้าด้านใน: หยุดโชว์ท่าทาง วิ่งพุ่งบ้าง งีบเมื่อคุณไม่อยู่ และกระโดดเมื่อคุณกลับมา">Along the edges of the editor window, head pointing in: it pauses to show off a gesture, makes the odd dash, naps when you&#39;re away and hops when you&#39;re back.</li>
+        <li data-en="Click it for a Thai word; pick it up and drop it on any edge." data-zh="點它會說一個泰文字；也可以抓起來放到任何一個邊上。" data-th="คลิกเพื่อดูคำไทย หยิบขึ้นมาแล้ววางที่ขอบไหนก็ได้">Click it for a Thai word; pick it up and drop it on any edge.</li>
+        <li data-en="A mascot or the animals: you choose, and how big." data-zh="吉祥物或動物：你來選，大小也可以調。" data-th="มาสคอตหรือสัตว์: คุณเลือกเอง และปรับขนาดได้">A mascot or the animals: you choose, and how big.</li>
         </ul>
       </div>
     </div>
@@ -441,34 +426,48 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
     <div class="dev">
       <div class="desktop pop"><img src="assets/devhelp/break-popup.png" alt="" width="668" height="261"></div>
       <div>
-        <h3 data-en="Pomodoro, breaks and reminders" data-zh="番茄鐘、休息與提醒" data-th="โพโมโดโร่ การพัก และการแจ้งเตือน">Pomodoro, breaks and reminders</h3>
+        <h3 data-en="Pomodoro, break pop-up and reminders" data-zh="番茄鐘、休息跳出視窗和提醒" data-th="โพโมโดโร่ ป๊อปอัปพัก และแจ้งเตือน">Pomodoro, break pop-up and reminders</h3>
         <ul>
-          <li data-en="Pomodoro: classic 25 · 5 · 15, or your own lengths; the countdown sits in the status bar." data-zh="番茄鐘：經典的 25 · 5 · 15，或自訂長度；倒數在狀態列上。" data-th="โพโมโดโร่: แบบคลาสสิก 25 · 5 · 15 หรือกำหนดเอง นับถอยหลังอยู่ที่แถบสถานะ">Pomodoro: classic 25 · 5 · 15, or your own lengths; the countdown sits in the status bar.</li>
-          <li data-en="Without the Pomodoro, a work clock and a nudge to rest every 30–90 minutes." data-zh="不用番茄鐘的話，也有工作計時，每 30–90 分鐘提醒你休息。" data-th="ถ้าไม่ใช้โพโมโดโร่ ก็มีนาฬิกาทำงานและเตือนให้พักทุก 30–90 นาที">Without the Pomodoro, a work clock and a nudge to rest every 30–90 minutes.</li>
-          <li data-en="At break time a buddy rises from the bottom of the editor: Take a break, 10 more min, or Skip." data-zh="休息時間到，夥伴會從編輯器下方冒出來：休息一下、再 10 分鐘，或略過。" data-th="เมื่อถึงเวลาพัก เพื่อนจะโผล่ขึ้นมาจากด้านล่างของเอดิเตอร์: พักเลย อีก 10 นาที หรือข้าม">At break time a buddy rises from the bottom of the editor: Take a break, 10 more min, or Skip.</li>
-          <li data-en="Reminders once, every day, on weekdays or every few minutes, each with a Thai word that goes with it." data-zh="提醒可以設一次、每天、平日或每隔幾分鐘，每個都附一個相關的泰文單字。" data-th="แจ้งเตือนครั้งเดียว ทุกวัน วันธรรมดา หรือทุกกี่นาทีก็ได้ แต่ละอันมีคำศัพท์ภาษาไทยที่เข้ากัน">Reminders once, every day, on weekdays or every few minutes, each with a Thai word that goes with it.</li>
+        <li data-en="Pomodoro: classic 25 · 5 · 15, or your own lengths; the countdown sits in the status bar." data-zh="番茄鐘：經典的 25 · 5 · 15，或自己設定長度；倒數顯示在狀態列。" data-th="โพโมโดโร่: แบบคลาสสิก 25 · 5 · 15 หรือกำหนดเอง เวลานับถอยหลังอยู่บนแถบสถานะ">Pomodoro: classic 25 · 5 · 15, or your own lengths; the countdown sits in the status bar.</li>
+        <li data-en="Without the Pomodoro, a work clock and a nudge to rest every 30–90 minutes." data-zh="不用番茄鐘時，有工作時鐘，每 30–90 分鐘提醒你休息。" data-th="ถ้าไม่ใช้โพโมโดโร่ ก็มีนาฬิกาทำงาน และเตือนให้พักทุก 30–90 นาที">Without the Pomodoro, a work clock and a nudge to rest every 30–90 minutes.</li>
+        <li data-en="At break time a buddy pops up from the bottom of the editor: Take a break, 10 more min, or Skip." data-zh="休息時間，夥伴會從編輯器底部跳出來：休息一下、再 10 分鐘，或略過。" data-th="ถึงเวลาพัก เพื่อนจะโผล่ขึ้นมาจากด้านล่างของตัวแก้ไขโค้ด: พักสักครู่ อีก 10 นาที หรือข้าม">At break time a buddy pops up from the bottom of the editor: Take a break, 10 more min, or Skip.</li>
+        <li data-en="Reminders once, every day, on weekdays or every few minutes, each with a Thai word that goes with it." data-zh="提醒可以單次、每天、平日或每隔幾分鐘，每個提醒都配一個相關的泰文字。" data-th="แจ้งเตือนครั้งเดียว ทุกวัน เฉพาะวันธรรมดา หรือทุกไม่กี่นาที แต่ละอันมีคำไทยที่เกี่ยวข้อง">Reminders once, every day, on weekdays or every few minutes, each with a Thai word that goes with it.</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <p class="sep" data-en="DevHelp keeps it light: no calendar, no data dashboards. For your whole work day, the calendar and seeing how you work over weeks and months, use ML WorkHelp." data-zh="DevHelp 保持輕巧：沒有行事曆、沒有數據分析。想管理整個工作日、用行事曆、看幾週幾個月的工作情況，請用 ML WorkHelp。" data-th="DevHelp เน้นความเบา ไม่มีปฏิทิน ไม่มีแดชบอร์ดสถิติ สำหรับทั้งวันทำงาน ปฏิทิน และดูว่าคุณทำงานอย่างไรตลอดหลายสัปดาห์และเดือน ให้ใช้ ML WorkHelp">DevHelp keeps it light: no calendar, no data dashboards. For your whole work day, the calendar and seeing how you work over weeks and months, use ML WorkHelp.</p>
-  <p class="small muted" data-en="Mac and Windows, English or 繁體中文. The mascots belong to GMMTV; our drawings follow the official art." data-zh="Mac 和 Windows，英文或繁體中文。吉祥物屬於 GMMTV；我們的插畫依照官方造型繪製。" data-th="Mac และ Windows ภาษาอังกฤษหรือจีนตัวเต็ม มาสคอตเป็นของ GMMTV ภาพวาดของเราอิงจากภาพทางการ">Mac and Windows, English or 繁體中文. The mascots belong to GMMTV; our drawings follow the official art.</p>
+  <div class="dpane" data-dp="pick">
+    <div class="dev">
+      <div class="mascots big"><img src="assets/devhelp/muvmuv.svg" alt="MuvMuv"><img src="assets/devhelp/lunar.svg" alt="Lunar"><img src="assets/devhelp/any.svg" alt="Any"><img src="assets/devhelp/jewel.svg" alt="Jewel"><img src="assets/devhelp/vimmy.svg" alt="Vimmy"><img src="assets/devhelp/wesley.svg" alt="Wesley"><img src="assets/devhelp/goldie_brown.svg" alt="Goldie"><img src="assets/devhelp/lolo.svg" alt="LOLO"></div>
+      <div>
+        <h3 data-en="Pick the mascot you like" data-zh="選你喜歡的吉祥物" data-th="เลือกมาสคอตที่คุณชอบ">Pick the mascot you like</h3>
+        <ul>
+        <li data-en="Eight GMMTV mascots (MuvMuv, Lunar, Any, Jewel, Vimmy, Wesley, Goldie and LOLO), in cartoon or pixel style, or a friendly animal." data-zh="八位 GMMTV 吉祥物（MuvMuv、Lunar、Any、Jewel、Vimmy、Wesley、Goldie 和 LOLO），卡通或像素風，也可以選可愛的動物。" data-th="มาสคอต GMMTV แปดตัว (MuvMuv, Lunar, Any, Jewel, Vimmy, Wesley, Goldie และ LOLO) แบบการ์ตูนหรือพิกเซล หรือจะเลือกสัตว์น่ารักก็ได้">Eight GMMTV mascots (MuvMuv, Lunar, Any, Jewel, Vimmy, Wesley, Goldie and LOLO), in cartoon or pixel style, or a friendly animal.</li>
+        <li data-en="Choose who walks round your editor, who pops up at break time, and how big they are." data-zh="選誰沿著編輯器走、休息時間誰跳出來，還有它們的大小。" data-th="เลือกว่าใครเดินรอบตัวแก้ไขโค้ด ใครโผล่มาตอนพัก และขนาดเท่าไร">Choose who walks round your editor, who pops up at break time, and how big they are.</li>
+        <li data-en="Switch any time in the extension&#39;s Settings." data-zh="隨時可以在擴充功能的設定裡更換。" data-th="เปลี่ยนได้ทุกเมื่อในการตั้งค่าของส่วนขยาย">Switch any time in the extension&#39;s Settings.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="sep" data-en="Thai Mascot Buddy keeps it light: no calendar, no data dashboards. For your whole work day, the calendar and seeing how you work over weeks and months, use ML WorkHelp." data-zh="Thai Mascot Buddy 保持輕巧：沒有日曆、沒有數據儀表板。想要整個工作日、日曆，以及看幾週幾個月的工作狀況，請用 ML WorkHelp。" data-th="Thai Mascot Buddy เน้นเบา: ไม่มีปฏิทิน ไม่มีแดชบอร์ดสถิติ ถ้าอยากได้ทั้งวันทำงาน ปฏิทิน และดูว่าทำงานอย่างไรตลอดหลายสัปดาห์หลายเดือน ให้ใช้ ML WorkHelp">Thai Mascot Buddy keeps it light: no calendar, no data dashboards. For your whole work day, the calendar and seeing how you work over weeks and months, use ML WorkHelp.</p>
+  <p class="small muted" data-en="Mac and Windows, English or 繁體中文. The mascots belong to GMMTV; our drawings follow the official art." data-zh="支援 Mac 和 Windows，英文或繁體中文。吉祥物屬於 GMMTV；我們的畫依照官方設計。" data-th="รองรับ Mac และ Windows ภาษาอังกฤษหรือ 繁體中文 มาสคอตเป็นของ GMMTV ภาพวาดของเราอ้างอิงจากงานต้นฉบับ">Mac and Windows, English or 繁體中文. The mascots belong to GMMTV; our drawings follow the official art.</p>
   <div class="install" id="devhelp-get">
     <div>
-      <h3 data-en="Get DevHelp" data-zh="下載 DevHelp" data-th="ดาวน์โหลด DevHelp">Get DevHelp</h3>
-      <p class="muted" data-en="DevHelp isn't in the extension store: you download one file and add it to VS Code or Kiro yourself. It takes a minute." data-zh="DevHelp 不在擴充功能商店裡：下載一個檔案，自己加進 VS Code 或 Kiro 就好，大約一分鐘。" data-th="DevHelp ไม่ได้อยู่ในสโตร์ส่วนขยาย ให้ดาวน์โหลดไฟล์เดียวแล้วเพิ่มเข้า VS Code หรือ Kiro เอง ใช้เวลาประมาณหนึ่งนาที">DevHelp isn't in the extension store: you download one file and add it to VS Code or Kiro yourself. It takes a minute.</p>
-      <div class="dl"><a class="btn main" id="devhelp-dl" href="https://github.com/alitasdepollos01/ml-workhelp/releases/download/devhelp-v1.0.0/devhelp-1.0.0.vsix" data-en="Download DevHelp 1.0.0 (.vsix)" data-zh="下載 DevHelp 1.0.0（.vsix）" data-th="ดาวน์โหลด DevHelp 1.0.0 (.vsix)">Download DevHelp 1.0.0 (.vsix)</a></div>
-      <p class="small muted" data-en="One file for Mac and Windows · VS Code 1.85 or later, or Kiro." data-zh="Mac 和 Windows 同一個檔案 · VS Code 1.85 以上，或 Kiro。" data-th="ไฟล์เดียวใช้ได้ทั้ง Mac และ Windows · VS Code 1.85 ขึ้นไป หรือ Kiro">One file for Mac and Windows · VS Code 1.85 or later, or Kiro.</p>
+      <h3 data-en="Get Thai Mascot Buddy" data-zh="安裝 Thai Mascot Buddy" data-th="ติดตั้ง Thai Mascot Buddy">Get Thai Mascot Buddy</h3>
+      <p class="muted" data-en="Install it from the VS Code Marketplace in one click. VS Code keeps it updated for you." data-zh="在 VS Code 市集一鍵安裝，之後 VS Code 會自動幫你更新。" data-th="ติดตั้งจาก VS Code Marketplace ได้ในคลิกเดียว แล้ว VS Code จะอัปเดตให้เอง">Install it from the VS Code Marketplace in one click. VS Code keeps it updated for you.</p>
+      <div class="dl"><a class="btn main" id="devhelp-dl" href="https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp" target="_blank" rel="noopener" data-en="Get it on VS Code Marketplace" data-zh="到 VS Code 市集安裝" data-th="ติดตั้งจาก VS Code Marketplace">Get it on VS Code Marketplace</a></div>
+      <p class="small muted" data-en="VS Code 1.85 or later · Mac and Windows." data-zh="需要 VS Code 1.85 以上 · Mac 和 Windows。" data-th="ต้องใช้ VS Code 1.85 ขึ้นไป · Mac และ Windows">VS Code 1.85 or later · Mac and Windows.</p>
+      <p class="small muted" data-en="<b>Kiro:</b> the Kiro marketplace extension is currently in development." data-zh="<b>Kiro：</b>Kiro 市集的版本目前開發中。" data-th="<b>Kiro:</b> ส่วนขยายบน Kiro marketplace กำลังอยู่ในระหว่างพัฒนา"><b>Kiro:</b> the Kiro marketplace extension is currently in development.</p>
     </div>
     <ol class="how">
-      <li data-en="Open VS Code or Kiro, and go to <b>Extensions</b> (the squares on the left, or ⇧⌘X / Ctrl+Shift+X)." data-zh="打開 VS Code 或 Kiro，到<b>擴充功能</b>（左邊的方塊圖示，或 ⇧⌘X / Ctrl+Shift+X）。" data-th="เปิด VS Code หรือ Kiro แล้วไปที่ <b>Extensions</b> (ไอคอนสี่เหลี่ยมด้านซ้าย หรือ ⇧⌘X / Ctrl+Shift+X)">Open VS Code or Kiro, and go to <b>Extensions</b> (the squares on the left, or ⇧⌘X / Ctrl+Shift+X).</li>
-      <li data-en="Click <b>…</b> at the top of the Extensions list, then <b>Install from VSIX…</b>" data-zh="點擴充功能清單最上面的 <b>…</b>，再選 <b>從 VSIX 安裝…</b>（Install from VSIX…）" data-th="คลิก <b>…</b> ด้านบนของรายการ Extensions แล้วเลือก <b>Install from VSIX…</b>">Click <b>…</b> at the top of the Extensions list, then <b>Install from VSIX…</b></li>
-      <li data-en="Pick the <b>devhelp-1.0.0.vsix</b> you downloaded (usually in Downloads)." data-zh="選你下載的 <b>devhelp-1.0.0.vsix</b>（通常在「下載」資料夾）。" data-th="เลือกไฟล์ <b>devhelp-1.0.0.vsix</b> ที่ดาวน์โหลดมา (ปกติอยู่ในโฟลเดอร์ Downloads)">Pick the <b>devhelp-1.0.0.vsix</b> you downloaded (usually in Downloads).</li>
-      <li data-en="When it asks, press <b>Reload</b>. DevHelp's panel appears in the Explorer, and the buddy starts walking." data-zh="出現提示時按<b>重新載入</b>（Reload）。DevHelp 的面板會出現在檔案總管，夥伴就開始走了。" data-th="เมื่อมีข้อความถาม ให้กด <b>Reload</b> แผงของ DevHelp จะปรากฏใน Explorer และเพื่อนจะเริ่มเดิน">When it asks, press <b>Reload</b>. DevHelp's panel appears in the Explorer, and the buddy starts walking.</li>
+        <li data-en="Open VS Code and go to <b>Extensions</b> (the squares on the left, or ⇧⌘X / Ctrl+Shift+X)." data-zh="打開 VS Code，到<b>擴充功能</b>（左邊的方塊圖示，或 ⇧⌘X / Ctrl+Shift+X）。" data-th="เปิด VS Code แล้วไปที่ <b>Extensions</b> (ไอคอนสี่เหลี่ยมด้านซ้าย หรือ ⇧⌘X / Ctrl+Shift+X)">Open VS Code and go to <b>Extensions</b> (the squares on the left, or ⇧⌘X / Ctrl+Shift+X).</li>
+        <li data-en="Search for <b>Thai Mascot Buddy</b> and click <b>Install</b>." data-zh="搜尋 <b>Thai Mascot Buddy</b>，按<b>安裝</b>（Install）。" data-th="ค้นหา <b>Thai Mascot Buddy</b> แล้วกด <b>Install</b>">Search for <b>Thai Mascot Buddy</b> and click <b>Install</b>.</li>
+        <li data-en="The panel appears in the Explorer, and the buddy starts walking." data-zh="面板會出現在檔案總管裡，夥伴開始走路。" data-th="แพเนลจะขึ้นใน Explorer และเพื่อนจะเริ่มเดิน">The panel appears in the Explorer, and the buddy starts walking.</li>
     </ol>
-    <p class="small muted cmdline"><span data-en="Or in a terminal:" data-zh="或在終端機輸入：" data-th="หรือพิมพ์ในเทอร์มินัล:">Or in a terminal:</span> <code>code --install-extension devhelp-1.0.0.vsix</code> · <code>kiro --install-extension devhelp-1.0.0.vsix</code></p>
-    <p class="small muted" data-en="New versions don't install by themselves: leave your email below and we'll tell you, then install the new file the same way. To remove DevHelp: Extensions › DevHelp › Uninstall." data-zh="新版本不會自動安裝：在下面留下 email，我們會通知你，再用一樣的方法裝新檔案。移除 DevHelp：擴充功能 › DevHelp › 解除安裝。" data-th="เวอร์ชันใหม่จะไม่ติดตั้งเอง ฝากอีเมลไว้ด้านล่างแล้วเราจะแจ้ง จากนั้นติดตั้งไฟล์ใหม่ด้วยวิธีเดิม หากต้องการลบ DevHelp: Extensions › DevHelp › Uninstall">New versions don't install by themselves: leave your email below and we'll tell you, then install the new file the same way. To remove DevHelp: Extensions › DevHelp › Uninstall.</p>
+    <p class="small muted cmdline"><span data-en="Or in a terminal:" data-zh="或在終端機輸入：" data-th="หรือพิมพ์ในเทอร์มินัล:">Or in a terminal:</span> <code>code --install-extension alitasdepollos.thaimascotdevhelp</code></p>
+    <p class="small muted" data-en="To remove it: Extensions › Thai Mascot Buddy › Uninstall." data-zh="要移除：擴充功能 › Thai Mascot Buddy › 解除安裝。" data-th="ถ้าจะลบ: Extensions › Thai Mascot Buddy › Uninstall">To remove it: Extensions › Thai Mascot Buddy › Uninstall.</p>
   </div>
 </div></section>
 
@@ -507,15 +506,14 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
 <!-- News -->
 <section id="news"><div class="wrap">
   <h2 data-en="New versions &amp; important notices" data-zh="新版本與重要通知" data-th="เวอร์ชันใหม่และประกาศสำคัญ">New versions &amp; important notices</h2>
-  <p class="lead" data-en="We write when there's a new version of ML WorkHelp or DevHelp, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all." data-zh="ML WorkHelp 或 DevHelp 有新版本，或有需要你注意的事（例如權利人要求移除照片或貼圖）時，我們會寫信告訴你。就這樣。" data-th="เราจะเขียนถึงคุณเมื่อ ML WorkHelp หรือ DevHelp มีเวอร์ชันใหม่ หรือเมื่อมีเรื่องที่คุณต้องรู้ (เช่น เจ้าของสิทธิ์ขอให้นำภาพหรือสติกเกอร์ออก) แค่นั้น">We write when there's a new version of ML WorkHelp or DevHelp, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all.</p>
+  <p class="lead" data-en="We write when there's a new version of ML WorkHelp, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all." data-zh="ML WorkHelp 有新版本，或有需要你注意的事（例如權利人要求移除照片或貼圖）時，我們會寫信告訴你。就這樣。" data-th="เราจะเขียนถึงคุณเมื่อ ML WorkHelp มีเวอร์ชันใหม่ หรือเมื่อมีเรื่องที่คุณต้องรู้ (เช่น เจ้าของสิทธิ์ขอให้นำภาพหรือสติกเกอร์ออก) แค่นั้น">We write when there's a new version of ML WorkHelp, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all.</p>
   <form class="sign" id="sign">
     <div class="row"><input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email">
       <button class="btn main" type="submit" data-en="Tell me" data-zh="通知我" data-th="แจ้งฉัน">Tell me</button></div>
     <label><input type="checkbox" name="ml" checked> <span data-en="ML WorkHelp: new versions and important updates" data-zh="ML WorkHelp：新版本和重要更新" data-th="ML WorkHelp: เวอร์ชันใหม่และอัปเดตสำคัญ">ML WorkHelp: new versions and important updates</span></label>
-    <label><input type="checkbox" name="dev"> <span data-en="DevHelp: new versions" data-zh="DevHelp：新版本" data-th="DevHelp: เวอร์ชันใหม่">DevHelp: new versions</span></label>
     <div class="promise"><b data-en="Our promise" data-zh="我們的承諾" data-th="สัญญาของเรา">Our promise</b>
       <ul>
-        <li data-en="Only about ML WorkHelp and DevHelp. No ads, no spam." data-zh="只寄 ML WorkHelp 和 DevHelp 的消息。沒有廣告、不會寄垃圾信。" data-th="เฉพาะเรื่อง ML WorkHelp และ DevHelp ไม่มีโฆษณา ไม่มีสแปม">Only about ML WorkHelp and DevHelp. No ads, no spam.</li>
+        <li data-en="Only about ML WorkHelp. No ads, no spam." data-zh="只寄 ML WorkHelp 的消息。沒有廣告、不會寄垃圾信。" data-th="เฉพาะเรื่อง ML WorkHelp ไม่มีโฆษณา ไม่มีสแปม">Only about ML WorkHelp. No ads, no spam.</li>
         <li data-en="Never shared, sold or given to anyone, and never used for anything else." data-zh="絕不分享、出售或提供給任何人，也不會拿來做其他用途。" data-th="ไม่แชร์ ไม่ขาย ไม่ให้ใคร และไม่ใช้ทำอย่างอื่น">Never shared, sold or given to anyone, and never used for anything else.</li>
         <li data-en="Stop any time: every email has an unsubscribe link." data-zh="隨時可以取消：每封信都有取消訂閱的連結。" data-th="ยกเลิกได้ทุกเมื่อ: ทุกอีเมลมีลิงก์ยกเลิกการรับ">Stop any time: every email has an unsubscribe link.</li>
       </ul></div>
@@ -538,7 +536,7 @@ footer { padding:30px 0 56px; color:var(--muted); font-size:14px; border-top:1px
 </main>
 
 <footer><div class="wrap">
-  <p data-en="ML WorkHelp and DevHelp are unofficial fan projects, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app; to have one removed or its credit fixed, write to us." data-zh="ML WorkHelp 和 DevHelp 是非官方的粉絲作品，並非由 GMMTV、Milk 或 Love 製作，也和他們沒有關係。每張照片都屬於它的拍攝者，App 裡都有標明；想移除照片或修正來源，請寫信給我們。" data-th="ML WorkHelp และ DevHelp เป็นผลงานของแฟนคลับ ไม่ได้จัดทำโดยหรือเกี่ยวข้องกับ GMMTV มิลค์ หรือเลิฟ ทุกภาพเป็นของช่างภาพที่ระบุไว้ในแอป หากต้องการให้นำภาพออกหรือแก้เครดิต เขียนถึงเราได้">ML WorkHelp and DevHelp are unofficial fan projects, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app; to have one removed or its credit fixed, write to us.</p>
+  <p data-en="ML WorkHelp and Thai Mascot Buddy are unofficial fan projects, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app; to have one removed or its credit fixed, write to us." data-zh="ML WorkHelp 和 Thai Mascot Buddy 是非官方的粉絲作品，並非由 GMMTV、Milk 或 Love 製作，也和他們沒有關係。每張照片都屬於它的拍攝者，App 裡都有標明；想移除照片或修正來源，請寫信給我們。" data-th="ML WorkHelp และ Thai Mascot Buddy เป็นผลงานของแฟนคลับ ไม่ได้จัดทำโดยหรือเกี่ยวข้องกับ GMMTV มิลค์ หรือเลิฟ ทุกภาพเป็นของช่างภาพที่ระบุไว้ในแอป หากต้องการให้นำภาพออกหรือแก้เครดิต เขียนถึงเราได้">ML WorkHelp and Thai Mascot Buddy are unofficial fan projects, not made by or connected with GMMTV, Milk or Love. Every photo belongs to its photographer, credited in the app; to have one removed or its credit fixed, write to us.</p>
   <p><span data-en="Contact" data-zh="聯絡" data-th="ติดต่อ">Contact</span>: <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> · <a href="https://x.com/alitasdepollos0" rel="noopener">@alitasdepollos0</a></p>
 </div></footer>
 
@@ -588,7 +586,7 @@ document.querySelectorAll("[data-data]").forEach((b) => b.addEventListener("clic
 document.getElementById("sign").addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = e.target, email = f.email.value.trim();
-  const tags = [f.ml.checked ? "page" : null, f.dev.checked ? "devhelp" : null].filter(Boolean);
+  const tags = [f.ml.checked ? "page" : null].filter(Boolean);
   const body = new URLSearchParams({ email }); for (const t of tags.length ? tags : ["page"]) body.append("tag", t);
   try { await fetch(SIGNUP_URL, { method: "POST", mode: "no-cors", body }); } catch { /* (a no-cors post can't be read back) */ }
   document.getElementById("thanks").hidden = false; f.email.value = "";
