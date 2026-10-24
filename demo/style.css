@@ -22,15 +22,15 @@
   --latin: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+:root:where([data-mode="dark"]){
     --desk: #171a2b;
     --desk-ink: #eef0f8;
     --desk-muted: #9aa0bf;
     --control-bg: #232741;
     --control-line: #3a3f60;
   }
-}
+
+
 
 /* Inside VS Code the desk is the editor's own sidebar. */
 body.vscode-light, body.vscode-dark, body.vscode-high-contrast, body.vscode-high-contrast-light {

@@ -17,6 +17,11 @@
   const look = { style: Q.get("style") || store("style") || "f", theme: Q.get("theme") || store("theme") || "matcha" };
   const root = document.documentElement;
   root.dataset.style = look.style; root.dataset.theme = look.theme;
+  // Light or dark (build.js: the pages' dark rules follow html[data-mode]): like this computer, until the website says.
+  const os = matchMedia("(prefers-color-scheme: dark)");
+  look.mode = Q.get("mode") || null;
+  const applyMode = () => { root.dataset.mode = look.mode || (os.matches ? "dark" : "light"); };
+  applyMode(); os.addEventListener?.("change", applyMode);
 
   // ---- pretend files for work.js ----------------------------------------------------------------
   const files = {};
@@ -37,6 +42,7 @@
     calendar: { on: false, cals: [], into: null, before: 10, allDay: false, ahead: 14 }, focusMood: null, breakMood: null, focusScreen: null,
     setupDone: true, buddyOff: [], ...(store("settings") || {}),
   };
+  if (Q.get("pace")) S.deskPace = Q.get("pace"); // (the website's buddy page: standing still)
   const saveS = () => store("settings", S);
   const pomoLengths = () => (S.pomo.kind === "classic" ? { focus: 25, rest: 5, long: 15, every: 4 } : { focus: S.pomo.focus, rest: S.pomo.rest, long: S.pomo.long, every: S.pomo.every });
 
@@ -140,7 +146,8 @@
 
   window.MLHost = {
     name: "electron", demo: true, lang,
-    setLang: (l) => { store("lang", l); const u = new URL(location.href); u.searchParams.set("lang", l); location.replace(u.toString()); },
+    setLang: (l) => { store("lang", l); const u = new URL(location.href); u.searchParams.set("lang", l); if (look.mode) u.searchParams.set("mode", look.mode);
+      const tab = window.__mlwhApp?.tab?.(); if (tab) u.hash = encodeURIComponent(JSON.stringify({ tab })); location.replace(u.toString()); },
     themes: () => ({ theme: look.theme, themes: DATA.themes || [], style: look.style }),
     setTheme: (id) => { look.theme = id; root.dataset.theme = id; store("theme", id); onCommand?.("theme", id); },
     styles: () => ({ style: look.style, styles: DATA.styles || [] }),
@@ -214,6 +221,7 @@
     if (e.data && Array.isArray(e.data.mlwhCmd)) { onCommand?.(e.data.mlwhCmd[0], e.data.mlwhCmd[1]); return; } // (from the pretend desktop: buddy.html)
     const m = e.data && e.data.mlwh;
     if (!m) return;
+    if (m.mode && m.mode !== look.mode) { look.mode = m.mode; applyMode(); for (const f of document.querySelectorAll("iframe")) try { f.contentWindow.postMessage({ mlwh: { mode: m.mode } }, "*"); } catch { /* fine */ } }
     if (m.style && m.style !== look.style) window.MLHost.setStyle(m.style);
     if (m.theme && m.theme !== look.theme) window.MLHost.setTheme(m.theme);
     if (m.lang && m.lang !== lang && ["en", "zh", "th"].includes(m.lang)) return window.MLHost.setLang(m.lang);
@@ -225,12 +233,15 @@
     if (file !== here) { location.href = file + location.search + (file === "app.html" ? "#" + encodeURIComponent(JSON.stringify({ tab: page === "data" ? "week" : page })) : ""); return; }
     if (file === "app.html") window.__mlwhApp?.go?.(page === "data" ? "week" : page, page === "settings" ? { group: null } : {});
   };
+  // The website shows only some of the window's pages: not Settings (its menu items are hidden: demo.css).
+  const wrapGo = setInterval(() => { const a = window.__mlwhApp; if (!a) return; clearInterval(wrapGo); const go0 = a.go; a.go = (t, ask) => (t === "settings" ? undefined : go0(t, ask)); }, 100);
   // You changed page inside: the website follows.
   let lastTab = null;
   setInterval(() => { const t = window.__mlwhApp?.tab?.(); if (t && t !== lastTab) { lastTab = t; tellParent(t === "week" ? "data" : t); } }, 400);
   // Embedded: the app's window, scaled to fit the frame (it's laid out for 1100 px).
   if (EMBED && /(app|welcome)\.html$/.test(location.pathname)) {
-    const fit = () => { root.style.zoom = String(Math.min(1, innerWidth / 1100)); };
+    // (on a phone, laid out narrower so the words stay readable)
+    const fit = () => { root.style.zoom = String(Math.min(1, innerWidth / (innerWidth < 600 ? 700 : 1100))); };
     fit(); addEventListener("resize", fit);
     root.classList.add("demo-embed");
   }

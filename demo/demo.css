@@ -1,2 +1,4 @@
 /* The website's demo (app/site-demo): small touches on top of the app's own styles. */
 html.demo-embed, html.demo-embed body { overflow-x: hidden; }
+/* Not in the website's demo: Settings (and the buddy's settings), the tour's own buttons into it */
+.appwin #nav [data-tab="settings"], .appwin #nav [data-tab="buddy"], .appwin #nav [data-tab="settings"] + .sub { display: none !important; }

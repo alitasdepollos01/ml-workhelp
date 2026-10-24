@@ -9,9 +9,9 @@ body.tool {
   height: auto;
   min-height: 100%;
 }
-@media (prefers-color-scheme: dark) {
-  body.tool { --bar: #f07aa8; }
-}
+:where(html[data-mode="dark"]) body.tool{ --bar: #f07aa8; }
+
+
 
 .tool main { max-width: 560px; margin: 0 auto; padding: 18px 18px 28px; display: grid; gap: 22px; }
 .tool section { display: grid; gap: 10px; }

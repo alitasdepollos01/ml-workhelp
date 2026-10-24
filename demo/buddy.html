@@ -4,79 +4,58 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Desktop buddy</title>
-<!-- The website's demo: a pretend desktop with the app's own desktop buddy (index.html?mode=buddy) walking
-     along it; right-click it for its card (quick.html); hide it and the reminder card (remind.html) shows. -->
+<!-- The website's demo: how the desktop buddy looks on a (pretend) desktop, standing still (index.html?mode=buddy),
+     and the card its right-click opens (quick.html), shown open beside it. To look at, not to play with. -->
 <script src="js/demo-data.js"></script><script src="js/demo-work.js"></script><script src="demo-host.js"></script>
 <style>
 html, body { margin: 0; height: 100%; overflow: hidden; font: 13px/1.4 -apple-system, system-ui, "PingFang TC", sans-serif; }
 .desk { position: absolute; inset: 0; overflow: hidden; background: linear-gradient(160deg, #b9d7ef 0%, #e9d6ef 55%, #f6e3d3 100%); }
-@media (prefers-color-scheme: dark) { .desk { background: linear-gradient(160deg, #1d2840 0%, #3a2a44 55%, #4a3330 100%); } }
+html[data-mode="dark"] .desk { background: linear-gradient(160deg, #1d2840 0%, #3a2a44 55%, #4a3330 100%); }
 .bar { position: absolute; left: 0; right: 0; top: 0; height: 26px; display: flex; gap: 16px; align-items: center; padding: 0 14px; background: rgba(255, 255, 255, .55); backdrop-filter: blur(12px); color: #222; font-weight: 500; z-index: 1; }
 .bar b { font-weight: 800; } .bar .sp { flex: 1; } .bar .heart { color: #c94f7e; font-weight: 700; }
-@media (prefers-color-scheme: dark) { .bar { background: rgba(30, 30, 36, .6); color: #eee; } }
+html[data-mode="dark"] .bar { background: rgba(30, 30, 36, .6); color: #eee; }
 .win { position: absolute; border-radius: 12px; background: rgba(255, 255, 255, .72); box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .35); }
 .win::before { content: ""; position: absolute; left: 12px; top: 10px; width: 46px; height: 10px; background: radial-gradient(circle, #ff5f57 4px, transparent 4.5px) 0 0/16px 10px repeat-x; opacity: .8; }
-@media (prefers-color-scheme: dark) { .win { background: rgba(50, 46, 56, .75); } }
-.cap { position: absolute; left: 14px; top: 36px; background: rgba(255, 255, 255, .8); color: #3b2a32; border-radius: 99px; padding: 3px 12px; font-size: 12.5px; z-index: 1; }
-#buddy { position: absolute; inset: 26px 0 0 0; width: 100%; height: calc(100% - 26px); border: 0; background: transparent; z-index: 2; color-scheme: normal; }
-#quick { position: absolute; width: 268px; height: 330px; border: 0; z-index: 5; border-radius: 16px; box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .4); background: transparent; }
-#cards { position: absolute; top: 34px; right: 12px; width: 330px; height: 260px; border: 0; z-index: 5; background: transparent; }
-#bring { position: absolute; right: 16px; bottom: 16px; z-index: 6; font: inherit; font-weight: 700; border: 0; border-radius: 99px; padding: 9px 16px; background: #3f7d5c; color: #fff; cursor: pointer; box-shadow: 0 8px 18px -8px rgba(0, 0, 0, .4); }
-.hint { position: absolute; left: 14px; bottom: 14px; z-index: 3; background: rgba(255, 255, 255, .85); color: #3b2a32; border-radius: 12px; padding: 6px 12px; max-width: 360px; }
-[hidden] { display: none !important; }
+html[data-mode="dark"] .win { background: rgba(50, 46, 56, .75); }
+.cap { position: absolute; left: 14px; top: 36px; background: rgba(255, 255, 255, .85); color: #3b2a32; border-radius: 99px; padding: 3px 12px; font-size: 12.5px; z-index: 1; }
+#buddy { position: absolute; inset: 26px 0 0 0; width: 100%; height: calc(100% - 26px); border: 0; background: transparent; z-index: 2; pointer-events: none; }
+.card { position: absolute; right: 300px; bottom: 18px; z-index: 5; display: grid; gap: 6px; justify-items: start; pointer-events: none; }
+.card .lbl { background: #3b2a32; color: #fff; border-radius: 99px; padding: 4px 12px; font-weight: 700; font-size: 12.5px; }
+#quick { width: 268px; height: 330px; border: 0; border-radius: 16px; box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .4); background: transparent; }
+.hint { position: absolute; left: 14px; bottom: 14px; z-index: 3; background: rgba(255, 255, 255, .88); color: #3b2a32; border-radius: 12px; padding: 8px 12px; max-width: 330px; display: grid; gap: 4px; }
+.hint b { color: #b4446a; }
+@media (max-width: 760px) { .card { right: auto; left: 14px; bottom: auto; top: 64px; } .hint { display: none; } .win { display: none; } }
 </style>
 </head>
 <body>
-<div class="desk" id="desk">
-  <div class="bar"><b></b><b>Finder</b><span>File</span><span>Edit</span><span>View</span><span class="sp"></span><span class="heart" id="clock">♡</span><span id="now"></span></div>
+<div class="desk">
+  <div class="bar"><b></b><b>Finder</b><span>File</span><span>Edit</span><span>View</span><span class="sp"></span><span class="heart">♡</span><span id="now"></span></div>
   <span class="cap" id="cap"></span>
   <div class="win" style="left:6%;top:14%;width:46%;height:46%"></div>
-  <div class="win" style="left:38%;top:24%;width:34%;height:38%;opacity:.85"></div>
-  <p class="hint" id="hint"></p>
-  <iframe id="buddy" title="Desktop buddy" allowtransparency="true"></iframe>
-  <iframe id="quick" title="The buddy's card" hidden></iframe>
-  <iframe id="cards" title="Reminder card" hidden></iframe>
-  <button type="button" id="bring" hidden></button>
+  <div class="win" style="left:30%;top:24%;width:30%;height:38%;opacity:.85"></div>
+  <div class="hint" id="hint"></div>
+  <iframe id="buddy" title="Desktop buddy" allowtransparency="true" tabindex="-1"></iframe>
+  <div class="card"><span class="lbl" id="lbl"></span><iframe id="quick" title="The buddy's card" tabindex="-1"></iframe></div>
 </div>
 <script>
 (function () {
   const lang = window.MLHost.lang, T = (en, zh, th) => (lang === "zh" ? zh : lang === "th" ? th || en : en);
-  const q = location.search ? location.search.slice(1) + "&" : "";
+  const q = (location.search ? location.search.slice(1) + "&" : "") + "pace=still&";
   const $ = (id) => document.getElementById(id);
   $("cap").textContent = T("Your desktop (pretend)", "你的桌面（示意）", "เดสก์ท็อปของคุณ (จำลอง)");
-  $("hint").textContent = T("Click the buddy for a Thai word; right-click it for its card. Drag it anywhere.", "點夥伴看泰文單字；按右鍵打開小卡。可以拖到任何地方。", "คลิกเพื่อนเพื่อดูคำไทย คลิกขวาเพื่อเปิดการ์ด ลากไปไหนก็ได้");
-  $("bring").textContent = T("Bring the buddy back", "叫回夥伴", "เรียกเพื่อนกลับมา");
+  $("lbl").textContent = T("Right-click the buddy: its card", "在夥伴上按右鍵：它的小卡", "คลิกขวาที่เพื่อน: การ์ดของเพื่อน");
+  $("hint").innerHTML = T("<b>On your desktop</b><span>Milk and Love stroll along the bottom of your screen, with what you're working on and your next reminder underneath. Click them for a Thai word; drag them anywhere.</span><span>Their card: take a break, the focus screen, remind me, done for today, and who's on your desktop.</span>",
+    "<b>在你的桌面上</b><span>Milk 和 Love 在螢幕下方走來走去，下面寫著你正在做的事和下一個提醒。點她們看泰文單字，也能拖到任何地方。</span><span>小卡上有：休息一下、專注全螢幕、提醒我、收工，還有桌面上要放誰。</span>",
+    "<b>บนเดสก์ท็อปของคุณ</b><span>Milk กับ Love เดินเล่นด้านล่างจอ ข้างใต้บอกงานที่ทำอยู่และการแจ้งเตือนถัดไป คลิกเพื่อดูคำไทย ลากไปไหนก็ได้</span><span>การ์ดของเพื่อน: พักสักหน่อย หน้าจอโฟกัส เตือนฉัน เลิกงาน และเลือกว่าใครอยู่บนเดสก์ท็อป</span>");
   const tickNow = () => { $("now").textContent = new Date().toLocaleString(lang === "zh" ? "zh-TW" : lang === "th" ? "th-TH" : "en-GB", { weekday: "short", hour: "2-digit", minute: "2-digit" }); };
   tickNow(); setInterval(tickNow, 15e3);
   $("buddy").src = "index.html?" + q + "mode=buddy&desk=1&dev=0";
-  const quick = $("quick"), cards = $("cards");
-  const hideQuick = () => { quick.hidden = true; };
-  const showCards = () => { cards.src = "remind.html?" + q; cards.hidden = false; };
+  $("quick").src = "quick.html?" + q;
   addEventListener("message", (e) => {
     const d = e.data || {};
-    if (d.mlwh) { for (const f of [$("buddy"), quick, cards]) try { f.contentWindow.postMessage({ mlwh: { style: d.mlwh.style, theme: d.mlwh.theme } }, "*"); } catch { /* fine */ } }
-    if (d.mlwhMenu) {
-      // (the card opens beside the pointer, kept inside the desktop)
-      const r = $("buddy").getBoundingClientRect(), x = Math.min(innerWidth - 280, Math.max(8, r.left + d.mlwhMenu.x - 280)), y = Math.min(innerHeight - 340, Math.max(30, r.top + d.mlwhMenu.y - 300));
-      quick.style.left = x + "px"; quick.style.top = y + "px";
-      if (quick.hidden || !quick.src) { quick.src = "quick.html?" + q; }
-      quick.hidden = false;
-    }
-    if (d.mlwhQuickSize) quick.style.height = d.mlwhQuickSize + "px";
-    if (d.mlwhRemindSize) cards.style.height = Math.min(innerHeight - 50, d.mlwhRemindSize) + "px";
-    if (d.mlwhQuick) {
-      const id = String(d.mlwhQuick);
-      if (id.startsWith("who:")) { $("buddy").contentWindow.postMessage({ mlwhCmd: d.again ? ["desk-shuffle"] : ["desk-who", id.slice(4)] }, "*"); return; }
-      hideQuick();
-      if (id === "hide") { $("buddy").hidden = true; $("bring").hidden = false; $("hint").hidden = true; showCards(); }
-      else if (id === "app" || id === "settings" || id === "name" || id === "switch") window.__mlwhGoPage(id === "settings" ? "settings" : "today");
-      else if (id === "shuffle") $("buddy").contentWindow.postMessage({ mlwhCmd: ["desk-shuffle"] }, "*");
-    }
-    if (d.mlwhRemind) cards.hidden = true;
-    if (d.mlwhDown) hideQuick();
+    if (d.mlwh) { if (d.mlwh.mode) document.documentElement.dataset.mode = d.mlwh.mode; for (const f of [$("buddy"), $("quick")]) try { f.contentWindow.postMessage({ mlwh: { style: d.mlwh.style, theme: d.mlwh.theme, mode: d.mlwh.mode } }, "*"); } catch { /* fine */ } }
+    if (d.mlwhQuickSize) $("quick").style.height = d.mlwhQuickSize + "px";
   });
-  document.addEventListener("pointerdown", (e) => { if (!e.target.closest("#quick")) hideQuick(); });
-  $("bring").addEventListener("click", () => { $("buddy").hidden = false; $("bring").hidden = true; $("hint").hidden = false; cards.hidden = true; });
 })();
 </script>
 </body>
