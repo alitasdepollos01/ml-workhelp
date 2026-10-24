@@ -241,7 +241,10 @@ async function thankYou() {
     card.className = "ty-card";
     card.style.animationDelay = `${0.15 + i * 0.09}s`;
     if (ALLOWED.includes(k)) card.append(Object.assign(document.createElement("span"), { className: "ok", textContent: "✓", title: L("Gave us permission", "已同意我們使用") }));
-    if (k === "wanwannjeab") {
+    if (p.avatar) {
+      card.append(Object.assign(document.createElement("img"), { className: "ty-pic", src: p.avatar, alt: "" }));
+      if (k === "wanwannjeab") { const m = Object.assign(document.createElement("span"), { className: "muvs small" }); for (const f of ["muv-heart", "muv-baby", "muv-plain"]) m.append(Object.assign(document.createElement("img"), { src: `art/${f}.png`, alt: "" })); card.append(m); }
+    } else if (k === "wanwannjeab") {
       const m = Object.assign(document.createElement("span"), { className: "muvs" });
       for (const f of ["muv-heart", "muv-baby", "muv-plain"]) m.append(Object.assign(document.createElement("img"), { src: `art/${f}.png`, alt: "" }));
       card.append(m);

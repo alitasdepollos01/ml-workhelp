@@ -100,5 +100,9 @@
     "version": "1.0.8",
     "marketplace": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp",
     "kiro": "in review"
+  },
+  "credits": {
+    "version": 0,
+    "url": "https://alitasdepollos01.github.io/ml-workhelp/credits/credits.json"
   }
 }

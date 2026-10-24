@@ -213,3 +213,7 @@ img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
   .wtop .dots { display: none; }
   .wtop .where { margin-left: auto; }
 }
+
+/* a thank-you card's profile picture (only for those who said yes); wanwannjeab's Muvs small beside it */
+.ty-card .ty-pic { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--control-bg), 0 0 0 3px var(--line); }
+.ty-card .muvs.small { position: absolute; left: 6px; top: 5px; height: 16px; } .ty-card .muvs.small img { height: 16px; }

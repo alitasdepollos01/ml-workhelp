@@ -983,3 +983,7 @@ html[data-style="f"] .appwin main .page-sub h2::after { content: none; }
   box-shadow: 0 10px 26px -10px rgba(0, 0, 0, .4); opacity: 0; visibility: hidden; transition: opacity .12s; z-index: 30; }
 .appwin .tip-pop p { margin: 0; } .appwin .tip-pop p + p { margin-top: 6px; }
 .appwin .help-tip:hover .tip-pop, .appwin .help-tip:focus-within .tip-pop, .appwin .help-tip.open .tip-pop { opacity: 1; visibility: visible; }
+
+/* a credit card's profile picture, in place of the icon (only for those who said yes) */
+.appwin .credit-card .cc-ic.has-pic { background: none; padding: 0; overflow: hidden; }
+.appwin .credit-card .cc-ic.has-pic img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; box-shadow: 0 0 0 2px var(--control-bg), 0 0 0 3.5px var(--line); }

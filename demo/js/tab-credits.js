@@ -50,7 +50,7 @@ export async function renderCredits(main, { ask }) {
   main.append(el("section", { className: "credit-cards all" }, all.map((k) => { const p = data.people[k];
     return el("div", { className: "credit-card" + (featured.has(k) ? " ok" : "") },
       featured.has(k) ? el("span", { className: "cc-ok", textContent: "✓", title: L("Gave us permission", "已同意我們使用") }) : null,
-      el("span", { className: "cc-ic" }, svg(k === "wanwannjeab" ? "draw" : "photo")), el("b", { textContent: SHORT[k] || p.name }),
+      el("span", { className: "cc-ic" + (p.avatar ? " has-pic" : "") }, p.avatar ? el("img", { src: p.avatar, alt: "" }) : svg(k === "wanwannjeab" ? "draw" : "photo")), el("b", { textContent: SHORT[k] || p.name }),
       p.url ? el("a", { href: p.url, target: "_blank", rel: "noopener", textContent: p.handle }) : null,
       el("span", { className: "muted", textContent: what(k) })); })));
   main.append(el("section", { className: "credit-note" }, el("b", { textContent: "ⓘ" }),
