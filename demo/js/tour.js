@@ -182,7 +182,7 @@ function finish() {
  */
 export function startTour(go, which = "app", { from = null, at = 0 } = {}) {
   endTour();
-  STEPS = (which === "settings" ? SETTINGS : which === "data" ? DATA : ALL).filter((s) => !s.when || s.when());
+  STEPS = (which === "settings" ? SETTINGS : which === "data" ? DATA : ALL).filter((s) => (!s.when || s.when()) && !(globalThis.MLHost?.demo && s.tab === "settings"));
   const title = el("b", { className: "tour-title" }), text = el("p", {}), where = el("span", { className: "muted" });
   const back = el("button", { type: "button", className: "btn small", textContent: L("Back", "上一步") });
   const next = el("button", { type: "button", className: "btn primary small" });
@@ -210,6 +210,6 @@ export function startTour(go, which = "app", { from = null, at = 0 } = {}) {
   show(Math.max(0, Math.min(STEPS.length - 1, at)));
 }
 
-export const tourSteps = (which = "app") => (which === "settings" ? SETTINGS : which === "data" ? DATA : ALL).filter((s) => !s.when || s.when()).length;
+export const tourSteps = (which = "app") => (which === "settings" ? SETTINGS : which === "data" ? DATA : ALL).filter((s) => (!s.when || s.when()) && !(globalThis.MLHost?.demo && s.tab === "settings")).length;
 export const tourWhich = () => on?.which || null;
 export const tourOn = () => (on ? on.at : -1);

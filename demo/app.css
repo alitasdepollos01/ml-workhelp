@@ -972,6 +972,7 @@ html[data-style="f"] .appwin main .page-sub h2::after { content: none; }
 .appwin .page-top.stickers-band > .deco { height: 118px; max-width: 190px; margin-left: 10px; margin-right: 12px; }
 .appwin .page-top.settings-band > .deco { height: 130px; max-width: 200px; }
 
+.appwin .tour-extra[hidden] { display: none !important; }
 /* Today's timer card: the way of keeping time as a small switch at the top, with a ? tip (what each way does, how it counts) */
 .appwin .now-top { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; position: relative; z-index: 2; }
 .appwin .now-top .seg button { padding: 4px 12px; font-size: 13px; }

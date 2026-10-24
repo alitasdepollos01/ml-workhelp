@@ -21,6 +21,6 @@ export function renderStickers(main, { go }) {
 
 // The maker's "how it looks on your desktop" chips: one setting for every sticker on the desktop.
 addEventListener("message", (e) => {
-  if (!e.origin === location.origin || e.data?.type !== "stk-look") return;
+  if (!(e.origin === location.origin) || e.data?.type !== "stk-look") return;
   for (const k of ["stkEdge", "stkShadow"]) if (e.data[k]) { host?.settingText?.(k, e.data[k]); if (state.st) state.st[k] = e.data[k]; }
 });

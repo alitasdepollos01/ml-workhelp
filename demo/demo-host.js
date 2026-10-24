@@ -19,7 +19,7 @@
   root.dataset.style = look.style; root.dataset.theme = look.theme;
   // Light or dark (build.js: the pages' dark rules follow html[data-mode]): like this computer, until the website says.
   const os = matchMedia("(prefers-color-scheme: dark)");
-  look.mode = Q.get("mode") || null;
+  look.mode = Q.get("dm") || null;
   const applyMode = () => { root.dataset.mode = look.mode || (os.matches ? "dark" : "light"); };
   applyMode(); os.addEventListener?.("change", applyMode);
 
@@ -51,14 +51,14 @@
   const work = W.createWork({ dir: "/demo", now: () => Date.now() });
   const DAY = 864e5, H = 36e5, M = 6e4;
   const at = (daysAgo, h, m = 0) => { const d = new Date(Date.now() - daysAgo * DAY); d.setHours(h, m, 0, 0); return d.getTime(); };
-  const T = (en, zh) => (lang === "zh" ? zh : en);
+  const T = (en, zh, th) => (lang === "zh" ? zh : lang === "th" ? th || en : en);
   (function seed() {
     const PLAN = [ // [start h, minutes, kind, name / type, category]
-      [9, 30, 50, "work", T("Email & planning", "信件與規劃"), "admin"], [10, 25, 50, "work", T("Chapter 3 draft", "第三章初稿"), "focus"], [11, 15, 10, "break", "stretch"],
-      [11, 25, 65, "work", T("Chapter 3 draft", "第三章初稿"), "focus"], [12, 30, 50, "break", "meal"], [13, 30, 45, "work", T("Team meeting", "團隊會議"), "meeting"],
-      [14, 20, 80, "work", T("Reading for the thesis", "論文閱讀"), "study"], [15, 40, 15, "break", "coffee"], [16, 0, 70, "work", T("Chapter 3 draft", "第三章初稿"), "focus"],
+      [9, 30, 50, "work", T("Email & planning", "信件與規劃", "อีเมลและวางแผน"), "admin"], [10, 25, 50, "work", T("Chapter 3 draft", "第三章初稿", "ร่างบทที่ 3"), "focus"], [11, 15, 10, "break", "stretch"],
+      [11, 25, 65, "work", T("Chapter 3 draft", "第三章初稿"), "focus"], [12, 30, 50, "break", "meal"], [13, 30, 45, "work", T("Team meeting", "團隊會議", "ประชุมทีม"), "meeting"],
+      [14, 20, 80, "work", T("Reading for the thesis", "論文閱讀", "อ่านทำวิทยานิพนธ์"), "study"], [15, 40, 15, "break", "coffee"], [16, 0, 70, "work", T("Chapter 3 draft", "第三章初稿"), "focus"],
     ];
-    const FOCUS = [T("Finish chapter 3, then treat myself ♡", "寫完第三章，然後犒賞自己 ♡"), T("Reading day", "閱讀日"), T("Clear the inbox", "清空收件匣"), T("Meeting notes + slides", "會議紀錄和投影片"), T("Chapter 3, part 2", "第三章第二段")];
+    const FOCUS = [T("Finish chapter 3 ♡", "寫完第三章 ♡", "เขียนบทที่ 3 ให้จบ ♡"), T("Reading day", "閱讀日", "วันอ่านหนังสือ"), T("Clear the inbox", "清空收件匣", "เคลียร์อีเมล"), T("Meeting notes + slides", "會議紀錄和投影片", "สรุปประชุม + สไลด์"), T("Chapter 3, part 2", "第三章第二段", "บทที่ 3 ตอนที่ 2")];
     for (let d = 13; d >= 1; d--) {
       const wd = new Date(Date.now() - d * DAY).getDay();
       if (wd === 0 || (wd === 6 && d % 3)) continue; // (weekends mostly off)
@@ -78,10 +78,10 @@
     work.setFocus(FOCUS[0]);
     try { work.startDay(); } catch { /* fine */ }
     work.setName(T("Chapter 3 draft", "第三章初稿"));
-    for (const [text, min, rep] of [[T("Stretch", "伸展"), 25, null], [T("Call the bank", "打給銀行"), 140, null], [T("Drink water", "喝水"), 60 * 20, "daily"]]) {
+    for (const [text, min, rep] of [[T("Stretch", "伸展", "ยืดเส้น"), 25, null], [T("Call the bank", "打給銀行", "โทรหาธนาคาร"), 140, null], [T("Drink water", "喝水", "ดื่มน้ำ"), 60 * 20, "daily"]]) {
       try { work.addReminder({ text, at: now + min * M, repeat: rep }); } catch { /* fine */ }
     }
-    try { work.addReminder({ kind: "event", text: T("MilkLove IG live", "MilkLove IG 直播"), start: now + 6 * H, end: now + 7 * H }); } catch { /* fine */ }
+    try { work.addReminder({ kind: "event", text: T("MilkLove IG live", "MilkLove IG 直播", "MilkLove ไลฟ์ IG"), start: now + 6 * H, end: now + 7 * H }); } catch { /* fine */ }
   })();
   // You're at the computer: the clock counts (the app's tick, every second).
   const tick = () => { try { work.tick({ idle: 0, breakEvery: S.breakEvery, count: true, goal: S.dailyGoal }); } catch { /* fine */ } };
@@ -146,7 +146,7 @@
 
   window.MLHost = {
     name: "electron", demo: true, lang,
-    setLang: (l) => { store("lang", l); const u = new URL(location.href); u.searchParams.set("lang", l); if (look.mode) u.searchParams.set("mode", look.mode);
+    setLang: (l) => { store("lang", l); const u = new URL(location.href); u.searchParams.set("lang", l); if (look.mode) u.searchParams.set("dm", look.mode);
       const tab = window.__mlwhApp?.tab?.(); if (tab) u.hash = encodeURIComponent(JSON.stringify({ tab })); location.replace(u.toString()); },
     themes: () => ({ theme: look.theme, themes: DATA.themes || [], style: look.style }),
     setTheme: (id) => { look.theme = id; root.dataset.theme = id; store("theme", id); onCommand?.("theme", id); },
@@ -196,13 +196,13 @@
     const st = status(), hm = (ms) => { const m = Math.floor((ms || 0) / 6e4); return `${Math.floor(m / 60)}:${String(m % 60).padStart(2, "0")}`; };
     const b = (id, icon, label, sub = false) => ({ id, icon, label, sub });
     return {
-      time: hm(st.today), timeLabel: st.onBreak ? T("worked today · on a break", "今天工作 · 休息中") : T("worked today", "今天工作"), pomo: "",
-      name: st.onBreak ? "" : st.name || "", nameHint: T("Name what I'm working on…", "幫正在做的事取名⋯"), nameTip: T("Change what I'm working on", "更改正在做的事"), switchLabel: T("Switch", "切換"),
-      big: [st.onBreak ? b("break", "back", T("I'm back", "我回來了")) : b("break", "brk", T("Take a break", "休息一下"), true), b("focus", "focus", T("Focus screen", "專注全螢幕")),
-        b("remind", "rem", T("Remind me", "提醒我"), true), b("done", "done", T("Done for today", "收工"))],
-      who: S.deskWho || "pair", whoTitle: T("On my desktop", "桌面上是"), whoHint: T("tap again for another sticker", "再點一次換一張"),
-      whoOpts: [["pair", T("Both, side by side", "並排")], ["together", T("Together", "同框")], ["milk", "Milk"], ["love", "Love"], ["others", T("Others", "其他")]],
-      small: [b("hide", "hide", T("Hide", "隱藏"), true), b("app", "app", T("Open app", "打開 App")), b("settings", "settings", T("Settings", "設定"))],
+      time: hm(st.today), timeLabel: st.onBreak ? T("worked today · on a break", "今天工作 · 休息中", "ทำงานวันนี้ · กำลังพัก") : T("worked today", "今天工作", "ทำงานวันนี้"), pomo: "",
+      name: st.onBreak ? "" : st.name || "", nameHint: T("Name what I'm working on…", "幫正在做的事取名⋯", "ตั้งชื่องานที่ทำอยู่…"), nameTip: T("Change what I'm working on", "更改正在做的事", "เปลี่ยนงานที่ทำอยู่"), switchLabel: T("Switch", "切換", "สลับ"),
+      big: [st.onBreak ? b("break", "back", T("I'm back", "我回來了", "กลับมาแล้ว")) : b("break", "brk", T("Take a break", "休息一下", "พักสักหน่อย"), true), b("focus", "focus", T("Focus screen", "專注全螢幕", "หน้าจอโฟกัส")),
+        b("remind", "rem", T("Remind me", "提醒我", "เตือนฉัน"), true), b("done", "done", T("Done for today", "收工", "เลิกงาน"))],
+      who: S.deskWho || "pair", whoTitle: T("On my desktop", "桌面上是", "บนเดสก์ท็อป"), whoHint: T("tap again for another sticker", "再點一次換一張", "แตะอีกครั้งเพื่อเปลี่ยนสติกเกอร์"),
+      whoOpts: [["pair", T("Both, side by side", "並排", "ทั้งคู่ เคียงกัน")], ["together", T("Together", "同框", "คู่กัน")], ["milk", "Milk"], ["love", "Love"], ["others", T("Others", "其他", "อื่น ๆ")]],
+      small: [b("hide", "hide", T("Hide", "隱藏", "ซ่อน"), true), b("app", "app", T("Open app", "打開 App", "เปิดแอป")), b("settings", "settings", T("Settings", "設定", "การตั้งค่า"))],
     };
   }
   function quickAct(id) {
@@ -225,7 +225,7 @@
     if (m.style && m.style !== look.style) window.MLHost.setStyle(m.style);
     if (m.theme && m.theme !== look.theme) window.MLHost.setTheme(m.theme);
     if (m.lang && m.lang !== lang && ["en", "zh", "th"].includes(m.lang)) return window.MLHost.setLang(m.lang);
-    if (m.page && window.parent !== window && !/mode=buddy|quick|remind/.test(location.href)) window.__mlwhGoPage(m.page);
+    if (m.page && window.parent !== window && /(^|\/)(app|welcome|buddy)\.html$/.test(location.pathname)) window.__mlwhGoPage(m.page);
   });
   // The website's tabs: Welcome (welcome.html), Desktop buddy (buddy.html) and the window's pages (app.html).
   window.__mlwhGoPage = (page) => {
@@ -239,10 +239,5 @@
   let lastTab = null;
   setInterval(() => { const t = window.__mlwhApp?.tab?.(); if (t && t !== lastTab) { lastTab = t; tellParent(t === "week" ? "data" : t); } }, 400);
   // Embedded: the app's window, scaled to fit the frame (it's laid out for 1100 px).
-  if (EMBED && /(app|welcome)\.html$/.test(location.pathname)) {
-    // (on a phone, laid out narrower so the words stay readable)
-    const fit = () => { root.style.zoom = String(Math.min(1, innerWidth / (innerWidth < 600 ? 700 : 1100))); };
-    fit(); addEventListener("resize", fit);
-    root.classList.add("demo-embed");
-  }
+  if (EMBED) root.classList.add("demo-embed"); // (the website scales the whole frame: a page laid out 1100 px wide)
 })();

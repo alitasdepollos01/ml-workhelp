@@ -9,7 +9,10 @@
     for (const [en, th] of data?.p || []) {
       const start = en.split(/\{\d+\}/)[0];
       const order = [...en.matchAll(/\{(\d+)\}/g)].map((m) => +m[1]);
-      const re = new RegExp("^" + en.split(/\{\d+\}/).map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("([\\s\\S]*?)") + "$");
+      // (a placeholder inside a word, "photo{1}", is a plural ending: then every value in it is short and has no spaces,
+      // so "{0} photo{1}" can't swallow a whole sentence that happens to say "photo")
+      const plural = /[A-Za-z]\{\d+\}|\{\d+\}[A-Za-z]/.test(en);
+      const re = new RegExp("^" + en.split(/\{\d+\}/).map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join(plural ? "(\\S{0,12}?)" : "([\\s\\S]*?)") + "$");
       const key = start.slice(0, 1); // ("" for a pattern that starts with {0})
       if (!byStart.has(key)) byStart.set(key, []);
       byStart.get(key).push({ re, order, th });

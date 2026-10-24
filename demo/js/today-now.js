@@ -54,16 +54,18 @@ function waySwitch(st, redraw) {
   return seg;
 }
 /** The ? beside the switch: what each way does and how this one counts (point at it, or click). */
+let tipOpen = false; // (open by a click: it stays open when the card redraws)
 function helpTip(lines) {
   const id = "now-tip-" + Math.random().toString(36).slice(2, 7);
   const b = el("button", { type: "button", className: "help-q", "aria-label": L("How it counts", "怎麼計時的"), "aria-describedby": id, "aria-expanded": "false", textContent: "?" });
   const pop = el("div", { className: "tip-pop", id, role: "tooltip" }, lines.map((t) => el("p", { textContent: t })));
   const wrap = el("span", { className: "help-tip" }, b, pop);
-  const close = () => { wrap.classList.remove("open"); b.setAttribute("aria-expanded", "false"); };
+  const close = () => { tipOpen = false; wrap.classList.remove("open"); b.setAttribute("aria-expanded", "false"); };
+  if (tipOpen) { wrap.classList.add("open"); b.setAttribute("aria-expanded", "true"); setTimeout(() => document.addEventListener("click", close, { once: true })); }
   b.addEventListener("click", (e) => {
     e.stopPropagation();
     const on = !wrap.classList.contains("open");
-    wrap.classList.toggle("open", on); b.setAttribute("aria-expanded", String(on));
+    tipOpen = on; wrap.classList.toggle("open", on); b.setAttribute("aria-expanded", String(on));
     if (on) setTimeout(() => document.addEventListener("click", close, { once: true })); // (a click anywhere else closes it)
   });
   b.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });

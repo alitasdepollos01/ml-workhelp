@@ -284,3 +284,6 @@ html:where([data-mode="dark"])[data-style="f"] body{ --sk-art: conic-gradient(rg
 html[data-style="f"] body.appwin, html[data-style="f"] body.welcome { background-size: 36px 36px; }
 html[data-style="g"] body { --sk-art: linear-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px); }
 html[data-style="g"] body.appwin, html[data-style="g"] body.welcome { background-size: 100% 6px; }
+
+/* Milk Tea Clay: a picked chip keeps its colour (it was white on white) */
+html[data-style="b"] .appwin .chip.on, html[data-style="b"] .chip.on { background: var(--primary); color: var(--primary-ink); border-color: var(--primary); }

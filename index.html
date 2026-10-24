@@ -174,7 +174,11 @@ details.more summary::-webkit-details-marker { display: none; }
 .styles button i { width: 22px; height: 22px; border-radius: 50%; display: block; border: 1px solid rgba(0,0,0,.12); }
 .styles button[aria-pressed="true"] { border-color: var(--a); background: var(--a-soft); color: var(--a-deep); }
 .screen { border-radius: 16px; overflow: hidden; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--a), var(--shadow); aspect-ratio: 1100 / 740; background: var(--surface-2); position: relative; }
-.screen iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.screen iframe { position: absolute; left: 0; top: 0; width: 1100px; height: 740px; border: 0; transform-origin: 0 0; }
+.screen .phone-shot { display: none; margin: 0; }
+.screen .phone-shot img { width: 100%; display: block; }
+.screen .phone-shot figcaption { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); background: var(--ink); color: var(--bg); font: 700 13px/1.2 var(--font-b); border-radius: 99px; padding: 6px 14px; white-space: nowrap; }
+@media (max-width: 599px) { .screen iframe { display: none; } .screen .phone-shot { display: block; } .try-side, .try-tabs, .try-desc { display: none !important; } .screen { aspect-ratio: auto; } }
 .cap { font-size: 13px; color: var(--muted); margin: 0; }
 
 /* focus screen demo: the monitor and controls from the current page */
@@ -338,7 +342,9 @@ footer p { margin: 0; color: var(--muted); font-size: 14px; }
 /* ---- phone ---- */
 @media (max-width: 900px) {
   .two, .quiz, .phero, .try, .fdemo, .dl, .news,   .three { grid-template-columns: minmax(0, 1fr); }
-  .dl .acts .btn { white-space: normal; }
+  .dl .acts .btn { flex-wrap: wrap; justify-content: flex-start; row-gap: 2px; padding: 9px 18px; }
+  .dl .acts .btn small { flex-basis: 100%; white-space: nowrap; }
+  .tmb-hero .mascots img { height: auto; width: 23%; max-height: 70%; }
   .art-tmb pre { font-size: 10.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .term code { white-space: normal; overflow-wrap: anywhere; }
   .people, .people.all { grid-template-columns: repeat(2, 1fr); }
@@ -420,7 +426,10 @@ body { background: var(--bg) radial-gradient(color-mix(in oklab, var(--a) 16%, t
 @media (max-width: 900px) { .try3 { grid-template-columns: 1fr; } .try-side .styles { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 420px) { html[lang="th"] .try-side .styles { grid-template-columns: 1fr; } }
 /* (phones: the menu scrolls sideways; a fade at the right edge says there's more) */
-@media (max-width: 900px) { .nav { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); padding-right: 24px; } }
+@media (max-width: 900px) { .nav { order: 3; width: 100%; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; overflow: visible; }
+  .nav a { white-space: normal; text-align: center; padding: 6px; font-size: 13.5px; line-height: 1.15; display: flex; align-items: center; justify-content: center; min-height: 40px; } }
+.try-side .styles button { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; text-align: left; white-space: normal; line-height: 1.15; min-height: 34px; }
+.try-side .styles button .tag { white-space: nowrap; }
 .lookbar { position: fixed; z-index: 60; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 4px; align-items: center; background: #1e1d22; color: #f3f1f6; border-radius: 99px; padding: 5px 6px 5px 14px; box-shadow: 0 10px 30px rgba(0,0,0,.3); font: 600 13px/1 -apple-system, system-ui, sans-serif; }
 .lookbar span { margin-right: 6px; opacity: .7; }
 .lookbar button { border: 0; background: transparent; color: #d9d6df; border-radius: 99px; padding: 8px 12px; cursor: pointer; font: inherit; }
@@ -547,7 +556,7 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
   </nav>
   <span class="spacer"></span>
   <div class="seg" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="zh">中文</button><button type="button" data-lang="th">ไทย<sup>beta</sup></button></div>
-  <div class="seg" role="group" aria-label="Light or dark"><button type="button" data-th="light" aria-label="Light"><i data-lucide="sun" class="ic"></i></button><button type="button" data-th="dark" aria-label="Dark"><i data-lucide="moon" class="ic"></i></button></div>
+  <div class="seg" role="group" aria-label="Light or dark"><button type="button" data-sitetheme="light" aria-label="Light"><i data-lucide="sun" class="ic"></i></button><button type="button" data-sitetheme="dark" aria-label="Dark"><i data-lucide="moon" class="ic"></i></button></div>
   <a class="btn btn-p btn-sm dlbtn" href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載" data-th="ดาวน์โหลด">Download</span></a>
 </div></header>
 
@@ -662,7 +671,9 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
     <div class="try3">
       <div class="try-tabs" id="tryList" role="tablist"></div>
       <div class="try-desc" id="tryDesc"></div>
-      <div class="screen"><iframe id="appFrame" title="ML WorkHelp preview" src="demo/app.html?embed=1" loading="lazy"></iframe></div>
+      <div class="screen"><iframe id="appFrame" title="ML WorkHelp preview" loading="lazy"></iframe>
+        <figure class="phone-shot"><picture><source srcset="demo/shot-today-dark.jpg" media="(prefers-color-scheme: dark)"><img src="demo/shot-today-light.jpg" alt="ML WorkHelp's Today page" data-zh-alt="ML WorkHelp 的「今天」頁" loading="lazy"></picture>
+          <figcaption data-zh="在 Mac 上就能在這裡試玩。" data-th="เปิดบน Mac เพื่อลองเล่นได้ที่นี่">Try it here on a Mac.</figcaption></figure></div>
       <aside class="try-side">
         <div><span class="lbl" data-zh="風格" data-th="สไตล์">Style</span><div class="styles" id="styleChips"></div></div>
         <div><span class="lbl" data-zh="淺色或深色" data-th="สว่างหรือมืด">Light or dark</span><div class="seg" role="group" id="modeSeg"><button type="button" data-m="light"><i data-lucide="sun" class="ic"></i><span data-zh="淺色" data-th="สว่าง">Light</span></button><button type="button" data-m="dark"><i data-lucide="moon" class="ic"></i><span data-zh="深色" data-th="มืด">Dark</span></button></div></div>
@@ -920,7 +931,7 @@ let LATEST = {"version": "1.2.0", "released": "2026-10-25", "download": "https:/
 const LANGS = ["en", "zh", "th"];
 let lang = /^zh/i.test(navigator.language || "") ? "zh" : /^th/i.test(navigator.language || "") ? "th" : "en";
 let theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-try { const l = localStorage.getItem("site-lang"); if (LANGS.includes(l)) lang = l; theme = localStorage.getItem("site-theme") || theme; } catch { /* fine */ }
+try { const l = localStorage.getItem("site-lang"); if (LANGS.includes(l)) lang = l; const t = localStorage.getItem("site-theme"); if (t === "light" || t === "dark") theme = t; /* (anything else saved there by mistake: forgotten) */ } catch { /* fine */ }
 { const q = new URLSearchParams(location.search).get("lang"); if (LANGS.includes(q)) lang = q; } // (a link in one language: ?lang=th)
 const T = (en, zh, th) => (lang === "zh" ? zh : lang === "th" ? (th || en) : en);
 const app = { page: "today", style: "f", mode: theme, theme: "matcha" };
@@ -940,13 +951,17 @@ const TRY = [
     ["Click for a Thai word; drag them anywhere", "Pick who's out: both, together, Milk, Love", "Hide them: reminders come as a card instead"], ["點一下看泰文單字，拖到任何地方", "選誰出來：兩個、同框、Milk、Love", "收起來時，提醒會變成小卡片"], ["คลิกเพื่อดูคำไทย ลากไปไหนก็ได้", "เลือกว่าใครออกมา: ทั้งคู่ คู่กัน Milk หรือ Love", "ซ่อนไว้ การแจ้งเตือนจะมาเป็นการ์ดแทน"]],
   ["stickers", "sticker", "Stickers", "貼圖", "สติกเกอร์", "Make stickers from your own photos.", "用你自己的照片做貼圖。", "ทำสติกเกอร์จากรูปของคุณเอง",
     ["Cut out, erase, soft edges", "Sort into Milk, Love, Together or Others", "Point at any sticker: whose photo it is"], ["去背、擦除、柔邊", "分到 Milk、Love、同框或其他", "滑鼠移到貼圖上，就知道是誰的照片"], ["ไดคัต ลบ ขอบนุ่ม", "แยกเป็น Milk, Love, คู่กัน หรืออื่น ๆ", "ชี้ที่สติกเกอร์ จะรู้ว่าใครถ่าย"]],
-  ["help", "message-circle-question", "Q&A", "常見問題", "ถาม-ตอบ", "Answers to the usual questions, and a way to write to us.", "常見問題的解答，還有寫信給我們的方式。", "คำตอบของคำถามที่พบบ่อย และช่องทางเขียนถึงเรา",
-    ["Search the answers", "The focus screen, the Pomodoro, your photos", "Write to us from the app"], ["搜尋答案", "專注全螢幕、番茄鐘、你的照片", "在 App 裡直接寫信給我們"], ["ค้นหาคำตอบ", "หน้าจอโฟกัส โพโมโดโร่ และรูปของคุณ", "เขียนถึงเราจากในแอป"]],
   ["credits", "camera", "Photo credits", "照片來源", "เครดิตภาพ", "Who took the photos, and who drew Muv.", "照片是誰拍的，Muv 是誰畫的。", "ใครถ่ายรูป และใครวาด Muv",
     ["Everyone credited, on the same card", "✓ for the ones who gave permission", "Click a sticker for its original photo"], ["每一位都標註，同樣的卡片", "同意我們使用的打勾 ✓", "點貼圖就能看原始照片"], ["ทุกคนมีเครดิต การ์ดเท่ากัน", "✓ สำหรับคนที่อนุญาตแล้ว", "คลิกสติกเกอร์เพื่อดูรูปต้นฉบับ"]],
 ];
 const frame = document.getElementById("appFrame");
 // (light or dark: the frame's color-scheme is what the pages inside see as the Mac's)
+// The frame: laid out like the app's window (1100 px), scaled to the box; only loaded on screens wide enough for it.
+const screenBox = frame.parentElement, wide = matchMedia("(min-width: 600px)");
+const fitFrame = () => { const k = screenBox.clientWidth / 1100; if (!k) return; frame.style.transform = `scale(${k})`; frame.style.height = Math.round(screenBox.clientHeight / k) + "px"; };
+new ResizeObserver(fitFrame).observe(screenBox);
+const loadFrame = () => { if (wide.matches && !frame.getAttribute("src")) frame.src = `demo/app.html?embed=1&lang=${lang}&dm=${app.mode === "dark" ? "dark" : "light"}`; };
+wide.addEventListener?.("change", loadFrame);
 // (the page only when it changed: a style or light/dark doesn't move you to another page)
 let sentPage = null;
 const tell = () => { frame.style.colorScheme = app.mode === "dark" ? "dark" : "light"; const msg = { style: app.style, theme: app.theme, mode: app.mode, lang };
@@ -962,7 +977,7 @@ function drawTry() {
   document.getElementById("styleChips").innerHTML = STYLES.map(([k, en, zh, th, sw]) => `<button type="button" data-style="${k}" aria-pressed="${app.style === k}"><i style="background:${sw}"></i>${T(en, zh, th)}${k === "f" ? ` <span class="tag a" style="padding:1px 6px;font-size:10.5px">${T("default", "預設", "ค่าเริ่มต้น")}</span>` : ""}</button>`).join("");
   document.querySelectorAll("#modeSeg button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.m === app.mode)));
   document.getElementById("themeDots").innerHTML = THEMES.map(([k, c1, c2]) => `<button type="button" data-theme="${k}" aria-pressed="${app.theme === k}" aria-label="${k}" style="background:linear-gradient(135deg,${c1} 50%,${c2} 50%)"></button>`).join("");
-  lucide.createIcons(); tell();
+  lucide.createIcons(); loadFrame(); tell();
 }
 
 const QUIZ = {
@@ -1096,14 +1111,14 @@ function applyLang() {
 }
 function applyTheme() {
   document.documentElement.dataset.theme = theme;
-  document.querySelectorAll("[data-th]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.th === theme)));
+  document.querySelectorAll("[data-sitetheme]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.sitetheme === theme)));
 }
 document.addEventListener("click", (e) => {
   const b = e.target.closest("button"); if (!b) return;
   const d = b.dataset;
   if (d.look) { look = d.look; try { localStorage.setItem("site-look", look); } catch {} applyLook(); return; }
   if (d.lang) { lang = d.lang; try { localStorage.setItem("site-lang", lang); } catch {} applyLang(); }
-  else if (d.th) { theme = d.th; app.mode = theme; try { localStorage.setItem("site-theme", theme); } catch {} applyTheme(); applyLook(); drawTry(); }
+  else if (d.sitetheme) { theme = d.sitetheme; app.mode = theme; try { localStorage.setItem("site-theme", theme); } catch {} applyTheme(); applyLook(); drawTry(); }
   else if (d.try) { app.page = d.try; drawTry(); }
   else if (d.style) { app.style = d.style; drawTry(); }
   else if (d.m) { app.mode = d.m; drawTry(); }
