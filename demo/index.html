@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML WorkHelp demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Bricolage+Grotesque:wght@500;700;800&family=Mali:wght@400;600&family=Itim&family=Noto+Sans+Thai:wght@400;600&family=Outfit:wght@400;500;600;700&family=Kanit:wght@400;500&family=Baloo+2:wght@500;700;800&family=Sriracha&family=Rubik:wght@400;500;600;700;800&family=Mitr:wght@400;500&family=VT323&family=IBM+Plex+Sans:wght@400;500;600;700&family=Chakra+Petch:wght@400;600&family=DM+Serif+Display&family=Noto+Serif+Thai:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@500;700&display=swap">
+<link rel="stylesheet" href="proto.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="bar">
+  <div class="bar-row">
+    <strong class="bar-title">ML WorkHelp · <span data-t="Redesign prototype|改版原型"></span></strong>
+    <div class="bar-group" id="styleBtns" role="group" aria-label="Style"></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-group" id="pageBtns" role="group" aria-label="Page"></div>
+    <span class="bar-gap"></span>
+    <div class="bar-group" id="themeBtns" role="group" aria-label="Colour theme"></div>
+    <div class="bar-group" id="langBtns" role="group" aria-label="Language"></div>
+    <div class="bar-group" id="modeBtns" role="group" aria-label="Light or dark"></div>
+    <button class="bar-btn" id="emptyBtn" type="button" aria-pressed="false"></button>
+    <button class="bar-btn" id="compareBtn" type="button" aria-pressed="false"></button>
+  </div>
+</header>
+<div class="stage" id="stage"></div>
+<aside class="notes" id="notes"></aside>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script src="proto.js"></script>
+</body>
+</html>
