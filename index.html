@@ -356,8 +356,6 @@ footer p { margin: 0; color: var(--muted); font-size: 14px; }
   .top .wrap { flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; min-height: 0; }
   .nav { order: 3; width: 100%; margin: 0; overflow-x: auto; }
   .top .dlbtn { display: none; }
-  .subnav { top: 104px; }
-  html { scroll-padding-top: 170px; }
   .try-list { grid-template-columns: repeat(2, 1fr); }
   .try-list button ul { display: none !important; }
 }
@@ -750,6 +748,41 @@ html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-scr { box-shadow: 0 0 0 1px
 :is(#ml-does, #ml-buddy) .fb-card .scene { height: 180px; }
 }
 
+
+/* The section tracker: the sub-menu stays under the top bar, marks where you are (aria-current), says what's next,
+   and a thin line shows how far down the page you are. Phones: one row of chips that scrolls sideways by itself. */
+.subnav .wrap { display: flex; align-items: center; gap: 10px; overflow: visible; }
+.subnav .sn-row { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; flex: 1 1 auto; min-width: 0; scroll-behavior: smooth; padding: 2px; margin: -2px; }
+.subnav .sn-row::-webkit-scrollbar { display: none; }
+.subnav a { flex: none; transition: background-color .2s, border-color .2s, color .2s; }
+.subnav a:focus-visible { outline: 3px solid var(--p); outline-offset: 2px; }
+html[data-look="scrapbook"] .subnav .sn-row a.on, :root:not([data-look]) .subnav .sn-row a.on { background: var(--a-deep); border-color: var(--a-deep); color: #fff; }
+.subnav.tmb .sn-row a.on { background: #6b57a8; border-color: #6b57a8; color: #fff; }
+html[data-look="stage"] .subnav.tmb .sn-row a.on { background: #b9a6f2; border-color: #b9a6f2; color: #1b0f22; box-shadow: 0 0 18px rgba(185,166,242,.55); }
+.subnav .sn-next { flex: none; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-size: 13px; font-weight: 700; color: var(--muted); padding: 6px 4px 6px 12px; border-left: 1.5px solid var(--line); min-height: 36px; white-space: nowrap; }
+.subnav .sn-next b { color: var(--ink-2); font-weight: 800; }
+.subnav .sn-next .ic { width: 15px; height: 15px; color: var(--a-deep); }
+.subnav .sn-next:hover b { text-decoration: underline; text-underline-offset: 3px; }
+.subnav .sn-next[hidden] { display: none; }
+.subnav .sn-bar { position: absolute; left: 0; right: 0; bottom: -2px; height: 3px; pointer-events: none; }
+.subnav .sn-bar i { display: block; height: 100%; width: 100%; transform-origin: 0 50%; transform: scaleX(var(--sn-p, 0)); background: var(--a-deep); border-radius: 0 3px 3px 0; }
+.subnav.tmb .sn-bar i { background: #6b57a8; }
+html[data-look="stage"] .subnav .sn-bar i { background: var(--a); }
+html[data-look="stage"] .subnav.tmb .sn-bar i { background: #b9a6f2; }
+.page section[id][tabindex="-1"]:focus { outline: none; }
+@media (max-width: 900px) {
+  .subnav .sn-next { padding: 6px 2px 6px 10px; }
+  .subnav .sn-next .sn-k, .subnav .sn-next b { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .subnav .sn-row { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .subnav .sn-row { scroll-behavior: auto; } .subnav a { transition: none; } }
+
+/* the sub-menu sits right under the top bar, however tall it is (--top-h, measured) */
+.subnav { top: var(--top-h, 64px); }
+html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px); }
+.subnav .sn-row { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+.subnav .sn-row.at-end { -webkit-mask-image: none; mask-image: none; }
+@media (max-width: 900px) { .subnav { padding: 8px 0; } }
 </style>
 </head>
 <body>
@@ -861,7 +894,9 @@ html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-scr { box-shadow: 0 0 0 1px
   </div></section>
   <p class="cap wrap hero-cred" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;otter&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p>
 
-  <nav class="subnav" aria-label="On this page"><div class="wrap">
+  <nav class="subnav" aria-label="On this page" data-zh-label="這一頁" data-th-label="ในหน้านี้"><div class="wrap">
+    <div class="sn-row">
+
     <a href="#ml-does"><i data-lucide="sparkles" class="ic"></i><span data-zh="能做什麼" data-th="ทำอะไรได้บ้าง">What it does</span></a>
     <a href="#ml-buddy"><i data-lucide="smile" class="ic"></i><span data-zh="桌面夥伴" data-th="เพื่อนบนเดสก์ท็อป">Desktop buddy</span></a>
     <a href="#ml-try"><i data-lucide="eye" class="ic"></i><span data-zh="試試看" data-th="ลองเล่น">Try it</span></a>
@@ -871,7 +906,9 @@ html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-scr { box-shadow: 0 0 0 1px
     <a href="#ml-photos"><i data-lucide="camera" class="ic"></i><span data-zh="照片來源" data-th="เครดิตภาพ">Photos &amp; credits</span></a>
     <a href="#ml-news"><i data-lucide="mail" class="ic"></i><span data-zh="新版本通知" data-th="ข่าวทางอีเมล">News by email</span></a>
     <a href="#ml-privacy"><i data-lucide="lock" class="ic"></i><span data-zh="隱私" data-th="ความเป็นส่วนตัว">Privacy</span></a>
-  </div></nav>
+    </div>
+    <a class="sn-next" href="#" hidden><span class="sn-k" data-zh="下一段" data-th="ถัดไป">Next</span><b></b><i data-lucide="arrow-down" class="ic"></i></a>
+  </div><div class="sn-bar" aria-hidden="true"><i></i></div></nav>
 
   <section class="sec" id="ml-does"><div class="wrap" id="ml-does-in"></div></section>
 
@@ -1035,6 +1072,17 @@ html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-scr { box-shadow: 0 0 0 1px
       <div class="mascots"><img src="assets/devhelp/muvmuv.svg" alt=""><img src="assets/devhelp/lolo.svg" alt=""><img src="assets/devhelp/jewel.svg" alt=""><img src="assets/devhelp/lunar.svg" alt=""></div>
     </div>
   </div></section>
+
+  <nav class="subnav tmb" aria-label="On this page" data-zh-label="這一頁" data-th-label="ในหน้านี้"><div class="wrap">
+    <div class="sn-row">
+      <a href="#tmb-panel"><i data-lucide="panels-top-left" class="ic"></i><span data-zh="面板" data-th="แพเนล">The panel</span></a>
+      <a href="#tmb-walk"><i data-lucide="footprints" class="ic"></i><span data-zh="散步的夥伴" data-th="เพื่อนเดินเล่น">The buddy</span></a>
+      <a href="#tmb-breaks"><i data-lucide="timer" class="ic"></i><span data-zh="番茄鐘與休息" data-th="โพโมโดโร่และพัก">Pomodoro &amp; breaks</span></a>
+      <a href="#tmb-mascots"><i data-lucide="smile" class="ic"></i><span data-zh="吉祥物" data-th="มาสคอต">Mascots</span></a>
+      <a href="#tmb-get"><i data-lucide="plus" class="ic"></i><span data-zh="加到 VS Code" data-th="เพิ่มใน VS Code">Add to VS Code</span></a>
+    </div>
+    <a class="sn-next" href="#" hidden><span class="sn-k" data-zh="下一段" data-th="ถัดไป">Next</span><b></b><i data-lucide="arrow-down" class="ic"></i></a>
+  </div><div class="sn-bar" aria-hidden="true"><i></i></div></nav>
 
   <section class="sec" id="tmb-panel"><div class="wrap two-col">
     <div>
@@ -1305,6 +1353,7 @@ function applyLang() {
   document.getElementById("thnote").hidden = lang !== "th";
   document.querySelectorAll("[data-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   drawTry(); drawQuiz(); buildFocus(); drawDl(); window.drawFeatures?.();
+  document.querySelectorAll(".subnav").forEach((n) => { n.setAttribute("aria-label", T("On this page", n.dataset.zhLabel, n.dataset.thLabel)); n.__redraw?.(); });
   lucide.createIcons();
 }
 function applyTheme() {
@@ -1324,9 +1373,65 @@ document.addEventListener("click", (e) => {
   else if (d.q) { quiz = d.q; drawQuiz(); }
   else if (b.id === "copyCmd") { navigator.clipboard?.writeText("code --install-extension alitasdepollos.thaimascotdevhelp"); b.querySelector("span").textContent = T("Copied", "已複製"); }
 });
-/* sub-menu follows the scroll */
-const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) document.querySelectorAll(".subnav a").forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "#" + en.target.id)); }), { rootMargin: "-40% 0px -55% 0px" });
-document.querySelectorAll("#p-ml section[id]").forEach((s) => io.observe(s));
+/* The section tracker (both pages): where you are, what's next, how far down; a chip click scrolls there smoothly
+   (instantly with reduced motion) without the router's jump, and moves focus to the section for keyboard users. */
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)");
+function tracker(nav) {
+  const row = nav.querySelector(".sn-row"), links = [...row.querySelectorAll("a[href^='#']")], next = nav.querySelector(".sn-next"), bar = nav.querySelector(".sn-bar");
+  const secs = links.map((a) => document.getElementById(a.getAttribute("href").slice(1)));
+  const label = (a) => a.querySelector("span").textContent;
+  let cur = -2;
+  function update() {
+    if (nav.offsetParent === null) return; // (the other page is showing)
+    const line = nav.getBoundingClientRect().bottom + Math.max(60, innerHeight * 0.12);
+    let i = -1;
+    secs.forEach((s, k) => { if (s && s.getBoundingClientRect().top <= line) i = k; });
+    const end = document.documentElement.scrollHeight - innerHeight;
+    if (scrollY >= end - 2 && secs.at(-1).getBoundingClientRect().top < innerHeight) i = secs.length - 1; // (the last one can't reach the top)
+    const first = secs[0].getBoundingClientRect().top + scrollY - line, last = secs.at(-1).getBoundingClientRect().bottom + scrollY - innerHeight;
+    bar.style.setProperty("--sn-p", Math.max(0, Math.min(1, (scrollY - first) / Math.max(1, last - first))).toFixed(4));
+    if (i === cur) return;
+    cur = i;
+    links.forEach((a, k) => { a.classList.toggle("on", k === i); if (k === i) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current"); });
+    const n = links[i + 1];
+    next.hidden = !n;
+    if (n) { next.href = n.getAttribute("href"); next.querySelector("b").textContent = label(n); next.setAttribute("aria-label", T("Next section: ", "下一段：", "ส่วนถัดไป: ") + label(n)); }
+    const on = links[Math.max(0, i)];
+    if (row.scrollWidth > row.clientWidth + 2) row.scrollTo({ left: on.offsetLeft - row.offsetLeft - (row.clientWidth - on.offsetWidth) / 2, behavior: REDUCE.matches ? "auto" : "smooth" });
+  }
+  let queued = false;
+  const soon = () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; update(); }); } };
+  addEventListener("scroll", soon, { passive: true }); addEventListener("resize", soon);
+  new IntersectionObserver(soon, { threshold: [0, 0.25, 0.5, 0.75, 1] }).observe(secs[0]); // (also when the page switches)
+  nav.addEventListener("click", (e) => {
+    const a = e.target.closest("a[href^='#']"); if (!a || a.getAttribute("href") === "#") return;
+    const el = document.getElementById(a.getAttribute("href").slice(1)); if (!el) return;
+    e.preventDefault();
+    el.scrollIntoView({ behavior: REDUCE.matches ? "auto" : "smooth", block: "start" });
+    history.pushState(null, "", "#" + el.id); // (no hashchange: the router would jump)
+    el.setAttribute("tabindex", "-1"); el.focus({ preventScroll: true });
+  });
+  row.addEventListener("keydown", (e) => { // ← → between the chips
+    const k = links.indexOf(document.activeElement); if (k < 0) return;
+    const to = e.key === "ArrowRight" ? links[k + 1] : e.key === "ArrowLeft" ? links[k - 1] : e.key === "Home" ? links[0] : e.key === "End" ? links.at(-1) : null;
+    if (to) { e.preventDefault(); to.focus(); }
+  });
+  nav.__redraw = () => { cur = -2; update(); }; // (after a language change: the "next" label)
+  soon();
+}
+const TRACKERS = [...document.querySelectorAll(".subnav")];
+{ // the top bar's height (phones: three rows), for the sub-menu and the jumps
+  const top = document.querySelector("header.top, .top");
+  const setH = () => {
+    const sub = TRACKERS.find((n) => n.offsetParent !== null) || TRACKERS[0];
+    document.documentElement.style.setProperty("--top-h", Math.round(top.getBoundingClientRect().height) + "px");
+    if (sub?.offsetHeight) document.documentElement.style.setProperty("--sub-h", sub.offsetHeight + "px");
+  };
+  setH(); if (window.ResizeObserver) { const ro = new ResizeObserver(setH); ro.observe(top); TRACKERS.forEach((n) => ro.observe(n)); } addEventListener("resize", setH); addEventListener("hashchange", setH);
+}
+TRACKERS.forEach((n) => { const r = n.querySelector(".sn-row"), end = () => r.classList.toggle("at-end", r.scrollLeft + r.clientWidth >= r.scrollWidth - 4); r.addEventListener("scroll", end, { passive: true }); addEventListener("resize", end); setTimeout(end, 300); });
+TRACKERS.forEach(tracker);
+addEventListener("hashchange", () => TRACKERS.forEach((n) => requestAnimationFrame(() => n.__redraw?.())));
 addEventListener("hashchange", route);
 let look = "scrapbook"; try { look = localStorage.getItem("site-look") || look; } catch {}
 function applyLook() { look = theme === "dark" ? "stage" : "scrapbook"; document.documentElement.dataset.look = look; document.querySelectorAll("[data-look]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.look === look))); }
