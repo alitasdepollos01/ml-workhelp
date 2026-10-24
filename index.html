@@ -290,6 +290,8 @@ details.more summary::-webkit-details-marker { display: none; }
 .who a { font-size: 13.5px; font-weight: 700; }
 .who span { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
 .thanks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.credit-tip { position: fixed; z-index: 100; pointer-events: none; opacity: 0; transition: opacity .12s; background: var(--ink, #3b2a32); color: var(--bg, #fff); font: 600 12.5px/1.3 var(--font-b, sans-serif); border-radius: 99px; padding: 4px 11px; white-space: nowrap; }
+.credit-tip.on { opacity: 1; }
 .people.all { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .people.all .who { position: relative; padding: 16px 8px 14px; }
 .people.all .who b { font-size: 16px; overflow-wrap: anywhere; }
@@ -640,7 +642,7 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
 
   <nav class="subnav" aria-label="On this page"><div class="wrap">
     <a href="#ml-try"><i data-lucide="eye" class="ic"></i><span data-zh="試試看" data-th="ลองเล่น">Try it</span></a>
-    <a href="#ml-new"><i data-lucide="sparkles" class="ic"></i><span data-zh="1.2 新功能" data-th="ใหม่ใน 1.2">New in 1.2</span></a>
+    <a href="#ml-does"><i data-lucide="sparkles" class="ic"></i><span data-zh="它會做什麼" data-th="ทำอะไรได้บ้าง">What it does</span></a>
     <a href="#ml-focus"><i data-lucide="maximize-2" class="ic"></i><span data-zh="專注全螢幕" data-th="หน้าจอโฟกัส">Focus screen</span></a>
     <a href="#ml-stickers"><i data-lucide="sticker" class="ic"></i><span data-zh="做貼圖" data-th="สติกเกอร์ของคุณ">Your stickers</span></a>
     <a href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載" data-th="ดาวน์โหลด">Download</span></a>
@@ -654,7 +656,7 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
     <div class="try3">
       <div class="try-tabs" id="tryList" role="tablist"></div>
       <div class="try-desc" id="tryDesc"></div>
-      <div class="screen"><iframe id="appFrame" title="ML WorkHelp preview" src="demo/index.html#embed&public" loading="lazy"></iframe></div>
+      <div class="screen"><iframe id="appFrame" title="ML WorkHelp preview" src="demo/app.html?embed=1" loading="lazy"></iframe></div>
       <aside class="try-side">
         <div><span class="lbl" data-zh="風格" data-th="สไตล์">Style</span><div class="styles" id="styleChips"></div></div>
         <div><span class="lbl" data-zh="淺色或深色" data-th="สว่างหรือมืด">Light or dark</span><div class="seg" role="group" id="modeSeg"><button type="button" data-m="light"><i data-lucide="sun" class="ic"></i><span data-zh="淺色" data-th="สว่าง">Light</span></button><button type="button" data-m="dark"><i data-lucide="moon" class="ic"></i><span data-zh="深色" data-th="มืด">Dark</span></button></div></div>
@@ -709,17 +711,17 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
 
   <div class="band"><div class="marquee" aria-hidden="true"><div class="mq-track"><img src="assets/fan/fan-15.webp" alt=""><img src="assets/fan/muv-app-look.webp" alt=""><img src="assets/fan/fan-16.webp" alt=""><img src="assets/fan/fan-17.webp" alt=""><img src="assets/fan/fan-18.webp" alt=""><img src="assets/fan/muv-muv-plain.webp" alt=""><img src="assets/fan/fan-19.webp" alt=""><img src="assets/fan/fan-20.webp" alt=""><img src="assets/fan/fan-05.webp" alt=""><img src="assets/fan/muv-w2-own.webp" alt=""><img src="assets/fan/fan-12.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""><img src="assets/fan/fan-15.webp" alt=""><img src="assets/fan/muv-app-look.webp" alt=""><img src="assets/fan/fan-16.webp" alt=""><img src="assets/fan/fan-17.webp" alt=""><img src="assets/fan/fan-18.webp" alt=""><img src="assets/fan/muv-muv-plain.webp" alt=""><img src="assets/fan/fan-19.webp" alt=""><img src="assets/fan/fan-20.webp" alt=""><img src="assets/fan/fan-05.webp" alt=""><img src="assets/fan/muv-w2-own.webp" alt=""><img src="assets/fan/fan-12.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""></div></div>
     <p class="cap wrap" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;otter&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p></div>
-  <section class="sec" id="ml-new"><div class="wrap">
-    <div class="sec-h"><span class="kick" data-zh="1.2 新功能" data-th="ใหม่ใน 1.2">New in 1.2</span><h2 class="sparkle" data-zh="整個 App 換新衣服，還多了這些" data-th="แอปโฉมใหม่ทั้งหมด และมีเพิ่มอีก">A whole new look, and a few new friends</h2><p data-zh="8 種風格任你挑，頁面重新整理過，還有這些新東西：" data-th="เลือกได้ 8 สไตล์ ทุกหน้าจัดใหม่ และยังมีของใหม่อีก:">Eight styles to pick from, every page tidied up, and these:</p></div>
+  <section class="sec" id="ml-does"><div class="wrap">
+    <div class="sec-h"><span class="kick" data-zh="它會做什麼" data-th="ทำอะไรได้บ้าง">What it does</span><h2 class="sparkle" data-zh="一個小 App，陪你過完工作的一天" data-th="แอปเล็ก ๆ ที่อยู่กับคุณทั้งวันทำงาน">A little app for your whole work day</h2><p data-zh="挑一種你喜歡的風格（共 8 種），然後：" data-th="เลือกสไตล์ที่ชอบ (มี 8 แบบ) แล้ว:">Pick one of eight styles, and then:</p></div>
     <div class="newgrid">
       <div class="print newc"><i data-lucide="bell-ring" class="ic"></i><b data-zh="在任何螢幕上跳出的小卡片" data-th="การ์ดเด้งบนจอไหนก็ได้">A card on whichever screen you're on</b><span data-zh="夥伴收起來時，提醒和休息會在你正在用的螢幕右上角跳出一張小卡片。" data-th="ถ้าซ่อนเพื่อนไว้ การแจ้งเตือนและพักจะเด้งเป็นการ์ดเล็ก ๆ มุมขวาบนของจอที่คุณใช้อยู่">With the buddy hidden, reminders and breaks pop up as a small card at the top right of the screen you're using.</span></div>
       <div class="print newc"><i data-lucide="headphones" class="ic"></i><b data-zh="專注時不打擾" data-th="ไม่กวนตอนโฟกัส">Quiet while you focus</b><span data-zh="專注全螢幕或番茄鐘進行中，提醒會先等等，結束後一起告訴你；活動照樣會跳出來。" data-th="ระหว่างหน้าจอโฟกัสหรือรอบโพโมโดโร่ การแจ้งเตือนจะรอ แล้วบอกรวดเดียวตอนจบ ส่วนกิจกรรมยังเด้งตามปกติ">During the focus screen or a Pomodoro round, reminders wait and come together at the end; events still come through.</span></div>
-      <div class="print newc"><i data-lucide="footprints" class="ic"></i><b data-zh="夥伴可以更悠閒" data-th="เพื่อนเดินช้าลงได้">A calmer buddy</b><span data-zh="活潑、悠閒、更悠閒、安靜：越悠閒越省電。" data-th="ร่าเริง สบาย ๆ สบายกว่า นิ่ง: ยิ่งสบายยิ่งประหยัดแบต">Lively, calm, calmer or still: the calmer, the less battery it uses.</span></div>
+      <div class="print newc"><i data-lucide="footprints" class="ic"></i><b data-zh="悠閒的桌面夥伴" data-th="เพื่อนบนเดสก์ท็อปแบบสบาย ๆ">A buddy as lively as you like</b><span data-zh="活潑、悠閒、更悠閒或安靜：越悠閒越省電。" data-th="ร่าเริง สบาย ๆ สบายกว่า หรือนิ่ง: ยิ่งสบายยิ่งประหยัดแบต">Lively, calm, calmer or still: the calmer, the less battery it uses.</span></div>
       <div class="print newc"><i data-lucide="music-2" class="ic"></i><b data-zh="Milk 和 Love 的聲音" data-th="เสียงของ Milk กับ Love">Milk and Love's voices</b><span data-zh="提醒時間到，可以響「P'Ink！」、「牙蟲」、「พี่มิว！」⋯" data-th="ถึงเวลาแจ้งเตือน ให้ดังเป็น “P'Ink!”, “牙蟲”, “พี่มิว!”…">Reminders can ring with “P'Ink!”, “牙蟲”, “พี่มิว!” and more.</span></div>
       <div class="print newc"><i data-lucide="image" class="ic"></i><b data-zh="做成圖片" data-th="ทำเป็นรูป">Make a picture</b><span data-zh="把這一週或今天做成一張小卡片，貼圖自己挑，卡片上標明照片來源。" data-th="ทำสัปดาห์นี้หรือวันนี้เป็นการ์ดเล็ก ๆ เลือกสติกเกอร์เอง พร้อมเครดิตรูปบนการ์ด">Turn your week or your day into a little card, with a sticker you pick and its photo's credit.</span></div>
       <div class="print newc"><i data-lucide="mouse-pointer-2" class="ic"></i><b data-zh="每張貼圖都看得到來源" data-th="ทุกสติกเกอร์บอกเครดิต">Every sticker shows its credit</b><span data-zh="滑鼠移到任何貼圖上，就知道照片是誰拍的；在夥伴上按右鍵，可以看原始照片。" data-th="ชี้ที่สติกเกอร์ไหนก็ได้ จะรู้ว่าใครถ่าย คลิกขวาที่เพื่อนเพื่อดูรูปต้นฉบับ">Point at any sticker to see who took the photo; right-click the buddy for the original.</span></div>
-      <div class="print newc"><i data-lucide="scissors" class="ic"></i><b data-zh="新的貼圖工具" data-th="ตัวทำสติกเกอร์ใหม่">A new sticker maker</b><span data-zh="一步一步來：放大、擦除、柔邊、清掉小雜點，按住 H 對照原圖。" data-th="ทีละขั้น: ซูม ลบ ขอบนุ่ม เก็บจุดเล็ก ๆ กด H ค้างไว้เพื่อเทียบรูปเดิม">Step by step: zoom, erase, soft edges, tidy the specks, hold H to compare.</span></div>
-      <div class="print newc"><i data-lucide="download" class="ic"></i><b data-zh="下載變小了" data-th="ดาวน์โหลดเล็กลง">A smaller download</b><span data-zh="App 約 200 MB；照片在 App 裡下載一次。之後更新不用再下載全部照片。" data-th="แอปประมาณ 200 MB รูปดาวน์โหลดในแอปครั้งเดียว อัปเดตครั้งต่อไปไม่ต้องโหลดรูปใหม่ทั้งหมด">The app is about 200 MB; the photos download inside it, once. Later updates don't fetch them all again.</span></div>
+      <div class="print newc"><i data-lucide="scissors" class="ic"></i><b data-zh="自己做貼圖" data-th="ทำสติกเกอร์เอง">Make your own stickers</b><span data-zh="一步一步來：放大、擦除、柔邊、清掉小雜點，按住 H 對照原圖。" data-th="ทีละขั้น: ซูม ลบ ขอบนุ่ม เก็บจุดเล็ก ๆ กด H ค้างไว้เพื่อเทียบรูปเดิม">Step by step: zoom, erase, soft edges, tidy the specks, hold H to compare.</span></div>
+      <div class="print newc"><i data-lucide="download" class="ic"></i><b data-zh="一個輕巧的下載" data-th="ดาวน์โหลดเบา ๆ">A light download</b><span data-zh="App 約 200 MB；照片在 App 裡下載一次。之後更新不用再下載全部照片。" data-th="แอปประมาณ 200 MB รูปดาวน์โหลดในแอปครั้งเดียว อัปเดตครั้งต่อไปไม่ต้องโหลดรูปใหม่ทั้งหมด">The app is about 200 MB; the photos download inside it, once. Updates don't fetch them all again.</span></div>
     </div>
   </div></section>
 
@@ -728,7 +730,7 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
     <div class="dl">
       <div class="print">
         <div class="ver"><b id="ver">1.1.0</b><span class="muted" id="verDate"></span><span class="tag a" data-zh="最新版" data-th="ล่าสุด">Latest</span></div>
-        <div class="new"><b data-zh="新功能：" data-th="มีอะไรใหม่:">What's new:</b> <span id="whatsnew"></span></div>
+        <span id="whatsnew" hidden></span>
         <div class="acts">
           <a class="btn btn-p" id="dlArm" href="#"><span><i data-lucide="apple" class="ic" style="vertical-align:-3px"></i> <span data-zh="Apple 晶片的 Mac" data-th="Mac ชิป Apple">Mac with Apple chip</span></span><small>M1 · M2 · M3 · M4</small></a>
           <a class="btn btn-s" id="dlIntel" href="#"><span><i data-lucide="cpu" class="ic" style="vertical-align:-3px"></i> <span data-zh="Intel 處理器的 Mac" data-th="Mac ชิป Intel">Mac with Intel chip</span></span><small>.dmg</small></a>
@@ -929,19 +931,24 @@ const STYLES = [["a", "Sticker Book", "貼紙手帳", "สมุดสติก�
   ["g", "Retro Desktop", "復古桌面", "เดสก์ท็อปย้อนยุค", "repeating-linear-gradient(0deg,#3f7d5c 0 2px,#b8d2c3 2px 4px)"], ["h", "Fan Magazine", "粉絲雜誌", "นิตยสารแฟนคลับ", "linear-gradient(135deg,#151313 50%,#f6f2ea 50%)"]];
 const THEMES = [["matcha", "#3f7d5c", "#e48aa6"], ["mint", "#1f8065", "#ff8fb4"], ["rose", "#b9507a", "#7cc59a"], ["lavender", "#6b57a8", "#f2a27e"], ["sky", "#3d73b0", "#ecc451"]];
 const TRY = [
-  ["today", "calendar-heart", "Today", "今天", "วันนี้", "The timer, your day, and a Thai word from the songs.", "計時、今天的紀錄，還有歌裡的泰文。", "ตัวจับเวลา วันของคุณ และคำไทยจากเพลง",
-    ["Work clock or Pomodoro, one tap to switch", "Set a theme for the day", "A Thai word card to flip"], ["工作時鐘或番茄鐘，點一下切換", "設定本日主題", "可以翻面的泰文單字卡"], ["นาฬิกาทำงานหรือโพโมโดโร่ แตะทีเดียวสลับได้", "ตั้งโฟกัสของวัน", "การ์ดคำไทยให้พลิกดู"]],
-  ["reminders", "bell", "Reminders & events", "提醒與活動", "แจ้งเตือนและกิจกรรม", "Just type it: “stretch in 20 min”.", "直接打字：「20 分鐘後 伸展」。", "พิมพ์ได้เลย: “ยืดเส้นอีก 20 นาที”",
-    ["The time is filled in for you", "Two-way with Apple Reminders and Calendar", "A chime, or Milk and Love calling each other"], ["時間自動幫你填好", "和 Apple 提醒事項、行事曆雙向同步", "響一聲，或 Milk 和 Love 互喊對方的名字"], ["ใส่เวลาให้อัตโนมัติ", "ซิงก์สองทางกับ Apple Reminders และ Calendar", "เสียงกริ๊ง หรือ Milk กับ Love เรียกชื่อกัน"]],
+  ["today", "calendar-heart", "Today", "今天", "วันนี้", "Your day: the timer, the focus of the day, what's next and a Thai word.", "你的一天：計時、本日主題、接下來的事，還有一個泰文單字。", "วันของคุณ: ตัวจับเวลา โฟกัสของวัน สิ่งที่จะมาถึง และคำไทยหนึ่งคำ",
+    ["Work clock or Pomodoro, switch at the top", "Take a break, or call it a day", "Click a part of the day to change it"], ["工作時鐘或番茄鐘，在最上面切換", "休息一下，或收工", "點今天紀錄的一段就能修改"], ["นาฬิกาทำงานหรือโพโมโดโร่ สลับได้ด้านบน", "พักสักหน่อย หรือเลิกงาน", "คลิกช่วงไหนของวันเพื่อแก้ไข"]],
+  ["reminders", "bell", "Reminders & events", "提醒與活動", "แจ้งเตือนและกิจกรรม", "Write what it is, then tap when.", "寫下要做什麼，再點時間。", "เขียนว่าจะทำอะไร แล้วแตะเลือกเวลา",
+    ["In 15 minutes, tonight, or a day and time", "Rings with a chime, or Milk and Love's voices", "A card on the screen you're on, held while you focus"], ["15 分鐘後、今晚，或選日期時間", "內建的「叮」，或 Milk 和 Love 的聲音", "在你正在用的螢幕跳出卡片，專注時先等等"], ["อีก 15 นาที คืนนี้ หรือเลือกวันเวลา", "เสียงกริ๊ง หรือเสียงของ Milk กับ Love", "การ์ดเด้งบนจอที่ใช้อยู่ และรอไว้ตอนโฟกัส"]],
   ["data", "chart-column", "Data", "數據", "สถิติ", "Your week, month and year.", "你的每週、每月、每年。", "สัปดาห์ เดือน และปีของคุณ",
-    ["Summary, Analysis and Calendar", "Goal days and each day by category", "Save a picture or export a CSV"], ["總覽、分析、日曆", "達標天數和每天依類別分", "存成圖片或匯出 CSV"], ["สรุป การวิเคราะห์ และปฏิทิน", "วันที่ถึงเป้า และแต่ละวันแยกตามหมวด", "บันทึกเป็นรูปหรือส่งออก CSV"]],
-  ["stickers", "sticker", "Stickers", "貼圖", "สติกเกอร์", "Sort the stickers you made.", "把做好的貼圖分類。", "จัดสติกเกอร์ที่ทำไว้",
-    ["Milk, Love, Together or Other", "Pick which ones your buddy uses", "Click one to see who took the photo"], ["Milk、Love、同框或其他", "選夥伴要用哪些貼圖", "點一張就能看到拍攝者"], ["Milk, Love, คู่กัน หรืออื่น ๆ", "เลือกว่าเพื่อนจะใช้สติกเกอร์ไหน", "คลิกเพื่อดูว่าใครถ่าย"]],
-  ["buddy", "smile", "Desktop buddy", "桌面夥伴", "เพื่อนบนเดสก์ท็อป", "Right-click the buddy for a small card.", "在夥伴上按右鍵，會出現小卡。", "คลิกขวาที่เพื่อนเพื่อเปิดการ์ดเล็ก",
-    ["Walks along your screen, naps when you're away", "Pick who's out: side by side, together, Milk, Love", "A Thai word now and then"], ["在螢幕上走來走去，你離開時會打瞌睡", "選誰出來：並排、同框、Milk、Love", "不時教你一個泰文單字"], ["เดินเล่นบนจอ งีบตอนคุณไม่อยู่", "เลือกว่าใครออกมา: เดินคู่กัน คู่กัน Milk หรือ Love", "สอนคำไทยเป็นครั้งคราว"]],
+    ["Summary, Analysis and Calendar", "Goal days and each day by category", "Make a picture of your week"], ["總覽、分析、日曆", "達標天數和每天依類別分", "把這一週做成一張圖"], ["สรุป การวิเคราะห์ และปฏิทิน", "วันที่ถึงเป้าและแต่ละวันตามหมวด", "ทำสัปดาห์ของคุณเป็นรูป"]],
+  ["buddy", "smile", "Desktop buddy", "桌面夥伴", "เพื่อนบนเดสก์ท็อป", "Milk and Love on your desktop. Right-click for their card.", "Milk 和 Love 在你的桌面上，按右鍵打開小卡。", "Milk กับ Love บนเดสก์ท็อป คลิกขวาเพื่อเปิดการ์ด",
+    ["Click for a Thai word; drag them anywhere", "Pick who's out: both, together, Milk, Love", "Hide them: reminders come as a card instead"], ["點一下看泰文單字，拖到任何地方", "選誰出來：兩個、同框、Milk、Love", "收起來時，提醒會變成小卡片"], ["คลิกเพื่อดูคำไทย ลากไปไหนก็ได้", "เลือกว่าใครออกมา: ทั้งคู่ คู่กัน Milk หรือ Love", "ซ่อนไว้ การแจ้งเตือนจะมาเป็นการ์ดแทน"]],
+  ["stickers", "sticker", "Stickers", "貼圖", "สติกเกอร์", "Make stickers from your own photos.", "用你自己的照片做貼圖。", "ทำสติกเกอร์จากรูปของคุณเอง",
+    ["Cut out, erase, soft edges", "Sort into Milk, Love, Together or Others", "Point at any sticker: whose photo it is"], ["去背、擦除、柔邊", "分到 Milk、Love、同框或其他", "滑鼠移到貼圖上，就知道是誰的照片"], ["ไดคัต ลบ ขอบนุ่ม", "แยกเป็น Milk, Love, คู่กัน หรืออื่น ๆ", "ชี้ที่สติกเกอร์ จะรู้ว่าใครถ่าย"]],
+  ["settings", "sliders-horizontal", "Settings", "設定", "การตั้งค่า", "Eight styles, your colours, and how it all works.", "8 種風格、你的顏色，還有各種設定。", "8 สไตล์ สีของคุณ และการตั้งค่าทั้งหมด",
+    ["Everything on one page of cards", "How lively the buddy is", "What pops up, and while you focus"], ["所有設定都在一頁卡片上", "夥伴有多活潑", "會跳出什麼、專注時怎麼辦"], ["ทุกอย่างอยู่ในหน้าเดียว", "เพื่อนร่าเริงแค่ไหน", "อะไรเด้งขึ้นมา และตอนโฟกัส"]],
+  ["welcome", "hand-heart", "Welcome", "歡迎頁", "หน้าต้อนรับ", "The first time you open it: a few pages and you're set.", "第一次打開時：幾頁就設定好了。", "ครั้งแรกที่เปิด: ไม่กี่หน้าก็พร้อมใช้",
+    ["Language, light or dark, a style", "The photos: the full library, or your own", "How you keep time, then Muv shows you around"], ["語言、淺色或深色、風格", "照片：完整貼圖庫，或你自己的", "計時方式，然後 Muv 帶你逛一圈"], ["ภาษา สว่างหรือมืด และสไตล์", "รูป: คลังทั้งหมด หรือของคุณเอง", "วิธีจับเวลา แล้ว Muv พาเดินดูรอบ ๆ"]],
 ];
 const frame = document.getElementById("appFrame");
-const tell = () => { try { frame.contentWindow.postMessage({ mlwh: { ...app, lang } }, "*"); } catch { /* fine */ } };
+// (light or dark: the frame's color-scheme is what the pages inside see as the Mac's)
+const tell = () => { frame.style.colorScheme = app.mode === "dark" ? "dark" : "light"; try { frame.contentWindow.postMessage({ mlwh: { ...app, lang } }, "*"); } catch { /* fine */ } };
 frame.addEventListener("load", tell);
 addEventListener("message", (e) => { if (e.data && e.data.mlwhPage && e.data.mlwhPage !== app.page) { app.page = e.data.mlwhPage; drawTry(); } });
 
@@ -1110,6 +1117,28 @@ let look = "scrapbook"; try { look = localStorage.getItem("site-look") || look; 
 function applyLook() { look = theme === "dark" ? "stage" : "scrapbook"; document.documentElement.dataset.look = look; document.querySelectorAll("[data-look]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.look === look))); }
 applyLook(); applyTheme(); applyLang(); route();
 fetch("latest.json", { cache: "no-store" }).then((r) => r.json()).then((j) => { LATEST = j; drawDl(); }).catch(() => {});
+</script>
+<div class="credit-tip" id="creditTip" role="tooltip"></div>
+<script>
+/* Point at any sticker or photo on this page: whose photo (or drawing) it is. */
+(function () {
+  const WHO = {"assets/fan/fan-01.webp": "Blumoon", "assets/fan/fan-02.webp": "Blumoon", "assets/fan/fan-03.webp": "Blumoon", "assets/fan/fan-04.webp": "Lyrac", "assets/fan/fan-05.webp": "Blumoon", "assets/fan/fan-06.webp": "NGMin", "assets/fan/fan-07.webp": "Lyrac", "assets/fan/fan-08.webp": "Blumoon", "assets/fan/fan-09.webp": "NGMin", "assets/fan/fan-10.webp": "NGMin", "assets/fan/fan-11.webp": "Lyrac", "assets/fan/fan-12.webp": "Blumoon", "assets/fan/fan-13.webp": "Lyrac", "assets/fan/fan-14.webp": "Blumoon", "assets/fan/fan-15.webp": "Blumoon", "assets/fan/fan-16.webp": "otter", "assets/fan/fan-17.webp": "otter", "assets/fan/fan-18.webp": "otter", "assets/fan/fan-19.webp": "NGMin", "assets/fan/fan-20.webp": "Blumoon", "assets/fan/muv-muv-baby.webp": "@wanwannjeab", "assets/fan/muv-muv-cartoon.webp": "@wanwannjeab", "assets/fan/muv-muv-heart.webp": "@wanwannjeab", "assets/fan/muv-muv-plain.webp": "@wanwannjeab", "assets/fan/muv-w2-own.webp": "alitasdepollos", "assets/fan/muv-w3-keep.webp": "alitasdepollos", "assets/fan/muv-app-look.webp": "alitasdepollos", "assets/stickers/photo-1.jpg": "alitasdepollos", "assets/stickers/auto-1.webp": "alitasdepollos", "assets/stickers/final-1.webp": "alitasdepollos", "assets/focus/sticker-1.png": "alitasdepollos", "assets/stickers/photo-2.jpg": "alitasdepollos", "assets/stickers/auto-2.webp": "alitasdepollos", "assets/stickers/final-2.webp": "alitasdepollos", "assets/focus/sticker-2.png": "alitasdepollos", "assets/stickers/photo-3.jpg": "alitasdepollos", "assets/stickers/auto-3.webp": "alitasdepollos", "assets/stickers/final-3.webp": "alitasdepollos", "assets/focus/sticker-3.png": "alitasdepollos", "assets/focus/blumoon-1.jpg": "Blumoon", "assets/focus/blumoon-2.jpg": "Blumoon", "assets/focus/blumoon-3.jpg": "Blumoon", "assets/focus/blumoon-4.jpg": "Blumoon", "assets/focus/blumoon-5.jpg": "Blumoon"};
+  const tip = document.getElementById("creditTip");
+  const credit = (img) => {
+    const src = (img.getAttribute("src") || "").replace(/^\.\//, ""), by = WHO[src];
+    if (!by) return "";
+    const draw = by.startsWith("@") || /muv-/.test(src) && by === "alitasdepollos" && !/photo/.test(src);
+    return (draw ? T("Drawing: ", "插畫：", "ภาพวาด: ") : T("Photo: ", "照片：", "รูป: ")) + by;
+  };
+  document.addEventListener("pointermove", (e) => {
+    const img = e.target.closest && e.target.closest("img");
+    const c = img ? credit(img) : "";
+    if (!c) { tip.classList.remove("on"); return; }
+    tip.textContent = c; tip.classList.add("on");
+    tip.style.left = Math.min(innerWidth - tip.offsetWidth - 8, e.clientX + 14) + "px"; tip.style.top = (e.clientY + 18) + "px";
+  });
+  document.addEventListener("pointerdown", () => tip.classList.remove("on"));
+})();
 </script>
 </body>
 </html>

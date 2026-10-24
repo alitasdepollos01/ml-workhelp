@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stickers</title>
+<style>
+:root { --ink: #3b2a32; --muted: #8c7680; --line: #efc6d4; --card: #fff; --acc: #c94f7e; }
+@media (prefers-color-scheme: dark) { :root { --ink: #f7ecf0; --muted: #bba6af; --line: #5a4250; --card: #2a2327; --acc: #f2a3bf; } }
+body { margin: 0; padding: 14px 16px; font: 14px/1.5 -apple-system, system-ui, "PingFang TC", sans-serif; color: var(--ink); background: transparent; }
+.note { border: 1.5px dashed var(--line); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px; font-size: 13.5px; }
+.note b { color: var(--acc); }
+h3 { margin: 14px 0 8px; font-size: 15px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+.grid figure { margin: 0; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: 6px; display: grid; place-items: center; height: 116px; }
+.grid img { max-width: 100%; max-height: 104px; object-fit: contain; filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff); }
+.tip { position: fixed; pointer-events: none; background: #3b2a32; color: #fff; font-size: 12px; border-radius: 99px; padding: 3px 10px; opacity: 0; transition: opacity .12s; }
+</style></head><body>
+<p class="note" id="note"></p>
+<div id="sets"></div>
+<div class="tip" id="tip"></div>
+<script src="js/demo-data.js"></script>
+<script>
+const D = window.__mlwhDemoData || {}, lang = new URLSearchParams(location.search).get("lang") || "en";
+const T = (en, zh, th) => (lang === "zh" ? zh : lang === "th" ? th || en : en);
+const NAME = { alitasdepollo: "alitasdepollos" };
+document.getElementById("note").innerHTML = T("<b>In the app</b>, this is where you add your own photos, cut them out (crop, erase, soft edges), and sort them into Milk, Love, Together or Others. Here are some of the stickers that come with it. Point at one: whose photo it is.",
+  "<b>在 App 裡</b>，這裡可以加入自己的照片、去背（裁切、擦除、柔邊），再分到 Milk、Love、同框或其他。這裡是 App 附的一些貼圖，滑鼠移上去就知道是誰的照片。",
+  "<b>ในแอป</b> ตรงนี้คุณเพิ่มรูปของคุณเอง ไดคัต (ครอป ลบ ขอบนุ่ม) แล้วแยกเป็น Milk, Love, คู่กัน หรืออื่น ๆ นี่คือสติกเกอร์บางส่วนที่มากับแอป ชี้ที่รูปเพื่อดูว่าใครถ่าย");
+const sets = [["milk", "Milk", "Milk", "Milk"], ["love", "Love", "Love", "Love"], ["together", "Together", "同框", "คู่กัน"]];
+document.getElementById("sets").innerHTML = sets.map(([k, en, zh, th]) => {
+  const list = (D.stickers || []).filter((s) => s.set === k);
+  return `<h3>${T(en, zh, th)} <span style="color:var(--muted);font-weight:500">· ${list.length}</span></h3><div class="grid">${list.map((s) => {
+    const by = (D.credits[s.source] || []).map((x) => NAME[x] || x).join(" · ");
+    return `<figure><img src="photos/stickers/${k}/${encodeURIComponent(s.name)}" alt="" data-credit="${by ? T("Photo: ", "照片：", "รูป: ") + by : ""}" loading="lazy"></figure>`; }).join("")}</div>`;
+}).join("");
+const tip = document.getElementById("tip");
+document.addEventListener("pointermove", (e) => { const c = e.target.closest?.("[data-credit]")?.dataset.credit; if (!c) { tip.style.opacity = 0; return; } tip.textContent = c; tip.style.opacity = 1; tip.style.left = Math.min(innerWidth - tip.offsetWidth - 6, e.clientX + 12) + "px"; tip.style.top = e.clientY + 16 + "px"; });
+document.addEventListener("contextmenu", (e) => { if (e.target.tagName === "IMG") e.preventDefault(); });
+document.addEventListener("dragstart", (e) => e.preventDefault());
+</script></body></html>

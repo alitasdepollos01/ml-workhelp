@@ -1,0 +1,215 @@
+/* The desktop app's welcome window (welcome.html): one framed card, never wider than 900 px. On top the name,
+   the page and the dots; then the page (the words on the left, what it looks like on the right); Back / Next
+   at the bottom. Whose photo a sticker is from: in the frame's bottom-right corner. */
+
+html, body.welcome { height: 100%; }
+body.welcome { margin: 0; padding: 14px; box-sizing: border-box; display: grid; place-items: center; overflow: hidden;
+  background: radial-gradient(color-mix(in srgb, var(--bar) 14%, transparent) 1.2px, transparent 1.6px) 0 0 / 22px 22px, var(--desk); }
+.welcome .wframe { position: relative; width: min(900px, 100%); height: 100%; max-height: 700px; margin: 0; padding: 0; box-sizing: border-box;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 0; max-width: none;
+  background: var(--control-bg); border: 1.5px solid color-mix(in srgb, var(--bar) 45%, var(--line)); border-radius: 22px;
+  box-shadow: 0 18px 44px -22px rgba(60, 20, 40, .35); overflow: hidden; }
+.welcome p { margin: 0; }
+.welcome h1 { font-size: 23px; line-height: 1.25; margin: 0; }
+.welcome .kicker { color: var(--bar); font-weight: 750; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.welcome .small { font-size: 12px; }
+
+/* the top: the name, the page, the dots, "3 of 11" */
+.wtop { display: flex; align-items: center; gap: 10px; padding: 12px 22px; border-bottom: 1.5px dashed var(--line); }
+.wtop .brand { font-size: 14px; color: var(--bar); white-space: nowrap; }
+.wtop .wtitle { color: var(--desk-muted); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wtop .wtitle:not(:empty)::before { content: "· "; }
+.wtop .dots { margin-left: auto; }
+.wtop .where { font-size: 12.5px; min-width: 52px; text-align: right; white-space: nowrap; }
+.dots { list-style: none; margin: 0; padding: 0; display: flex; gap: 5px; }
+.dots li { width: 8px; height: 8px; border-radius: 50%; background: var(--line); transition: width .2s; }
+.dots li.done { background: var(--focus, #3f7d5c); opacity: .75; }
+.dots li.on { background: var(--bar); width: 22px; border-radius: 4px; }
+.dots li.skip { display: none; }
+
+/* the page: two columns (one for the photo, keeping-time and last pages); a long one scrolls inside */
+.wbody { position: relative; min-height: 0; overflow: hidden; }
+.welcome .step { display: none; height: 100%; box-sizing: border-box; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+  padding: 22px 28px 40px; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 26px; align-items: center; }
+.welcome .step.on { display: grid; animation: page-in .25s ease-out; }
+.welcome .step, .welcome .step.on { border: 0; background: none; box-shadow: none; border-radius: 0; margin: 0; } /* (the styles' section cards: not here, the frame is the card) */
+.welcome .step.one { grid-template-columns: minmax(0, 1fr); align-items: start; }
+@keyframes page-in { from { opacity: .3; transform: translateX(10px); } }
+.welcome .col { display: grid; gap: 12px; align-content: center; min-width: 0; }
+.welcome .pic { display: grid; gap: 10px; justify-items: center; align-content: center; position: relative; min-width: 0; }
+.art { display: block; max-width: 100%; max-height: 320px; width: auto; height: auto; object-fit: contain; pointer-events: none;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .14)); }
+@keyframes bob { 50% { transform: translateY(-6px) rotate(-2deg); } }
+.bob { animation: bob 1.8s ease-in-out infinite; }
+.say { background: var(--control-bg); color: var(--desk-ink); border: 2px solid #efa3ba; border-radius: 16px; padding: 8px 12px;
+  font-weight: 650; font-size: 13.5px; box-shadow: 0 6px 16px -8px rgba(0, 0, 0, .3); max-width: 270px; justify-self: start; }
+.say small { display: block; font-weight: 500; color: var(--desk-muted); font-size: 12px; }
+
+/* whose photo: the frame's bottom-right corner */
+.pcr { position: absolute; right: 18px; bottom: 66px; z-index: 4; font-size: 11.5px; color: var(--desk-muted); pointer-events: none;
+  background: color-mix(in srgb, var(--control-bg) 88%, transparent); border-radius: 999px; padding: 2px 10px; max-width: 60%;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pcr:empty { display: none; }
+
+/* the styles' touches go on the frame (Purikura's stitching, Sticker Book's tape), not on each page */
+html[data-style="a"] .welcome .wframe::after { top: 3px; z-index: 6; }
+html[data-style="f"] .welcome .wframe::before { z-index: 6; pointer-events: none; }
+
+/* Back / Next */
+.steps-nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; border-top: 1.5px dashed var(--line);
+  padding: 12px 22px; background: var(--control-bg); position: relative; z-index: 3; }
+.steps-nav .primary { min-width: 120px; }
+.steps-nav button:disabled { opacity: .45; cursor: default; }
+.steps-nav .hint { font-size: 13px; text-align: center; }
+
+/* choices: cards side by side, a sticker at the top of each */
+.choices { display: grid; gap: 10px; }
+.choices.two { grid-template-columns: 1fr 1fr; }
+.choice { position: relative; display: grid; gap: 4px; align-content: start; cursor: pointer; border: 2px solid var(--line); border-radius: 16px;
+  padding: 12px 14px; background: var(--control-bg); }
+.choice input { position: absolute; top: 12px; left: 12px; accent-color: var(--bar); }
+.choice:has(input:checked) { border-color: var(--choice, var(--bar)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--bar) 22%, transparent); background: var(--soft, var(--control-bg)); }
+.choice:has(input:disabled) { opacity: .55; cursor: not-allowed; }
+.choice .pic-in { height: 92px; width: 100%; object-fit: contain; }
+.choice-body { display: grid; gap: 3px; }
+.choice-body > b { font-size: 15px; }
+.choice-body > span { font-size: 13px; line-height: 1.45; }
+.choice .count { font-size: 12.5px; }
+.choice.keep .for { color: var(--focus, #3f7d5c); font-size: 12.5px; }
+
+/* the photos page: the disclaimer, then the download */
+.consent { border: 1px solid var(--consent, #d9a441); background: color-mix(in srgb, var(--consent, #d9a441) 12%, transparent); border-radius: 14px;
+  padding: 12px 14px; display: grid; gap: 8px; font-size: 13px; }
+.consent .check { font-weight: 650; display: flex; gap: 8px; align-items: center; }
+.consent h2 { margin: 0; text-transform: none; letter-spacing: 0; font-size: 14px; color: var(--desk-ink); }
+.consent ol { margin: 0; padding-left: 20px; display: grid; gap: 5px; max-height: 150px; overflow-y: auto; }
+.consent a { color: inherit; font-weight: 600; }
+.dl { display: grid; gap: 6px; justify-items: start; }
+.dl-on { width: 100%; font-size: 13.5px; }
+.load { height: 8px; border-radius: 9px; background: var(--line); overflow: hidden; margin-top: 6px; }
+.load i { display: block; height: 100%; width: 0; background: var(--focus, #3f7d5c); border-radius: 9px; transition: width .3s; }
+.dl.done .dl-on b { color: var(--focus, #3f7d5c); }
+.dl.bad .dl-on b { color: #d9667f; }
+.note { border-radius: 10px; padding: 10px 12px; background: color-mix(in srgb, var(--desk-ink) 6%, transparent); font-size: 13px; }
+
+/* page 1: language, light or dark, colours, the look */
+.prefs { display: grid; gap: 8px; }
+.pref-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; }
+.pref-row[hidden] { display: none; }
+.langs { display: flex; gap: 6px; flex-wrap: wrap; }
+.themes { display: flex; gap: 6px; flex-wrap: wrap; }
+.themes button { width: 26px; height: 26px; padding: 0; border-radius: 50%; border: 2px solid var(--control-line);
+  background: linear-gradient(135deg, var(--a) 50%, var(--b) 50%); }
+.themes button[aria-checked="true"] { border-color: var(--desk-ink); box-shadow: 0 0 0 2px var(--desk), 0 0 0 4px var(--desk-ink); }
+.langs button[aria-checked="true"] { background: var(--desk-ink); color: var(--desk); border-color: var(--desk-ink); font-weight: 600; }
+.style-pick { display: grid; gap: 8px; }
+.style-pick > b { font-size: 13.5px; }
+.s1 .pic .art { max-height: 330px; }
+
+/* Muv's tip: a little Muv and a line */
+.pansa { display: flex; gap: 12px; align-items: center; border-radius: 14px; padding: 8px 12px 8px 8px; font-size: 13.5px;
+  background: color-mix(in srgb, var(--bar) 10%, transparent); }
+.pansa .tip-img { height: 52px; width: auto; flex: none; }
+.pansa > p > b:first-child { color: var(--bar); }
+.warn { border-left: 3px solid #e48aa6; padding-left: 10px; color: var(--desk-muted); font-size: 13px; }
+.how { margin: 0; padding-left: 20px; display: grid; gap: 7px; font-size: 14px; }
+
+/* 3. keeping time: away from the computer? */
+.away-q { display: flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+.away-say { display: none; margin: -4px 0 0 26px; font-size: 13px; color: var(--desk-muted); }
+.away-on .away-say { display: block; }
+
+/* 4. the desktop buddy: what shows under it, and how it looks */
+.s4b .fields { display: grid; gap: 8px; min-width: 0; }
+.s4b select { max-width: 100%; }
+.s4b .check { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+.w-preview { position: relative; width: 100%; height: 240px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line);
+  background: linear-gradient(160deg, #b9d7ef 0%, #e9d6ef 55%, #f6e3d3 100%); display: grid; grid-template-columns: minmax(0, 1fr); align-content: end; justify-items: center; gap: 4px; padding: 8px; box-sizing: border-box; }
+.w-preview .pv-pair { display: flex; align-items: end; justify-content: center; overflow: hidden; min-width: 0; }
+.w-preview .pv-pair img { height: 130px; width: auto; }
+.w-preview .pv-label { background: rgba(255, 255, 255, .92); color: #22352a; border-radius: 12px; padding: 4px 10px; font-size: 12px; text-align: center; box-shadow: 0 2px 8px -3px rgba(0, 0, 0, .25); display: grid; gap: 1px; max-width: 100%; }
+.w-preview .pv-label .l1 { font-weight: 650; } .w-preview .pv-label .l2 { color: #5d7164; font-size: 11.5px; }
+
+/* 5. the window */
+.tabs-list { margin: 0; padding: 10px 14px 10px 34px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; font-size: 13.5px;
+  background: color-mix(in srgb, var(--desk-ink) 4%, transparent); border: 1px solid var(--line); border-radius: 12px; }
+.keep-work .pomo-only { display: none; }
+.both-only { display: none; } .keep-both li.both-only { display: list-item; } .keep-both span.both-only { display: inline; }
+
+/* 8. reminders: Apple Reminders and Calendar */
+.s8r .connect { display: grid; gap: 8px; }
+.s8r .conn { display: grid; gap: 4px; background: color-mix(in srgb, var(--desk-ink) 4%, transparent); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; }
+.s8r .conn .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+/* 9. data: two pictures, a little Muv peeking */
+.pomo-text { display: none; } .keep-pomo .pomo-text { display: block; } .keep-pomo .work-text { display: none; }
+.s9w .pics { display: grid; gap: 10px; width: 100%; }
+.s9w .pics figure { margin: 0; } .s9w .pics img { width: 100%; display: block; border-radius: 10px; border: 1px solid var(--line); }
+.s9w .pics figcaption { font-size: 12px; color: var(--desk-muted, #888); margin-top: 3px; }
+.s9w .art.peek { position: absolute; right: -8px; bottom: -18px; max-height: 92px; }
+.keep-pomo .s9w .pics { display: none; }
+
+/* 11. the email */
+.s11c .contact-box { display: grid; gap: 6px; padding: 14px 16px; border-radius: 14px; background: color-mix(in srgb, var(--desk-ink) 4%, transparent); border: 1px solid var(--line); }
+.s11c #contact-email { font: inherit; font-size: 16px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel, transparent); color: inherit; }
+.s11c #contact-email.bad { border-color: #d9667f; }
+.s11c .contact-msg { min-height: 20px; margin: 0; font-size: 13.5px; }
+.s11c .contact-msg.bad { color: #d9667f; } .s11c .contact-msg.ok { color: #4f9a70; }
+.s11c .promise { margin: 4px 0 0; padding-left: 18px; font-size: 13px; color: var(--desk-muted); }
+.only-contact .dots, .only-contact #back, .only-photos .dots, .only-photos #back { visibility: hidden; }
+
+/* 12. all set: everyone behind the photos and drawings, the same card each, popping in; hearts float up */
+.s11d .done { text-align: center; justify-items: center; gap: 6px; }
+.s11d .done-st { height: 52px; width: auto; }
+.s11d.step { padding-top: 14px; padding-bottom: 24px; }
+.s11d .done a { color: var(--bar); font-weight: 600; }
+.thanks { position: relative; overflow: hidden; width: 100%; box-sizing: border-box; border-radius: 18px; padding: 12px 10px 8px; display: grid; gap: 8px; justify-items: center;
+  background: color-mix(in srgb, var(--bar) 8%, transparent); }
+.thanks h2 { margin: 0; font-size: 14px; text-transform: none; letter-spacing: 0; color: var(--desk-ink); position: relative; }
+.confetti { position: absolute; inset: 0; pointer-events: none; opacity: .5; background:
+  radial-gradient(circle, #f3aac0 3px, transparent 4px) 12% 18% / 60px 60px, radial-gradient(circle, #86c79b 3px, transparent 4px) 68% 30% / 70px 70px; }
+.ty-cards { position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; width: 100%; }
+.ty-card { position: relative; height: 98px; border: 1.5px solid var(--line); border-radius: 16px; background: var(--control-bg);
+  display: grid; place-items: center; align-content: center; gap: 2px; padding: 6px 4px; box-sizing: border-box;
+  opacity: 0; transform: scale(.6) translateY(10px); }
+.step.on .ty-card { animation: thank-pop .5s cubic-bezier(.3, 1.6, .6, 1) forwards; }
+@keyframes thank-pop { to { opacity: 1; transform: none; } }
+.ty-card b { font-size: 13px; line-height: 1.2; max-width: 100%; overflow-wrap: anywhere; }
+.ty-card em { font-style: normal; font-size: 11px; color: var(--bar); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ty-card span { font-size: 11px; color: var(--desk-muted); }
+.ty-card svg { width: 24px; height: 24px; color: var(--bar); }
+.ty-card .ok { position: absolute; top: 5px; right: 6px; font-size: 10px; font-weight: 800; color: #fff; background: var(--focus, #3f7d5c); border-radius: 999px; padding: 0 6px; line-height: 16px; }
+.ty-card .muvs { display: flex; gap: 2px; height: 24px; }
+.ty-card .muvs img { height: 24px; width: auto; animation: thank-wiggle 2.4s ease-in-out infinite; }
+.ty-card .muvs img:nth-child(2) { animation-delay: .3s; } .ty-card .muvs img:nth-child(3) { animation-delay: .6s; }
+@keyframes thank-wiggle { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg) translateY(-3px); } }
+.thanks .hearts span { position: absolute; bottom: -18px; font-size: 14px; opacity: 0; pointer-events: none; }
+.step.on .thanks .hearts span { animation: thank-rise 3.6s ease-in infinite; }
+@keyframes thank-rise { 0% { opacity: 0; transform: translateY(0) scale(.8); } 15% { opacity: .9; } 100% { opacity: 0; transform: translateY(-200px) scale(1.2) rotate(15deg); } }
+.ty-note { max-width: 760px; line-height: 1.5; }
+.ty-note a { color: var(--bar); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bob, .welcome .step.on { animation: none; }
+  .step.on .ty-card { animation: none; opacity: 1; transform: none; }
+  .ty-card .muvs img, .step.on .thanks .hearts span { animation: none; }
+}
+
+body:not(.os-is-win) .os-win, body.os-is-win .os-mac { display: none; }
+
+/* The photos and stickers stay in the app: not dragged out or selected */
+img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
+
+/* the Thai version's note about the translation */
+.th-note { background: color-mix(in srgb, #f0c27a 18%, var(--control-bg)); border: 1px solid color-mix(in srgb, #f0c27a 55%, transparent); border-radius: 12px; padding: 6px 10px; font-size: 12px; line-height: 1.45; }
+.th-only { display: none; } .lang-th .th-only { display: block; }
+.lang-th { font-family: -apple-system, "Thonburi", "Sukhumvit Set", "PingFang TC", system-ui, sans-serif; }
+
+/* narrow windows: one column */
+@media (max-width: 720px) {
+  .welcome .step { grid-template-columns: minmax(0, 1fr); padding: 18px 18px 40px; }
+  .choices.two { grid-template-columns: 1fr; }
+  .ty-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .wtop .dots { display: none; }
+  .wtop .where { margin-left: auto; }
+}

@@ -1,0 +1,100 @@
+/* The desktop app's colour themes: html[data-theme], set by preload.js from the
+   app's setting (Theme / 主題 in the menu, Reminders and work time, or the
+   welcome window). Without it (VS Code, a browser) nothing here applies.
+   Each theme sets the shared tokens for light and dark mode; pastels go on
+   backgrounds, cards, charts and bubbles, while text and the main button stay
+   deep enough to read. The buddy's bubbles stay light in dark mode (they sit
+   on your desktop, not on a window). "classic" is the original look. */
+
+/* ---- Matcha & Sakura (the default): sage green leads, sakura pink highlights ---- */
+html[data-theme="matcha"] body {
+  --desk: #f1f7f0; --desk-ink: #22352a; --desk-muted: #5d7164; --control-bg: #ffffff; --control-line: #d3e5d4;
+  --focus: #5aa47a; --bar: #b4446a; --choice: #4f9a70; --primary: #3f7d5c; --primary-ink: #ffffff;
+  --consent: #e48aa6; --soft: #e3f2e6;
+  --paper: #ffffff; --ink: #22352a; --ink-soft: #5d7164; --berry: #d66a8f; --rom: #3f7d5c; --bubble-line: #efa3ba;
+  --alarm-bg: #f6c6d4; --alarm-ink: #4a1f2e; --alarm-btn-bg: #ffffff; --alarm-btn-ink: #8e3156; --alarm-btn-line: rgba(74, 31, 46, .35);
+  --work: #86c79b; --break: #f3aac0; --away: #d9ddd6; --grid: #e1ece2;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="matcha"] body {
+    --desk: #17201b; --desk-ink: #e8f1eb; --desk-muted: #9fb3a6; --control-bg: #212c25; --control-line: #34443a;
+    --focus: #8fd1a8; --bar: #f4b3c7; --choice: #8fd1a8; --primary: #8fd1a8; --primary-ink: #14261b;
+    --consent: #e99ab2; --soft: #253a2e;
+    --work: #6fb98a; --break: #df8fa8; --away: #46524a; --grid: #2a362e;
+  }
+}
+
+/* ---- Mint & Strawberry milk: brighter and more playful ---- */
+html[data-theme="mint"] body {
+  --desk: #ecf9f3; --desk-ink: #1d3830; --desk-muted: #557a6e; --control-bg: #ffffff; --control-line: #c9ecdc;
+  --focus: #3fbf8f; --bar: #c2386a; --choice: #2fa77b; --primary: #25866a; --primary-ink: #ffffff;
+  --consent: #ff8fb4; --soft: #dcf5ea;
+  --paper: #ffffff; --ink: #1d3830; --ink-soft: #557a6e; --berry: #f0789f; --rom: #25866a; --bubble-line: #ff9cbd;
+  --alarm-bg: #ffc4d8; --alarm-ink: #4d1429; --alarm-btn-bg: #ffffff; --alarm-btn-ink: #a3285a; --alarm-btn-line: rgba(77, 20, 41, .35);
+  --work: #6ed6aa; --break: #ffa6c4; --away: #d6e2dd; --grid: #dcefe6;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="mint"] body {
+    --desk: #122420; --desk-ink: #e6f6ef; --desk-muted: #93b8ab; --control-bg: #1b302a; --control-line: #2c4a40;
+    --focus: #6fe0b2; --bar: #ffb3cc; --choice: #6fe0b2; --primary: #6fe0b2; --primary-ink: #0f2a21;
+    --consent: #ff9cbd; --soft: #1f3d33;
+    --work: #4fc292; --break: #f28fb0; --away: #3f544d; --grid: #24403a;
+  }
+}
+
+/* ---- Rose & Mint: the pastels the other way round, pink leads ---- */
+html[data-theme="rose"] body {
+  --desk: #fdf2f5; --desk-ink: #3a2430; --desk-muted: #7a5d69; --control-bg: #ffffff; --control-line: #f0d5de;
+  --focus: #ec9fb8; --bar: #a83e66; --choice: #c4638a; --primary: #b9507a; --primary-ink: #ffffff;
+  --consent: #6aaf86; --soft: #fbe4ec;
+  --paper: #ffffff; --ink: #3a2430; --ink-soft: #7a5d69; --berry: #b9507a; --rom: #3f8a5f; --bubble-line: #93cfa9;
+  --alarm-bg: #cfeedd; --alarm-ink: #1f3a2b; --alarm-btn-bg: #ffffff; --alarm-btn-ink: #2f6b4f; --alarm-btn-line: rgba(31, 58, 43, .35);
+  --work: #93cfa9; --break: #f0a9bf; --away: #e2d9dd; --grid: #f3e3e9;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="rose"] body {
+    --desk: #24181d; --desk-ink: #f6e9ee; --desk-muted: #bfa3ae; --control-bg: #2f2127; --control-line: #4a3540;
+    --focus: #f2a3bf; --bar: #f7bcd0; --choice: #f2a3bf; --primary: #f2a3bf; --primary-ink: #2f1420;
+    --consent: #8fd1a8; --soft: #3e2531;
+    --work: #78c294; --break: #e494ae; --away: #54444b; --grid: #3a2a31;
+  }
+}
+
+/* ---- Lavender & Peach ---- */
+html[data-theme="lavender"] body {
+  --desk: #f5f2fb; --desk-ink: #2e2640; --desk-muted: #6c6385; --control-bg: #ffffff; --control-line: #e0d8f0;
+  --focus: #a593d6; --bar: #b0532f; --choice: #8a74c9; --primary: #6b57a8; --primary-ink: #ffffff;
+  --consent: #f2a27e; --soft: #ece6f8;
+  --paper: #ffffff; --ink: #2e2640; --ink-soft: #6c6385; --berry: #e08a64; --rom: #6b57a8; --bubble-line: #c9b8ee;
+  --alarm-bg: #ffd9c4; --alarm-ink: #4a2414; --alarm-btn-bg: #ffffff; --alarm-btn-ink: #a3492a; --alarm-btn-line: rgba(74, 36, 20, .35);
+  --work: #b6a5e6; --break: #ffc3a3; --away: #dedbe6; --grid: #ebe6f5;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="lavender"] body {
+    --desk: #1c1826; --desk-ink: #efeaf8; --desk-muted: #a9a1c2; --control-bg: #262033; --control-line: #3b3350;
+    --focus: #c3b4f0; --bar: #ffc3a3; --choice: #c3b4f0; --primary: #c3b4f0; --primary-ink: #221a38;
+    --consent: #f0a986; --soft: #2f2840;
+    --work: #9d8ce0; --break: #f0a986; --away: #4a4458; --grid: #2f2840;
+  }
+}
+
+/* ---- Sky & Lemon ---- */
+html[data-theme="sky"] body {
+  --desk: #f0f6fc; --desk-ink: #1f2f40; --desk-muted: #5b6e82; --control-bg: #ffffff; --control-line: #d4e3f2;
+  --focus: #8bb8e8; --bar: #8a6400; --choice: #5b93cf; --primary: #3d73b0; --primary-ink: #ffffff;
+  --consent: #e6c04f; --soft: #e3eefa;
+  --paper: #ffffff; --ink: #1f2f40; --ink-soft: #5b6e82; --berry: #d9a92a; --rom: #3d73b0; --bubble-line: #9cc4ec;
+  --alarm-bg: #fff0b3; --alarm-ink: #3d3000; --alarm-btn-bg: #ffffff; --alarm-btn-ink: #7a5c00; --alarm-btn-line: rgba(61, 48, 0, .35);
+  --work: #8fbfee; --break: #ffe083; --away: #dde3ea; --grid: #e3edf7;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="sky"] body {
+    --desk: #141c26; --desk-ink: #e9f1fa; --desk-muted: #9db0c6; --control-bg: #1d2836; --control-line: #2f3f52;
+    --focus: #9cc8f2; --bar: #ffe28a; --choice: #9cc8f2; --primary: #9cc8f2; --primary-ink: #122236;
+    --consent: #e8c860; --soft: #253244;
+    --work: #6fa8e0; --break: #e8c860; --away: #3e4a58; --grid: #253244;
+  }
+}
+
+/* ---- Pieces that follow the theme where one is set ---- */
+html[data-theme] .bubble:not(.ringing) { box-shadow: 0 0 0 2px var(--bubble-line, transparent), 0 6px 22px -6px rgba(20, 24, 50, .45); }

@@ -1,0 +1,345 @@
+{
+ "app-credits-top": {
+  "photo": "app-credits-top-3a840744.webp",
+  "cartoon": "app-credits-top-3a840744.webp",
+  "size": 125,
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "app-data-sum": {
+  "photo": "app-data-sum-bd3cff9f.webp",
+  "cartoon": "app-data-sum-bd3cff9f.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-help-top": {
+  "photo": "app-help-top-3386667a.webp",
+  "cartoon": "app-help-top-3386667a.webp",
+  "by": [
+   "otter"
+  ]
+ },
+ "app-look-card": {
+  "photo": "app-look-card-17197ba2.webp",
+  "cartoon": "app-look-card-17197ba2.webp",
+  "by": [
+   "alitasdepollo"
+  ]
+ },
+ "app-menu": {
+  "photo": "muv-cartoon.webp",
+  "cartoon": "muv-cartoon.webp",
+  "size": 95,
+  "by": [
+   "wanwannjeab"
+  ]
+ },
+ "app-now-done": {
+  "photo": "app-now-done-443b4259.webp",
+  "cartoon": "app-now-done-443b4259.webp",
+  "size": 145,
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "app-now-pomo": {
+  "photo": "app-now-pomo-52c6b97f.webp",
+  "cartoon": "app-now-pomo-52c6b97f.webp",
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "app-now-work": {
+  "photo": "app-now-work-f915203f.webp",
+  "cartoon": "app-now-work-f915203f.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-pomo-break": {
+  "photo": "app-pomo-break-4b6b24bf.webp",
+  "cartoon": "app-pomo-break-4b6b24bf.webp",
+  "size": 90,
+  "by": [
+   "NGMin"
+  ]
+ },
+ "app-rem-add": {
+  "photo": "app-rem-add-fa866d09.webp",
+  "cartoon": "app-rem-add-fa866d09.webp",
+  "size": 140,
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-rem-empty": {
+  "photo": "app-rem-empty-f5e65e76.webp",
+  "cartoon": "app-rem-empty-f5e65e76.webp",
+  "size": 80,
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-rem-event": {
+  "photo": "app-rem-event-3c3d2d46.webp",
+  "cartoon": "app-rem-event-3c3d2d46.webp",
+  "size": 130,
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-rem-head": {
+  "photo": "app-rem-head-4c9f45a3.webp",
+  "cartoon": "app-rem-head-4c9f45a3.webp",
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "app-rem-next": {
+  "photo": "app-rem-next-9c88e0ee.webp",
+  "cartoon": "app-rem-next-9c88e0ee.webp",
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "app-reminders-empty": {
+  "photo": "app-reminders-empty-218677d2.webp",
+  "cartoon": "app-reminders-empty-218677d2.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-settings-about": {
+  "photo": "app-settings-about-d6a96149.webp",
+  "cartoon": "app-settings-about-d6a96149.webp",
+  "size": 145,
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "app-settings-look": {
+  "photo": "app-settings-look-abb6988e.webp",
+  "cartoon": "app-settings-look-abb6988e.webp",
+  "size": 165,
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-stickers-title": {
+  "photo": "app-stickers-title-3526fdd0.webp",
+  "cartoon": "app-stickers-title-3526fdd0.webp",
+  "size": 45,
+  "by": [
+   "alitasdepollo"
+  ]
+ },
+ "app-today-left": {
+  "photo": "app-today-left-7a130976.webp",
+  "cartoon": "app-today-left-7a130976.webp",
+  "size": 105,
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-week-analysis": {
+  "photo": "app-week-analysis-bb0b1b3e.webp",
+  "cartoon": "app-week-analysis-bb0b1b3e.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "preview-love": {
+  "photo": "preview-love-3e1da30c.webp",
+  "cartoon": "preview-love-3e1da30c.webp",
+  "size": 120,
+  "by": [
+   "otter"
+  ]
+ },
+ "preview-milk": {
+  "photo": "preview-milk-25d9980b.webp",
+  "cartoon": "preview-milk-25d9980b.webp",
+  "size": 115,
+  "by": [
+   "NGMin"
+  ]
+ },
+ "tip": {
+  "photo": "pick-05-milk.webp",
+  "cartoon": "pick-05-milk.webp",
+  "by": [
+   "alitasdepollo"
+  ]
+ },
+ "w-contact": {
+  "photo": "w-contact-a0141675.webp",
+  "cartoon": "w-contact-a0141675.webp",
+  "size": 155,
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "w1-left": {
+  "photo": "w1-left-491a9220.webp",
+  "cartoon": "w1-left-491a9220.webp",
+  "size": 85,
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "w1-right": {
+  "photo": "w1-right-39adbd5c.webp",
+  "cartoon": "w1-right-39adbd5c.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "w10": {
+  "photo": "w10-32626d3f.webp",
+  "cartoon": "w10-32626d3f.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "w11-left": {
+  "photo": "together-17.webp",
+  "cartoon": "together-17.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "w11-right": {
+  "photo": "w11-right-303518a9.webp",
+  "cartoon": "w11-right-303518a9.webp",
+  "size": 65,
+  "by": [
+   "wanwannjeab"
+  ]
+ },
+ "w2-full": {
+  "photo": "w2-full-f98592e3.webp",
+  "cartoon": "w2-full-f98592e3.webp",
+  "size": 125,
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "w2-own": {
+  "photo": "w2-own-3526fdd0.webp",
+  "cartoon": "w2-own-3526fdd0.webp",
+  "by": [
+   "alitasdepollo"
+  ]
+ },
+ "w2-starter": {
+  "photo": "w2-starter-9c88e0ee.webp",
+  "cartoon": "w2-starter-9c88e0ee.webp",
+  "by": [
+   "otter"
+  ]
+ },
+ "w3-keep": {
+  "photo": "w3-keep-c8b7ca47.webp",
+  "cartoon": "w3-keep-c8b7ca47.webp",
+  "size": 125,
+  "by": [
+   "alitasdepollo"
+  ]
+ },
+ "w5": {
+  "photo": "w5-72989f1d.webp",
+  "cartoon": "w5-72989f1d.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "w6": {
+  "photo": "pick-18-love.webp",
+  "cartoon": "pick-18-love.webp",
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "w7": {
+  "photo": "w7-205202d7.webp",
+  "cartoon": "w7-205202d7.webp",
+  "size": 90,
+  "by": [
+   "otter"
+  ]
+ },
+ "w8": {
+  "photo": "w8-ea416006.webp",
+  "cartoon": "w8-ea416006.webp",
+  "size": 90,
+  "by": [
+   "NGMin"
+  ]
+ },
+ "w9": {
+  "photo": "w9-97932480.webp",
+  "cartoon": "w9-97932480.webp",
+  "size": 90,
+  "by": [
+   "wanwannjeab"
+  ]
+ },
+ "app-set-rem": {
+  "photo": "app-set-rem-ae9d7d80.webp",
+  "cartoon": "app-set-rem-ae9d7d80.webp",
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "app-set-about": {
+  "photo": "app-set-about-26e08516.webp",
+  "cartoon": "app-set-about-26e08516.webp",
+  "by": [
+   "Blumoon"
+  ]
+ },
+ "app-data-top": {
+  "photo": "app-data-top-6fb51ab0.webp",
+  "cartoon": "app-data-top-6fb51ab0.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-set-look": {
+  "photo": "app-set-look-a93609bd.webp",
+  "cartoon": "app-set-look-a93609bd.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-set-buddy": {
+  "photo": "w1-right-39adbd5c.webp",
+  "cartoon": "w1-right-39adbd5c.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "app-set-keep": {
+  "photo": "w3-keep-c8b7ca47.webp",
+  "cartoon": "w3-keep-c8b7ca47.webp",
+  "by": [
+   "alitasdepollo"
+  ]
+ },
+ "app-set-cats": {
+  "photo": "w10-32626d3f.webp",
+  "cartoon": "w10-32626d3f.webp",
+  "by": [
+   "Lyrac"
+  ]
+ },
+ "w1-muv": {
+  "photo": "w1-muv-8934cae4.webp",
+  "cartoon": "w1-muv-8934cae4.webp",
+  "by": [
+   "wanwannjeab"
+  ]
+ }
+}

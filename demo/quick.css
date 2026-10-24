@@ -1,0 +1,35 @@
+/* Right-clicking the desktop buddy: a small card beside it (quick.html), in place of a long menu.
+   The everyday things as big buttons; the way into the app and Settings as small icons. */
+html, body.quick { height: auto; background: transparent !important; overflow: hidden; }
+body.quick { margin: 0; padding: 10px; font: 13px/1.35 var(--latin); color: var(--desk-ink); user-select: none; -webkit-user-select: none; }
+html[lang="th"] body.quick { font-family: var(--thai); }
+.qp { background: var(--control-bg); border: 1.5px solid #efa3ba; border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, .22); padding: 12px; display: grid; gap: 10px; }
+.qp .top { display: flex; align-items: baseline; gap: 8px; }
+.qp .top b { font-size: 22px; font-variant-numeric: tabular-nums; }
+.qp .top span { color: var(--desk-muted); }
+.qp .pomo { font: inherit; text-align: left; border: 0; border-radius: 9px; padding: 5px 8px; background: color-mix(in srgb, var(--bar, #e8508a) 12%, var(--control-bg)); color: var(--desk-ink); cursor: pointer; }
+.qp .task { display: flex; gap: 6px; align-items: center; background: color-mix(in srgb, var(--desk-muted) 10%, var(--control-bg)); border-radius: 9px; padding: 5px 6px 5px 8px; }
+.qp .task .n { flex: 1; font-weight: 650; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+.qp .task .n.none { font-weight: 400; color: var(--desk-muted); }
+.qp .chip { font: inherit; font-size: 12px; border: 1px solid var(--control-line); background: var(--control-bg); color: var(--desk-ink); border-radius: 999px; padding: 2px 9px; cursor: pointer; white-space: nowrap; }
+.qp .big { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.qp .big button { font: inherit; border: 1px solid var(--control-line); background: var(--desk); color: var(--desk-ink); border-radius: 10px; padding: 8px 6px; cursor: pointer; display: grid; gap: 2px; justify-items: center; text-align: center; }
+.qp .big button svg { width: 20px; height: 20px; color: var(--primary, var(--desk-ink)); }
+.qp .row { display: flex; justify-content: space-between; gap: 2px; border-top: 1px solid var(--control-line); padding-top: 8px; }
+.qp .row button { font: inherit; font-size: 11.5px; border: 0; background: none; color: var(--desk-muted); cursor: pointer; display: grid; justify-items: center; gap: 2px; padding: 3px 4px; border-radius: 8px; flex: 1; min-width: 0; }
+.qp .row button svg { width: 18px; height: 18px; }
+.qp button:hover, .qp button:focus-visible, .qp .task .n:hover { background: color-mix(in srgb, #efa3ba 22%, var(--control-bg)); outline: none; }
+.qp .sub::after { content: " ›"; color: var(--desk-muted); }
+
+/* "On my desktop": who the buddy is, as little faces */
+.qp .who { display: grid; gap: 5px; border-top: 1px solid var(--control-line); padding-top: 8px; }
+.qp .who .lbl { font-size: 11.5px; font-weight: 700; color: var(--desk-muted); }
+.qp .faces { display: flex; gap: 6px; }
+.qp .face { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--control-line); background: color-mix(in srgb, var(--desk-muted) 10%, var(--control-bg)); padding: 0; cursor: pointer; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; }
+.qp .face img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.qp .face.two img { width: 55%; }
+.qp .face[aria-checked="true"] { border-color: var(--primary, #3f7d5c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary, #3f7d5c) 22%, transparent); }
+.qp .who-name { font-size: 11.5px; } .qp .who-name span { color: var(--desk-muted); }
+.qp .top b { font-size: 20px; }
+.qp .big button { padding: 7px 6px; font-size: 12px; }
+.qp .big button svg { width: 18px; height: 18px; }

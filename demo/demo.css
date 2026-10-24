@@ -1,0 +1,2 @@
+/* The website's demo (app/site-demo): small touches on top of the app's own styles. */
+html.demo-embed, html.demo-embed body { overflow-x: hidden; }

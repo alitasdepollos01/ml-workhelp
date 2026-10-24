@@ -1,0 +1,617 @@
+/* ML_WorkHelp shared UI: the browser page, the VS Code panel and the desktop
+   buddy all load this file. No inline styles anywhere (VS Code's CSP). */
+
+:root {
+  /* The polaroid and stickers are physical objects: these never change with the theme. */
+  --paper: #ffffff;
+  --ink: #1f2340;
+  --ink-soft: #5d6283;
+  --berry: #e8508a;
+  --sky: #6fa8e8;
+  --tape: rgba(255, 214, 102, 0.62);
+
+  /* The surface they sit on follows the host. */
+  --desk: #e9ecf5;
+  --desk-ink: #1f2340;
+  --desk-muted: #646a88;
+  --control-bg: #ffffff;
+  --control-line: #cfd4e6;
+  --focus: #e8508a;
+
+  --thai: "Thonburi", "Tahoma", "Noto Sans Thai Looped", "Leelawadee UI", "Leelawadee", sans-serif;
+  --latin: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --desk: #171a2b;
+    --desk-ink: #eef0f8;
+    --desk-muted: #9aa0bf;
+    --control-bg: #232741;
+    --control-line: #3a3f60;
+  }
+}
+
+/* Inside VS Code the desk is the editor's own sidebar. */
+body.vscode-light, body.vscode-dark, body.vscode-high-contrast, body.vscode-high-contrast-light {
+  --desk: var(--vscode-sideBar-background, var(--vscode-editor-background));
+  --desk-ink: var(--vscode-foreground);
+  --desk-muted: var(--vscode-descriptionForeground);
+  --control-bg: var(--vscode-dropdown-background);
+  --control-line: var(--vscode-dropdown-border, var(--vscode-contrastBorder, transparent));
+  --focus: var(--vscode-focusBorder);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--desk);
+  color: var(--desk-ink);
+  font: 14px/1.45 var(--latin);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+[lang="th"] { font-family: var(--thai); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 0;
+}
+
+/* ---- the polaroid ------------------------------------------------------ */
+
+.desk {
+  flex: none;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 8px;
+  -webkit-perspective: 1400px;
+  perspective: 1400px;
+}
+
+.polaroid {
+  position: relative;
+  width: min(100%, 380px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform: rotate(var(--tilt, -1.5deg));
+  transition: transform 0.5s cubic-bezier(.2, .8, .3, 1.2);
+  container-type: inline-size;
+}
+.polaroid:focus-visible { outline-offset: 8px; }
+
+.flipper {
+  position: relative;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(.3, .7, .25, 1);
+}
+.polaroid.flipped .flipper { transform: rotateY(180deg); }
+
+/* WebKit doesn't reliably honour backface-visibility (the back shows through,
+   mirrored), so each face also switches visibility at the midpoint of the flip. */
+.front, .back { transition: visibility 0s linear 0.35s; }
+.back { visibility: hidden; }
+.polaroid.flipped .back { visibility: visible; }
+.polaroid.flipped .front { visibility: hidden; }
+
+.face {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(20, 24, 50, .18), 0 10px 26px -8px rgba(20, 24, 50, .35);
+}
+.front {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 5.5% 5.5% 0;
+  transform: rotateY(0deg); /* Safari needs a 3D transform on both faces */
+}
+.back {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  color: #fff;
+  transform: rotateY(180deg);
+  padding: 9% 8%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  overflow: auto;
+}
+
+.tape {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 34%;
+  height: 26px;
+  background: var(--tape);
+  transform: translateX(-50%) rotate(var(--tape-tilt, 2deg));
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .06);
+  z-index: 1;
+}
+
+.shot {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #dfe2ec;
+}
+.shot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.caption {
+  min-height: 20cqi;
+  padding: 3cqi 1cqi 3.5cqi;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2cqi;
+}
+.caption .th {
+  margin: 0;
+  font-size: clamp(15px, 5.9cqi, 24px);
+  line-height: 1.35;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.caption .th.long { font-size: clamp(13px, 4.3cqi, 18px); }
+/* Which song (or deck) the card is from: a small, quiet single line. */
+.caption .from {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(8px, 3cqi, 11px);
+  line-height: 1.3;
+  color: var(--ink-soft);
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.caption .from::after {
+  content: "Tap to flip";
+  display: block;
+  margin-top: 1px;
+  color: var(--berry);
+  opacity: 0.9;
+}
+.polaroid.seen .caption .from::after { content: ""; }
+
+.back .kind { margin: 0; font-size: 12px; color: #aab0d6; }
+.back .th { margin: 0; font-size: clamp(17px, 6cqi, 24px); line-height: 1.4; }
+.back .rom { margin: 0; font-size: clamp(15px, 5cqi, 19px); color: var(--sky); font-style: italic; }
+.back .en { margin: 0; font-size: clamp(15px, 4.6cqi, 18px); line-height: 1.4; }
+.back .std { margin: 0; font-size: 14px; color: #d6d9ee; }
+.back .words {
+  list-style: none;
+  margin: 0.2em 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25em 0.9em;
+  font-size: 13.5px;
+}
+.back .words li { display: contents; }
+.back .words .w { font-family: var(--thai); font-size: 15px; }
+.back .words .g { color: #d6d9ee; }
+.back .words .g i { color: var(--sky); margin-right: 0.4em; }
+.back .foot {
+  margin: auto 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 10px;
+}
+.back .from { font-size: 12px; color: #aab0d6; }
+.back .know {
+  font: inherit;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+.back .know::before { content: "\2713  "; opacity: .5; }
+.back .know:hover { border-color: #fff; }
+.back .know[aria-pressed="true"] { background: #fff; color: var(--ink); border-color: #fff; }
+.back .know[aria-pressed="true"]::before { opacity: 1; color: var(--berry); }
+
+/* A new photo is "placed" on the desk: the one orchestrated motion in the UI. */
+.polaroid.placing { animation: place 0.55s cubic-bezier(.2, .8, .3, 1.1); }
+@keyframes place {
+  from { transform: rotate(calc(var(--tilt) * 3)) translateY(-14px) scale(1.04); opacity: 0.3; }
+}
+
+/* VS Code: a compact section under the file tree, about half the size. */
+body.host-vscode .app { padding: 12px 10px 0; }
+body.host-vscode .desk { padding-top: 4px; }
+body.host-vscode .polaroid { width: min(100%, 190px); }
+body.host-vscode .tape { top: -7px; height: 15px; }
+body.host-vscode .caption .th { font-size: clamp(11px, 7cqi, 24px); }
+body.host-vscode .caption .th.long { font-size: clamp(10px, 5.2cqi, 18px); }
+body.host-vscode .caption .from { font-size: 8px; }
+body.host-vscode .back { padding: 7%; gap: 0.35em; }
+body.host-vscode .back .th { font-size: clamp(13px, 6.5cqi, 24px); }
+body.host-vscode .back .rom, body.host-vscode .back .en { font-size: 12px; }
+body.host-vscode .back .kind, body.host-vscode .back .from { font-size: 10px; }
+body.host-vscode .back .know { font-size: 10px; padding: 1px 7px; }
+body.host-vscode .back .words { font-size: 11px; }
+body.host-vscode .back .words .w { font-size: 12px; }
+body.host-vscode .controls { margin: 14px 0 8px; gap: 6px; font-size: 12px; }
+body.host-vscode .controls .row { gap: 6px 8px; }
+body.host-vscode .controls select, body.host-vscode .controls button { padding: 2px 8px; }
+body.host-vscode .section > summary { padding: 5px 8px; }
+body.host-vscode .section > .panel { padding: 2px 8px 10px; }
+body.host-vscode .ringer { padding: 8px 10px; margin-bottom: 8px; }
+body.host-vscode .ringer .title { font-size: 14px; }
+
+/* ---- controls --------------------------------------------------------- */
+
+.controls {
+  position: relative;
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 26px 0 8px;
+  color: var(--desk-muted);
+  font-size: 13px;
+}
+.controls .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 10px;
+}
+.controls label { display: inline-flex; align-items: center; gap: 6px; }
+.controls select, .controls button, .controls input {
+  font: inherit;
+  color: var(--desk-ink);
+  background: var(--control-bg);
+  border: 1px solid var(--control-line);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+.controls select { max-width: 190px; }
+.controls button { cursor: pointer; padding: 4px 12px; }
+/* On / off buttons (the buddies): a dot that fills in when on. */
+.controls .toggle::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  vertical-align: 1px;
+  border-radius: 50%;
+  border: 1.5px solid var(--desk-muted);
+}
+.controls .toggle[aria-pressed="true"] { border-color: var(--berry); }
+.controls .toggle[aria-pressed="true"]::before { background: var(--berry); border-color: var(--berry); }
+.controls .quiet { background: transparent; color: var(--desk-muted); }
+.controls .quiet[aria-pressed="true"] { color: var(--berry); border-color: var(--berry); }
+.controls input[type="checkbox"] { accent-color: var(--berry); width: 15px; height: 15px; margin: 0; padding: 0; }
+
+.options-toggle::after { content: " \25BE"; color: var(--desk-muted); }
+.options-toggle[aria-expanded="true"] { border-color: var(--desk-ink); }
+.options-toggle[aria-expanded="true"]::after { content: " \25B4"; }
+.controls .running-chip { color: #fff; background: var(--berry); border-color: var(--berry); font-variant-numeric: tabular-nums; }
+.controls .running-chip.paused { color: var(--berry); background: transparent; }
+#focus-quick::before { content: "\25B6"; font-size: .75em; margin-right: 5px; color: var(--berry); }
+.controls .primary { color: #fff; background: var(--berry); border-color: var(--berry); font-weight: 600; }
+.controls .today { margin: -2px 0 0; font-size: 12px; text-align: center; font-variant-numeric: tabular-nums; }
+
+/* Options: a list of sections under the photo, each opening in place. */
+.options {
+  width: 100%;
+  border: 1px solid var(--control-line);
+  border-radius: 8px;
+  background: var(--control-bg);
+  color: var(--desk-ink);
+  overflow: hidden;
+}
+.options[hidden] { display: none; }
+.section + .section { border-top: 1px solid var(--control-line); }
+.section > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 12px;
+  font-variant-numeric: tabular-nums;
+}
+.section > summary::-webkit-details-marker { display: none; }
+.section > summary::after { content: "\25B8"; color: var(--desk-muted); transition: transform .15s; }
+.section[open] > summary::after { transform: rotate(90deg); }
+.section > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.section.running > summary { color: var(--berry); font-weight: 600; }
+.section.running.paused > summary { color: var(--desk-muted); }
+.section > .panel {
+  padding: 4px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.panel .field { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
+.panel .field input, .panel .field select { width: 100%; max-width: none; }
+.panel .group { margin: 4px 0 -4px; font-size: 12px; color: var(--desk-muted); }
+.panel hr { width: 100%; margin: 4px 0 0; border: 0; border-top: 1px solid var(--control-line); }
+.panel .chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.panel .chips button { padding: 5px 0; }
+.panel .line { display: flex; align-items: center; gap: 8px; margin: 0; }
+.panel .line input { min-width: 0; flex: 1; }
+.panel .line input[type="number"] { flex: 0 1 80px; }
+.panel .wide { width: 100%; }
+.panel .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.panel .trio .field { font-size: 12px; color: var(--desk-muted); }
+.panel .trio select { color: var(--desk-ink); padding-left: 4px; padding-right: 2px; }
+.panel .pair { display: flex; gap: 6px; }
+.panel .pair button { flex: 1; }
+.panel .status { margin: 0; font-size: 14px; line-height: 1.5; }
+.panel .status b { font-variant-numeric: tabular-nums; }
+.panel .check { gap: 8px; }
+#alarm-set, #alarm-running { display: flex; flex-direction: column; gap: 10px; }
+
+/* ---- alarm ringing ---------------------------------------------------- */
+
+.ringer {
+  order: -1; /* top of the page, whatever is scrolled */
+  position: sticky;
+  top: 8px;
+  z-index: 20;
+  width: min(100%, 420px);
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  background: var(--berry);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px -10px rgba(232, 80, 138, .7);
+}
+.ringer p { margin: 0; }
+.ringer .title { font-size: 17px; font-weight: 650; }
+.ringer .body { font-size: 13.5px; opacity: .92; }
+.ringer .actions, .bubble .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ringer button, .bubble .actions button {
+  font: inherit;
+  font-size: 13px;
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .7);
+  background: transparent;
+  color: #fff;
+}
+.ringer #ringer-stop { background: #fff; color: var(--berry); border-color: #fff; font-weight: 600; }
+
+.bubble.ringing { background: var(--alarm-bg, var(--berry)); color: var(--alarm-ink, #fff); cursor: default; }
+.bubble.ringing::after { background: var(--alarm-bg, var(--berry)); }
+.bubble.ringing .actions button { border-color: var(--alarm-btn-line, rgba(255, 255, 255, .7)); color: inherit; }
+.bubble.ringing .title { margin: 0; font-size: 18px; font-weight: 650; }
+.bubble.ringing .en { margin: 2px 0 0; font-size: 13.5px; }
+.bubble.ringing .actions { margin-top: 8px; }
+.bubble.ringing .actions button:last-child { background: var(--alarm-btn-bg, #fff); color: var(--alarm-btn-ink, var(--berry)); border-color: var(--alarm-btn-bg, #fff); font-weight: 600; }
+
+.notice {
+  max-width: 340px;
+  margin: 40px auto;
+  text-align: center;
+  color: var(--desk-muted);
+}
+.notice code { font-size: 12px; overflow-wrap: anywhere; }
+
+/* ---- buddies (buddy windows only) -------------------------------------- */
+
+/* A see-through window over the screen: the page shows only the buddies, and
+   clicks pass through everywhere else (the host handles that). */
+body.mode-buddy { background: transparent; overflow: hidden; }
+body.mode-buddy .app { padding: 0; height: 100%; }
+body.mode-buddy .desk, body.mode-buddy .controls, body.mode-buddy .ringer { display: none; }
+.ground { position: fixed; inset: 0; pointer-events: none; }
+.layer { position: absolute; inset: 0; pointer-events: none; }
+.layer > * { pointer-events: auto; }
+
+.buddy {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: var(--dev-h, 90px);
+  transform-origin: 50% 100%; /* the feet */
+  will-change: transform;
+  cursor: pointer;
+  touch-action: none;
+}
+.buddy.deskbuddy { height: var(--desk-h, 152px); transform-origin: 50% 50%; cursor: grab; }
+.buddy.deskbuddy.held { cursor: grabbing; }
+.buddy .body {
+  position: relative;
+  height: 100%;
+  transform-origin: 50% 100%;
+}
+.buddy img {
+  height: 100%;
+  width: auto;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  /* Die-cut sticker edge (Stickers › how they look: white edge none / thin / thick, shadow or not) */
+  filter: var(--stk-edge) var(--stk-shadow, );
+}
+:root { --stk-e: 1.5px; --stk-edge: drop-shadow(var(--stk-e) 0 0 #fff) drop-shadow(calc(-1 * var(--stk-e)) 0 0 #fff) drop-shadow(0 var(--stk-e) 0 #fff) drop-shadow(0 calc(-1 * var(--stk-e)) 0 #fff);
+        --stk-shadow: drop-shadow(0 3px 3px rgba(20, 24, 50, .3)); --stk-held: drop-shadow(0 14px 12px rgba(20, 24, 50, .35)); }
+:root[data-stk-edge="thick"] { --stk-e: 3px; }
+:root[data-stk-edge="none"] { --stk-edge: ; }
+:root[data-stk-shadow="none"] { --stk-shadow: ; --stk-held: drop-shadow(0 10px 8px rgba(20, 24, 50, .18)); }
+.buddy.facing-left img { transform: scaleX(-1); }
+/* Calm, calmer and still (Settings › Desktop buddy › How lively): the props and the nap's z's stay put
+   (anything moving has the window redrawn every frame) */
+html:is([data-pace="calm"], [data-pace="calmer"], [data-pace="still"]) .buddy .prop,
+html:is([data-pace="calm"], [data-pace="calmer"], [data-pace="still"]) .buddy.napping::after { animation: none; }
+
+/* (the buddies lean from their feet: the bottom of a sticker stays level, on the line under it) */
+.buddy .body { transform-origin: 50% 100%; }
+.buddy.walking .body { animation: waddle 0.52s ease-in-out infinite alternate; }
+@keyframes waddle {
+  from { transform: skewX(3deg) translateY(0); }
+  50% { transform: skewX(0deg) translateY(-4px); }
+  to { transform: skewX(-3deg) translateY(0); }
+}
+.buddy.hopping .body, .buddy.cheering .body { animation: hop 0.6s cubic-bezier(.3, .6, .4, 1); }
+.buddy.cheering .body { animation-iteration-count: infinite; animation-duration: 0.7s; }
+@keyframes hop {
+  30% { transform: translateY(-28%) scaleY(1.04); }
+  60% { transform: translateY(0) scaleY(0.94); }
+}
+.buddy.napping .body { transform: skewX(5deg) scaleY(0.96); transition: transform 0.8s; }
+.buddy.napping:not(.deskbuddy)::after {
+  content: "z z";
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  font: italic 600 15px var(--latin);
+  color: #8a90b0;
+  animation: zz 2.4s ease-in-out infinite;
+}
+@keyframes zz { 50% { transform: translateY(-6px); opacity: 0.4; } }
+.buddy.arriving .body { animation: pop 0.45s cubic-bezier(.3, .7, .3, 1.4); }
+@keyframes pop { from { transform: scale(0.6); opacity: 0; } }
+
+/* Screen locked: nothing moves until it's unlocked. */
+body.asleep *, body.asleep *::after { animation-play-state: paused !important; }
+
+/* The desktop buddy's actions */
+.buddy .prop {
+  position: absolute;
+  top: 2%;
+  right: -10%;
+  font-size: calc(var(--desk-h, 152px) * 0.17);
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(20, 24, 50, .3));
+  animation: bob 1.6s ease-in-out infinite;
+}
+.buddy.facing-left .prop { right: auto; left: -10%; }
+.buddy .prop:empty { display: none; }
+@keyframes bob { 50% { transform: translateY(-6px) rotate(-6deg); } }
+.buddy.dancing .body { animation: sway 0.9s ease-in-out infinite; }
+@keyframes sway {
+  25% { transform: skewX(5deg) translateX(-3%); }
+  75% { transform: skewX(-5deg) translateX(3%); }
+}
+.buddy.singing .body { animation: sing 1.2s ease-in-out infinite; }
+@keyframes sing { 50% { transform: scaleY(1.03) skewX(-1.5deg); } }
+.buddy.reading .body, .buddy.sipping .body { transform: skewX(2deg); transition: transform 0.6s; }
+.buddy.posing .body { animation: flash 0.5s ease-out 2; }
+@keyframes flash { 30% { filter: brightness(1.6); transform: scale(1.04); } }
+.buddy.hearts .prop { animation: float-up 1.6s ease-out infinite; }
+@keyframes float-up {
+  from { transform: translateY(0) scale(0.8); opacity: 1; }
+  to { transform: translateY(-60px) scale(1.2); opacity: 0; }
+}
+.buddy.twirling .body { animation: twirl 1.2s ease-in-out; }
+@keyframes twirl { to { transform: rotateY(360deg); } }
+.buddy.held .body { animation: wiggle 0.3s ease-in-out infinite alternate; transform-origin: 50% 0; }
+@keyframes wiggle { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+.buddy.held img { filter: var(--stk-edge) var(--stk-held); }
+
+/* Under the desktop buddy (placed by desk-buddy.js): work time, and any alarm. */
+.desk-label {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.35;
+  white-space: nowrap;
+  text-align: center;
+  width: max-content;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 600 12px var(--latin);
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 2px 8px rgba(20, 24, 50, .25);
+}
+
+/* A Thai word on a reminder, break or goal bubble. */
+.bubble .word { margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(31, 35, 64, .25); }
+.bubble .word .th { font-size: 16.5px; }
+.bubble .word .rom { margin: 0; font-size: 12px; color: var(--ink-soft); }
+.bubble.ringing .word { border-top-color: rgba(255, 255, 255, .5); }
+.bubble.ringing .word .rom { color: inherit; font-style: normal; opacity: .92; }
+
+/* The next reminder, under the work time. */
+.desk-label .next { font-weight: 500; font-size: 11.5px; color: var(--ink-soft); }
+
+/* Speech bubble: placed with left/top by bubble.js; the tail points back at
+   the speaker on whichever side it's on (data-side). */
+.bubble {
+  position: absolute;
+  width: max-content;
+  max-width: min(250px, calc(100vw - 24px));
+  padding: 10px 14px 11px;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 14px;
+  box-shadow: 0 6px 22px -6px rgba(20, 24, 50, .45);
+  cursor: pointer;
+  z-index: 5;
+  animation: pop 0.25s ease-out;
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
+  border-radius: 2px;
+}
+.bubble[data-side="above"]::after { bottom: -7px; left: var(--tail, 50%); transform: translateX(-50%) rotate(45deg); }
+.bubble[data-side="below"]::after { top: -7px; left: var(--tail, 50%); transform: translateX(-50%) rotate(45deg); }
+.bubble[data-side="left"]::after { right: -7px; top: var(--tail, 50%); transform: translateY(-50%) rotate(45deg); }
+.bubble[data-side="right"]::after { left: -7px; top: var(--tail, 50%); transform: translateY(-50%) rotate(45deg); }
+.bubble .th { margin: 0; font-size: 19px; line-height: 1.35; }
+.bubble .rom { margin: 2px 0 0; color: var(--rom, #3d79c4); font-style: italic; }
+.bubble .en { margin: 2px 0 0; }
+.bubble .hint { margin: 3px 0 0; font-size: 11.5px; color: var(--berry); }
+.bubble .hint:first-child { margin: 0 0 2px; color: var(--ink-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  .flipper, .polaroid { transition-duration: 0.01s; }
+  .polaroid.placing, .buddy .body, .buddy .prop, .buddy.napping::after, .bubble { animation: none !important; }
+}
+
+/* Settings → "During a Pomodoro focus: out of sight until the break": only the label, faint. */
+.focus-hide .buddy, .focus-hide .bubble { opacity: 0; pointer-events: none; transition: opacity .6s; }
+.focus-hide .desk-label { opacity: .55; }
+
+/* A line too long for the room it has wraps instead of being cut off (placeLabel sets max-width). */
+.desk-label > * { white-space: normal; overflow-wrap: anywhere; }
+
+/* The photos and stickers stay in the app: not dragged out or selected */
+img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }

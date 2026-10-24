@@ -1,0 +1,973 @@
+/* The app's window (app.html): tabs on the left, one tab's page on the right. */
+
+body.appwin { --away: #d9ddd6; --soft: color-mix(in srgb, var(--focus) 14%, var(--control-bg)); --pink-soft: color-mix(in srgb, var(--bar) 12%, var(--control-bg)); height: 100%; }
+.appwin * { box-sizing: border-box; }
+.appwin [hidden] { display: none !important; }
+.appwin .shell { display: grid; grid-template-columns: 176px minmax(0, 1fr); min-height: 100vh; }
+.appwin nav.side { border-right: 1px solid var(--line); padding: 14px 10px; display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
+.appwin nav.side button { display: flex; gap: 9px; align-items: flex-start; line-height: 1.35; text-align: left; border: 0; background: transparent; border-radius: 9px; padding: 8px 10px; font: inherit; color: var(--desk-ink); cursor: pointer; }
+.appwin nav.side button.on { background: var(--control-bg); box-shadow: 0 1px 3px rgba(0, 0, 0, .08); font-weight: 650; color: var(--primary, var(--desk-ink)); }
+.appwin nav.side .deco { margin-top: auto; width: 120px; align-self: center; pointer-events: none; }
+.appwin main { margin: 0; width: 100%; padding: 18px 22px 30px; display: grid; gap: 14px; align-content: start; min-width: 0; max-width: 980px; outline: none; position: relative; }
+.appwin main h2 { margin: 0; font-size: 19px; text-transform: none; letter-spacing: 0; color: var(--desk-ink); }
+.appwin h3 { margin: 0; font-size: 12.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--desk-muted); }
+.appwin p { margin: 0; }
+.appwin .muted { color: var(--desk-muted); font-size: 12.5px; }
+.appwin .card { background: var(--control-bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; position: relative; min-width: 0; }
+.appwin .row-flex { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.appwin .spread { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.appwin .btn { font: inherit; border-radius: 8px; padding: 5px 11px; border: 1px solid var(--line); background: var(--control-bg); color: var(--desk-ink); cursor: pointer; }
+.appwin .btn.primary { background: var(--primary, var(--desk-ink)); color: var(--primary-ink, var(--desk)); border-color: var(--primary, var(--desk-ink)); font-weight: 600; }
+.appwin .btn.ghost { border-color: transparent; background: transparent; color: var(--desk-muted); }
+.appwin .btn.small { padding: 2px 8px; font-size: 12.5px; }
+.appwin .chip { font: inherit; font-size: 12.5px; border-radius: 999px; padding: 3px 11px; border: 1px solid var(--line); background: var(--control-bg); color: var(--desk-ink); cursor: pointer; }
+.appwin .chip.on { background: var(--primary, var(--desk-ink)); color: var(--primary-ink, var(--desk)); border-color: var(--primary, var(--desk-ink)); }
+.appwin .pager { display: flex; gap: 6px; flex-wrap: wrap; }
+.appwin .field { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; }
+.appwin .field .inline { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.appwin input[type=number] { width: 70px; }
+.appwin .ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.appwin .deco { position: absolute; pointer-events: none; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .12)); object-fit: contain; }
+.appwin .clickable { cursor: pointer; }
+.appwin a { color: var(--primary, var(--desk-ink)); font-weight: 600; }
+
+/* Today */
+.appwin .focus-row { display: flex; align-items: center; gap: 8px; background: var(--pink-soft); border-radius: 12px; padding: 6px 10px; margin-left: 130px; min-height: 52px; }
+.appwin .focus-row b { font-size: 12.5px; color: var(--bar); white-space: nowrap; }
+.appwin .focus-row input { flex: 1; min-width: 160px; border: 1px solid transparent; border-radius: 8px; padding: 4px 8px; background: transparent; font: inherit; font-size: 16px; font-weight: 650; color: var(--desk-ink); }
+.appwin .focus-row input:focus, .appwin .now .name:focus, .appwin .entry input:focus { border-color: var(--line); background: var(--control-bg); outline: 2px solid var(--focus); outline-offset: 0; }
+.appwin .today-top { position: relative; padding-top: 26px; }
+.appwin .today-top > .deco.left { left: 0; top: -6px; height: 96px; max-width: 120px; }
+.appwin .now { padding-right: 140px; min-height: 108px; }
+.appwin .now > .deco.right { right: 10px; bottom: 0; max-height: 112px; max-width: 120px; }
+.appwin .now .name { font: inherit; font-size: 17px; font-weight: 650; border: 1px solid transparent; border-radius: 6px; padding: 1px 4px; background: transparent; color: var(--desk-ink); flex: 1 1 240px; min-width: 160px; width: auto; text-overflow: ellipsis; }
+.appwin .timer { font-variant-numeric: tabular-nums; font-weight: 650; color: var(--focus); }
+.appwin .stack { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--line); }
+.appwin .stack i { display: block; height: 100%; }
+.appwin .legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: var(--desk-muted); }
+.appwin .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 4px; background: var(--c); vertical-align: -1px; }
+.appwin .entries { display: grid; gap: 6px; }
+.appwin .entry { display: grid; grid-template-columns: 112px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; background: var(--control-bg); border: 1px solid var(--line); border-left: 5px solid var(--c, var(--line)); border-radius: 10px; padding: 6px 8px 6px 10px; }
+.appwin .entry.break { background: color-mix(in srgb, var(--bar) 5%, var(--control-bg)); }
+.appwin .entry.away { background: transparent; border-style: dashed; border-left-style: solid; }
+.appwin .entry.cur { box-shadow: 0 0 0 2px var(--soft); }
+.appwin .times { display: flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; font-size: 12.5px; }
+.appwin .times input { width: 48px; text-align: center; border: 1px solid transparent; border-radius: 5px; padding: 1px 2px; background: transparent; font: inherit; color: var(--desk-ink); }
+.appwin .times input:hover, .appwin .entry input:hover { border-color: var(--line); }
+.appwin .what { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+.appwin .what input.n { flex: 1 1 220px; min-width: 110px; text-overflow: ellipsis; border: 1px solid transparent; border-radius: 6px; padding: 2px 5px; background: transparent; font: inherit; font-weight: 600; color: var(--desk-ink); }
+.appwin .what input.note { flex-basis: 100%; border: 1px solid transparent; border-radius: 6px; padding: 1px 5px; background: transparent; font: inherit; font-size: 12px; color: var(--desk-muted); }
+.appwin .cat-select { font: inherit; font-size: 12.5px; border: 1px solid var(--line); border-radius: 999px; padding: 1px 6px; background: var(--control-bg); color: var(--desk-ink); max-width: 200px; }
+.appwin .dur { font-size: 12.5px; color: var(--desk-muted); font-variant-numeric: tabular-nums; min-width: 50px; text-align: right; }
+.appwin .del { border: 0; background: none; color: var(--desk-muted); cursor: pointer; font-size: 15px; padding: 2px 6px; border-radius: 6px; }
+.appwin .del:hover { background: var(--pink-soft); color: var(--bar); }
+.appwin .ask { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; padding-top: 4px; }
+.appwin .ask b { font-size: 12.5px; color: var(--bar); }
+.appwin .addbox { display: grid; gap: 8px; background: var(--soft); border-radius: 12px; padding: 10px 12px; }
+.appwin .addbox .row-flex input, .appwin .addbox select { font: inherit; border: 1px solid var(--line); border-radius: 7px; padding: 3px 6px; background: var(--control-bg); color: var(--desk-ink); }
+.appwin .empty { display: flex; align-items: center; gap: 18px; color: var(--desk-muted); font-size: 13px; border: 1px dashed var(--line); border-radius: 12px; padding: 10px 16px; }
+.appwin .empty img { height: 130px; max-width: 190px; object-fit: contain; }
+
+/* Reminders */
+.appwin .rem { display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--control-bg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+.appwin .rem.due { border-color: var(--bar); }
+.appwin .rem .th { font-size: 16px; }
+.appwin .rem small { color: var(--desk-muted); }
+.appwin .days-pick { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.appwin .days-pick button { border: 0; border-right: 1px solid var(--line); background: var(--control-bg); padding: 3px 8px; font: inherit; font-size: 12.5px; cursor: pointer; color: var(--desk-ink); }
+.appwin .days-pick button:last-child { border-right: 0; }
+.appwin .days-pick button.on { background: var(--primary, var(--desk-ink)); color: var(--primary-ink, var(--desk)); }
+
+/* This week */
+.appwin .tiles6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 8px; }
+.appwin .tile6 { background: var(--control-bg); border: 1px solid var(--line); border-radius: 12px; padding: 9px 11px; display: grid; gap: 2px; align-content: start; }
+.appwin .tile6 b { font-size: 18px; font-variant-numeric: tabular-nums; }
+.appwin .daybars { display: flex; gap: 10px; align-items: end; height: 210px; }
+.appwin .daybars > div { flex: 1; display: grid; gap: 3px; justify-items: center; font-size: 12px; color: var(--desk-muted); cursor: pointer; min-width: 0; }
+.appwin .daybars .col { width: 62%; max-width: 46px; display: flex; flex-direction: column-reverse; border-radius: 5px 5px 0 0; overflow: hidden; }
+.appwin .daybars .col i { display: block; }
+.appwin .daybars .faded .col { opacity: .35; }
+.appwin .daybars .picked .col { outline: 3px solid var(--bar); outline-offset: 3px; border-radius: 5px; }
+.appwin .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+.appwin .ranked { display: grid; gap: 5px; }
+.appwin .ranked > div { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(36px, 1fr) auto; gap: 8px; align-items: center; font-size: 13px; }
+.appwin .meter { height: 9px; border-radius: 5px; background: var(--line); overflow: hidden; }
+.appwin .meter i { display: block; height: 100%; }
+.appwin .heat { display: grid; gap: 2px; font-size: 12px; align-items: center; }
+.appwin .heat i { display: block; border-radius: 3px; }
+.appwin .lane { position: relative; border-radius: 5px; background: var(--line); overflow: hidden; }
+.appwin .lane i { position: absolute; top: 0; bottom: 0; }
+.appwin .stands { padding-right: 140px; }
+.appwin .stands > .deco { right: 10px; bottom: 0; max-height: 115px; max-width: 120px; }
+.appwin .csv { border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.appwin .csv th, .appwin .csv td { border: 1px solid var(--line); padding: 3px 6px; text-align: left; white-space: nowrap; }
+.appwin .csv th { background: var(--soft); position: sticky; top: 0; }
+
+/* Settings */
+.appwin details.fold > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-weight: 650; font-size: 13.5px; }
+.appwin details.fold > summary::-webkit-details-marker { display: none; }
+.appwin details.fold > summary::after { content: "▾"; color: var(--desk-muted); }
+.appwin details.fold:not([open]) > summary::after { content: "▸"; }
+.appwin details.fold[open] > summary { margin-bottom: 8px; }
+.appwin .cats { display: grid; gap: 6px; }
+.appwin .catrow { display: flex; align-items: center; gap: 8px; background: var(--desk); border-radius: 9px; padding: 4px 8px; }
+.appwin .catrow input { font: inherit; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--desk-ink); }
+.appwin .catrow input.e { width: 40px; text-align: center; font-size: 16px; }
+.appwin .catrow input.l { flex: 1; min-width: 80px; padding: 2px 5px; }
+.appwin .catrow input[type=color] { width: 28px; height: 22px; padding: 0; border: 0; }
+.appwin .catrow input:hover, .appwin .catrow input:focus { border-color: var(--line); background: var(--control-bg); }
+.appwin .newcat { display: flex; gap: 6px; }
+.appwin .newcat input { flex: 1; font: inherit; border: 1px dashed var(--line); border-radius: 8px; padding: 4px 8px; background: transparent; color: var(--desk-ink); }
+.appwin .look-card > .deco { right: 12px; bottom: 0; height: calc(100% - 24px); max-height: 150px; width: auto; max-width: 120px; object-fit: contain; object-position: bottom right; }
+@media (max-width: 760px) { .appwin .look-card { padding-right: 16px; } .appwin .look-card > .deco { display: none; } }
+.appwin .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+.appwin .swatches button { width: 28px; height: 28px; padding: 0; border-radius: 50%; border: 2px solid var(--line); background: linear-gradient(135deg, var(--a) 50%, var(--b) 50%); cursor: pointer; }
+.appwin .swatches button.on { box-shadow: 0 0 0 2px var(--desk), 0 0 0 4px var(--desk-ink); }
+
+/* Stickers */
+.appwin .stk-top { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, 1fr); gap: 12px; align-items: stretch; font-size: 13px; }
+@media (max-width: 820px) { .appwin .stk-top { grid-template-columns: 1fr; } }
+.appwin .stk-notice { padding: 12px 16px; display: flex; flex-direction: column; justify-content: center; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--bar) 35%, var(--line)); background: color-mix(in srgb, var(--bar) 6%, var(--control-bg)); }
+.appwin .stk-notice summary { cursor: pointer; list-style-position: inside; }
+.appwin .stk-notice summary b { color: var(--bar); font-weight: 650; }
+.appwin .stk-notice[open] summary .muted { display: none; }
+.appwin .stk-notice p { margin: 6px 0 2px; line-height: 1.5; }
+.appwin .buddy-pick-card { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: var(--sk-card, var(--control-bg)); border: 1px solid var(--sk-card-line, var(--line)); }
+.appwin .buddy-pick-card .bp-thumbs { display: flex; flex: none; }
+.appwin .buddy-pick-card .bp-thumbs img { width: 38px; height: 46px; object-fit: contain; filter: drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 2px rgba(0,0,0,.18)); }
+.appwin .buddy-pick-card .bp-thumbs img + img { margin-left: -12px; }
+.appwin .buddy-pick-card .bp-t { flex: 1; min-width: 0; display: grid; gap: 1px; }
+.appwin .buddy-pick-card .bp-t b { font-size: 13.5px; }
+.appwin .maker-frame { width: 100%; height: calc(100vh - 170px); min-height: 480px; border: 1px solid var(--line); border-radius: 12px; background: var(--control-bg); }
+.appwin .disclaimer { border-color: color-mix(in srgb, var(--bar) 45%, var(--line)); background: color-mix(in srgb, var(--bar) 6%, var(--control-bg)); }
+.appwin .disclaimer h3 { color: var(--bar); }
+
+/* Photo credits */
+.appwin .credit-list { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.appwin .credits-top { padding-right: 150px; }
+.appwin .credits-top > .deco { right: 8px; bottom: 0; max-height: 130px; max-width: 120px; }
+.appwin .sticker-strip { display: flex; gap: 8px; flex-wrap: wrap; }
+.appwin .sticker-strip img { height: 104px; max-width: 150px; object-fit: contain; background: var(--desk); border-radius: 8px; padding: 4px; cursor: pointer; }
+
+/* Pop-ups */
+.appwin .viewer { position: fixed; inset: 0; background: rgba(20, 30, 24, .72); display: grid; place-items: center; z-index: 20; padding: 24px; }
+.appwin .viewer .box { background: var(--control-bg); color: var(--desk-ink); border-radius: 14px; padding: 14px; display: grid; gap: 10px; width: min(960px, 96vw); max-height: 94vh; overflow: auto; }
+.appwin .box-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.appwin .orig { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 14px; align-items: start; }
+.appwin .orig img.st { width: 100%; background: var(--desk); border-radius: 10px; padding: 6px; }
+.appwin .orig img.ph { width: 100%; max-height: 68vh; object-fit: contain; border-radius: 10px; background: #111; cursor: zoom-in; }
+.appwin .orig img.ph.zoom { max-height: none; cursor: zoom-out; }
+.appwin .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--desk-ink); color: var(--desk); border-radius: 999px; padding: 7px 16px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 30; }
+.appwin .toast.on { opacity: .94; }
+
+@media (max-width: 900px) {
+  /* A narrower window: what you're working on gets a line of its own, the sticker beside it steps aside. */
+  .appwin .now { padding-right: 16px; }
+  .appwin .now > .deco.right { display: none; }
+  .appwin .now .name { flex-basis: 100%; }
+  .appwin .what input.n { flex-basis: 100%; }
+}
+@media (max-width: 760px) {
+  .appwin .shell { grid-template-columns: 1fr; }
+  .appwin nav.side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid var(--line); }
+  .appwin nav.side .deco { display: none; }
+  .appwin .focus-row { margin-left: 0; }
+  .appwin nav.side { align-items: center; padding: 8px 10px; }
+  .appwin .today-top { padding-top: 0; }
+  .appwin .today-top > .deco.left { display: none; } /* (it would sit on the focus of the day) */
+  .appwin .entry { grid-template-columns: 1fr auto; }
+}
+
+/* The guided tour (js/tour.js): the window dims around one thing, and Muv says what it is. */
+.tour-block { position: fixed; inset: 0; z-index: 1000; }
+.tour-hole { position: fixed; border-radius: 12px; box-shadow: 0 0 0 9999px rgba(20, 30, 24, .55); outline: 2px solid #ffd0de; outline-offset: 2px;
+  transition: left .3s ease, top .3s ease, width .3s ease, height .3s ease; pointer-events: none; }
+.tour-coach { position: fixed; width: 390px; max-width: calc(100vw - 16px); display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px; align-items: end;
+  transition: left .3s ease, top .3s ease; }
+.tour-coach > img { width: 64px; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .2)); }
+.tour-bubble { background: var(--control-bg); color: var(--desk-ink); border: 2px solid #efa3ba; border-radius: 14px; padding: 10px 12px;
+  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, .45); display: grid; gap: 6px; }
+.tour-bubble .tour-title { font-size: 15px; }
+.tour-bubble p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.tour-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; white-space: nowrap; }
+.tour-btns { display: flex; gap: 6px; }
+.tour-bubble .tour-extra { justify-self: start; margin: 2px 0; }
+.tour-skip { background: none; border: 0; padding: 0; color: var(--desk-muted); cursor: pointer; font: inherit; font-size: 12.5px; text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .tour-hole, .tour-coach { transition: none; } }
+
+/* Settings → Starting the day: the choices, and the lines the buddy can ask with. */
+.start-card .start-opt { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--control-bg); cursor: pointer; font-size: 13.5px; }
+.start-card .start-opt.on { border-color: var(--bar); box-shadow: 0 0 0 1px var(--bar); }
+.start-card .start-opt > span { flex: 1; display: grid; gap: 2px; min-width: 0; }
+.start-card .start-opt small { color: var(--desk-muted); font-size: 12.5px; }
+.start-card .start-opt input { margin-top: 3px; }
+.start-card .start-opt .del { border: 0; background: none; color: var(--desk-muted); cursor: pointer; font-size: 14px; }
+.start-card .row-flex input[type=text] { flex: 1; min-width: 0; }
+
+/* Reminders → Apple Reminders */
+.apple-tag { margin-left: 6px; font-size: 11px; font-weight: 600; color: var(--desk-muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; vertical-align: 1px; }
+.apple-lists { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.apple-lists .chip { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.apple-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.apple-card > .btn { justify-self: start; }
+.appwin nav.side button > span:first-child { flex: none; }
+.appwin nav.side button > .t { min-width: 0; }
+
+/* The Pomodoro tab */
+.appwin .pomo-what { background: var(--pink-soft); border: 0; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; align-items: center; padding-right: 130px; position: relative; }
+.appwin .pomo-what .big { font-size: 40px; text-align: center; }
+.appwin .pomo-what p { margin: 0; font-size: 13.5px; }
+.appwin .pomo-what > .deco.right { position: absolute; right: 10px; bottom: 0; max-height: 110px; max-width: 120px; }
+/* On a break: a GMMTV video (the big thumbnail), and the sticker with its bubble, floating */
+.appwin .break-video { position: relative; display: grid; grid-template-columns: minmax(0, 460px) minmax(180px, 1fr); gap: 16px; align-items: end; overflow: hidden; }
+.appwin .bv-main { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.appwin .break-video .thumb { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: #000; cursor: pointer; }
+.appwin .break-video .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.appwin .break-video .len { position: absolute; right: 6px; bottom: 6px; background: rgba(0, 0, 0, .75); color: #fff; font-size: 11px; padding: 1px 5px; border-radius: 4px; }
+.appwin .break-video .play { position: absolute; inset: 0; display: grid; place-items: center; }
+.appwin .break-video .play span { width: 48px; height: 34px; border-radius: 9px; background: rgba(220, 30, 30, .9); color: #fff; display: grid; place-items: center; font-size: 16px; }
+.appwin .break-video .thumb:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.appwin .break-video .vt { font-weight: 600; font-size: 13.5px; line-height: 1.35; overflow-wrap: anywhere; }
+.appwin .muted.small { font-size: 12px; }
+.appwin .linkish { border: 0; background: none; color: var(--desk-muted); text-decoration: underline; font: inherit; font-size: 12.5px; cursor: pointer; padding: 2px 4px; }
+.appwin .bv-side { display: grid; justify-items: center; gap: 12px; align-self: end; animation: bv-float 3.2s ease-in-out infinite; }
+.appwin .bv-side .deco { position: static; max-height: 280px; max-width: 100%; object-fit: contain; }
+.appwin .bv-side .say { position: relative; max-width: 300px; background: color-mix(in srgb, var(--focus) 16%, var(--control-bg)); border: 1.5px solid var(--focus);
+  border-radius: 16px; padding: 8px 14px; font-weight: 600; font-size: 13.5px; text-align: center; box-shadow: 0 3px 10px rgba(0, 0, 0, .15); animation: bv-float 3.2s ease-in-out .5s infinite; }
+.appwin .bv-side .say::after { content: ""; position: absolute; left: calc(50% - 7px); bottom: -8px; width: 13px; height: 13px; transform: rotate(45deg);
+  background: color-mix(in srgb, var(--focus) 16%, var(--control-bg)); border-right: 1.5px solid var(--focus); border-bottom: 1.5px solid var(--focus); }
+@keyframes bv-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .appwin .bv-side, .appwin .bv-side .say { animation: none; } }
+@media (max-width: 760px) {
+  .appwin .break-video { grid-template-columns: 1fr; }
+  .appwin .bv-side .deco { max-height: 160px; }
+  .appwin .empty img { height: 90px; max-width: 120px; }
+}
+.appwin .pomo-off { background: color-mix(in srgb, #f0d9a6 25%, var(--control-bg)); }
+.appwin .modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.appwin .modes.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.appwin .mode { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--control-bg); color: var(--desk-ink); cursor: pointer; display: grid; gap: 2px; text-align: left; font: inherit; }
+.appwin .mode.on { border-color: var(--focus); box-shadow: 0 0 0 1px var(--focus); background: var(--soft, var(--control-bg)); }
+.appwin .mode small { color: var(--desk-muted); font-size: 12.5px; }
+.appwin .pomo-start { justify-items: start; }
+.btn.tomato { background: #e0584a; border-color: #e0584a; color: #fff; font-weight: 650; padding: 8px 18px; }
+.appwin .pomo-timer { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: center; }
+.appwin .pomo-ring { --p: 0; width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; position: relative;
+  background: conic-gradient(#e0584a calc(var(--p) * 1%), color-mix(in srgb, var(--line) 70%, transparent) 0); }
+.appwin .pomo-ring.rest { background: conic-gradient(#5aa47a calc(var(--p) * 1%), color-mix(in srgb, var(--line) 70%, transparent) 0); }
+.appwin .pomo-ring::before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: var(--control-bg); }
+.appwin .pomo-ring > div { position: relative; display: grid; justify-items: center; }
+.appwin .pomo-ring .time { font-size: 30px; font-variant-numeric: tabular-nums; }
+.appwin .pomo-side { display: grid; gap: 10px; }
+.appwin .pomo-side p { margin: 0; }
+.appwin .pomo-dots { display: flex; gap: 6px; }
+.appwin .pomo-dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #e0584a; }
+.appwin .pomo-dots i.done { background: #e0584a; }
+
+/* Settings → Reminders & events */
+.appwin .section-h { margin: 6px 0 -4px; font-size: 12.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--desk-muted); }
+.appwin .connect-card h3, .appwin .thai-card h3 { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.switch { position: relative; width: 42px; height: 24px; border-radius: 999px; background: color-mix(in srgb, var(--desk-muted) 40%, transparent); border: 0; cursor: pointer; flex: none; padding: 0; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left .2s; box-shadow: 0 1px 2px rgba(0, 0, 0, .25); }
+.switch.on { background: var(--focus); } .switch.on::after { left: 21px; }
+
+/* Reminders & events */
+.appwin .rem-head { position: relative; min-height: 40px; display: flex; align-items: flex-end; gap: 14px; }
+.appwin .rem-head > .deco { position: static; max-height: 92px; max-width: 116px; margin: -20px 0 -14px; align-self: flex-end; } /* (next to the title, standing on the add box's top edge: the page's gap is 14px) */
+.appwin .add-card { position: relative; padding-right: calc(130px * var(--deco-z, 1)); }
+.appwin .add-card > .deco.right { position: absolute; right: 10px; bottom: 0; max-height: 130px; max-width: 115px; }
+.appwin .rem.with-next { grid-template-columns: 60px minmax(0, 1fr) 64px auto; }
+.appwin .rem .rem-next { position: static; max-height: 56px; max-width: 60px; justify-self: center; margin: -8px 0; }
+@media (max-width: 900px) {
+  .appwin .add-card { padding-right: 16px; }
+  .appwin .add-card > .deco.right, .appwin .rem-head > .deco { display: none; }
+}
+
+/* Settings → Desktop buddy: the fields, and a preview beside them */
+.appwin .buddy-cols { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 16px; align-items: start; }
+.appwin .buddy-fields { display: grid; gap: 10px; min-width: 0; }
+.appwin .buddy-pv { display: grid; gap: 6px; justify-items: center; }
+.appwin .buddy-preview { position: relative; width: 250px; height: 230px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line);
+  background: linear-gradient(160deg, #b9d7ef 0%, #e9d6ef 55%, #f6e3d3 100%); }
+.appwin .pv-b { position: absolute; left: 8px; right: 8px; bottom: 8px; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 4px; transition: opacity .3s; }
+.appwin .pv-pair { display: flex; align-items: end; justify-content: center; overflow: hidden; min-width: 0; }
+.appwin .pv-pair .deco { position: static; height: 118px; width: auto; max-width: none; }
+.appwin .pv-hide .pv-pair { opacity: .12; }
+.appwin .pv-lively .pv-pair .deco { animation: pvhop .7s ease-in-out infinite alternate; }
+.appwin .pv-lively .pv-pair .deco + .deco { animation-delay: .35s; }
+@keyframes pvhop { to { transform: translateY(-10px) rotate(-3deg); } }
+.appwin .pv-label { background: rgba(255, 255, 255, .92); color: #22352a; border-radius: 12px; padding: 4px 10px; font-size: 12px; text-align: center; box-shadow: 0 2px 8px -3px rgba(0, 0, 0, .25); display: grid; gap: 1px; max-width: 100%; }
+.appwin .pv-label .l1 { font-weight: 650; } .appwin .pv-label .l2 { color: #5d7164; font-size: 11.5px; }
+.appwin .pv-sign { position: absolute; left: 10px; top: 10px; z-index: 1; background: #fff; color: #22352a; border: 2px solid #efa3ba; border-radius: 12px; padding: 4px 10px; font-size: 12.5px; font-weight: 650; }
+.appwin .pv-moments { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+.appwin .pv-moments .chip { font-size: 11.5px; padding: 1px 8px; }
+@media (max-width: 900px) { .appwin .buddy-cols { grid-template-columns: 1fr; } }
+.appwin .card.rounds { position: relative; padding-right: 140px; min-height: 120px; justify-items: start; }
+.appwin .card.rounds > .deco.right { position: absolute; right: 10px; bottom: 0; max-height: 112px; max-width: 120px; }
+.appwin .big-rounds { font-size: 22px; }
+.appwin .rounds-days { display: grid; gap: 4px; }
+.appwin .rounds-days > div { display: grid; grid-template-columns: 56px 1fr; gap: 8px; font-size: 13.5px; }
+.appwin .card.now .or { margin-left: 6px; }
+/* Reminders & events, day by day */
+.appwin .rem-day { display: flex; align-items: baseline; gap: 10px; margin: 10px 2px 0; }
+.appwin .rem-day b { font-size: 14px; }
+.appwin .rem-day span { color: var(--desk-muted); font-size: 13px; }
+.appwin .rem-acts { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
+.appwin .rem-what { overflow-wrap: anywhere; }
+.appwin .rem-later { display: grid; gap: 8px; }
+.appwin .rem-later[hidden] { display: none; }
+.appwin .rem-list { display: grid; gap: 8px; }
+.appwin .rem-kinds button { white-space: nowrap; }
+.appwin .rem-fold { display: flex; align-items: baseline; gap: 10px; width: 100%; margin-top: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--control-bg); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.appwin .rem-fold:hover { border-color: var(--primary); }
+.appwin .rem-fold b { font-size: 14px; } .appwin .rem-fold .muted { font-size: 13px; }
+.appwin .rem-fold .tw { width: 12px; color: var(--desk-muted); } .appwin .rem-fold .n { margin-left: auto; color: var(--desk-muted); font-size: 13px; }
+
+/* The Pomodoro: "a surprise on the break" (before a round and while focusing), its sticker in the corner */
+.appwin .pomo-tip { display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 10px; font-size: 13px;
+  background: color-mix(in srgb, var(--focus) 14%, transparent); border: 1px dashed var(--focus); }
+.appwin .card.with-tip { position: relative; padding-right: calc(150px * var(--deco-z, 1)); min-height: 150px; }
+.appwin .pomo-tip-art { position: absolute; right: 12px; bottom: 0; max-height: 130px; max-width: 130px; object-fit: contain; animation: bv-float 3.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .appwin .pomo-tip-art { animation: none; } }
+@media (max-width: 760px) { .appwin .card.with-tip { padding-right: 16px; } .appwin .pomo-tip-art { display: none; } }
+
+/* Settings: the reminder sound, its ▶ and its volume, together */
+.sound-pick { display: flex; align-items: center; gap: 8px; }
+.sound-pick input[type="range"] { width: 120px; accent-color: var(--primary); }
+
+/* Data: a month's calendar, a year's months, the ranking, a day's log opened there */
+.appwin .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.appwin .cal-wd { text-align: center; font-size: 12px; color: var(--desk-muted); }
+.appwin .cal-day { display: grid; align-content: start; gap: 1px; min-height: 64px; padding: 5px 7px; border-radius: 9px; border: 1px solid var(--line); font-size: 12px; cursor: pointer; min-width: 0;
+  background: color-mix(in srgb, var(--primary) calc(var(--h, 0) * 65%), var(--card, transparent)); }
+.appwin .cal-day:hover { border-color: var(--primary); }
+.appwin .cal-day.today { outline: 2px solid var(--focus, #f3aac0); outline-offset: -1px; }
+.appwin .cal-day.open { outline: 2px solid var(--primary); outline-offset: -1px; }
+.appwin .cal-day.future { opacity: .45; cursor: default; }
+.appwin .year-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.appwin .year-month { position: relative; overflow: hidden; display: grid; gap: 2px; text-align: left; padding: 8px 10px 10px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer; min-width: 0; }
+.appwin .year-month:hover:not(:disabled) { border-color: var(--primary); }
+.appwin .year-month i { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--primary); }
+.appwin .year-month.future { opacity: .45; cursor: default; }
+.appwin .rank { display: grid; gap: 6px; }
+.appwin .rank-row { display: grid; grid-template-columns: 18px minmax(0, 1fr) minmax(0, 1.3fr) 150px 18px; gap: 10px; align-items: center; font-size: 13px; }
+.appwin .rank-row > .muted { text-align: right; }
+.appwin .cal-day > .muted { color: inherit; opacity: .8; }
+.appwin .rank-row .up { color: #4f9a70; } .appwin .rank-row .down { color: #d9667f; }
+.appwin .dfocus-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 13.5px; padding: 3px 4px; border-bottom: 1px dashed var(--line); cursor: pointer; border-radius: 6px; }
+.appwin .dfocus-row:hover, .appwin .dfocus-row.open { background: var(--control-bg); }
+.appwin .day-panel { display: grid; gap: 8px; margin-top: 10px; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--control-bg); }
+.appwin .day-panel input[type="text"] { min-width: 0; }
+.appwin .day-panel .entries { display: grid; gap: 6px; }
+.appwin .daybars.many { gap: 2px; }
+.appwin .daybars.many > div { font-size: 10px; }
+.appwin .by-task { padding-right: calc(140px * var(--deco-z, 1)); }
+.appwin .by-task { position: relative; min-height: 120px; }
+.appwin .by-task > .deco { right: 10px; bottom: 0; height: calc(100% - 12px); max-height: 170px; width: auto; max-width: 130px; object-fit: contain; object-position: bottom right; } /* (as tall as the card lets it be) */
+@media (max-width: 720px) { .appwin .year-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .appwin .cal-day { min-height: 46px; } .appwin .by-task { padding-right: 16px; } .appwin .by-task > .deco { display: none; } }
+
+/* The photos and stickers stay in the app: not dragged out or selected */
+img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
+
+/* Settings › the stickers the buddies use */
+.appwin .buddy-picker { width: min(980px, 96vw); }
+.appwin .bp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; max-height: 58vh; overflow: auto; padding: 2px; }
+.appwin .bp-st { position: relative; height: 104px; border: 2px solid var(--primary); border-radius: 10px; background: var(--control-bg); padding: 4px; cursor: pointer; display: grid; place-items: center; }
+.appwin .bp-st img { max-width: 100%; max-height: 92px; object-fit: contain; }
+.appwin .bp-st i { position: absolute; top: 3px; right: 5px; font-style: normal; font-weight: 700; color: var(--primary); }
+.appwin .bp-st.off { border-color: var(--line); opacity: .4; filter: grayscale(.8); }
+
+/* The menu: a tab's own parts, sliding open under it while it's shown */
+.appwin nav.side .sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease, opacity .28s ease; opacity: 0; margin: -2px 0 2px 26px; }
+.appwin nav.side .sub.open { grid-template-rows: 1fr; opacity: 1; }
+.appwin nav.side .sub > div { overflow: hidden; display: grid; gap: 1px; border-left: 2px solid var(--line); padding-left: 6px; }
+.appwin nav.side .sub button { padding: 4px 8px; font-size: 13px; color: var(--desk-muted); border-radius: 7px; }
+.appwin nav.side .sub button:hover { color: var(--desk-ink); background: var(--control-bg); }
+.appwin nav.side .sub button.on { color: var(--primary, var(--desk-ink)); font-weight: 650; background: transparent; box-shadow: none; }
+@media (prefers-reduced-motion: reduce) { .appwin nav.side .sub { transition: none; } }
+/* Settings: find a setting; where you land flashes */
+.appwin .set-search { position: relative; }
+.appwin .set-search input { width: 230px; font: inherit; font-size: 13px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--control-bg); color: var(--desk-ink); }
+.appwin .set-results { position: absolute; right: 0; top: calc(100% + 4px); z-index: 40; width: 320px; display: grid; gap: 2px; padding: 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--control-bg); box-shadow: 0 10px 28px -12px rgba(0, 0, 0, .5); }
+.appwin .set-results[hidden] { display: none; }
+.appwin .set-results button { text-align: left; border: 0; background: transparent; color: inherit; font: inherit; font-size: 13px; padding: 6px 8px; border-radius: 8px; cursor: pointer; }
+.appwin .set-results button:hover, .appwin .set-results button:focus { background: var(--line); }
+@keyframes mlwh-flash { 0%, 60% { box-shadow: 0 0 0 3px var(--primary); } 100% { box-shadow: 0 0 0 0 transparent; } }
+.appwin .flash { animation: mlwh-flash 1.6s ease; border-radius: 12px; }
+@media (max-width: 760px) { .appwin nav.side .sub { display: none; } }
+
+/* Today: the three ways, the "now" card (today-now.js), the break screen, 收工 */
+body.appwin { --tomato: #e0584a; --brk: color-mix(in srgb, var(--bar) 70%, #f3aac0); }
+.appwin .ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.appwin .way { border: 1px solid var(--line); background: var(--control-bg); color: var(--desk-ink); border-radius: 12px; padding: 8px 12px; text-align: left; cursor: pointer; display: grid; gap: 1px; font: inherit; }
+.appwin .way b { font-size: 14.5px; } .appwin .way small { color: var(--desk-muted); font-size: 12px; }
+.appwin .way.on { border-color: var(--focus); box-shadow: 0 0 0 1px var(--focus); background: var(--soft); }
+.appwin .now-card { padding: 16px 18px; position: relative; }
+/* the card's sticker, bottom right; the words keep clear of it */
+.appwin .now-card .now-deco { position: absolute; right: 10px; bottom: 0; height: 150px; max-width: 160px; object-fit: contain; object-position: 50% 100%; pointer-events: none; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .18)); }
+.appwin .now-card.has-deco .nowc { padding-right: calc(150px * var(--deco-z, 1)); }
+@media (max-width: 760px) { .appwin .now-card .now-deco { display: none; } .appwin .now-card.has-deco .nowc { padding-right: 0; } }
+.appwin .nowc { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.appwin .nowc .side { display: grid; gap: 10px; flex: 1; min-width: 280px; justify-items: start; }
+.appwin .nowc .side > * { max-width: 100%; }
+.appwin .now-ring { --p: 0; --c: var(--tomato); width: 158px; height: 158px; border-radius: 50%; display: grid; place-items: center; position: relative; flex: none;
+  background: conic-gradient(var(--c) calc(var(--p) * 1%), color-mix(in srgb, var(--line) 70%, transparent) 0); }
+.appwin .now-ring::before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: var(--control-bg); }
+.appwin .now-ring > div { position: relative; display: grid; justify-items: center; line-height: 1.2; }
+.appwin .now-ring .time { font-size: 31px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.appwin .now-ring .lab { font-size: 12px; color: var(--desk-muted); }
+.appwin .digital { display: grid; gap: 4px; min-width: 210px; }
+.appwin .digital .time { font-size: 46px; font-weight: 750; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.appwin .goal { display: grid; gap: 3px; font-size: 12px; color: var(--desk-muted); width: 100%; min-width: 210px; }
+.appwin .gbar { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; } .appwin .gbar i { display: block; height: 100%; background: var(--work); transition: width .6s; }
+.appwin .pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 1px 10px; font-size: 12px; font-weight: 650; }
+.appwin .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.appwin .pill.work { background: color-mix(in srgb, var(--work) 28%, transparent); color: var(--primary); }
+.appwin .pill.brk { background: color-mix(in srgb, var(--brk) 22%, transparent); color: var(--bar); }
+.appwin .pill.tom { background: color-mix(in srgb, var(--tomato) 16%, transparent); color: var(--tomato); }
+.appwin .pill.off { background: var(--soft); color: var(--desk-muted); }
+.appwin .big-line { font-size: 18px; }
+.appwin .btn.big { font-size: 15.5px; padding: 8px 18px; border-radius: 10px; font-weight: 650; }
+.appwin .btn.pinkb { background: var(--brk); border-color: var(--brk); color: #fff; }
+.appwin .btn.end-day { white-space: nowrap; }
+.appwin .namebtn { border: 1px dashed transparent; background: none; border-radius: 8px; padding: 0 6px; cursor: pointer; font: inherit; font-weight: 700; font-size: 18px; color: var(--desk-ink); max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.appwin .namebtn:hover, .appwin .namebtn.open { border-color: var(--line); background: var(--soft); }
+.appwin .picker { position: relative; display: inline-block; }
+.appwin .dd { position: absolute; left: 0; top: calc(100% + 4px); z-index: 6; width: 270px; background: var(--control-bg); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, .16); padding: 6px; display: grid; gap: 2px; }
+.appwin .dd .it { text-align: left; border: 0; background: none; border-radius: 8px; padding: 6px 9px; cursor: pointer; font: inherit; font-size: 13.5px; color: var(--desk-ink); display: flex; justify-content: space-between; gap: 8px; }
+.appwin .dd .it:hover, .appwin .dd .it.on { background: var(--soft); }
+.appwin .dd .addrow { display: flex; gap: 6px; padding: 4px; border-top: 1px solid var(--line); margin-top: 4px; }
+.appwin .dd input, .appwin .chips input { font: inherit; font-size: 13.5px; border: 1px solid var(--line); border-radius: 8px; padding: 3px 8px; background: var(--control-bg); color: var(--desk-ink); min-width: 0; flex: 1; }
+.appwin .chips { gap: 6px; } .appwin .chips .lead { min-width: 64px; }
+.appwin .explain { font-size: 12px; color: var(--desk-muted); border-left: 3px solid var(--line); padding-left: 8px; }
+.appwin .logline { font-size: 12px; color: var(--desk-muted); background: var(--soft); border-radius: 8px; padding: 4px 9px; }
+.appwin .tom { font-size: 12px; color: var(--tomato); font-weight: 600; white-space: nowrap; }
+.appwin .len-info { display: grid; gap: 6px; justify-items: start; width: 100%; }
+.appwin .lengths { display: grid; gap: 8px; width: 100%; justify-items: start; }
+.appwin .lengths .modes { width: 100%; }
+.appwin .custom-lens { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; width: 100%; }
+.appwin .custom-lens label { display: grid; gap: 2px; } .appwin .custom-lens .in { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.appwin .custom-lens input { width: 68px; font: inherit; border: 1px solid var(--line); border-radius: 8px; padding: 3px 6px; background: var(--control-bg); color: var(--desk-ink); }
+.appwin .pomo-info summary { cursor: pointer; color: var(--desk-muted); font-size: 12.5px; text-decoration: underline; list-style: none; }
+.appwin .pomo-info p { margin: 4px 0 0; max-width: 620px; }
+@media (max-width: 760px) { .appwin .ways { grid-template-columns: 1fr; } .appwin .nowc { justify-content: center; } }
+/* 收工: the celebration (stickers from the buddies' own, confetti) */
+.cele { position: fixed; inset: 0; background: rgba(20, 30, 24, .45); display: grid; place-items: center; z-index: 50; animation: cele-fade .25s ease; }
+.cele .box { background: var(--control-bg); color: var(--desk-ink); border-radius: 22px; padding: 22px 26px 20px; width: min(460px, calc(100vw - 32px)); text-align: center; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, .3); animation: cele-rise .4s cubic-bezier(.2, 1.4, .4, 1); display: grid; gap: 8px; }
+.cele .stk { display: flex; justify-content: center; align-items: flex-end; gap: 4px; height: 150px; margin: -96px 0 4px; }
+.cele .stk img { height: 140px; max-width: 150px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .25)); animation: cele-pop .6s cubic-bezier(.2, 1.6, .4, 1) both; }
+.cele .stk img:nth-child(1) { animation-delay: .1s; } .cele .stk img:nth-child(2) { animation-delay: .25s; height: 160px; } .cele .stk img:nth-child(3) { animation-delay: .4s; }
+.cele h2 { margin: 4px 0 0; font-size: 23px; text-transform: none; letter-spacing: 0; }
+.cele .sum { display: grid; gap: 4px; margin: 6px 0; text-align: left; background: var(--soft); border-radius: 12px; padding: 10px 14px; font-size: 14px; }
+.conf { position: fixed; top: -30px; font-size: 22px; animation: cele-fall linear forwards; pointer-events: none; z-index: 51; }
+@keyframes cele-pop { 0% { transform: scale(0) rotate(-12deg); opacity: 0; } 70% { transform: scale(1.12) rotate(4deg); opacity: 1; } 100% { transform: none; } }
+@keyframes cele-rise { from { transform: translateY(40px) scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes cele-fade { from { opacity: 0; } }
+@keyframes cele-fall { to { transform: translateY(110vh) rotate(540deg); } }
+@media (prefers-reduced-motion: reduce) { .cele, .cele .box, .cele .stk img { animation: none; } }
+/* Settings › Apple Calendar: can't see some events? */
+.appwin .cal-help { border: 1px solid var(--line); border-radius: 10px; background: var(--soft); }
+.appwin .cal-help summary { cursor: pointer; padding: 7px 10px; font-weight: 600; font-size: 13px; }
+.appwin .cal-help .body { padding: 0 12px 10px; font-size: 13px; display: grid; gap: 6px; }
+.appwin .cal-help ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; } .appwin .cal-help ul { margin: 3px 0 0; padding-left: 18px; }
+.appwin .rem-cal-help { font-size: 12.5px; color: var(--desk-muted); }
+
+/* Shared: a segmented switch, up and down, a danger button */
+.appwin .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--control-bg); flex: none; }
+.appwin .seg button { border: 0; background: none; padding: 4px 13px; cursor: pointer; font: inherit; font-size: 13.5px; color: var(--desk-ink); }
+.appwin .seg button.on { background: var(--primary); color: var(--primary-ink); }
+.appwin .up { color: var(--primary); } .appwin .down { color: var(--bar); }
+.appwin .danger { color: var(--bar); }
+.appwin .small { font-size: 12.5px; }
+
+/* A day's log (day-log.js): the timeline, a row for each entry, one open to change */
+.appwin .day-log { display: grid; gap: 8px; }
+.appwin .dl-line { position: relative; height: 44px; border-radius: 10px; background: var(--soft); overflow: hidden; }
+.appwin .dl-blk { position: absolute; top: 8px; bottom: 8px; border: 0; border-radius: 6px; cursor: pointer; padding: 0 4px; font: inherit; font-size: 11px; color: #173a26; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.appwin .dl-blk:hover { filter: brightness(.95); } .appwin .dl-blk.sel { outline: 2px solid var(--desk-ink); outline-offset: 1px; }
+.appwin .dl-gap { position: absolute; top: 12px; bottom: 12px; border: 1.5px dashed var(--desk-muted); border-radius: 6px; background: var(--control-bg); color: var(--desk-muted); cursor: pointer; font: inherit; font-size: 12px; padding: 0; }
+.appwin .dl-gap:hover, .appwin .dl-gap.sel { border-color: var(--focus); color: var(--focus); }
+.appwin .dl-ticks { position: relative; height: 14px; font-size: 11px; color: var(--desk-muted); }
+.appwin .dl-ticks span { position: absolute; transform: translateX(-50%); }
+.appwin .dl-rows { display: grid; gap: 5px; }
+.appwin .dl-row { display: grid; grid-template-columns: 112px minmax(0, 1fr) auto 16px; gap: 10px; align-items: center; text-align: left; width: 100%; font: inherit; font-size: 14px; color: var(--desk-ink);
+  background: var(--control-bg); border: 1px solid var(--line); border-left: 5px solid var(--c, var(--work)); border-radius: 10px; padding: 7px 10px; cursor: pointer; }
+.appwin .dl-row:hover { border-color: var(--focus); border-left-color: var(--c, var(--work)); }
+.appwin .dl-row.brk { background: color-mix(in srgb, var(--break) 8%, var(--control-bg)); }
+.appwin .dl-row.cur { border-style: dashed; border-left-style: solid; cursor: default; }
+.appwin .dl-row .t { font-variant-numeric: tabular-nums; color: var(--desk-muted); }
+.appwin .dl-row .what { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; min-width: 0; }
+.appwin .dl-row .say { color: var(--bar); font-size: 12px; }
+.appwin .dl-row .pen { color: var(--desk-muted); font-size: 13px; }
+.appwin .dl-editor { border: 2px solid var(--focus); border-radius: 12px; background: var(--control-bg); padding: 12px; display: grid; gap: 10px; justify-items: start; }
+.appwin .dl-editor > .spread { width: 100%; }
+.appwin .dl-fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; width: 100%; }
+.appwin .dl-fields label { display: grid; gap: 3px; font-size: 12px; color: var(--desk-muted); }
+.appwin .dl-fields label.wide { grid-column: 1 / -1; }
+.appwin .dl-fields input, .appwin .dl-fields select { font: inherit; font-size: 14px; border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; background: var(--control-bg); color: var(--desk-ink); min-width: 0; }
+
+/* Data (tab-week.js): the bar, the tabs, the overview, the calendar */
+.appwin .dbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: var(--control-bg); border: 1px solid var(--line); border-radius: 14px; padding: 7px 10px;
+  position: sticky; top: 6px; z-index: 5; box-shadow: 0 2px 10px rgba(0, 0, 0, .05); }
+.appwin .dbar .period { font-size: 16.5px; margin: 0; min-width: 200px; text-align: center; }
+.appwin .dtabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); }
+.appwin .dtabs button { border: 0; background: none; padding: 8px 16px; cursor: pointer; font: inherit; font-size: 14.5px; color: var(--desk-ink); border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.appwin .dtabs button.on { border-bottom-color: var(--primary); color: var(--primary); font-weight: 650; }
+.appwin .dtiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.appwin .dtile { background: var(--control-bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; align-content: start; min-width: 0; }
+.appwin .dtile b { font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -.2px; }
+.appwin .dtile span { font-size: 12px; }
+.appwin .dpills { display: flex; flex-wrap: wrap; gap: 6px; }
+.appwin .dpill { border: 1px solid var(--line); background: var(--control-bg); border-radius: 999px; padding: 2px 10px; font-size: 12.5px; color: var(--desk-muted); }
+.appwin .dpill.warn { border-color: var(--bar); color: var(--bar); }
+.appwin .dstrip { display: flex; align-items: flex-end; gap: 4px; height: 100px; padding-top: 4px; }
+.appwin .dstrip .d { flex: 1; display: grid; justify-items: center; align-content: end; gap: 3px; min-width: 0; border: 0; background: none; padding: 0; font: inherit; color: inherit; }
+.appwin .dstrip .d i { display: block; width: 100%; max-width: 46px; border-radius: 6px 6px 2px 2px; background: var(--work); }
+.appwin .dstrip .d.goal i { background: var(--primary); } .appwin .dstrip .d.today i { outline: 2px solid var(--desk-ink); outline-offset: 1px; }
+.appwin .dstrip .d small { font-size: 11px; color: var(--desk-muted); white-space: nowrap; }
+.appwin .dstrip.months .d { cursor: pointer; } .appwin .dstrip.months .d:disabled { cursor: default; opacity: .4; }
+.appwin .dstrip.months .d:not(.goal) i { background: color-mix(in srgb, var(--work) 70%, var(--line)); }
+.appwin .month-pick { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; background: var(--soft); }
+.appwin .month-pick .dtile b { font-size: 17px; }
+.appwin .trend { width: 100%; height: auto; max-height: 210px; }
+.appwin .trend .now { fill: none; stroke: var(--primary); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.appwin .trend .was { fill: none; stroke: var(--desk-muted); stroke-opacity: .5; stroke-width: 2; stroke-dasharray: 6 5; }
+.appwin .trend .avg { stroke: var(--desk-muted); stroke-dasharray: 2 4; }
+.appwin .trend .dot { fill: var(--primary); } .appwin .trend .lab { font-size: 11px; fill: var(--desk-muted); }
+.appwin ul.ins { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+.appwin .week-cards { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.appwin .wcard { border: 1px solid var(--line); border-radius: 12px; background: var(--control-bg); padding: 8px; display: grid; gap: 4px; cursor: pointer; align-content: start; min-height: 116px; min-width: 0; }
+.appwin .wcard:hover { border-color: var(--focus); } .appwin .wcard.open { outline: 2px solid var(--primary); } .appwin .wcard.today { border-color: var(--desk-ink); }
+.appwin .wcard.future { opacity: .45; cursor: default; } .appwin .wcard b { font-size: 16px; } .appwin .wcard .muted { font-size: 12px; }
+.appwin .mini { height: 6px; border-radius: 3px; background: var(--soft); overflow: hidden; display: flex; } .appwin .mini i { display: block; height: 100%; }
+.appwin .day-panel { gap: 10px; } .appwin .day-panel .dp-title { font-size: 16px; }
+.appwin .day-panel input[type="text"] { font: inherit; border: 1px solid var(--line); border-radius: 8px; padding: 4px 9px; min-width: 240px; background: var(--control-bg); color: var(--desk-ink); }
+@media (max-width: 760px) { .appwin .dtiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .appwin .week-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .appwin .dl-row { grid-template-columns: 1fr auto; } .appwin .dl-row .t { grid-column: 1 / -1; } }
+
+/* Settings (tab-settings.js): the home page, a group's page */
+.appwin .set-quick { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; background: var(--control-bg); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; }
+.appwin .set-quick .qi { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.appwin .set-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.appwin .set-tile { border: 1px solid var(--line); background: var(--control-bg); color: var(--desk-ink); border-radius: 14px; padding: 12px 14px; cursor: pointer; text-align: left; display: grid; gap: 3px; font: inherit; align-content: start; }
+.appwin .set-tile:hover { border-color: var(--focus); box-shadow: 0 2px 8px rgba(0, 0, 0, .05); }
+.appwin .set-tile .top { display: flex; align-items: center; gap: 8px; } .appwin .set-tile .ic { font-size: 21px; } .appwin .set-tile b { font-size: 15.5px; }
+.appwin .set-tile small { color: var(--desk-muted); font-size: 12.5px; line-height: 1.45; } .appwin .set-tile .has { font-size: 11.5px; color: var(--desk-muted); opacity: .85; }
+.appwin .set-crumbs { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.appwin .set-crumbs .set-title { margin: 0; font-size: 19px; }
+.appwin .set-pn { margin-top: 4px; }
+
+/* Adding a reminder or an event (add-form.js) */
+.appwin .add2 { gap: 10px; }
+.appwin .add2 input.what { font: inherit; font-size: 16px; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; background: var(--control-bg); color: var(--desk-ink); width: 100%; }
+.appwin .add2 input.what:focus { outline: 2px solid var(--focus); outline-offset: 0; }
+.appwin .add2 .heard { color: var(--primary); font-size: 12.5px; }
+.appwin .add-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.appwin .add-row .lbl { font-size: 12.5px; color: var(--desk-muted); min-width: 64px; }
+.appwin .add-row .chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.appwin .add-row input[type="date"], .appwin .add-row input[type="time"], .appwin .add-row select { font: inherit; font-size: 13.5px; border: 1px solid var(--line); border-radius: 8px; padding: 3px 7px; background: var(--control-bg); color: var(--desk-ink); }
+.appwin .chip.ghost { border-style: dashed; color: var(--desk-muted); }
+.appwin .add-note { font-size: 13px; color: var(--desk-muted); background: var(--soft); border-radius: 10px; padding: 8px 12px; }
+.appwin .add-btn { font-weight: 650; padding: 7px 16px; }
+
+/* ---- the celebration: Together on top in the middle, Milk bottom left, Love bottom right; today in tiles ---- */
+.cele .box { width: min(600px, calc(100vw - 32px)); padding: 86px 34px 26px; margin-top: 60px; }
+.cele .cs { position: absolute; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .25)); animation: cele-pop .6s cubic-bezier(.2, 1.6, .4, 1) both; pointer-events: none; }
+.cele .cs.top { height: 170px; max-width: 240px; left: 50%; top: -100px; translate: -50% 0; animation-delay: .1s; }
+.cele .cs.left { height: 150px; max-width: 150px; left: -70px; bottom: -14px; animation-delay: .3s; }
+.cele .cs.right { height: 150px; max-width: 150px; right: -70px; bottom: -14px; animation-delay: .45s; }
+.cele .ctiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 14px 0 8px; text-align: left; }
+.cele .ct { background: var(--soft); border-radius: 12px; padding: 9px 12px; display: grid; gap: 1px; min-width: 0; }
+.cele .ct b { font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cele .ct .gbar { height: 6px; border-radius: 99px; background: var(--line); margin-top: 4px; overflow: hidden; } .cele .ct .gbar i { display: block; height: 100%; background: var(--primary); }
+.cele .cnotes { display: grid; gap: 3px; font-size: 14px; margin: 2px 0 6px; }
+.cele .cbtns { justify-content: center; margin-top: 10px; }
+@media (max-width: 760px) { .cele .cs.left, .cele .cs.right { display: none; } }
+@media (prefers-reduced-motion: reduce) { .cele .cs { animation: none; } }
+
+/* ---- ⛶ the focus screen (focus-screen.js): dark, one clock, the buttons when the mouse moves ---- */
+body.focus-on { overflow: hidden; }
+.fscreen { position: fixed; inset: 0; z-index: 90; background: #0e1311; color: #e8ece9; overflow: hidden; user-select: none; --fs-bright: .35; cursor: default; }
+.fscreen.quiet { cursor: none; }
+.fscreen .fs-clock { opacity: var(--fs-clock-op, 1); } .fscreen.night .fs-clock { opacity: calc(var(--fs-clock-op, 1) * .72); } .fscreen.night { --fs-night: .6; }
+.fscreen .fs-bg { position: absolute; inset: 0; }
+.fscreen .fs-bg .fs-ph { position: absolute; inset: 0; display: flex; opacity: 0; transition: opacity 2.5s ease; }
+.fscreen .fs-bg .fs-ph.on { opacity: calc(var(--fs-bright) * var(--fs-night, 1)); }
+.fscreen .fs-bg .fs-ph img { flex: 1; min-width: 0; height: 100%; object-fit: cover; }
+.fscreen .fs-bg .fs-ph.pair img + img { border-left: 2px solid #0e1311; }
+.fscreen .fs-bg.photos::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgba(14, 19, 17, .62) 0%, rgba(14, 19, 17, .2) 62%, rgba(14, 19, 17, .55) 100%); }
+.fscreen .fs-clock { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: var(--fs-h, center); justify-content: var(--fs-v, center); gap: .5em; z-index: 2; text-shadow: 0 2px 14px rgba(0, 0, 0, .5); text-align: var(--fs-align, center); padding: 76px 6vw 9vh; }
+.fscreen .fs-task { font-size: clamp(15px, 2vw, 26px); color: #c3ccc6; } .fscreen .fs-task b { color: #fff; }
+.fscreen .fs-big { font-variant-numeric: tabular-nums; font-weight: 700; line-height: 1; letter-spacing: -.02em; color: var(--fs-digits, #e8ece9); }
+.fscreen .fs-clock.big .fs-big { font-size: calc(clamp(72px, 16vw, 240px) * var(--fs-size, 1)); }
+.fscreen.filled .fs-clock.big .fs-big { background: var(--fs-inner); padding: .12em .32em; border-radius: .32em; text-shadow: none; }
+.fscreen .fs-ring { --p: 0; --c: var(--fs-ring, var(--tomato)); width: calc(min(52vh, 40vw) * var(--fs-size, 1)); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; position: relative;
+  background: conic-gradient(var(--c) calc(var(--p) * 1%), var(--fs-track, rgba(255, 255, 255, .08)) 0); }
+.fscreen .fs-ring::before { content: ""; position: absolute; inset: calc(7px * var(--fs-size, 1)); border-radius: 50%; background: var(--fs-inner, #0e1311); }
+.fscreen .fs-ring > div { position: relative; display: grid; justify-items: center; gap: .7em; }
+.fscreen .fs-ring .fs-big { font-size: calc(clamp(44px, 8vw, 132px) * var(--fs-size, 1)); }
+.fscreen.filled .fs-ring .fs-big { text-shadow: none; }
+.fscreen .fs-dots { display: flex; gap: 8px; } .fscreen .fs-dots i { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--fs-ring, var(--tomato)); } .fscreen .fs-dots i.done { background: var(--fs-ring, var(--tomato)); }
+.fscreen.filled .fs-dots i { border-color: var(--fs-digits); } .fscreen.filled .fs-dots i.done { background: var(--fs-digits); }
+.fscreen .fs-sub { font-size: clamp(14px, 1.7vw, 22px); color: #c3ccc6; }
+.fscreen .fs-lines { font-size: clamp(13px, 1.3vw, 17px); color: #aab4ae; } .fscreen .fs-lines b { color: #e8ece9; }
+.fscreen .fs-time { position: absolute; left: 18px; bottom: 12px; font-size: 13px; color: #6f7b74; z-index: 3; font-variant-numeric: tabular-nums; }
+.fscreen .fs-controls { position: absolute; top: 16px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; z-index: 5; transition: opacity .5s; padding: 0 16px; }
+.fscreen.quiet .fs-controls { opacity: 0; pointer-events: none; }
+.fscreen .fs-controls button { font: inherit; font-size: 14px; color: #e8ece9; background: rgba(40, 50, 45, .9); border: 1px solid #44534b; border-radius: 99px; padding: 7px 14px; cursor: pointer; }
+.fscreen .fs-controls button.go { background: var(--tomato); border-color: var(--tomato); color: #fff; font-weight: 650; }
+.fscreen .fs-controls button.end { border-color: var(--tomato); }
+.fscreen .fs-controls button.gear.on { background: #3b4a42; }
+.fscreen .fs-pop { position: absolute; top: 62px; right: 20px; z-index: 6; width: 300px; max-height: calc(100vh - 90px); overflow: auto; background: #222b26; border: 1px solid #44534b; border-radius: 14px; padding: 14px; display: grid; gap: 6px; font-size: 13px; box-shadow: 0 14px 40px rgba(0, 0, 0, .5); }
+.fscreen.quiet .fs-pop { opacity: 1; }
+.fscreen .fs-pop .lbl { color: #9aa59f; margin-top: 6px; }
+.fscreen .fs-seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.fscreen .fs-seg button { font: inherit; font-size: 12.5px; color: #e8ece9; background: #2b3530; border: 1px solid #44534b; border-radius: 8px; padding: 4px 9px; cursor: pointer; }
+.fscreen .fs-seg button.on { background: var(--focus, #8fd1a8); color: #14261b; border-color: transparent; font-weight: 650; }
+.fscreen .fs-ticks { display: flex; flex-wrap: wrap; gap: 4px 12px; } .fscreen .fs-ticks label { display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+.fscreen .fs-range { display: flex; gap: 8px; align-items: center; } .fscreen .fs-range input { flex: 1; }
+.fscreen .fs-walker { position: absolute; z-index: 1; transform-origin: 50% 100%; opacity: calc(var(--fs-bright) * var(--fs-night, 1)); filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .4)); transition: opacity .6s; pointer-events: none; }
+.fscreen .fs-walker.swap { opacity: 0; }
+.appwin .focus-btn { border-style: dashed; }
+.fscreen input[type=checkbox], .fscreen input[type=range] { accent-color: var(--focus, #8fd1a8); }
+
+/* ---- Data › Overview: one chart, the summary, where the time went ---- */
+.appwin { --chart-was: color-mix(in srgb, var(--desk-muted) 38%, var(--control-bg)); }
+.appwin .month-chip { justify-self: start; }
+.appwin .sum-card { padding-right: calc(150px * var(--deco-z, 1)); }
+.appwin .sum-card > .deco { right: 10px; bottom: 0; height: calc(100% - 40px); max-height: 160px; min-height: 70px; width: auto; max-width: 140px; object-fit: contain; object-position: bottom right; }
+.appwin .chart-card .wchart { width: 100%; height: auto; display: block; margin-top: 4px; }
+.appwin .wchart .grid { stroke: var(--line); stroke-width: 1; }
+.appwin .wchart .goal { stroke: var(--primary); stroke-width: 1.5; stroke-dasharray: 5 5; opacity: .7; }
+.appwin .wchart .lab { fill: var(--desk-muted); font-size: 11px; } .appwin .wchart .lab.strong { fill: var(--desk-ink); font-weight: 700; }
+.appwin .wchart .now { fill: var(--primary); }
+.appwin .wchart .was { fill: var(--chart-was); }
+.appwin .chart-card .legend span:last-child::before { background: var(--chart-was); }
+.appwin .wchart .hit { fill: transparent; }
+.appwin .wchart .col { cursor: pointer; outline: none; } .appwin .wchart .col.future { cursor: default; }
+.appwin .wchart .col:hover .hit, .appwin .wchart .col:focus-visible .hit { fill: color-mix(in srgb, var(--primary) 8%, transparent); }
+.appwin .wchart .col.on .hit { fill: color-mix(in srgb, var(--primary) 14%, transparent); }
+.appwin .wchart .col.dim .now { opacity: .35; }
+.appwin .peek { margin-top: 8px; background: var(--soft); border-radius: 12px; padding: 10px 12px; display: grid; gap: 4px; }
+.appwin .peek-line { position: relative; height: 22px; background: var(--line); border-radius: 6px; overflow: hidden; margin-top: 4px; }
+.appwin .peek-line i { position: absolute; top: 3px; bottom: 3px; border-radius: 3px; }
+.appwin .peek-ticks { display: flex; justify-content: space-between; font-size: 11px; }
+.appwin .where-card { --wa: min(calc(var(--where-art, 110px) * var(--deco-z, 1)), 22%); padding-right: calc(18px + var(--wa)); }
+.appwin .where-card > .deco { right: 10px; bottom: 0; width: var(--wa); height: auto; aspect-ratio: 1; max-height: calc(100% - 8px); max-width: none; object-fit: contain; object-position: bottom right; } /* (its size from how much the card lists: tab-week.js) */
+.appwin .ranked > .clickable { cursor: pointer; border-radius: 6px; } .appwin .ranked > .clickable:hover, .appwin .ranked > .clickable:focus-visible { background: var(--soft); outline: none; }
+.appwin .ranked > .subtasks { display: flex; flex-wrap: wrap; gap: 4px 12px; grid-template-columns: none; font-size: 12.5px; color: var(--desk-muted); padding: 2px 0 6px 12px; border-left: 2px solid var(--line); margin-left: 4px; }
+.appwin .ranked > .subtasks b { color: var(--desk-ink); font-weight: 600; }
+.appwin .dash-row { align-items: start; }
+
+/* ---- Settings: getting set up (home), the focus screen card ---- */
+.appwin .setup-list { padding-right: 16px; }
+.appwin .setup-list > .deco { right: 12px; bottom: 0; height: calc(100% - 30px); max-height: 170px; width: auto; max-width: 150px; object-fit: contain; object-position: bottom right; }
+.appwin .setup-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px; }
+.appwin .setup-item { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--control-bg); color: var(--desk-ink); border-radius: 10px; padding: 8px 10px; cursor: pointer; font: inherit; }
+.appwin .setup-item:hover, .appwin .setup-item:focus-visible { border-color: var(--focus); outline: none; }
+.appwin .setup-item .tick { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; border: 1.5px solid var(--line); color: var(--desk-muted); }
+.appwin .setup-item.ok .tick { background: var(--primary); border-color: var(--primary); color: var(--primary-ink, #fff); }
+.appwin .setup-item .t { display: grid; min-width: 0; } .appwin .setup-item .t b { font-size: 13.5px; font-weight: 600; } .appwin .setup-item .t small { font-size: 12px; }
+.appwin .setup-item .go { color: var(--desk-muted); font-size: 18px; }
+.appwin .focus-card label.chk { display: inline-flex; gap: 4px; align-items: center; font-size: 13px; }
+@media (max-width: 760px) { .appwin .setup-list { padding-right: 16px; } .appwin .setup-list > .deco { display: none; } }
+
+.appwin .add-card.has-deco { padding-right: calc(14px + 150px * var(--deco-z, 1)); }
+.appwin .add-card > .add-deco { right: 10px; bottom: 0; max-height: 150px; max-width: 150px; }
+.appwin .title-deco { align-items: flex-end; gap: 10px; } .appwin .title-deco > .deco { position: static; max-height: 48px; max-width: 70px; margin-bottom: -4px; }
+.appwin .deco-foot { display: flex; justify-content: flex-end; margin: -6px 18px 0 0; pointer-events: none; } /* (its own row above the ← → buttons: never over one) */
+.appwin .deco-foot > .deco { position: static; max-height: 140px; max-width: 160px; }
+@media (max-width: 760px) { .appwin .add-card.has-deco { padding-right: 14px; } .appwin .add-card > .add-deco, .appwin .deco-foot { display: none; } }
+
+/* the Thai version's note about the translation */
+.th-note { background: color-mix(in srgb, #f0c27a 18%, var(--control-bg)); border: 1px solid color-mix(in srgb, #f0c27a 55%, transparent); border-radius: 12px; padding: 10px 14px; font-size: 13px; line-height: 1.6; }
+.th-only { display: none; } .lang-th .th-only { display: block; }
+.lang-th { font-family: -apple-system, "Thonburi", "Sukhumvit Set", "PingFang TC", system-ui, sans-serif; }
+
+/* a button pressed shows at once */
+.appwin .now-card .btn.pressed { transform: scale(.97); filter: brightness(.95); transition: transform .08s; }
+
+.undo-note { position: fixed; left: 50%; bottom: 22px; translate: -50% 0; z-index: 60; display: flex; gap: 14px; align-items: center; background: var(--desk-ink); color: var(--control-bg); border-radius: 12px; padding: 10px 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); font-size: 14px; max-width: calc(100vw - 40px); }
+.undo-note .linkish { color: var(--control-bg); font-weight: 650; } .undo-note .close { opacity: .7; font-weight: 400; }
+
+/* Muv at the bottom of the left side: "Need help?" when pointed at; click for Help */
+.appwin nav.side .muv-help { margin-top: auto; align-self: center; position: relative; background: none; border: 0; padding: 0; cursor: pointer; display: grid; justify-items: center; }
+.appwin nav.side .muv-help .deco { width: 120px; pointer-events: none; transition: transform .2s; }
+.appwin nav.side .muv-help:hover .deco, .appwin nav.side .muv-help:focus-visible .deco { transform: translateY(-3px) rotate(-3deg); }
+.appwin nav.side .muv-help .muv-say { position: absolute; bottom: calc(100% - 6px); background: var(--control-bg); color: var(--desk-ink); border: 1.5px solid #efa3ba; border-radius: 12px; padding: 4px 10px; font-size: 12.5px; white-space: nowrap; opacity: 0; translate: 0 6px; transition: opacity .2s, translate .2s; pointer-events: none; }
+.appwin nav.side .muv-help:hover .muv-say, .appwin nav.side .muv-help:focus-visible .muv-say, .appwin nav.side .muv-help.on .muv-say { opacity: 1; translate: 0 0; }
+@media (max-width: 760px) { .appwin nav.side .muv-help { display: none; } }
+.appwin .help-search { width: 100%; }
+.appwin .faq { display: grid; gap: 6px; }
+.appwin .faq details { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; background: var(--control-bg); }
+.appwin .faq summary { cursor: pointer; font-weight: 600; }
+.appwin .faq details p { margin: 6px 0 2px; color: var(--desk-muted); font-size: 14px; }
+.appwin .mail-card select, .appwin .mail-card textarea { width: 100%; }
+
+/* ---- Data: Summary's little trends, the goal ring, the chart's switch, a square a day; Analysis' cards; the picture ---- */
+.appwin .dtile .spark { width: 100%; height: 22px; margin-top: 4px; overflow: visible; }
+.appwin .dtile .spark polyline { fill: none; stroke: var(--primary); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.appwin .dtile.ring-tile { grid-template-columns: 1fr auto; align-items: center; }
+.appwin .dtile.ring-tile > div { display: grid; gap: 2px; }
+.appwin .dring { width: 52px; height: 52px; }
+.appwin .dring circle { fill: none; stroke-width: 6; } .appwin .dring .bg { stroke: var(--line); } .appwin .dring .fg { stroke: var(--primary); stroke-linecap: round; }
+.appwin .seg.small-seg button { font-size: 12.5px; padding: 3px 10px; }
+.appwin .chart-card .legend .was-legend::before { background: none; border: 1.5px solid var(--chart-was); width: 7px; height: 7px; }
+.appwin .wchart .was { fill: none; stroke: var(--chart-was); stroke-width: 1.5; }
+.appwin .ysq-wrap { overflow-x: auto; padding-bottom: 2px; }
+.appwin .ysq { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 12px); grid-auto-columns: 12px; gap: 3px; }
+.appwin .ysq i { border-radius: 3px; background: var(--primary); cursor: pointer; } .appwin .ysq i.blank { background: none; cursor: default; } .appwin .ysq i.future { background: var(--line); opacity: .35; cursor: default; }
+.appwin .ysq i:hover { outline: 2px solid var(--desk-ink); outline-offset: 1px; }
+.appwin .ysq-card .peek-ticks { margin-top: 4px; }
+.appwin .ribbon { position: relative; height: 26px; background: var(--line); border-radius: 7px; overflow: hidden; margin-top: 6px; }
+.appwin .ribbon i { position: absolute; top: 4px; bottom: 4px; border-radius: 4px; }
+.appwin .big-num { font-size: 28px; } .appwin .big-meter { height: 10px; border-radius: 5px; background: var(--line); overflow: hidden; display: block; margin: 6px 0; } .appwin .big-meter i { display: block; height: 100%; }
+.appwin .cmp-grid { display: grid; grid-template-columns: minmax(110px, 1.2fr) auto auto auto; gap: 4px 14px; font-size: 13.5px; align-items: center; }
+.appwin .cmp-grid b { font-variant-numeric: tabular-nums; }
+.appwin .compare-card select { font: inherit; font-size: 13px; }
+.share-card { width: 360px; max-width: 100%; border-radius: 20px; padding: 20px 22px; background: linear-gradient(150deg, color-mix(in srgb, var(--primary) 35%, var(--control-bg)), color-mix(in srgb, #f2a7c3 30%, var(--control-bg))); display: grid; gap: 4px; position: relative; overflow: hidden; min-height: 210px; margin: 6px 0 10px; }
+.share-card .share-what { font-size: 20px; } .share-card .share-n { font-size: 34px; line-height: 1.1; }
+.share-card .share-deco { position: absolute; right: -6px; bottom: 0; height: 160px; max-width: 150px; object-fit: contain; pointer-events: none; }
+.share-card > span, .share-card > b { position: relative; z-index: 1; max-width: 62%; }
+
+/* Line icons in place of emoji: the left menu and the Settings groups. */
+.appwin nav.side button > .ico { width: 18px; height: 18px; margin-top: 1px; color: var(--desk-muted); }
+.appwin nav.side button.on > .ico { color: var(--primary, var(--desk-ink)); }
+.appwin .set-tile .ic { width: 22px; height: 22px; color: var(--primary, var(--desk-ink)); flex: none; }
+.appwin .mail-ways { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font-size: 13.5px; }
+.appwin .mail-ways .mail-way { font-size: inherit; padding: 2px 0; color: var(--primary, var(--desk-ink)); text-decoration: underline; text-underline-offset: 2px; }
+
+/* The focus clock's look (clock-look.js): soft cream behind it, and the choices' controls (focus screen ⚙ and Settings). */
+.fscreen.soft { background: #f6f1ec; color: #3b3330; }
+.fscreen.soft .fs-clock { text-shadow: none; }
+.fscreen.soft .fs-task, .fscreen.soft .fs-sub { color: #7d716b; } .fscreen.soft .fs-task b, .fscreen.soft .fs-lines b { color: #3b3330; }
+.fscreen.soft .fs-lines, .fscreen.soft .fs-time { color: #988b84; }
+.fscreen.soft .fs-bg.photos::after { background: radial-gradient(ellipse at 50% 46%, rgba(246, 241, 236, .7) 0%, rgba(246, 241, 236, .25) 62%, rgba(246, 241, 236, .6) 100%); }
+.cl-look { display: grid; gap: 10px; }
+.cl-row { display: grid; gap: 5px; } .cl-row .lbl { font-size: 12.5px; color: var(--desk-muted, #9aa59f); }
+.cl-swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.cl-sw { display: grid; justify-items: center; gap: 3px; border: 1.5px solid var(--line, #44534b); background: transparent; border-radius: 10px; padding: 6px 4px; cursor: pointer; font: inherit; font-size: 11.5px; color: inherit; line-height: 1.25; text-align: center; }
+.cl-sw.on { border-color: var(--focus, #8fd1a8); box-shadow: 0 0 0 1px var(--focus, #8fd1a8); }
+.cl-sw .ball { width: 26px; height: 26px; border-radius: 50%; background: conic-gradient(var(--r) 70%, rgba(127, 127, 127, .25) 0); position: relative; }
+.cl-sw .ball::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--d); }
+.cl-seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.cl-seg button { font: inherit; font-size: 12.5px; color: inherit; background: transparent; border: 1px solid var(--line, #44534b); border-radius: 8px; padding: 4px 9px; cursor: pointer; }
+.cl-seg button.on { background: var(--focus, #8fd1a8); color: #14261b; border-color: transparent; font-weight: 650; }
+.cl-where { display: flex; gap: 12px; align-items: center; }
+.cl-pos { display: grid; grid-template-columns: repeat(3, 28px); gap: 3px; }
+.cl-pos button { height: 20px; border-radius: 5px; border: 1px solid var(--line, #44534b); background: transparent; cursor: pointer; padding: 0; }
+.cl-pos button.on { background: var(--focus, #8fd1a8); border-color: transparent; }
+.cl-size { display: flex; gap: 8px; align-items: center; } .cl-size input { flex: 1; } .cl-v { font-size: 12.5px; color: var(--desk-muted, #9aa59f); }
+.fscreen .fs-pop .cl-sw, .fscreen .fs-pop .cl-seg button, .fscreen .fs-pop .cl-pos button { border-color: #44534b; } .fscreen .fs-pop .cl-sw { background: #2b3530; color: #e8ece9; } .fscreen .fs-pop .cl-seg button { color: #e8ece9; } .fscreen .fs-pop .cl-seg button.on { color: #14261b; }
+.appwin .focus-card .cl-look { max-width: none; grid-template-columns: 1fr 1fr; gap: 14px 36px; } .appwin .focus-card .cl-look > .cl-row:first-child { grid-column: 1 / -1; }
+@media (max-width: 760px) { .appwin .focus-card .cl-look { grid-template-columns: 1fr; } }
+.appwin .focus-card .cl-swatches { grid-template-columns: repeat(6, 1fr); }
+.appwin .cl-field { display: block; padding: 10px 0 6px; border-bottom: 1px dashed var(--line); } .appwin .cl-field > span:first-child { display: block; font-weight: 650; margin-bottom: 10px; } /* (the clock's choices across the card: no empty column on the left) */
+.cl-size input { accent-color: var(--focus, #5b9b74); }
+.appwin .mine-badge { font-size: 11px; background: color-mix(in srgb, var(--brk, #f3aac0) 40%, transparent); padding: 1px 7px; border-radius: 99px; margin-left: 6px; }
+/* Settings › Categories › Photo sources */
+.appwin .sources-card { display: grid; gap: 8px; }
+.appwin .sources-card .src-h { font-size: 13px; margin-top: 4px; }
+.appwin .src-list { display: grid; gap: 4px; }
+.appwin .src-row { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 13.5px; padding: 3px 0; border-bottom: 1px dashed var(--line); }
+.appwin .src-row .small { margin-left: auto; }
+.appwin .src-row.mine { align-items: center; }
+.appwin .src-row.mine input { flex: 1; min-width: 140px; }
+.appwin .src-add { display: flex; gap: 8px; flex-wrap: wrap; } .appwin .src-add input { flex: 1; min-width: 160px; }
+
+/* Help: the sticker (app-help-top) above the title, both in the middle of the page */
+.appwin .help-head { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.appwin .help-head h2 { font-size: 30px; margin: 0; text-align: center; }
+.appwin .help-head > .deco { position: static; height: 160px; width: auto; max-width: 100%; object-fit: contain; margin-bottom: -4px; }
+.appwin .help-card { margin-top: 2px; }
+.appwin .help-search { border: 1px solid var(--line); background: var(--control-bg); color: var(--desk-ink); border-radius: 10px; padding: 9px 12px; font: inherit; box-sizing: border-box; margin-bottom: 4px; }
+@media (max-width: 760px) { .appwin .help-head > .deco { display: none; } }
+.cl-row { align-content: start; } .cl-seg { align-items: flex-start; align-self: start; }
+
+/* Today: "What's new" once after an update (Muv beside the notes) */
+.appwin .whats-new { grid-template-columns: 64px 1fr; align-items: center; background: color-mix(in srgb, #f2c94c 18%, var(--control-bg)); border-color: color-mix(in srgb, #e8c766 70%, var(--line)); }
+.appwin .whats-new > .deco { position: static; width: 64px; height: auto; }
+.appwin .whats-new p { margin: 2px 0 8px; font-size: 13.5px; }
+
+/* Settings › Look: the Style picker takes the whole row */
+.appwin .style-field { display: grid; gap: 8px; }
+
+/* The menu: a "Fan corner" heading; Settings, the word of the day and Muv at the bottom */
+.appwin nav.side .nav-h { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--desk-muted); padding: 12px 10px 2px; }
+.appwin nav.side .nav-foot { margin-top: auto; display: flex; flex-direction: column; gap: 4px; }
+.appwin nav.side .nav-foot .muv-help { margin-top: 6px; }
+.appwin nav.side .muv-help .deco { width: 96px; }
+.appwin nav.side .wordmini, .appwin .wordmini { display: grid; justify-items: start; font: inherit; text-align: left; cursor: pointer; border: 1.5px solid var(--line, var(--control-line)); border-radius: 12px; padding: 8px 10px; display: grid; gap: 1px; margin-bottom: 4px;
+  background: color-mix(in srgb, var(--consent, #e48aa6) 14%, var(--control-bg)); color: var(--desk-ink); }
+.appwin .wordmini small { font-size: 10.5px; font-weight: 700; color: var(--bar); }
+.appwin .wordmini .th { font-family: var(--thai); font-size: 17px; line-height: 1.35; }
+.appwin .wordmini span { font-size: 11.5px; color: var(--desk-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 760px) { .appwin .wordmini, .appwin nav.side .nav-h { display: none; } }
+
+/* Today: the Thai word card and "Next up", beside the focus of the day */
+.appwin .today-mid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: stretch; }
+.appwin .today-mid > .col { display: grid; gap: 12px; align-content: start; }
+@media (max-width: 760px) { .appwin .today-mid { grid-template-columns: 1fr; } }
+.appwin .word-card { cursor: pointer; padding-right: 92px; min-height: 130px; align-content: start; }
+.appwin .word-card .wc-th { font-family: var(--thai); font-size: 28px; line-height: 1.3; }
+.appwin .word-card .wc-rom { font-weight: 700; color: var(--primary, var(--desk-ink)); }
+.appwin .word-card .wc-mean { font-size: 14.5px; font-weight: 600; }
+.appwin .word-card .wc-mean.hidden { font-weight: 400; color: var(--desk-muted); font-size: 12.5px; }
+.appwin .word-card .wc-song { justify-self: start; font-size: 11.5px; font-weight: 700; color: var(--bar); background: color-mix(in srgb, var(--consent, #e48aa6) 16%, var(--control-bg)); border-radius: 999px; padding: 2px 9px; }
+.appwin .word-card .wc-deco { right: 10px; bottom: 8px; width: 72px; height: 72px; }
+.appwin .next-card { display: flex; gap: 12px; align-items: center; padding: 10px 14px; }
+.appwin .next-card .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--consent, #e48aa6) 18%, var(--control-bg)); color: var(--bar); }
+.appwin .next-card .ic svg { width: 19px; height: 19px; }
+.appwin .next-card .lbl { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--desk-muted); font-weight: 600; }
+.appwin .next-card .lbl .deco { position: static; width: 64px; height: 46px; margin: -14px 0 -10px 2px; }
+.appwin .next-card .when { font-weight: 800; color: var(--primary, var(--desk-ink)); font-variant-numeric: tabular-nums; margin-right: 4px; }
+.appwin .next-card .nx { flex: 1; min-width: 0; }
+.appwin .coming-h { display: flex; align-items: center; gap: 4px; }
+.appwin .coming-h .rem-next { position: static; width: 70px; height: 52px; margin: -16px 0 -10px; }
+.appwin .today-mid .focus-row { margin-left: 0; position: relative; padding-right: 92px; min-height: 76px; flex-wrap: wrap; }
+.appwin .today-mid .focus-row .in-note { right: 10px; top: 50%; transform: translateY(-50%); height: 70px; max-width: 80px; }
+.appwin .today-mid .focus-row b { width: 100%; }
+/* Data: the summary's sticker a size bigger */
+.appwin .sum-card { padding-right: calc(190px * var(--deco-z, 1)); }
+.appwin .sum-card > .deco { max-height: 210px; max-width: 180px; min-height: 110px; }
+
+/* ---- Page tops (app-common.js pageTop): like the website's section tops: a small line above, a big
+   title, a line on what the page is for, and the page's sticker standing at the right ---- */
+.appwin .page-top { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; min-height: 72px; padding: 6px 2px 0; }
+.appwin .page-top .pt-text { flex: 1; min-width: 0; align-self: center; display: grid; gap: 4px; padding-bottom: 6px; }
+.appwin main .page-top h2 { font-size: 28px; line-height: 1.15; color: var(--sk-accent-ink, var(--bar)); }
+.appwin .page-top .pt-crumb { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--sk-accent-ink, var(--bar)) 80%, var(--desk-muted)); }
+.appwin .page-top .pt-sub, .appwin .page-sub .pt-sub { color: var(--desk-muted); font-size: 14px; max-width: 62ch; }
+.appwin .page-top .pt-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+.appwin .page-top .pt-side { display: flex; gap: 8px; align-items: center; align-self: center; flex: none; }
+.appwin .page-top > .deco { position: static; height: 96px; width: auto; max-width: 170px; align-self: flex-end; flex: none; margin-bottom: -8px; }
+/* Today: the focus of the day, a box above "Next up" */
+.appwin .focus-box { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 4px 12px; padding-right: 14px; min-height: 104px; }
+.appwin .focus-box .lbl { grid-column: 1; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--sk-accent-ink, var(--bar)); }
+.appwin .focus-box .pt-focus { grid-column: 1; font: inherit; font-size: 20px; font-weight: 700; color: var(--desk-ink); border: 0; border-bottom: 2px dashed color-mix(in srgb, var(--sk-accent, var(--bar)) 35%, transparent);
+  background: transparent; padding: 4px 0 6px; width: 100%; min-width: 0; outline: none; font-family: var(--sk-h, inherit); }
+.appwin .focus-box .pt-focus:focus { border-bottom-color: var(--sk-accent, var(--bar)); }
+.appwin .focus-box .pt-focus::placeholder { color: color-mix(in srgb, var(--desk-muted) 75%, transparent); font-weight: 600; }
+.appwin .focus-box > .deco { position: static; grid-column: 2; grid-row: 1 / 3; height: 92px; width: auto; max-width: 120px; margin-bottom: -12px; }
+/* A sub-page (Settings › a group): slimmer, "Settings › name", one sticker */
+.appwin .page-sub { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; padding: 0 2px 8px;
+  border-bottom: 2px dashed color-mix(in srgb, var(--sk-accent, var(--bar)) 40%, var(--line)); }
+.appwin .page-sub .ps-text { min-width: 0; display: grid; gap: 2px; padding-bottom: 6px; }
+.appwin .page-sub .ps-path { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.appwin .page-sub .ps-parent { font: inherit; font-size: 14px; color: var(--desk-muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.appwin .page-sub .ps-parent:hover { color: var(--desk-ink); }
+.appwin .page-sub .ps-sep { color: var(--desk-muted); }
+.appwin main .page-sub h2 { font-size: 21px; }
+html[data-style="f"] .appwin main .page-sub h2::after { content: none; }
+.appwin .page-sub > .deco { position: static; height: 114px; width: auto; max-width: 170px; flex: none; margin-bottom: -10px; }
+@media (max-width: 760px) { .appwin .page-top > .deco { height: 68px; } .appwin .page-sub > .deco { height: 80px; } .appwin main .page-top h2 { font-size: 21px; } }
+/* Point at a sticker: whose photo it is */
+.appwin .deco[data-credit] { pointer-events: auto; }
+.credit-tip { position: fixed; z-index: 90; pointer-events: none; opacity: 0; transition: opacity .12s; max-width: 70vw;
+  background: var(--desk-ink, #333); color: var(--desk, #fff); font-size: 12px; line-height: 1.3; border-radius: 999px; padding: 3px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.credit-tip:not(.on) { display: none; }
+.credit-tip.on { opacity: .95; }
+/* Settings › Look & menu bar: the styles and the colours side by side */
+.appwin .look2 { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(250px, 1fr); gap: 14px; align-items: start; }
+.appwin .look2 > .card { align-self: stretch; align-content: start; }
+.appwin .look-colours { gap: 0; }
+.appwin .look-colours h3 { margin-bottom: 4px; }
+.appwin .look-colours .lc-row { display: grid; gap: 8px; padding: 12px 0; border-top: 1px dashed color-mix(in srgb, var(--sk-accent, var(--bar)) 30%, var(--line)); }
+.appwin .look-colours .lc-row:first-of-type { border-top: 0; padding-top: 6px; }
+.appwin .look-colours .lc-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 13.5px; }
+.appwin .look-colours .lc-h b { font-size: 12.5px; color: var(--desk-muted); font-weight: 600; text-align: right; }
+.appwin .look-colours .days-pick { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; }
+.appwin .look-colours .days-pick button { text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.appwin .look-colours .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.appwin .look-colours .swatches button { width: 34px; height: 34px; }
+@media (max-width: 900px) { .appwin .look2 { grid-template-columns: 1fr; } }
+.appwin .set-pn { margin-top: -4px; }
+.appwin .page-top .pt-tools .help-search, .appwin .page-top .pt-tools input { min-width: 220px; }
+/* Make a picture (tab-week.js): six cards, a sticker from ten, the photo's credit on the card */
+.viewer .share-box { width: min(900px, 96vw); }
+.share-layout { display: grid; grid-template-columns: auto minmax(220px, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 760px) { .share-layout { grid-template-columns: 1fr; } }
+.share-side { display: grid; gap: 8px; align-content: start; }
+.share-kinds { display: flex; flex-wrap: wrap; gap: 6px; }
+.share-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.share-strip button { aspect-ratio: 1; padding: 3px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--control-bg); cursor: pointer; overflow: hidden; min-width: 0; }
+.share-strip button.on { border-color: var(--primary); box-shadow: inset 0 0 0 1.5px var(--primary); }
+.share-strip img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.share-card { width: 440px; min-height: 300px; padding-bottom: 44px; }
+.share-card .share-k { font-weight: 600; opacity: .8; }
+.share-card .share-focus { font-size: 19px; line-height: 1.25; }
+.share-card .share-th { font-size: 50px; line-height: 1.15; }
+.share-card .share-st { position: absolute; right: 12px; bottom: 34px; height: 64%; max-width: 46%; object-fit: contain; object-position: bottom right; pointer-events: none;
+  filter: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 4px 6px rgba(40, 20, 30, .25)); }
+.share-card .share-credit { position: absolute; left: 16px; bottom: 10px; z-index: 2; max-width: calc(100% - 32px); font-size: 13px; font-weight: 600; color: #3b2a32;
+  background: rgba(255, 255, 255, .85); border-radius: 999px; padding: 3px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.share-card .share-dots { display: flex; flex-wrap: wrap; gap: 5px; max-width: 56%; margin-top: 4px; }
+.share-card .share-dots i { width: 18px; height: 18px; border-radius: 50%; background: #e2584f; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .12); }
+.share-card .share-bars { display: flex; gap: 6px; align-items: flex-end; height: 86px; max-width: 56%; margin-top: 6px; }
+.share-card .share-bars i { flex: 1; border-radius: 5px 5px 2px 2px; background: var(--primary); opacity: .55; }
+.share-card .share-bars i.hit { opacity: 1; }
+.share-card .share-cal { display: grid; grid-template-columns: repeat(7, 16px); gap: 4px; margin-top: 6px; }
+.share-card .share-cal i { width: 16px; height: 16px; border-radius: 4px; background: var(--primary); }
+.share-card.k-day { background: linear-gradient(150deg, color-mix(in srgb, #ffe27a 40%, var(--control-bg)), color-mix(in srgb, #f2a7c3 30%, var(--control-bg))); }
+.share-card.k-pomo { background: linear-gradient(150deg, color-mix(in srgb, #f2a7c3 40%, var(--control-bg)), color-mix(in srgb, #ffc2a8 35%, var(--control-bg))); }
+.share-card.k-thai { background: linear-gradient(150deg, color-mix(in srgb, #c9bdf3 40%, var(--control-bg)), color-mix(in srgb, #f2a7c3 30%, var(--control-bg))); }
+.share-card.k-goal { background: linear-gradient(150deg, color-mix(in srgb, #a9d4f2 40%, var(--control-bg)), color-mix(in srgb, var(--primary) 25%, var(--control-bg))); }
+.share-card.k-month { background: linear-gradient(150deg, color-mix(in srgb, #f6e7c8 50%, var(--control-bg)), color-mix(in srgb, var(--primary) 25%, var(--control-bg))); }
+/* (the title only as wide as its words: Fan Zine Pop's highlighter stays under them) */
+.appwin .page-top .pt-text > h2, .appwin .page-sub .ps-path h2 { justify-self: start; width: fit-content; max-width: 100%; }
+
+/* Settings › Reminders & events: the card switched off */
+.appwin .card-warn { margin: 0; padding: 8px 12px; border-radius: 10px; font-size: 13px; background: color-mix(in srgb, #e0a100 16%, var(--control-bg)); border: 1px solid color-mix(in srgb, #e0a100 45%, var(--line)); }
+/* Photo credits (like the website's): a card for each who said yes, everyone else as chips, notes */
+.appwin .credit-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.appwin .credit-card { display: grid; justify-items: center; text-align: center; gap: 4px; padding: 16px 10px 14px; border-radius: var(--sk-r-lg, 16px);
+  background: var(--sk-card, var(--control-bg)); border: var(--sk-bw, 1px) solid var(--sk-card-line, var(--line)); box-shadow: var(--sk-shadow, none); }
+.appwin .credit-card .cc-ic { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 4px;
+  background: color-mix(in srgb, var(--sk-accent, var(--bar)) 18%, var(--sk-card, var(--control-bg))); color: var(--sk-accent-ink, var(--bar)); }
+.appwin .credit-card .cc-ic svg { width: 24px; height: 24px; }
+.appwin .credit-card b { font-size: 16px; font-family: var(--sk-h, inherit); }
+.appwin .credit-card a { color: var(--primary, var(--desk-ink)); font-weight: 600; font-size: 13.5px; }
+.appwin .credit-cards.all { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.appwin .credit-cards.all .credit-card { position: relative; padding: 14px 6px 12px; }
+.appwin .credit-cards.all .credit-card b { font-size: 14.5px; overflow-wrap: anywhere; }
+.appwin .credit-cards.all .credit-card a { font-size: 12px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.appwin .credit-card .cc-ok { position: absolute; top: 7px; right: 8px; font-size: 10.5px; font-weight: 800; color: #fff; background: var(--focus, #3f7d5c); border-radius: 999px; padding: 0 7px; line-height: 17px; }
+@media (max-width: 900px) { .appwin .credit-cards.all { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.appwin .credit-also { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.appwin .credit-chip { font-size: 13px; font-weight: 600; padding: 5px 13px; border-radius: 999px; text-decoration: none; color: var(--desk-ink);
+  background: var(--sk-card, var(--control-bg)); border: 1.5px solid var(--sk-card-line, var(--line)); }
+.appwin a.credit-chip:hover { border-color: var(--sk-accent, var(--bar)); }
+.appwin .credit-note { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; align-items: start; padding: 14px 18px; border-radius: var(--sk-r-lg, 16px);
+  background: color-mix(in srgb, var(--sk-accent, var(--bar)) 10%, var(--sk-card, var(--control-bg))); border: 1.5px solid color-mix(in srgb, var(--sk-accent, var(--bar)) 35%, var(--line)); }
+.appwin .credit-note > b { grid-row: 1 / 3; font-size: 18px; line-height: 1.3; color: var(--sk-accent-ink, var(--bar)); }
+.appwin .credit-note p { font-size: 13.5px; line-height: 1.55; }
+.appwin .credit-note a { color: var(--primary, var(--desk-ink)); font-weight: 600; }
+.appwin .credit-note.please-note { background: var(--sk-card, var(--control-bg)); border-style: dashed; }
+.appwin .credit-note.please-note h3 { margin: 0; }
+.appwin .whose-card .sticker-strip { gap: 10px; }
+.appwin .whose-card .sticker-strip img { height: 112px; border-radius: 12px; transition: transform .15s; }
+.appwin .whose-card .sticker-strip img:hover { transform: translateY(-3px) rotate(-1.5deg); }
+
+/* Settings › Look: the colour themes as named chips filling the box */
+.appwin .look-colours .sw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.appwin .look-colours .sw-pick { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 4px 10px 4px 4px; border-radius: 999px; cursor: pointer; font: inherit; font-size: 12.5px; text-align: left;
+  border: 1.5px solid var(--line); background: var(--control-bg); color: var(--desk-ink); }
+.appwin .look-colours .sw-pick i { width: 24px; height: 24px; border-radius: 50%; flex: none; background: linear-gradient(135deg, var(--a) 50%, var(--b) 50%); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .7); }
+.appwin .look-colours .sw-pick span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.appwin .look-colours .sw-pick:hover { border-color: color-mix(in srgb, var(--primary) 50%, var(--line)); }
+.appwin .look-colours .sw-pick.on { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); font-weight: 650; }
+
+/* Settings › Reminders & events: what pops up */
+.appwin .pops { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.appwin .pops-card .pop { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.appwin .pops-card .pop.through { padding: 8px 12px; border-radius: 10px; background: color-mix(in srgb, var(--primary) 8%, var(--control-bg)); }
+.appwin .pops-card .field, .appwin .sound-card .field { flex-wrap: nowrap; align-items: flex-start; }
+.appwin .pops-card .field > span:first-child, .appwin .sound-card .field > span:first-child { flex: 1; min-width: 0; }
+/* Page tops: the sticker in front of the title (left), when picked */
+.appwin .page-top.st-left { justify-content: flex-start; }
+.appwin .page-top.st-left > .deco { order: -1; margin: 0 6px -8px -4px; }
+/* Photo credits: its sticker bigger and higher */
+.appwin .page-top.credits-band > .deco { height: 140px; max-width: 210px; align-self: flex-start; margin-top: -2px; margin-bottom: 0; }
+.appwin .page-top.stickers-band > .deco { height: 118px; max-width: 190px; margin-left: 10px; margin-right: 12px; }
+.appwin .page-top.settings-band > .deco { height: 130px; max-width: 200px; }

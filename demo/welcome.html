@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-zh="歡迎">Welcome</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="reminders.css">
+<link rel="stylesheet" href="welcome.css">
+<link rel="stylesheet" href="themes.css">
+<link rel="stylesheet" href="skins.css">
+</head>
+<body class="tool welcome">
+<main class="wframe">
+  <!-- The frame: the name, the page, the dots; the page; Back / Next. One page at a time, never wider than the frame. -->
+  <header class="wtop">
+    <b class="brand">ML WorkHelp</b><span class="wtitle" id="wtitle"></span>
+    <ol class="dots" id="dots" aria-label="Steps" data-zh-aria-label="步驟"></ol>
+    <span id="where" class="muted where"></span>
+  </header>
+
+  <div class="wbody">
+  <!-- 1. Hello, and the language -->
+  <section class="step s1" data-title="Welcome" data-zh-title="歡迎">
+    <div class="col">
+      <p class="kicker">ML WorkHelp</p>
+      <h1 data-zh="嗨！來認識一下你的工作夥伴吧。">Hi! Meet your work buddies.</h1>
+      <p data-zh="你工作時，Milk 和 Love 會陪在旁邊：在螢幕上走來走去、幫你計時、提醒你起來休息、把提醒和活動舉給你看，偶爾還會教你一個泰文單字。">Milk and Love keep you company while you work: they stroll about on your screen, keep
+        time with you, remind you to take breaks, hold up your reminders and events, and teach you a Thai word now and then.</p>
+      <div class="prefs">
+        <div class="pref-row"><span data-zh="語言">Language</span>
+          <div class="langs" role="radiogroup" aria-label="Language / 語言 / ภาษา">
+            <button type="button" role="radio" data-lang="en">English</button>
+            <button type="button" role="radio" data-lang="zh">繁體中文</button>
+            <button type="button" role="radio" data-lang="th">ไทย <small>(beta)</small></button>
+          </div></div>
+        <p class="th-note th-only"><b>ภาษาไทยยังอยู่ในช่วงทดลอง</b><br>คำแปลภาษาไทยอาจยังไม่ถูกต้องทั้งหมด หากคุณอยากช่วยปรับปรุงคำแปล ติดต่อเราได้ที่ <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> หรือ X @alitasdepollos0 ขอบคุณมากค่ะ</p>
+        <div class="pref-row" id="appearance-row" hidden><span data-zh="淺色或深色">Light or dark</span>
+          <div class="langs appearance" id="appearance" role="radiogroup" aria-label="Light or dark" data-zh-aria-label="淺色或深色">
+            <button type="button" role="radio" data-appearance="system" data-zh="跟系統一樣">Like my Mac</button>
+            <button type="button" role="radio" data-appearance="light" data-zh="淺色">Light</button>
+            <button type="button" role="radio" data-appearance="dark" data-zh="深色">Dark</button>
+          </div></div>
+        <div class="pref-row" id="themes-row"><span data-zh="顏色">Colours</span><div class="themes" id="themes" role="radiogroup" aria-label="Colour theme" data-zh-aria-label="主題顏色"></div></div>
+      </div>
+      <div class="style-pick" id="style-pick" hidden><b data-zh="挑一個你喜歡的樣子（之後隨時能在「設定」改）">Pick a look you like (you can change it any time in Settings)</b></div>
+    </div>
+    <div class="pic">
+      <span class="say" data-zh="嗨，我是 Muv！<small>叫我 Jubmeow 也可以。我來帶你逛逛。</small>">Hi, I'm Muv! <small>You can call me Jubmeow too. I'll show you around.</small></span>
+      <img class="art bob" data-spot="w1-muv" alt="">
+    </div>
+  </section>
+
+  <!-- 2. Which photos: the full library (downloaded once, after the disclaimer) or your own -->
+  <section class="step s2 one" data-title="Photos" data-zh-title="照片" aria-labelledby="lib-h">
+    <div class="col">
+      <h1 id="lib-h" data-zh="要從哪些照片開始？">Which photos to start with?</h1>
+      <p id="existing" class="note" hidden></p>
+      <div class="choices two" role="radiogroup" aria-labelledby="lib-h">
+        <label class="choice" id="c-full">
+          <input type="radio" name="lib" value="full">
+          <img class="pic-in" data-spot="w2-full" alt="">
+          <span class="choice-body">
+            <b data-zh="完整貼圖庫">Full sticker library</b>
+            <span data-zh="App 附的所有照片和貼圖，只要下載一次。">Every photo and sticker that comes with the app, downloaded once.</span>
+            <span class="count muted" id="n-full"></span>
+          </span>
+        </label>
+        <label class="choice" id="c-own">
+          <input type="radio" name="lib" value="own">
+          <img class="pic-in" data-spot="w2-own" alt="">
+          <span class="choice-body">
+            <b data-zh="不用了，我自己加照片">None: I'll add my own</b>
+            <span data-zh="從零開始，用你自己的照片做貼圖。">Start empty and make stickers from your own photos.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="consent" id="consent" hidden>
+        <h2 data-zh="免責聲明（請先看完）">Disclaimer: please read</h2>
+        <ol>
+          <li data-zh="ML WorkHelp 是粉絲自製的非官方 App，跟圖片中的藝人、他們的經紀公司，以及任何片商、電視台或唱片公司都沒有關係，也沒有得到他們的授權或背書。">ML WorkHelp is an unofficial, fan-made app. It isn't affiliated with, authorised or
+            endorsed by the artists in these images, their management or agencies, or any studio, network or label.</li>
+          <li data-zh="這些貼圖是從照片裁切出來的。開發者並不擁有這些貼圖或原始照片的任何權利；所有權利都屬於原攝影師、創作者和權利人，功勞也全都是他們的。">These stickers are cut from photos. The developer does not own any rights to them or
+            to the photos they come from. All rights belong to the original photographers, creators and rights holders,
+            and all credit goes to them.</li>
+          <li data-zh="有些照片的攝影師已經同意我們使用；有些來自 GMMTV、Milk 和 Love 自己的貼文；還有一些我們聯絡不到攝影師，或不知道是誰拍的。如果你對這點有疑慮，請選「不用了，我自己加照片」，只用你自己的照片。">Some photos we have the photographer's permission for; some come from GMMTV and Milk and Love's own posts; for some we couldn't reach the photographer, or don't know who took them. If you'd rather not use photos like that, choose "None: I'll add my own" and use only your own photos.</li>
+          <li data-zh="想知道貼圖是從誰拍的照片裁下來的？到「貼圖」分頁點那張貼圖，就會看到原始照片和拍攝者。">Want to know who took the photo a sticker was cut
+            from? Open the <b>Stickers</b> tab and click the sticker: you'll see the original photo and who took it.</li>
+          <li data-zh="這些圖片只供個人欣賞，不能做商業用途。請不要複製、分享、轉貼、上傳或販售，也不要拿去營利、廣告、做周邊或任何商業用途，更不要說是自己的作品。">They're here for your own personal, non-commercial enjoyment only. Don't copy,
+            share, repost, upload or sell them, don't use them for profit, advertising, merchandise or anything
+            commercial, and don't claim them as your own.</li>
+          <li data-zh="如果你是圖片的權利人，希望把它移除，請寄信到 <a href=&quot;mailto:alitasdepollos01@gmail.com&quot;>alitasdepollos01@gmail.com</a>，我們會把那張圖片拿掉。">If you own the rights to an image and want it removed, please email
+            <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> and it will be taken out.</li>
+          <li data-zh="圖片依現狀提供。選擇使用，就代表你同意自行承擔使用的風險，怎麼使用也請自行負責；開發者不負任何責任。">The images are provided as they are. By choosing them you accept that you use them
+            at your own risk and that you alone are responsible for how you use them; the developer accepts no
+            liability.</li>
+        </ol>
+        <label class="field check"><input type="checkbox" id="agree">
+          <span data-zh="我已經看完並同意以上聲明，使用上會自行負責。">I have read and agree to this disclaimer, and I take responsibility for my use.</span></label>
+      </div>
+      <div class="dl" id="dl-box">
+        <button type="button" class="primary" id="dl" disabled></button>
+        <div class="dl-on" id="dl-on" hidden>
+        <b id="dl-say"></b> <span class="muted" id="dl-much"></span>
+        <div class="load"><i id="dl-bar"></i></div>
+        </div>
+        <p class="muted small" id="dl-note" data-zh="照片會直接放進 App 裡，不用解壓縮或搬檔案；下載的時候可以繼續往下看。每張都標明是誰拍的；可以當貼圖、當桌面夥伴，但不能裁切或修改。">It goes straight into the app: nothing to unzip or move, and you can keep going while it downloads. Each photo shows who took it; use them as stickers and on your desktop, but they can't be cut or changed.</p>
+      </div>
+
+      <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小提醒：</b>之後隨時都能加自己的照片（誰都可以，不限 MilkLove），分到 <b>Milk</b>、<b>Love</b>、<b>同框</b>或<b>其他</b>。"><b>Muv's tip:</b> you can add your own photos any time (anyone, not only MilkLove) and sort them under <b>Milk</b>, <b>Love</b>, <b>Together</b> or <b>Others</b>.</p></div>
+      <p id="lib-status" class="muted" role="status"></p>
+    </div>
+  </section>
+
+  <!-- 3. How to keep time -->
+  <section class="step s3k one" data-title="Keeping time" data-zh-title="計時" aria-labelledby="keep-h">
+    <div class="col">
+      <h1 id="keep-h" data-zh="你想怎麼計時？">How do you want to keep time?</h1>
+      <div class="choices two" role="radiogroup" aria-labelledby="keep-h">
+        <label class="choice keep">
+          <input type="radio" name="keep" value="work">
+          <img class="pic-in" data-spot="w3-keep" alt="">
+          <span class="choice-body">
+            <b data-zh="工作時鐘">Work clock</b>
+            <span data-zh="只要你在電腦前就會計時，離開 5 分鐘以上會自動停下。在「今天」和「數據」可以看到時間都花去哪了。">The clock counts while you're at the computer, and stops by itself when you're away 5 minutes. Today and Data show where the time goes.</span>
+            <span class="for" data-zh="適合想知道時間都花去哪裡的你。">Good if you want to see where your time goes.</span>
+          </span>
+        </label>
+        <label class="choice keep">
+          <input type="radio" name="keep" value="both">
+          <img class="pic-in" data-spot="app-now-pomo" alt="">
+          <span class="choice-body">
+            <b data-zh="番茄鐘">Pomodoro</b>
+            <span data-zh="專注 25 分鐘、休息 5 分鐘，一輪接一輪。每一輪都算進今天的工作，休息也會記下來。">25 minutes of focus, a 5-minute break, round after round. Each round counts as today's work, and breaks go in the log too.</span>
+            <span class="for" data-zh="適合需要節奏、容易分心的你。">Good if you want a rhythm and get distracted easily.</span>
+          </span>
+        </label>
+      </div>
+      <label class="away-q"><input type="checkbox" id="away-work"> <span data-zh="我常常不在電腦前工作（看書、讀紙本、畫畫⋯）">I often work away from the computer (reading, studying on paper, drawing…)</span></label>
+      <p class="away-say" id="away-say" data-zh="那就用 <b>專注全螢幕</b>：時鐘放大到整個螢幕，不碰電腦也一直計時。在「今天」或選單列打開。">Then use the <b>Focus screen</b>: the clock fills the screen and keeps counting while you don't touch the computer. Open it from Today or the menu bar.</p>
+      <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小提醒：</b>還沒決定？就先選「工作時鐘」吧。之後在<b>今天</b>最上面的兩個按鈕就能隨時切換。"><b>Muv's tip:</b> not sure? Start with the work clock. Switch any time with the two buttons at the top of <b>Today</b>.</p></div>
+    </div>
+  </section>
+
+  <!-- 4. The desktop buddy -->
+  <section class="step s4b" data-title="The buddy" data-zh-title="夥伴">
+    <div class="col">
+      <h1 data-zh="1. 桌面夥伴">1. The desktop buddy</h1>
+      <ul class="how">
+        <li data-zh="<b>拖曳</b>她到任何地方、任何螢幕；<b>按右鍵</b>可以打開選單。"><b>Drag it</b> anywhere, onto any screen; <b>right-click it</b> for its menu.</li>
+        <li data-zh="<b>點一下</b>她會換個動作；休息時點她，就能說「我回來了」。"><b>Click it</b> and it does something else; on a break, click it to say you're back.</li>
+      </ul>
+      <div class="fields">
+        <b data-zh="夥伴下面要顯示什麼？">What shows under the buddy?</b>
+        <span class="muted" id="keep-says"></span>
+        <label class="field"><span data-zh="第一行">First line</span><select id="label1" aria-label="First line" data-zh-aria-label="第一行"></select></label>
+        <label class="field"><span data-zh="第二行">Second line</span><select id="label2" aria-label="Second line" data-zh-aria-label="第二行"></select></label>
+        <label class="field"><span data-zh="多活潑">How lively</span><select id="pace" aria-label="How lively the desktop buddy is" data-zh-aria-label="桌面夥伴有多活潑">
+          <option value="lively" data-zh="活潑：一直走來走去">Lively: walks about all the time</option><option value="calm" data-zh="悠閒：每半分鐘左右散步一下" selected>Calm: a stroll every half a minute or so</option>
+          <option value="calmer" data-zh="更悠閒：每一兩分鐘散步一下">Calmer: a stroll every minute or two</option><option value="still" data-zh="安靜：待在你放的地方">Still: stays where you put it</option></select></label>
+        <label class="check"><input type="checkbox" id="thai" checked> <span data-zh="教我泰文單字（點夥伴、提醒和休息的時候）">Teach me Thai words (when I click the buddy, with reminders and breaks)</span></label>
+        <p><button type="button" id="bring" class="primary" data-zh="叫出桌面夥伴">Bring the desktop buddy out</button>
+          <span id="brought" class="muted" hidden data-zh="她出來囉！拖拖看。">It's out. Try dragging it.</span></p>
+      </div>
+    </div>
+    <div class="pic">
+      <div class="w-preview" id="w-preview" aria-label="What the desktop buddy will look like" data-zh-aria-label="桌面夥伴大概長這樣">
+        <div class="pv-pair"><img data-spot="preview-milk" alt=""><img data-spot="preview-love" alt=""></div>
+        <div class="pv-label" id="pv-label"></div>
+      </div>
+      <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小提醒：</b>之後可以到 <b>設定</b> → <b>桌面夥伴</b> 修改（也能調大小：小、中、大、特大），或直接在夥伴上按右鍵。"><b>Muv's tip:</b> change it any time in <b>Settings</b> → <b>Desktop buddy</b> (its size too: small to extra large), or right-click the buddy.</p></div>
+    </div>
+  </section>
+
+  <!-- 5. The menu, and the window -->
+  <section class="step s5w" data-title="The window" data-zh-title="視窗">
+    <div class="col">
+      <h1 class="os-mac" data-zh="2. 所有功能都在一個視窗裡">2. Everything is in one window</h1>
+      <h1 class="os-win" data-zh="2. 所有功能都在一個視窗裡">2. Everything is in one window</h1>
+      <p class="os-mac text" data-zh="點螢幕右上角選單列的小圖示，或在夥伴上按右鍵，就能打開它。左邊的分頁有：">Click the little icon at the top right of your screen, in the menu bar, or right-click the buddy. The tabs down the left:</p>
+      <p class="os-win text" data-zh="點螢幕右下角時鐘旁的小圖示（可能收在 ^ 箭頭裡），或在夥伴上按右鍵，就能打開它。左邊的分頁有：">Click the little icon at the bottom right of your screen, next to the clock (it may be under the ^ arrow), or right-click the buddy. The tabs down the left:</p>
+      <ol class="tabs-list">
+        <li data-zh="<b>今天</b>：計時、番茄鐘、你今天做了什麼"><b>Today</b>: the clock, the Pomodoro, your day</li>
+        <li data-zh="<b>提醒與活動</b>"><b>Reminders &amp; events</b></li>
+        <li data-zh="<b>數據</b>：看一週、一個月、一年"><b>Data</b>: your week, month and year</li>
+        <li data-zh="<b>設定</b>：風格、顏色、語言、計時方式"><b>Settings</b>: style, colours, language, keeping time</li>
+        <li data-zh="<b>貼圖</b>：用自己的照片做貼圖，標註照片來自誰"><b>Stickers</b>: make your own from your photos, and credit them</li>
+        <li data-zh="<b>照片來源</b>"><b>Photo credits</b></li>
+      </ol>
+      <p class="muted" data-zh="有問題？點左下角的 <b>Muv</b>：常見問題、寫信給我們">Questions? Click <b>Muv</b> at the bottom left: answers, and a way to email us</p>
+      <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小提醒：</b>風格、顏色和語言都在<b>設定</b>裡改，這段介紹的第一頁也可以。"><b>Muv's tip:</b> the style, colours and language are in <b>Settings</b>, and on the first page of this tour.</p></div>
+    </div>
+    <div class="pic"><img class="art bob" data-spot="w5" alt=""></div>
+  </section>
+
+  <!-- 6. Work time -->
+  <section class="step s6w" data-title="Work time" data-zh-title="工作時間" data-skip="pomo">
+    <div class="col">
+      <h1 data-zh="3. 你的工作時間">3. Your work time</h1>
+      <ul class="how text">
+        <li data-zh="每天夥伴會問你要不要開始；按下<b>開始</b>才會計時。">Each day the buddy asks whether to start; the clock counts from <b>Start</b>.</li>
+        <li data-zh="設定<b>本日主題</b>：今天整天的重點。「數據」會列出每天的主題。">Set a <b>focus of the day</b>: the theme of the whole day. Data shows each day's.</li>
+        <li data-zh="<b>點正在做的事的名字</b>就能換一件事；新的事直接打。"><b>Click the name of what you're doing</b> to switch to another task, or type a new one.</li>
+        <li data-zh="<b>休息一下</b>：選這次休息做什麼、休息多久；回來按 <b>我回來了</b>。"><b>Take a break</b>: pick what it is and how long; back, press <b>I'm back</b>.</li>
+        <li data-zh="<b>收工</b>：把做到現在的時間記進去，結束今天，還有貼圖慶祝"><b>Done for today</b>: what you've done so far is logged, the day ends, with a sticker celebration</li>
+        <li data-zh="今天的紀錄是一條<b>時間軸</b>：點一段就能改，虛線的空白點一下就能補登。">Today's log is a <b>timeline</b>: click a part to change it; click a dashed gap to add time you forgot.</li>
+        <li data-zh="<b>專注全螢幕</b>：要看書、不在電腦前工作時打開，時鐘放大到整個螢幕，不碰電腦也一直計時，顏色、位置、大小都能自己選。"><b>Focus screen</b>: away from the computer? The clock fills the screen and keeps counting; you pick its colours, place and size.</li>
+      </ul>
+      <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小提醒：</b>早上取好名字，之後換事情時切換一下就好。"><b>Muv's tip:</b> name your task once in the morning, then just switch when you change.</p></div>
+    </div>
+    <div class="pic"><img class="art" data-spot="w6" alt=""></div>
+  </section>
+
+  <!-- 7. The Pomodoro (not with work count only) -->
+  <section class="step s7p" data-title="Pomodoro" data-zh-title="番茄鐘" data-skip="work">
+    <div class="col">
+      <h1 data-zh="3. 番茄鐘">3. The Pomodoro</h1>
+      <ul class="how text">
+        <li data-zh="專注 25 分鐘、休息 5 分鐘，每 4 輪多休息一下（長度可以自己設）。在<b>今天</b>、選單列或夥伴的右鍵選單開始一輪。">25 minutes of focus, 5 of rest, a longer break every 4 rounds (or your own lengths). Start a round on <b>Today</b>, in the menu bar or from the buddy's right-click menu.</li>
+        <li data-zh="每次休息都是同一個畫面：可以改成吃飯、上廁所⋯，還有一支 MilkLove 的影片（GMMTV OFFICIAL）">Every break is one screen: make it lunch, the toilet…, with a MilkLove video (GMMTV OFFICIAL)</li>
+        <li data-zh="<b>收工</b>：做到一半的這一輪也算（只有專注的時間算工作），再來一點貼圖慶祝。不在電腦前？每一輪都能打開 <b>專注全螢幕</b>。"><b>Done for today</b>: a half-done round counts too (only focus time counts as work), then a sticker celebration. Away from the computer? Each round can open the <b>Focus screen</b>.</li>
+        <li class="mac-only" data-zh="<b>選單列小倒數</b>：都收起來時，愛心旁會顯示 🍅 18:42（休息時是 ☕）；到<b>設定 › 外觀與選單列</b>可以調整。"><b>Menu bar timer</b>: with everything put away, 🍅 18:42 shows beside the heart (☕ on a break); change it in <b>Settings › Look &amp; menu bar</b>.</li>
+      </ul>
+      <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小提醒：</b>每一輪只做一件事最有效；專注時把視窗收起來，看選單列就知道還剩多久。"><b>Muv's tip:</b> one thing per round works best. Put the window away while you focus: the menu bar shows how long is left.</p></div>
+    </div>
+    <div class="pic"><img class="art" data-spot="w7" alt=""></div>
+  </section>
+
+  <!-- 8. Reminders & events -->
+  <section class="step s8r" data-title="Reminders & events" data-zh-title="提醒與活動">
+    <div class="col">
+      <h1 data-zh="4. 提醒與活動">4. Reminders &amp; events</h1>
+      <ul class="how text">
+        <li data-zh="<b>寫下要做什麼，再點時間</b>：15 分鐘後、今晚，或自己選日期和時間。"><b>Write what it is, then tap when</b>: in 15 minutes, tonight, or pick a date and time.</li>
+        <li data-zh="<b>提醒</b>：時間一到，夥伴就會把提醒舉給你看，還附上相關的泰文單字。"><b>Reminders</b>: when it's time, the buddy holds it up, with a Thai word that goes with it.</li>
+        <li data-zh="<b>活動</b>：不用連結行事曆也能加，會存在 App 裡；開始前夥伴會提醒你。連結 Apple 行事曆後，兩邊會同步。"><b>Events</b>: no calendar needed, they stay in the app; the buddy reminds you before each starts. Connect Apple Calendar and they go both ways.</li>
+        <li data-zh="<b>時間到會響</b>：內建的「叮」，或 Milk 和 Love 的聲音（「พี่มิว！」、「น้องเลิฟ」、「P'Ink！」、「牙蟲」⋯），到<b>設定 › 提醒與活動</b>選。"><b>It rings when it's time</b>: the chime, or Milk and Love's voices (“พี่มิว!”, “น้องเลิฟ”, “P'Ink!”, “牙蟲”…); pick it in <b>Settings › Reminders &amp; events</b>.</li>
+        <li data-zh="<b>夥伴收起來的時候</b>，會在你正在用的螢幕右上角跳出一張小卡片。<b>專注時</b>（專注全螢幕或番茄鐘），提醒會先等等，結束後一起告訴你；活動照樣會跳出來。"><b>With the buddy hidden</b>, a small card pops up at the top right of the screen you're on. <b>While you focus</b> (the focus screen or a Pomodoro round), reminders wait and come together at the end; events still come through.</li>
+      </ul>
+      <div class="connect mac-only">
+        <div class="conn" id="conn-apple">
+          <b data-zh="也要用 Apple 提醒事項嗎？">Use Apple Reminders too?</b>
+          <span class="muted" data-zh="Apple 提醒事項裡有設時間的提醒會同步過來，在這裡新增的也會同步過去。">Reminders with a time come in from Apple Reminders, and the ones you add here go there too, both ways.</span>
+          <span class="row"><button type="button" class="primary" id="connect-apple" data-zh="連結 Apple 提醒事項">Connect Apple Reminders</button><span class="muted state"></span></span>
+        </div>
+        <div class="conn" id="conn-calendar">
+          <b data-zh="Apple 行事曆呢？">And Apple Calendar?</b>
+          <span class="muted" data-zh="接下來的活動會出現在這裡，開始前提醒你；也可以在這裡新增活動，兩邊的修改會互相同步。">Your upcoming events show here and remind you before they start; add events here too, changes go both ways.</span>
+          <span class="row"><button type="button" class="primary" id="connect-calendar" data-zh="連結 Apple 行事曆">Connect Apple Calendar</button><span class="muted state"></span></span>
+        </div>
+      </div>
+      <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小提醒：</b>兩個都可以之後再到「設定」連結（或關掉）。"><b>Muv's tip:</b> connect either one (or switch it off) any time in Settings.</p></div>
+    </div>
+    <div class="pic"><img class="art" data-spot="w8" alt=""></div>
+  </section>
+
+  <!-- 9. Data -->
+  <section class="step s9w" data-title="Data" data-zh-title="數據">
+    <div class="col">
+      <h1 data-zh="5. 數據">5. Data</h1>
+      <ul class="how text work-text">
+        <li data-zh="看<b>一週、一個月或一年</b>，三個分頁：<b>總覽</b>（數字、重點整理、每天的長條圖）、<b>分析</b>（時間花在哪裡、休息、什麼時候工作、專注程度）和<b>日曆</b>。看一年時點一個月，整頁就換成那個月。">A <b>week, a month or a year</b>, in three tabs: <b>Summary</b> (the numbers, the summary, each day's bar), <b>Analysis</b> (where the time went, breaks, when you work, how focused) and <b>Calendar</b>. In a year, click a month and the whole page is that month.</li>
+        <li data-zh="<b>日曆</b>：每天的主題和時數；<b>點一天</b>就能看那天做了什麼：一條時間軸，點一段就能改，空白可以補登。"><b>Calendar</b>: each day's focus and hours; <b>click a day</b> to see what you did: a timeline, click a part to change it, fill in a gap.</li>
+        <li data-zh="數字都會跟前一段時間比（▲▼）。也能匯出成試算表；資料都只存在你的電腦裡。">Every number is against the time before (▲▼). Export it as a spreadsheet; everything stays on your computer.</li>
+        <li data-zh="<b>做成圖片</b>：六種小卡片（我的這一週、我的今天、番茄鐘⋯），貼圖自己挑，卡片上會標明照片來源。"><b>Make a picture</b>: six little cards (My week, My day, Pomodoros…) with a sticker you pick, and its photo's credit on the card.</li>
+      </ul>
+      <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小提醒：</b>月底打開日曆看看，這個月都忙了些什麼。"><b>Muv's tip:</b> open the calendar at the end of the month and see what it was all about.</p></div>
+    </div>
+    <div class="pic">
+      <div class="pics work-text">
+        <figure><img src="art/welcome-data-cal-en.jpg" data-zh-src="art/welcome-data-cal-zh.jpg" alt="" data-zh-alt=""><figcaption data-zh="月：每天的主題和時數">A month: each day's focus and hours</figcaption></figure>
+        <figure><img src="art/welcome-data-day-en.jpg" data-zh-src="art/welcome-data-day-zh.jpg" alt=""><figcaption data-zh="點一天：時間軸，點一段就能改">Click a day: a timeline, click a part to change it</figcaption></figure>
+      </div>
+      <img class="art bob peek" data-spot="w9" alt="">
+    </div>
+  </section>
+
+  <!-- 10. Your own stickers -->
+  <section class="step s10s" data-title="Your stickers" data-zh-title="你的貼圖">
+    <div class="col">
+      <h1 data-zh="6. 做你自己的貼圖">6. Make your own stickers</h1>
+      <ol class="how text">
+        <li data-zh="打開<b>貼圖</b>分頁 → <b>＋ 加入照片</b>：誰都可以，只要你喜歡。">Open the <b>Stickers</b> tab → <b>＋ Add photos</b>: anyone you like.</li>
+        <li data-zh="把每張分到 <b>Milk</b>、<b>Love</b>、<b>同框</b>或<b>其他</b>。">Sort each into <b>Milk</b>, <b>Love</b>, <b>Together</b> or <b>Others</b>.</li>
+        <li data-zh="想要的話，也可以讓「<b>其他</b>」當夥伴，新做的貼圖會自動加進去。">Pick <b>Others</b> as your buddy if you like; new stickers show up by themselves.</li>
+        <li data-zh="點任何一張貼圖，就能看到原始照片和拍攝者。">Click any sticker to see the photo it came from, and who took it.</li>
+      </ol>
+      <p class="warn text" data-zh="請用你有權使用的照片，並標上來源。你加進來的照片請自行負責。你做的貼圖<b>只會留在這個 App 裡</b>（當桌面夥伴），不能複製、另存或貼到其他地方。App 內建的貼圖可以瀏覽、也能看原始照片，但不能修改。">Use photos you have the right to use, with their credit. You're responsible for the photos you add.
+        The stickers you make <b>stay in this app</b> (as desktop buddies): they can't be copied, saved or pasted anywhere else. The ones that come with the app are there to look at, with their original photos, not to change.</p>
+      <p><button type="button" id="open-maker" data-zh="現在就做貼圖">Make stickers now</button></p>
+    </div>
+    <div class="pic">
+      <span class="say" data-zh="好可愛～">Cuteee!</span>
+      <img class="art" data-spot="w10" alt="">
+    </div>
+  </section>
+
+  <!-- 11. New versions & important notices: the email (needed to go on) -->
+  <section class="step s11c" data-title="Updates" data-zh-title="新版本與重要通知">
+    <div class="col">
+      <h1 data-zh="新版本與重要通知">New versions &amp; important notices</h1>
+      <p class="text" data-zh="最後一步：留下你的 email。有新版本，或有需要讓你知道的事，我們就會寫信給你。例如照片或貼圖的權利人聯絡我們、要求移除某些內容時，我們會更新 App，並告訴你接下來怎麼做。">One last step: leave your email. We'll write when there's a new version, or something you need to know: for example, if a photo or sticker's rights holder contacts us and asks for something to be removed, we'll update the app and tell you what to do.</p>
+      <div class="contact-box">
+        <input type="email" id="contact-email" autocomplete="email" placeholder="you@example.com" data-zh-placeholder="你的 email" aria-label="Email">
+        <p class="contact-msg" id="contact-msg" role="status"></p>
+        <ul class="promise">
+          <li data-zh="只會寄 ML WorkHelp 的新版本，和需要你知道的事（像是版權相關的更新），不寄廣告、不寄垃圾信">Only ML WorkHelp's new versions and things you need to know (copyright updates, say). No ads, no spam.</li>
+          <li data-zh="絕對不會分享、出售或提供給任何人，也不會拿去做別的用途">Never shared, sold or given to anyone, and never used for anything else.</li>
+          <li data-zh="隨時可以取消：點信裡的「取消訂閱」，或寫信到 alitasdepollos01@gmail.com">Stop any time: "unsubscribe" in any of our emails, or write to alitasdepollos01@gmail.com.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pic"><img class="art" data-spot="w-contact" alt=""></div>
+  </section>
+
+  <!-- 12. Done: thank you to everyone behind the photos and drawings -->
+  <section class="step s11d one" data-title="Done" data-zh-title="完成">
+    <div class="col done">
+      <img class="done-st" data-spot="w11-right" alt="">
+      <h1 data-zh="都準備好了！">You're all set!</h1>
+      <p><span data-zh="祝你工作順利。">Have a good day of work.</span> <span lang="th">สู้ๆ นะ!</span> <span data-zh="（su su na：加油！）">(su su na: you've got this!)</span></p>
+      <p class="muted" data-zh="按下<b>完成</b>後會打開 App 的視窗，Muv 會帶你逛一圈。">When you click <b>Finish</b>, the app's window opens and Muv shows you around it.</p>
+      <div class="thanks" id="thanks">
+        <div class="confetti"></div>
+        <h2 data-zh="謝謝這些照片和插畫的主人">Thank you to the people behind these photos and drawings</h2>
+        <div class="ty-cards" id="thank-names"></div>
+        <span class="hearts" aria-hidden="true"></span>
+      </div>
+      <p class="muted small ty-note" id="thank-note" data-zh="<b>✓ 已經同意我們使用：</b>Blumoon、Lyrac、NGMin 和 otter（照片），以及 wanwannjeab（Muv 插畫）。也謝謝上面的每一位。其他的照片，我們試著聯絡過攝影師但沒有收到回覆，或不知道是誰拍的。如果其中有你的照片，想更改標註或希望移除，隨時告訴我們，我們會在下一次更新修正："><b>✓ Gave us permission:</b> Blumoon, Lyrac, NGMin and otter (photos), and wanwannjeab (the Muv drawings). Thank you to everyone else above too. For the rest, we tried to reach the photographers but heard nothing back, or we don't know who took them. If a photo is yours and you'd like the credit changed or the photo removed, tell us any time and we'll fix it in the next update:</p>
+      <p class="muted small" data-zh="之後可以到 <b>設定</b> → <b>關於</b> 再看一次，或從選單選 <b>歡迎與導覽⋯</b>">See it again in <b>Settings</b> → <b>About</b>, or from the menu: <b>Welcome and tour…</b></p>
+    </div>
+  </section>
+  </div>
+
+  <span class="pcr" id="pcr"></span>
+  <nav class="steps-nav">
+    <button type="button" id="back" data-zh="上一步">Back</button>
+    <span id="hint" class="muted hint"></span>
+    <button type="button" id="next" class="primary">Next</button>
+  </nav>
+</main>
+<script src="js/demo-data.js"></script><script src="js/demo-work.js"></script><script src="demo-host.js"></script><link rel="stylesheet" href="demo.css">
+<script type="module" src="js/welcome.js"></script>
+</body>
+</html>

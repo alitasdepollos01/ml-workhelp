@@ -1,5 +1,5 @@
 Fonts bundled with ML WorkHelp. All are under the SIL Open Font License 1.1 (see OFL.txt);
-each font's copyright notice is kept inside the font file. Converted to woff2 and trimmed to the characters this demo shows.
+each font's copyright notice is kept inside the font file. Converted to woff2, not modified.
 
   huninn.woff2          jf open 粉圓 (jf open huninn) 2.1        https://github.com/justfont/open-huninn-font
   gensen-r/b.woff2      源泉圓體 (GenSen Rounded TC) 2.100        https://github.com/ButTaiwan/gensen-font

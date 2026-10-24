@@ -1,0 +1,22 @@
+/* The reminder card (remind.html): a small stack at the top right of the screen */
+html, body.remind { margin: 0; background: transparent !important; overflow: hidden; }
+body.remind { padding: 6px 8px 10px; font: 14px/1.4 var(--latin, -apple-system, system-ui, sans-serif); }
+.rc-stack { display: grid; gap: 8px; }
+.rc { position: relative; display: grid; gap: 2px; align-content: start; min-height: 96px; padding: 12px 14px 12px 16px;
+  background: var(--sk-card, var(--control-bg, #fff)); color: var(--desk-ink, #3b2a32);
+  border: 2px solid color-mix(in srgb, var(--sk-accent, var(--bar, #e48aa6)) 55%, var(--line, #eee)); border-radius: var(--sk-r-lg, 16px);
+  box-shadow: 0 10px 28px rgba(40, 20, 30, .28); animation: rc-in .28s cubic-bezier(.2, .8, .3, 1.1); }
+.rc.has-st { padding-right: 104px; }
+@keyframes rc-in { from { opacity: 0; transform: translateY(-10px) scale(.97); } }
+@media (prefers-reduced-motion: reduce) { .rc { animation: none; } }
+.rc-k { font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; font-weight: 700; color: var(--sk-accent-ink, var(--bar, #b4446a)); }
+.rc-b { font-size: 16px; line-height: 1.3; }
+.rc-t { color: var(--desk-muted, #8c7680); font-size: 12.5px; }
+.rc-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.rc-acts button { font: inherit; font-size: 13px; border-radius: var(--sk-r-btn, 999px); padding: 4px 12px; cursor: pointer;
+  border: 1.5px solid var(--line, #e7c9d4); background: var(--control-bg, #fff); color: var(--desk-ink, #3b2a32); }
+.rc-acts button.pri { background: var(--primary, #3f7d5c); border-color: var(--primary, #3f7d5c); color: var(--primary-ink, #fff); font-weight: 600; }
+.rc-x { position: absolute; top: 6px; right: 8px; z-index: 2; border: 0; background: none; color: var(--desk-muted, #8c7680); font-size: 13px; cursor: pointer; padding: 2px 4px; border-radius: 6px; }
+.rc-x:hover { color: var(--desk-ink, #3b2a32); }
+.rc-st { position: absolute; right: 10px; bottom: 6px; height: 88px; max-width: 92px; object-fit: contain; object-position: bottom right; pointer-events: none;
+  filter: var(--sk-stk, drop-shadow(0 3px 4px rgba(0, 0, 0, .18))); }

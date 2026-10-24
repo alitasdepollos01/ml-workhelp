@@ -1,0 +1,274 @@
+/* The app's 8 styles (Settings › Look › Style; html[data-style], set by preload.js like the
+   colour theme). A style changes shape, fonts, shadows and how the stickers are dressed; the
+   colours still come from the colour theme (themes.css) and light or dark. Without
+   data-style (VS Code, a browser) nothing here applies.
+     a Sticker Book · b Milk Tea Clay · c Clean Pastel · d Fan Zine Pop
+     e Concert Night · f Purikura (the default) · g Retro Desktop · h Fan Magazine
+   Fonts: fonts/ (SIL Open Font License, see fonts/README.txt). */
+
+@import url("fonts/latin.css");
+@font-face { font-family: "ML Huninn"; src: url(fonts/huninn.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "ML GenSen"; src: url(fonts/gensen-r.woff2) format("woff2"); font-weight: 100 549; font-display: swap; }
+@font-face { font-family: "ML GenSen"; src: url(fonts/gensen-b.woff2) format("woff2"); font-weight: 550 1000; font-display: swap; }
+@font-face { font-family: "ML ChillRound"; src: url(fonts/chill.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "ML ChenYu"; src: url(fonts/chenyu.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "ML Cubic11"; src: url(fonts/cubic.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "ML NotoTC"; src: url(fonts/noto-rg.woff2) format("woff2"); font-weight: 100 549; font-display: swap; }
+@font-face { font-family: "ML NotoTC"; src: url(fonts/noto-bd.woff2) format("woff2"); font-weight: 550 1000; font-display: swap; }
+@font-face { font-family: "ML LineSeed"; src: url(fonts/lineseed-rg.woff2) format("woff2"); font-weight: 100 549; font-display: swap; }
+@font-face { font-family: "ML LineSeed"; src: url(fonts/lineseed-bd.woff2) format("woff2"); font-weight: 550 1000; font-display: swap; }
+@font-face { font-family: "ML LineSeed TH"; src: url(fonts/lineseed-th-rg.woff2) format("woff2"); font-display: swap; }
+
+/* ===== the shared skin: every style sets these, the rules below use them ===== */
+html[data-style] body {
+  --sys: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", "Segoe UI", system-ui, sans-serif;
+  --sk-r-lg: 14px; --sk-r-md: 11px; --sk-r-sm: 8px; --sk-r-btn: 9px; --sk-bw: 1px;
+  --sk-card: var(--control-bg); --sk-card-line: var(--line, var(--control-line));
+  --sk-shadow: 0 1px 2px rgba(0, 0, 0, .05); --sk-shadow-sm: 0 1px 2px rgba(0, 0, 0, .06); --sk-shadow-pop: 0 14px 34px -10px rgba(0, 0, 0, .25);
+  --sk-shadow-btn: 0 1px 2px rgba(0, 0, 0, .1); --sk-press: scale(.98);
+  --sk-stk: drop-shadow(0 4px 6px rgba(0, 0, 0, .14));
+  --sk-accent: var(--consent, #e48aa6); --sk-accent-ink: var(--bar, #b4446a);
+  --sk-hl: #ffe27a; --sk-art: none;
+  font-family: var(--latin);
+}
+html[data-style] .appwin main h2, html[data-style] .welcome h1, html[data-style] .cele h2, html[data-style] .tour-bubble .tour-title,
+html[data-style] .appwin .tile6 b, html[data-style] .appwin .dtile b, html[data-style] .appwin .now-ring .time, html[data-style] .appwin .pomo-ring .time,
+html[data-style] .appwin .digital .time, html[data-style] .appwin .big-line, html[data-style] .qp .top b, html[data-style] .thanks h2 { font-family: var(--sk-h, var(--latin)); }
+html[data-style] body.appwin, html[data-style] body.welcome { background-image: var(--sk-art); background-attachment: fixed; }
+html[data-style] .appwin .card { border-radius: var(--sk-r-lg); border-width: var(--sk-bw); border-color: var(--sk-card-line); background-color: var(--sk-card); box-shadow: var(--sk-shadow); }
+html[data-style] .appwin .btn { border-radius: var(--sk-r-btn); border-width: var(--sk-bw); box-shadow: var(--sk-shadow-btn); transition: transform .12s, box-shadow .12s, filter .15s, background .15s; }
+html[data-style] .appwin .btn.ghost, html[data-style] .appwin .linkish { box-shadow: none; }
+html[data-style] .appwin .btn:active:not(:disabled) { transform: var(--sk-press); }
+html[data-style] .appwin .btn.primary:hover { filter: brightness(1.06); }
+html[data-style] .appwin .chip, html[data-style] .appwin .seg, html[data-style] .appwin .dtabs button, html[data-style] .appwin .days-pick button { border-width: var(--sk-bw); }
+html[data-style] .appwin input[type=text], html[data-style] .appwin input[type=email], html[data-style] .appwin input[type=number], html[data-style] .appwin select, html[data-style] .appwin textarea,
+html[data-style] .welcome input[type=email], html[data-style] .welcome select { border-radius: var(--sk-r-sm); }
+html[data-style] .appwin .deco, html[data-style] .welcome [data-spot], html[data-style] .cele .stk img { filter: var(--sk-stk); }
+html[data-style] .appwin .toast, html[data-style] .tour-bubble, html[data-style] .appwin .viewer .box, html[data-style] .appwin .dd { border-radius: var(--sk-r-lg); box-shadow: var(--sk-shadow-pop); }
+html[data-style] .appwin nav.side button { border-radius: var(--sk-r-md); }
+html[data-style] .appwin nav.side button.on { box-shadow: var(--sk-shadow-sm); }
+/* the right-click card and the buddy's bubbles follow the style too */
+html[data-style] .qp { border-radius: var(--sk-r-lg); border-width: var(--sk-bw); box-shadow: var(--sk-shadow-pop); background: var(--sk-card); }
+html[data-style] .qp .big button, html[data-style] .qp .task, html[data-style] .qp .pomo { border-radius: var(--sk-r-md); }
+html[data-style] .bubble { border-radius: var(--sk-r-lg); font-family: var(--latin); }
+html[data-style] .bubble .th, html[data-style] .bubble .word .th { font-family: var(--thai); }
+
+/* ===================================================================
+   A · Sticker Book 貼紙手帳: cream paper, washi tape, die-cut stickers
+   =================================================================== */
+html[data-style="a"] body {
+  --latin: "Nunito", "ML Huninn", var(--sys); --thai: "Mali", "Nunito", "ML Huninn", var(--sys); --sk-h: "Fredoka", "ML Huninn", var(--sys); --sk-note: "ML ChenYu", "ML Huninn", var(--sys);
+  --sk-r-lg: 22px; --sk-r-md: 15px; --sk-r-sm: 11px; --sk-r-btn: 999px; --sk-bw: 1.5px;
+  --sk-card: color-mix(in oklab, var(--control-bg) 72%, #fffaf0); --sk-card-line: color-mix(in oklab, var(--control-line) 60%, #e7d9c5);
+  --sk-shadow: 0 2px 0 rgba(150, 110, 60, .14), 0 10px 24px -14px rgba(95, 62, 30, .3); --sk-shadow-sm: 0 2px 0 rgba(150, 110, 60, .14);
+  --sk-shadow-pop: 0 18px 40px -16px rgba(95, 62, 30, .45); --sk-shadow-btn: 0 2px 0 rgba(150, 110, 60, .18); --sk-press: translateY(2px);
+  --sk-stk: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 5px 6px rgba(80, 50, 20, .22));
+  --sk-art: radial-gradient(color-mix(in oklab, var(--primary) 22%, transparent) 1.1px, transparent 1.4px);
+}
+html[data-style="a"] body.appwin, html[data-style="a"] body.welcome { background-color: color-mix(in oklab, var(--desk) 45%, #fbf6ee); background-size: 18px 18px; }
+@media (prefers-color-scheme: dark) { html[data-style="a"] body.appwin, html[data-style="a"] body.welcome { background-color: color-mix(in oklab, var(--desk) 70%, #221d1b); }
+  html[data-style="a"] body { --sk-card: color-mix(in oklab, var(--control-bg) 80%, #2d2725); --sk-card-line: var(--control-line); --sk-shadow: 0 2px 0 rgba(0, 0, 0, .3), 0 10px 24px -14px rgba(0, 0, 0, .6); --sk-shadow-sm: 0 2px 0 rgba(0, 0, 0, .3); --sk-shadow-btn: 0 2px 0 rgba(0, 0, 0, .3); } }
+html[data-style="a"] .appwin .now-card::after, html[data-style="a"] .welcome .wframe::after { content: ""; position: absolute; top: -11px; left: 50%; width: 96px; height: 24px; transform: translateX(-50%) rotate(-3deg); pointer-events: none;
+  background: repeating-linear-gradient(45deg, color-mix(in oklab, var(--sk-accent) 55%, transparent) 0 8px, color-mix(in oklab, var(--sk-accent) 35%, transparent) 8px 16px); border-radius: 2px; opacity: .9; }
+html[data-style="a"] .appwin .focus-row { background: #fff3c4; transform: rotate(-.6deg); box-shadow: 0 10px 18px -12px rgba(95, 62, 30, .45); }
+@media (prefers-color-scheme: dark) { html[data-style="a"] .appwin .focus-row { background: #4b4226; } }
+html[data-style="a"] .appwin .focus-row input { font-family: var(--sk-note); font-size: 19px; font-weight: 400; }
+html[data-style="a"] .appwin main h2 { font-weight: 600; }
+html[data-style="a"] .appwin nav.side button.on { color: var(--primary); }
+html[data-style="a"] .appwin nav.side button.on::after { content: ""; margin-left: auto; align-self: center; width: 7px; height: 7px; border-radius: 50%; background: var(--sk-accent); flex: none; }
+
+/* ===================================================================
+   B · Milk Tea Clay 奶茶黏土: soft, squishy, toy-like
+   =================================================================== */
+html[data-style="b"] body {
+  --latin: "DM Sans", "ML GenSen", var(--sys); --thai: "Mali", "DM Sans", "ML GenSen", var(--sys); --sk-h: "Nunito", "ML GenSen", var(--sys);
+  --sk-r-lg: 28px; --sk-r-md: 20px; --sk-r-sm: 14px; --sk-r-btn: 999px; --sk-bw: 0px;
+  --sk-card: linear-gradient(180deg, color-mix(in oklab, var(--control-bg) 100%, #fff), var(--control-bg) 60%);
+  --sk-shadow: 0 16px 32px -18px rgba(150, 90, 70, .45), inset 0 -4px 0 rgba(120, 80, 60, .06), inset 0 2px 0 rgba(255, 255, 255, .8);
+  --sk-shadow-sm: 0 6px 14px -8px rgba(150, 90, 70, .4), inset 0 -2px 0 rgba(120, 80, 60, .06); --sk-shadow-pop: 0 24px 44px -18px rgba(120, 70, 50, .5);
+  --sk-shadow-btn: inset 0 -3px 0 rgba(0, 0, 0, .12), 0 8px 14px -10px rgba(150, 90, 70, .5); --sk-press: translateY(2px) scale(.98);
+  --sk-stk: drop-shadow(0 8px 8px rgba(120, 70, 50, .25));
+  --sk-art: radial-gradient(700px 420px at 10% 0%, color-mix(in oklab, var(--primary) 22%, transparent), transparent 65%), radial-gradient(700px 480px at 100% 100%, color-mix(in oklab, var(--sk-accent) 26%, transparent), transparent 65%);
+}
+html[data-style="b"] body.appwin, html[data-style="b"] body.welcome { background-color: color-mix(in oklab, var(--desk) 55%, #fbf1ea); }
+@media (prefers-color-scheme: dark) { html[data-style="b"] body.appwin, html[data-style="b"] body.welcome { background-color: color-mix(in oklab, var(--desk) 80%, #221c1f); }
+  html[data-style="b"] body { --sk-card: var(--control-bg); --sk-shadow: 0 16px 32px -18px rgba(0, 0, 0, .7), inset 0 -4px 0 rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .07); --sk-shadow-sm: 0 6px 14px -8px rgba(0, 0, 0, .6); --sk-shadow-btn: inset 0 -3px 0 rgba(0, 0, 0, .25); } }
+html[data-style="b"] .appwin .card { background: var(--sk-card); }
+html[data-style="b"] .appwin .btn.primary { box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .2), inset 0 2px 0 rgba(255, 255, 255, .25), 0 10px 18px -10px var(--primary); }
+html[data-style="b"] .appwin main h2 { font-weight: 900; }
+html[data-style="b"] .appwin nav.side { background: rgba(255, 255, 255, .35); }
+html[data-style="b"] .appwin nav.side button > span:first-child { background: var(--control-bg); border-radius: 50%; padding: 4px; box-shadow: 0 4px 8px -4px rgba(150, 90, 70, .45); }
+html[data-style="b"] .appwin nav.side button.on > span:first-child { background: var(--primary); color: var(--primary-ink); }
+html[data-style="b"] .appwin .chip, html[data-style="b"] .appwin .seg { background: color-mix(in oklab, var(--desk) 60%, var(--control-bg)); box-shadow: inset 0 2px 4px rgba(120, 80, 60, .1); border-color: transparent; }
+
+/* ===================================================================
+   C · Clean Pastel 清爽粉彩: calm and tidy, stickers peek in
+   =================================================================== */
+html[data-style="c"] body {
+  --latin: "Plus Jakarta Sans", "ML NotoTC", var(--sys); --thai: "Noto Sans Thai", "Plus Jakarta Sans", "ML NotoTC", var(--sys); --sk-h: "Plus Jakarta Sans", "ML NotoTC", var(--sys);
+  --sk-r-lg: 14px; --sk-r-md: 10px; --sk-r-sm: 8px; --sk-r-btn: 9px; --sk-bw: 1px;
+  --sk-shadow-pop: 0 12px 32px -8px rgba(0, 0, 0, .18), 0 0 0 1px rgba(0, 0, 0, .04);
+}
+html[data-style="c"] body.appwin, html[data-style="c"] body.welcome { background-color: color-mix(in oklab, var(--desk) 40%, #fafafa); }
+@media (prefers-color-scheme: dark) { html[data-style="c"] body.appwin, html[data-style="c"] body.welcome { background-color: color-mix(in oklab, var(--desk) 40%, #0f0f11); } }
+html[data-style="c"] .appwin nav.side { background: var(--control-bg); }
+html[data-style="c"] .appwin nav.side button.on { background: color-mix(in oklab, var(--desk-muted) 10%, var(--control-bg)); box-shadow: none; }
+html[data-style="c"] .appwin main h2 { letter-spacing: -.01em; }
+
+/* ===================================================================
+   D · Fan Zine Pop 應援小誌: soft plum outlines, pink offset shadows
+   =================================================================== */
+html[data-style="d"] body {
+  --latin: "DM Sans", "ML NotoTC", var(--sys); --thai: "Itim", "DM Sans", "ML NotoTC", var(--sys); --sk-h: "Bricolage Grotesque", "ML NotoTC", var(--sys);
+  --sk-edge: #4b3f55; --sk-r-lg: 18px; --sk-r-md: 13px; --sk-r-sm: 10px; --sk-r-btn: 12px; --sk-bw: 1.5px;
+  --sk-card: color-mix(in oklab, var(--control-bg) 80%, #fffdf7); --sk-card-line: color-mix(in oklab, var(--sk-edge) 65%, transparent);
+  --sk-shadow: 3px 3px 0 color-mix(in oklab, var(--sk-accent) 45%, transparent); --sk-shadow-sm: 2px 2px 0 color-mix(in oklab, var(--sk-accent) 40%, transparent);
+  --sk-shadow-pop: 5px 5px 0 color-mix(in oklab, var(--sk-accent) 40%, transparent); --sk-shadow-btn: 2px 2px 0 color-mix(in oklab, var(--sk-accent) 40%, transparent); --sk-press: translate(2px, 2px);
+  --sk-stk: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(3px 3px 0 color-mix(in oklab, var(--sk-accent) 50%, transparent));
+  --sk-art: radial-gradient(color-mix(in oklab, var(--sk-accent) 16%, transparent) 1.2px, transparent 1.4px);
+}
+html[data-style="d"] body.appwin, html[data-style="d"] body.welcome { background-color: color-mix(in oklab, var(--desk) 40%, #fff5e3); background-size: 18px 18px; }
+@media (prefers-color-scheme: dark) { html[data-style="d"] body.appwin, html[data-style="d"] body.welcome { background-color: color-mix(in oklab, var(--desk) 60%, #17141b); }
+  html[data-style="d"] body { --sk-edge: #fff5e3; --sk-card: var(--control-bg); --sk-card-line: rgba(255, 245, 227, .45); } }
+html[data-style="d"] .appwin main h2 { font-weight: 800; display: inline; background: linear-gradient(transparent 66%, color-mix(in oklab, var(--sk-hl) 80%, transparent) 66% 94%, transparent 94%); }
+@media (prefers-color-scheme: dark) { html[data-style="d"] .appwin main h2 { background: linear-gradient(transparent 66%, rgba(255, 226, 122, .3) 66% 94%, transparent 94%); } }
+html[data-style="d"] .appwin .btn, html[data-style="d"] .appwin .chip { border-color: var(--sk-card-line); }
+html[data-style="d"] .appwin nav.side { border-right: 1.5px solid color-mix(in oklab, var(--sk-edge) 22%, transparent); }
+html[data-style="d"] .appwin nav.side button.on { background: color-mix(in oklab, var(--sk-hl) 65%, var(--control-bg)); border: 1.5px solid var(--sk-card-line); color: var(--desk-ink); }
+
+/* ===================================================================
+   E · Concert Night 演唱會之夜: frosted glass and light-stick glow
+   =================================================================== */
+html[data-style="e"] body {
+  --latin: "Outfit", "ML ChillRound", var(--sys); --thai: "Kanit", "Outfit", "ML ChillRound", var(--sys); --sk-h: "Outfit", "ML ChillRound", var(--sys);
+  --sk-r-lg: 22px; --sk-r-md: 16px; --sk-r-sm: 12px; --sk-r-btn: 999px; --sk-bw: 1px;
+  --sk-card: color-mix(in oklab, var(--control-bg) 62%, transparent); --sk-card-line: rgba(255, 255, 255, .75);
+  --sk-shadow: 0 10px 30px -12px rgba(60, 30, 110, .25); --sk-shadow-sm: 0 4px 12px -6px rgba(60, 30, 110, .25); --sk-shadow-pop: 0 20px 44px -14px rgba(60, 30, 110, .4);
+  --sk-shadow-btn: none; --sk-press: scale(.97);
+  --sk-stk: drop-shadow(0 0 10px color-mix(in oklab, var(--sk-accent) 55%, transparent)) drop-shadow(0 6px 8px rgba(40, 20, 80, .2));
+  --sk-art: radial-gradient(600px 380px at 15% 0%, color-mix(in oklab, var(--primary) 30%, transparent), transparent 70%), radial-gradient(640px 420px at 95% 90%, color-mix(in oklab, var(--sk-accent) 38%, transparent), transparent 70%);
+}
+html[data-style="e"] body.appwin, html[data-style="e"] body.welcome { background-color: color-mix(in oklab, var(--desk) 30%, #f3f0fa); }
+@media (prefers-color-scheme: dark) { html[data-style="e"] body.appwin, html[data-style="e"] body.welcome { background-color: #140f22; }
+  html[data-style="e"] body { --sk-card: rgba(30, 24, 50, .62); --sk-card-line: rgba(255, 255, 255, .14); --sk-shadow: 0 10px 30px -12px rgba(0, 0, 0, .6);
+    --sk-art: radial-gradient(620px 400px at 10% 0%, color-mix(in oklab, var(--primary) 35%, transparent), transparent 70%), radial-gradient(640px 440px at 100% 100%, color-mix(in oklab, var(--sk-accent) 40%, transparent), transparent 70%), radial-gradient(360px 260px at 65% 15%, rgba(120, 90, 255, .25), transparent 70%); } }
+html[data-style="e"] .appwin .card, html[data-style="e"] .appwin nav.side, html[data-style="e"] .qp, html[data-style="e"] .tour-bubble { -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); }
+html[data-style="e"] .appwin nav.side { background: color-mix(in oklab, var(--control-bg) 35%, transparent); }
+html[data-style="e"] .appwin .btn.primary { background: linear-gradient(120deg, var(--primary), color-mix(in oklab, var(--primary) 55%, var(--sk-accent))); box-shadow: 0 8px 22px -6px color-mix(in oklab, var(--sk-accent) 70%, transparent); }
+html[data-style="e"] .appwin main h2 { font-weight: 700; letter-spacing: -.02em; }
+html[data-style="e"] .appwin .now-ring .time, html[data-style="e"] .appwin .pomo-ring .time, html[data-style="e"] .appwin .dtile b { text-shadow: 0 0 18px color-mix(in oklab, var(--sk-accent) 55%, transparent); }
+
+/* ===================================================================
+   F · Purikura 拍貼機 (the default): photo-booth frames, sparkles, candy colours
+   =================================================================== */
+html[data-style="f"] body {
+  --latin: "Nunito", "ML Huninn", var(--sys); --thai: "Mali", "Nunito", "ML Huninn", var(--sys); --sk-h: "Baloo 2", "ML Huninn", var(--sys);
+  --sk-r-lg: 24px; --sk-r-md: 16px; --sk-r-sm: 12px; --sk-r-btn: 999px; --sk-bw: 2px;
+  --sk-card-line: color-mix(in oklab, var(--sk-accent) 40%, var(--control-bg));
+  --sk-shadow: 0 6px 0 -2px color-mix(in oklab, var(--sk-accent) 28%, var(--control-bg)), 0 14px 26px -18px color-mix(in oklab, var(--sk-accent) 80%, #000);
+  --sk-shadow-sm: 0 3px 0 color-mix(in oklab, var(--sk-accent) 28%, var(--control-bg)); --sk-shadow-pop: 0 16px 36px -14px color-mix(in oklab, var(--sk-accent) 80%, #000);
+  --sk-shadow-btn: 0 3px 0 color-mix(in oklab, var(--sk-accent) 30%, var(--control-bg)); --sk-press: translateY(2px);
+  --sk-stk: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(2px 0 0 var(--sk-accent)) drop-shadow(-2px 0 0 var(--sk-accent)) drop-shadow(0 2px 0 var(--sk-accent)) drop-shadow(0 -2px 0 var(--sk-accent));
+  --sk-art: conic-gradient(color-mix(in oklab, var(--sk-accent) 11%, transparent) 25%, transparent 0 50%, color-mix(in oklab, var(--sk-accent) 11%, transparent) 0 75%, transparent 0);
+}
+html[data-style="f"] body.appwin, html[data-style="f"] body.welcome { background-color: color-mix(in oklab, var(--desk) 35%, #fff7fb); background-size: 28px 28px; }
+@media (prefers-color-scheme: dark) { html[data-style="f"] body.appwin, html[data-style="f"] body.welcome { background-color: color-mix(in oklab, var(--desk) 60%, #24161e); }
+  html[data-style="f"] body { --sk-card-line: color-mix(in oklab, var(--sk-accent) 35%, var(--control-bg)); --sk-art: conic-gradient(rgba(255, 255, 255, .035) 25%, transparent 0 50%, rgba(255, 255, 255, .035) 0 75%, transparent 0);
+    --sk-shadow: 0 6px 0 -2px rgba(0, 0, 0, .35), 0 14px 26px -16px #000; --sk-shadow-sm: 0 3px 0 rgba(0, 0, 0, .35); --sk-shadow-btn: 0 3px 0 rgba(0, 0, 0, .35); } }
+html[data-style="f"] .appwin .card::before, html[data-style="f"] .welcome .wframe::before { content: ""; position: absolute; inset: 5px; border: 2px dashed color-mix(in oklab, var(--sk-accent) 26%, transparent); border-radius: calc(var(--sk-r-lg) - 5px); pointer-events: none; }
+html[data-style="f"] .appwin main h2 { font-weight: 800; color: var(--sk-accent-ink); }
+html[data-style="f"] .appwin main h2::after { content: " ✦"; color: var(--sk-accent); font-size: .75em; }
+html[data-style="f"] .appwin nav.side { border-right: 2px dashed color-mix(in oklab, var(--sk-accent) 35%, transparent); }
+html[data-style="f"] .appwin nav.side button.on { background: color-mix(in oklab, var(--sk-accent) 16%, var(--control-bg)); box-shadow: inset 0 0 0 2px var(--sk-accent); color: var(--sk-accent-ink); }
+html[data-style="f"] .appwin .chip.on, html[data-style="f"] .appwin .seg button.on, html[data-style="f"] .appwin .dtabs button.on { background: var(--sk-accent); border-color: var(--sk-accent); color: #fff; }
+
+/* ===================================================================
+   G · Retro Desktop 復古桌面: every card a little old-computer window
+   =================================================================== */
+html[data-style="g"] body {
+  --latin: "IBM Plex Sans", "ML NotoTC", var(--sys); --thai: "Chakra Petch", "IBM Plex Sans", "ML NotoTC", var(--sys); --sk-h: "VT323", "ML Cubic11", monospace;
+  --sk-win: #2b2838; --sk-r-lg: 6px; --sk-r-md: 5px; --sk-r-sm: 4px; --sk-r-btn: 5px; --sk-bw: 2px; --sk-card-line: var(--sk-win);
+  --sk-shadow: 4px 4px 0 rgba(30, 25, 45, .28); --sk-shadow-sm: 2px 2px 0 rgba(30, 25, 45, .25); --sk-shadow-pop: 5px 5px 0 rgba(30, 25, 45, .35);
+  --sk-shadow-btn: inset 2px 2px 0 rgba(255, 255, 255, .45), inset -2px -2px 0 rgba(0, 0, 0, .2); --sk-press: translate(1px, 1px);
+  --sk-stk: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(1px 0 0 var(--sk-win)) drop-shadow(-1px 0 0 var(--sk-win)) drop-shadow(0 1px 0 var(--sk-win)) drop-shadow(0 -1px 0 var(--sk-win));
+  --sk-art: linear-gradient(rgba(255, 255, 255, .18) 1px, transparent 1px);
+}
+html[data-style="g"] body.appwin, html[data-style="g"] body.welcome { background-color: color-mix(in oklab, var(--primary) 22%, #dfe7ee); background-size: 100% 4px; }
+@media (prefers-color-scheme: dark) { html[data-style="g"] body.appwin, html[data-style="g"] body.welcome { background-color: color-mix(in oklab, var(--primary) 18%, #1b1a24); } html[data-style="g"] body { --sk-win: #0c0b12; } }
+html[data-style="g"] .appwin .card { padding-top: 36px; }
+html[data-style="g"] .appwin .card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 22px; border-bottom: 2px solid var(--sk-win); border-radius: 3px 3px 0 0; pointer-events: none;
+  background: radial-gradient(circle at 12px 10px, #fbfaf7 4px, var(--sk-win) 4.5px, transparent 6px), repeating-linear-gradient(0deg, var(--primary) 0 2px, color-mix(in oklab, var(--primary) 70%, #fff) 2px 4px); }
+html[data-style="g"] .appwin main h2 { font-weight: 400; font-size: 30px; }
+html[data-style="g"] .appwin .now-ring .time, html[data-style="g"] .appwin .pomo-ring .time { font-weight: 400; }
+html[data-style="g"] .appwin nav.side { background: color-mix(in oklab, var(--control-bg) 90%, transparent); border-right: 2px solid var(--sk-win); }
+html[data-style="g"] .appwin nav.side button.on { background: var(--primary); color: var(--primary-ink); box-shadow: inset 2px 2px 0 rgba(255, 255, 255, .35), inset -2px -2px 0 rgba(0, 0, 0, .25); }
+html[data-style="g"] .appwin .btn, html[data-style="g"] .appwin .chip { border-color: var(--sk-win); }
+
+/* ===================================================================
+   H · Fan Magazine 粉絲雜誌: serif titles, thin rules, cover stickers
+   =================================================================== */
+html[data-style="h"] body {
+  --latin: "IBM Plex Sans", "ML LineSeed", var(--sys); --thai: "ML LineSeed TH", "IBM Plex Sans", "ML LineSeed", var(--sys); --sk-h: "DM Serif Display", "ML LineSeed", var(--sys);
+  --sk-r-lg: 3px; --sk-r-md: 3px; --sk-r-sm: 2px; --sk-r-btn: 2px; --sk-bw: 1px; --sk-shadow: none; --sk-shadow-sm: none; --sk-shadow-btn: none; --sk-press: translateY(1px);
+  --sk-stk: drop-shadow(0 10px 14px rgba(0, 0, 0, .18));
+}
+html[data-style="h"] body.appwin, html[data-style="h"] body.welcome { background-color: color-mix(in oklab, var(--desk) 25%, #f6f2ea); }
+@media (prefers-color-scheme: dark) { html[data-style="h"] body.appwin, html[data-style="h"] body.welcome { background-color: #121110; } }
+html[data-style="h"] .appwin .card { border-width: 0; border-top: 2px solid var(--desk-ink); background: color-mix(in oklab, var(--control-bg) 70%, transparent); }
+html[data-style="h"] .appwin main h2 { font-weight: 400; font-size: 34px; letter-spacing: -.01em; }
+html[data-style="h"] .appwin h3 { letter-spacing: .14em; }
+html[data-style="h"] .appwin nav.side { background: #151313; border-right: 0; }
+html[data-style="h"] .appwin nav.side button { color: #d8d1c5; }
+html[data-style="h"] .appwin nav.side button.on { background: transparent; color: #fff; box-shadow: inset 3px 0 0 var(--sk-accent); }
+html[data-style="h"] .appwin nav.side .sub button { color: #b9b1a4; }
+html[data-style="h"] .appwin .btn { text-transform: uppercase; letter-spacing: .05em; font-size: 12.5px; }
+html[data-style="h"] .appwin .btn.primary { background: var(--desk-ink); border-color: var(--desk-ink); color: var(--control-bg); }
+
+/* ===== the Style picker's cards (any style) ===== */
+.stylecards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; width: 100%; }
+.stylecard { font: inherit; border: 2px solid var(--line, var(--control-line)); border-radius: 12px; padding: 6px; cursor: pointer; background: var(--control-bg); color: var(--desk-ink); text-align: left; display: grid; gap: 5px; }
+.stylecard[aria-checked="true"] { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 22%, transparent); }
+.stylecard:hover { border-color: color-mix(in oklab, var(--primary) 50%, var(--control-line)); }
+.stylecard b { font-size: 12.5px; } .stylecard small { font-size: 11px; color: var(--desk-muted); margin-top: -4px; }
+.stylecard .mini { height: 54px; border-radius: 8px; position: relative; overflow: hidden; display: block; }
+@media (max-width: 560px) { .stylecards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.mini[data-mini="a"] { background: #fbf6ee radial-gradient(#d9cbb5 1px, transparent 1.3px) 0 0/10px 10px; }
+.mini[data-mini="a"]::before { content: ""; position: absolute; left: 10px; top: 14px; right: 30px; bottom: 8px; background: #fffdf9; border: 1.5px solid #e7d9c5; border-radius: 10px; }
+.mini[data-mini="a"]::after { content: ""; position: absolute; left: 30px; top: 9px; width: 34px; height: 10px; background: rgba(228, 138, 166, .6); transform: rotate(-4deg); }
+.mini[data-mini="b"] { background: linear-gradient(140deg, #dcebe0, #f6dde6); }
+.mini[data-mini="b"]::before { content: ""; position: absolute; left: 10px; top: 10px; right: 26px; bottom: 8px; background: #fffaf6; border-radius: 16px; box-shadow: 0 8px 12px -8px rgba(150, 90, 70, .6), inset 0 -3px 0 rgba(0, 0, 0, .05); }
+.mini[data-mini="b"]::after { content: ""; position: absolute; right: 10px; bottom: 6px; width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #f4c2d2); }
+.mini[data-mini="c"] { background: #fafafa; }
+.mini[data-mini="c"]::before { content: ""; position: absolute; left: 10px; top: 10px; right: 10px; bottom: 8px; background: #fff; border: 1px solid #e4e4e7; border-radius: 7px; }
+.mini[data-mini="c"]::after { content: ""; position: absolute; left: 20px; top: 22px; width: 40px; height: 9px; background: #3f7d5c; border-radius: 4px; }
+.mini[data-mini="d"] { background: #fff5e3 radial-gradient(rgba(228, 138, 166, .4) 1.2px, transparent 1.4px) 0 0/9px 9px; }
+.mini[data-mini="d"]::before { content: ""; position: absolute; left: 10px; top: 10px; right: 26px; bottom: 12px; background: #fffdf7; border: 1.5px solid #4b3f55; border-radius: 9px; box-shadow: 3px 3px 0 rgba(228, 138, 166, .55); }
+.mini[data-mini="d"]::after { content: ""; position: absolute; left: 20px; top: 20px; width: 44px; height: 9px; background: #ffe27a; }
+.mini[data-mini="e"] { background: radial-gradient(60px 40px at 20% 20%, rgba(63, 125, 92, .7), transparent), radial-gradient(70px 50px at 90% 90%, rgba(228, 138, 166, .8), transparent), #1a1430; }
+.mini[data-mini="e"]::before { content: ""; position: absolute; left: 12px; top: 10px; right: 12px; bottom: 10px; background: rgba(255, 255, 255, .18); border: 1px solid rgba(255, 255, 255, .35); border-radius: 10px; }
+.mini[data-mini="e"]::after { content: ""; position: absolute; left: 22px; top: 22px; width: 40px; height: 10px; border-radius: 9px; background: #e48aa6; box-shadow: 0 0 10px #e48aa6; }
+.mini[data-mini="f"] { background: conic-gradient(#f8d3df 25%, #fff 0 50%, #f8d3df 0 75%, #fff 0) 0 0/14px 14px; }
+.mini[data-mini="f"]::before { content: ""; position: absolute; left: 10px; top: 8px; right: 10px; bottom: 8px; background: #fff; border-radius: 14px; outline: 2px dashed #f0b3c6; outline-offset: -5px; }
+.mini[data-mini="f"]::after { content: "✦"; position: absolute; right: 16px; top: 10px; color: #e48aa6; font-size: 16px; }
+.mini[data-mini="g"] { background: #c5d7cc; }
+.mini[data-mini="g"]::before { content: ""; position: absolute; left: 10px; top: 8px; right: 18px; bottom: 8px; background: #fbfaf7; border: 2px solid #2b2838; border-radius: 3px; box-shadow: 3px 3px 0 rgba(0, 0, 0, .25); }
+.mini[data-mini="g"]::after { content: ""; position: absolute; left: 12px; top: 10px; right: 20px; height: 8px; background: repeating-linear-gradient(0deg, #3f7d5c 0 2px, #fff 2px 3px); }
+.mini[data-mini="h"] { background: #f6f2ea; }
+.mini[data-mini="h"]::before { content: "Aa"; position: absolute; left: 12px; top: 4px; font: 400 30px/1 "DM Serif Display", serif; color: #151313; }
+.mini[data-mini="h"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 10px; border-top: 2px solid #151313; }
+html[data-style="h"] .appwin nav.side .wordmini { background: rgba(255, 255, 255, .07); border-color: rgba(255, 255, 255, .18); color: #f4efe6; }
+html[data-style="h"] .appwin nav.side .wordmini span { color: #b9b1a4; }
+html[data-style="h"] .appwin nav.side .wordmini small { color: var(--sk-accent); }
+html[data-style="h"] .appwin nav.side .nav-h { color: #9e968a; }
+
+/* Calmer backgrounds (2026-10-24): the dots, checks and lines fainter and further apart, so the pages
+   don't feel busy (Sticker Book, Fan Zine Pop, Purikura, Retro Desktop) */
+html[data-style="a"] body { --sk-art: radial-gradient(color-mix(in oklab, var(--primary) 11%, transparent) 1px, transparent 1.3px); }
+html[data-style="a"] body.appwin, html[data-style="a"] body.welcome { background-size: 24px 24px; }
+html[data-style="d"] body { --sk-art: radial-gradient(color-mix(in oklab, var(--sk-accent) 8%, transparent) 1.1px, transparent 1.3px); }
+html[data-style="d"] body.appwin, html[data-style="d"] body.welcome { background-size: 24px 24px; }
+html[data-style="f"] body { --sk-art: conic-gradient(color-mix(in oklab, var(--sk-accent) 5%, transparent) 25%, transparent 0 50%, color-mix(in oklab, var(--sk-accent) 5%, transparent) 0 75%, transparent 0); }
+@media (prefers-color-scheme: dark) { html[data-style="f"] body { --sk-art: conic-gradient(rgba(255, 255, 255, .018) 25%, transparent 0 50%, rgba(255, 255, 255, .018) 0 75%, transparent 0); } }
+html[data-style="f"] body.appwin, html[data-style="f"] body.welcome { background-size: 36px 36px; }
+html[data-style="g"] body { --sk-art: linear-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px); }
+html[data-style="g"] body.appwin, html[data-style="g"] body.welcome { background-size: 100% 6px; }
