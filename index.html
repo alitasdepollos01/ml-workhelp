@@ -290,6 +290,19 @@ details.more summary::-webkit-details-marker { display: none; }
 .who a { font-size: 13.5px; font-weight: 700; }
 .who span { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
 .thanks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.people.all { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.people.all .who { position: relative; padding: 16px 8px 14px; }
+.people.all .who b { font-size: 16px; overflow-wrap: anywhere; }
+.people.all .who a { font-size: 12.5px; }
+.who .okb { position: absolute; top: 10px; right: 12px; font-size: 12px; font-weight: 800; color: #fff; background: #3f7d5c; border-radius: 999px; padding: 0 8px; line-height: 20px; z-index: 2; }
+.newgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.newc { display: grid; gap: 6px; align-content: start; padding: 18px; }
+.newc .ic { width: 26px; height: 26px; color: var(--a-deep); }
+.newc b { font: 800 17px/1.25 var(--font-h); }
+.newc span { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.upd { margin-top: 16px; padding: 16px 18px; }
+.upd h4 { margin: 0 0 8px; font: 800 17px/1.3 var(--font-h); display: flex; gap: 8px; align-items: center; }
+.upd ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
 .thanks a { text-decoration: none; background: var(--surface); border: 2px solid var(--line); border-radius: 99px; padding: 5px 12px; font-weight: 700; font-size: 14px; color: var(--ink-2); }
 .thanks a:hover { border-color: var(--a); }
 
@@ -323,7 +336,8 @@ footer p { margin: 0; color: var(--muted); font-size: 14px; }
 /* ---- phone ---- */
 @media (max-width: 900px) {
   .two, .quiz, .phero, .try, .fdemo, .dl, .news,   .three { grid-template-columns: 1fr; }
-  .people { grid-template-columns: repeat(2, 1fr); }
+  .people, .people.all { grid-template-columns: repeat(2, 1fr); }
+  .newgrid { grid-template-columns: 1fr; }
   .tiles { grid-template-columns: repeat(2, 1fr); }
   .make { grid-template-columns: 1fr; } .make .arrow { transform: rotate(90deg); justify-self: center; }
   .collage { height: 320px; }
@@ -626,6 +640,7 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
 
   <nav class="subnav" aria-label="On this page"><div class="wrap">
     <a href="#ml-try"><i data-lucide="eye" class="ic"></i><span data-zh="試試看" data-th="ลองเล่น">Try it</span></a>
+    <a href="#ml-new"><i data-lucide="sparkles" class="ic"></i><span data-zh="1.2 新功能" data-th="ใหม่ใน 1.2">New in 1.2</span></a>
     <a href="#ml-focus"><i data-lucide="maximize-2" class="ic"></i><span data-zh="專注全螢幕" data-th="หน้าจอโฟกัส">Focus screen</span></a>
     <a href="#ml-stickers"><i data-lucide="sticker" class="ic"></i><span data-zh="做貼圖" data-th="สติกเกอร์ของคุณ">Your stickers</span></a>
     <a href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載" data-th="ดาวน์โหลด">Download</span></a>
@@ -694,6 +709,20 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
 
   <div class="band"><div class="marquee" aria-hidden="true"><div class="mq-track"><img src="assets/fan/fan-15.webp" alt=""><img src="assets/fan/muv-app-look.webp" alt=""><img src="assets/fan/fan-16.webp" alt=""><img src="assets/fan/fan-17.webp" alt=""><img src="assets/fan/fan-18.webp" alt=""><img src="assets/fan/muv-muv-plain.webp" alt=""><img src="assets/fan/fan-19.webp" alt=""><img src="assets/fan/fan-20.webp" alt=""><img src="assets/fan/fan-05.webp" alt=""><img src="assets/fan/muv-w2-own.webp" alt=""><img src="assets/fan/fan-12.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""><img src="assets/fan/fan-15.webp" alt=""><img src="assets/fan/muv-app-look.webp" alt=""><img src="assets/fan/fan-16.webp" alt=""><img src="assets/fan/fan-17.webp" alt=""><img src="assets/fan/fan-18.webp" alt=""><img src="assets/fan/muv-muv-plain.webp" alt=""><img src="assets/fan/fan-19.webp" alt=""><img src="assets/fan/fan-20.webp" alt=""><img src="assets/fan/fan-05.webp" alt=""><img src="assets/fan/muv-w2-own.webp" alt=""><img src="assets/fan/fan-12.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""></div></div>
     <p class="cap wrap" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;otter&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p></div>
+  <section class="sec" id="ml-new"><div class="wrap">
+    <div class="sec-h"><span class="kick" data-zh="1.2 新功能" data-th="ใหม่ใน 1.2">New in 1.2</span><h2 class="sparkle" data-zh="整個 App 換新衣服，還多了這些" data-th="แอปโฉมใหม่ทั้งหมด และมีเพิ่มอีก">A whole new look, and a few new friends</h2><p data-zh="8 種風格任你挑，頁面重新整理過，還有這些新東西：" data-th="เลือกได้ 8 สไตล์ ทุกหน้าจัดใหม่ และยังมีของใหม่อีก:">Eight styles to pick from, every page tidied up, and these:</p></div>
+    <div class="newgrid">
+      <div class="print newc"><i data-lucide="bell-ring" class="ic"></i><b data-zh="在任何螢幕上跳出的小卡片" data-th="การ์ดเด้งบนจอไหนก็ได้">A card on whichever screen you're on</b><span data-zh="夥伴收起來時，提醒和休息會在你正在用的螢幕右上角跳出一張小卡片。" data-th="ถ้าซ่อนเพื่อนไว้ การแจ้งเตือนและพักจะเด้งเป็นการ์ดเล็ก ๆ มุมขวาบนของจอที่คุณใช้อยู่">With the buddy hidden, reminders and breaks pop up as a small card at the top right of the screen you're using.</span></div>
+      <div class="print newc"><i data-lucide="headphones" class="ic"></i><b data-zh="專注時不打擾" data-th="ไม่กวนตอนโฟกัส">Quiet while you focus</b><span data-zh="專注全螢幕或番茄鐘進行中，提醒會先等等，結束後一起告訴你；活動照樣會跳出來。" data-th="ระหว่างหน้าจอโฟกัสหรือรอบโพโมโดโร่ การแจ้งเตือนจะรอ แล้วบอกรวดเดียวตอนจบ ส่วนกิจกรรมยังเด้งตามปกติ">During the focus screen or a Pomodoro round, reminders wait and come together at the end; events still come through.</span></div>
+      <div class="print newc"><i data-lucide="footprints" class="ic"></i><b data-zh="夥伴可以更悠閒" data-th="เพื่อนเดินช้าลงได้">A calmer buddy</b><span data-zh="活潑、悠閒、更悠閒、安靜：越悠閒越省電。" data-th="ร่าเริง สบาย ๆ สบายกว่า นิ่ง: ยิ่งสบายยิ่งประหยัดแบต">Lively, calm, calmer or still: the calmer, the less battery it uses.</span></div>
+      <div class="print newc"><i data-lucide="music-2" class="ic"></i><b data-zh="Milk 和 Love 的聲音" data-th="เสียงของ Milk กับ Love">Milk and Love's voices</b><span data-zh="提醒時間到，可以響「P'Ink！」、「牙蟲」、「พี่มิว！」⋯" data-th="ถึงเวลาแจ้งเตือน ให้ดังเป็น “P'Ink!”, “牙蟲”, “พี่มิว!”…">Reminders can ring with “P'Ink!”, “牙蟲”, “พี่มิว!” and more.</span></div>
+      <div class="print newc"><i data-lucide="image" class="ic"></i><b data-zh="做成圖片" data-th="ทำเป็นรูป">Make a picture</b><span data-zh="把這一週或今天做成一張小卡片，貼圖自己挑，卡片上標明照片來源。" data-th="ทำสัปดาห์นี้หรือวันนี้เป็นการ์ดเล็ก ๆ เลือกสติกเกอร์เอง พร้อมเครดิตรูปบนการ์ด">Turn your week or your day into a little card, with a sticker you pick and its photo's credit.</span></div>
+      <div class="print newc"><i data-lucide="mouse-pointer-2" class="ic"></i><b data-zh="每張貼圖都看得到來源" data-th="ทุกสติกเกอร์บอกเครดิต">Every sticker shows its credit</b><span data-zh="滑鼠移到任何貼圖上，就知道照片是誰拍的；在夥伴上按右鍵，可以看原始照片。" data-th="ชี้ที่สติกเกอร์ไหนก็ได้ จะรู้ว่าใครถ่าย คลิกขวาที่เพื่อนเพื่อดูรูปต้นฉบับ">Point at any sticker to see who took the photo; right-click the buddy for the original.</span></div>
+      <div class="print newc"><i data-lucide="scissors" class="ic"></i><b data-zh="新的貼圖工具" data-th="ตัวทำสติกเกอร์ใหม่">A new sticker maker</b><span data-zh="一步一步來：放大、擦除、柔邊、清掉小雜點，按住 H 對照原圖。" data-th="ทีละขั้น: ซูม ลบ ขอบนุ่ม เก็บจุดเล็ก ๆ กด H ค้างไว้เพื่อเทียบรูปเดิม">Step by step: zoom, erase, soft edges, tidy the specks, hold H to compare.</span></div>
+      <div class="print newc"><i data-lucide="download" class="ic"></i><b data-zh="下載變小了" data-th="ดาวน์โหลดเล็กลง">A smaller download</b><span data-zh="App 約 200 MB；照片在 App 裡下載一次。之後更新不用再下載全部照片。" data-th="แอปประมาณ 200 MB รูปดาวน์โหลดในแอปครั้งเดียว อัปเดตครั้งต่อไปไม่ต้องโหลดรูปใหม่ทั้งหมด">The app is about 200 MB; the photos download inside it, once. Later updates don't fetch them all again.</span></div>
+    </div>
+  </div></section>
+
   <section class="sec" id="ml-get"><div class="wrap">
     <div class="sec-h"><span class="kick" data-zh="下載" data-th="ดาวน์โหลด">Download</span><h2 class="sparkle" data-zh="下載 ML WorkHelp" data-th="ดาวน์โหลด ML WorkHelp">Get ML WorkHelp</h2></div>
     <div class="dl">
@@ -713,7 +742,16 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
           <div class="step"><div><b data-zh="打開下載的 .dmg" data-th="เปิดไฟล์ .dmg ที่ดาวน์โหลดมา">Open the .dmg you downloaded</b><span data-zh="把 ML WorkHelp 拖到「應用程式」資料夾。" data-th="ลาก ML WorkHelp ไปไว้ในแอปพลิเคชัน">Drag ML WorkHelp into Applications.</span></div></div>
           <div class="step"><div><b data-zh="打開 App" data-th="เปิดแอป">Open the app</b><span data-zh="Mac 可能會說「未打開 ML WorkHelp」，先按「完成」。" data-th="macOS อาจแจ้งว่า “ไม่ได้เปิด ML WorkHelp” ให้กด “เสร็จสิ้น”">macOS may say “ML WorkHelp” Not Opened. Press Done.</span></div></div>
           <div class="step"><div><b data-zh="允許打開" data-th="อนุญาตให้เปิด">Allow it</b><span data-zh="到 <span class=kbd>系統設定 › 隱私權與安全性</span>，往下捲，按「強制打開」。（macOS 14 或更舊：在 App 上按右鍵，選「打開」。）" data-th="ไปที่ &lt;span class=&quot;kbd&quot;&gt;การตั้งค่าระบบ › ความเป็นส่วนตัวและความปลอดภัย&lt;/span&gt; เลื่อนลง แล้วกด “เปิดต่อไป” (macOS 14 หรือเก่ากว่า: คลิกขวาที่แอปแล้วเลือก “เปิด”)">Go to <span class="kbd">System Settings › Privacy & Security</span>, scroll down and press Open Anyway. (macOS 14 or older: right-click the app and choose Open.)</span></div></div>
-          <div class="step"><div><b data-zh="跟 Milk 和 Love 打招呼" data-th="ทักทาย Milk กับ Love">Say hi to Milk & Love</b><span data-zh="歡迎頁會帶你選照片、計時方式和風格，Muv 也會帶你逛一圈。" data-th="หน้าต้อนรับจะช่วยเลือกรูป วิธีจับเวลา และสไตล์ แล้ว Muv จะพาเดินดูรอบ ๆ">The welcome pages help you pick photos, how you keep time and your style, then Muv shows you around.</span></div></div>
+          <div class="step"><div><b data-zh="選照片" data-th="เลือกรูป">Pick your photos</b><span data-zh="歡迎頁第 2 頁：選「完整貼圖庫」，照片會在 App 裡下載一次（約 320 MB），直接放好，不用解壓縮；或選「我自己加照片」。" data-th="หน้าต้อนรับหน้าที่ 2: เลือก “คลังสติกเกอร์ทั้งหมด” แล้วรูปจะดาวน์โหลดในแอปครั้งเดียว (ประมาณ 320 MB) วางให้เรียบร้อย ไม่ต้องแตกไฟล์ หรือเลือกใช้รูปของคุณเอง">On the second welcome page, pick the full sticker library: the photos download inside the app, once (about 320 MB), straight into place. Or start with your own.</span></div></div>
+          <div class="step"><div><b data-zh="跟 Milk 和 Love 打招呼" data-th="ทักทาย Milk กับ Love">Say hi to Milk & Love</b><span data-zh="選好計時方式和風格，Muv 會帶你逛一圈。" data-th="เลือกวิธีจับเวลาและสไตล์ แล้ว Muv จะพาเดินดูรอบ ๆ">Pick how you keep time and your style, then Muv shows you around.</span></div></div>
+        </div>
+        <div class="upd print">
+          <h4><i data-lucide="refresh-cw" class="ic"></i><span data-zh="之後怎麼更新？" data-th="อัปเดตยังไง?">How do updates work?</span></h4>
+          <ul>
+            <li data-zh="有新版本時，桌面夥伴會告訴你，「設定 › 關於」也會有下載按鈕。" data-th="เมื่อมีเวอร์ชันใหม่ เพื่อนบนเดสก์ท็อปจะบอก และมีปุ่มดาวน์โหลดใน การตั้งค่า › เกี่ยวกับ">When there's a new version, your buddy tells you, and Settings › About has a Download button.</li>
+            <li data-zh="下載新的 .dmg（約 200 MB），拖到「應用程式」取代舊的就好。你的照片、貼圖和工作紀錄都會留著。" data-th="ดาวน์โหลด .dmg ใหม่ (ประมาณ 200 MB) แล้วลากไปแทนตัวเก่าในแอปพลิเคชัน รูป สติกเกอร์ และบันทึกงานของคุณยังอยู่ครบ">Download the new .dmg (about 200 MB) and drag it over the old one in Applications. Your photos, stickers and work log stay.</li>
+            <li data-zh="照片的標註更新、移除，App 會自己處理；有新照片時，只會下載你還沒有的。" data-th="การแก้เครดิตหรือเอารูปออก แอปจัดการเอง ถ้ามีรูปใหม่ จะดาวน์โหลดเฉพาะที่คุณยังไม่มี">Photo credit changes and removals happen by themselves; new photos download only if you don't have them yet.</li>
+          </ul>
         </div>
         <p class="cap" style="margin-top:12px" data-zh="每次更新後也可能要再允許一次。App 每天會讀取這個網頁上的一個小檔案看看有沒有新版本，不會送出任何關於你的資料，可以在「設定 › 關於與更新」關閉。" data-th="หลังอัปเดตแต่ละครั้งอาจต้องกดอนุญาตอีกรอบ แอปจะเช็กเวอร์ชันใหม่วันละครั้งโดยอ่านไฟล์เล็ก ๆ บนหน้านี้ ไม่มีการส่งข้อมูลอะไรของคุณ ปิดได้ที่ การตั้งค่า › เกี่ยวกับและอัปเดต">You may need to allow it again after each update. The app checks for a new version once a day by reading a small file on this page; nothing about you is sent. You can switch it off in Settings › About & updates.</p>
       </div>
@@ -722,15 +760,20 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
 
   <section class="sec" id="ml-photos"><div class="wrap">
     <div class="sec-h"><span class="kick" data-zh="照片與授權" data-th="รูปและเครดิต">Photos & credits</span><h2 class="sparkle" data-zh="謝謝這些拍攝者和畫家" data-th="ขอบคุณช่างภาพและนักวาด">Thank you to the photographers and artist</h2><p data-zh="App 裡的照片已獲得 Blumoon、Lyrac、NGMin、otter 授權使用，卡通插畫也已獲得 wanwannjeab 授權。在 App 裡點任何一張貼圖，就能看到原始照片和拍攝者。" data-th="เราได้รับอนุญาตให้ใช้รูปของ Blumoon, Lyrac, NGMin และ otter รวมถึงภาพการ์ตูนของ wanwannjeab ในแอป คลิกสติกเกอร์ไหนก็ได้เพื่อดูรูปต้นฉบับและคนถ่าย">We've been given permission to use photos by Blumoon, Lyrac, NGMin and otter, and the cartoon drawings by wanwannjeab. In the app, click any sticker to see its original photo and who took it.</p></div>
-    <div class="people">
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Blumoon</b><a href="https://x.com/blumoonfoto" target="_blank" rel="noopener">@blumoonfoto</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Lyrac</b><a href="https://x.com/loveminiheartph" target="_blank" rel="noopener">@loveminiheartph</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>NGMin</b><a href="https://x.com/ngmin" target="_blank" rel="noopener">@ngmin</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>otter</b><a href="https://x.com/Miiiichstabe" target="_blank" rel="noopener">@Miiiichstabe</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who"><div class="av"><i data-lucide="pen-tool" class="ic"></i></div><b>wanwannjeab</b><a href="https://x.com/wanwannjeab" target="_blank" rel="noopener">@wanwannjeab</a><span data-zh="卡通 Muv 插畫" data-th="ภาพการ์ตูน Muv">Cartoon Muv drawings</span></div>
+    <div class="people all">
+      <div class="print who ok"><span class="okb" title="Gave us permission">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Blumoon</b><a href="https://x.com/blumoonfoto" target="_blank" rel="noopener">@blumoonfoto</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok"><span class="okb" title="Gave us permission">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Lyrac</b><a href="https://x.com/loveminiheartph" target="_blank" rel="noopener">@loveminiheartph</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok"><span class="okb" title="Gave us permission">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>NGMin</b><a href="https://x.com/ngmin" target="_blank" rel="noopener">@ngmin</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok"><span class="okb" title="Gave us permission">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>otter</b><a href="https://x.com/Miiiichstabe" target="_blank" rel="noopener">@Miiiichstabe</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok"><span class="okb" title="Gave us permission">✓</span><div class="av"><i data-lucide="pen-tool" class="ic"></i></div><b>wanwannjeab</b><a href="https://x.com/wanwannjeab" target="_blank" rel="noopener">@wanwannjeab</a><span data-zh="卡通 Muv 插畫" data-th="ภาพการ์ตูน Muv">Cartoon Muv drawings</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>GMMTV</b><a href="https://x.com/GMMTV" target="_blank" rel="noopener">@GMMTV</a><span data-zh="官方照片" data-th="รูปทางการ">Official photos</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Milk</b><a href="https://x.com/panlyyy" target="_blank" rel="noopener">@panlyyy</a><span data-zh="她的貼文" data-th="โพสต์ของเธอ">Her posts</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Love</b><a href="https://x.com/loverrukk" target="_blank" rel="noopener">@loverrukk</a><span data-zh="她的貼文" data-th="โพสต์ของเธอ">Her posts</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>MilkPansaFamily</b><a href="https://x.com/milkfamily__" target="_blank" rel="noopener">@milkfamily__</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>KIU</b><a href="https://x.com/kiu_628ML" target="_blank" rel="noopener">@kiu_628ML</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Sflove0523</b><a href="https://x.com/sflove0523" target="_blank" rel="noopener">@sflove0523</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>alitasdepollos</b><a href="https://x.com/alitasdepollos0" target="_blank" rel="noopener">@alitasdepollos0</a><span data-zh="照片和 Muv 插畫" data-th="รูปและภาพวาด Muv">Photos & Muv drawings</span></div>
     </div>
-    <p class="muted small" style="margin:18px 0 0" data-zh="也謝謝：" data-th="ขอบคุณเพิ่มเติม:">Thank you also to:</p>
-    <div class="thanks"><a href="https://x.com/GMMTV" target="_blank" rel="noopener">GMMTV</a><a href="https://x.com/alitasdepollos0" target="_blank" rel="noopener">alitasdepollos</a><a href="https://x.com/sflove0523" target="_blank" rel="noopener">Sflove0523</a><a href="https://x.com/kiu_628ML" target="_blank" rel="noopener">KIU</a><a href="https://x.com/milkfamily__" target="_blank" rel="noopener">MilkPansaFamily</a><a href="https://x.com/panlyyy" target="_blank" rel="noopener">Milk Pansa Vosbein</a><a href="https://x.com/loverrukk" target="_blank" rel="noopener">Love Pattranite Limpatiyakorn</a></div>
     <div class="note"><i data-lucide="info" class="ic"></i><p data-zh="其他照片我們有試著聯絡拍攝者，但還沒收到回覆。我們已經盡力找出並標註每張照片的拍攝者；如果有照片是你拍的，想修改標註或希望下架，隨時告訴我們，我們會在下一次更新時修改，並通知使用者。" data-th="สำหรับรูปอื่น ๆ เราพยายามติดต่อช่างภาพแล้วแต่ยังไม่ได้รับคำตอบ เราพยายามหาและให้เครดิตทุกคนอย่างเต็มที่ ถ้ารูปไหนเป็นของคุณและอยากแก้เครดิตหรือให้นำออก บอกเราได้ทุกเมื่อ เราจะแก้ในอัปเดตถัดไปและแจ้งผู้ใช้">For the other photos we tried to reach the photographers but haven't heard back. We've done our best to find and credit everyone; if a photo is yours and you'd like the credit changed or the photo removed, tell us any time and we'll fix it in the next update and let users know.</p></div>
   </div></section>
 

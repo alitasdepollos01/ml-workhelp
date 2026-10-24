@@ -1,20 +1,32 @@
 {
-  "version": "1.1.0",
-  "released": "2026-10-24",
+  "version": "1.2.0",
+  "released": "2026-10-25",
   "download": "https://alitasdepollos01.github.io/ml-workhelp/#download",
   "files": {
-    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.1.0/ML.WorkHelp-1.1.0-arm64.dmg",
-    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.1.0/ML.WorkHelp-1.1.0.dmg",
+    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.2.0/ML.WorkHelp-1.2.0-arm64.dmg",
+    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.2.0/ML.WorkHelp-1.2.0.dmg",
     "windows": null,
     "vscode": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp"
   },
   "notes": {
-    "en": "Right-click the desktop buddy for a small card with the everyday things; a much shorter menu-bar menu (the rest is in Settings); the buddy tells you about new versions, and Today shows what's new after updating.",
-    "zh": "在桌面夥伴上按右鍵，會出現一張放常用功能的小卡片；選單列的選單變短了（其他都在「設定」）；有新版本時夥伴會告訴你，更新後「今天」會顯示新功能。",
-    "th": "คลิกขวาที่เพื่อนบนเดสก์ท็อปจะมีการ์ดเล็ก ๆ รวมสิ่งที่ใช้บ่อย เมนูบนแถบเมนูสั้นลงมาก (ที่เหลืออยู่ในการตั้งค่า) เพื่อนจะบอกเมื่อมีเวอร์ชันใหม่ และหน้าวันนี้จะแสดงสิ่งใหม่หลังอัปเดต"
+    "en": "A whole new look with 8 styles; reminders and breaks as a card on any screen, held while you focus; a calmer buddy; Milk and Love's voices as ringtones; picture cards; every sticker shows its credit; a new sticker maker; and a smaller download (the photos download once, inside the app).",
+    "zh": "整個 App 換新風格（8 種可選）；提醒和休息會在任何螢幕跳出小卡片，專注時先等等；夥伴可以更悠閒；Milk 和 Love 的聲音當鈴聲；做成圖片；每張貼圖都看得到來源；新的貼圖工具；下載變小了（照片在 App 裡下載一次）。",
+    "th": "โฉมใหม่ทั้งแอปกับ 8 สไตล์; แจ้งเตือนและพักเด้งเป็นการ์ดบนจอไหนก็ได้ และรอไว้ตอนโฟกัส; เพื่อนเดินสบาย ๆ ได้; เสียง Milk กับ Love เป็นเสียงเตือน; ทำเป็นรูป; ทุกสติกเกอร์บอกเครดิต; ตัวทำสติกเกอร์ใหม่; และดาวน์โหลดเล็กลง (รูปดาวน์โหลดในแอปครั้งเดียว)"
   },
   "min": "0.1.0",
   "history": [
+    {
+      "version": "1.2.0",
+      "date": "2026-10-25",
+      "en": "A whole new look with 8 styles; reminders and breaks as a card on any screen, held while you focus; a calmer buddy; Milk and Love's voices as ringtones; picture cards; every sticker shows its credit; a new sticker maker; and a smaller download (the photos download once, inside the app).",
+      "zh": "整個 App 換新風格（8 種可選）；提醒和休息會在任何螢幕跳出小卡片，專注時先等等；夥伴可以更悠閒；Milk 和 Love 的聲音當鈴聲；做成圖片；每張貼圖都看得到來源；新的貼圖工具；下載變小了（照片在 App 裡下載一次）。",
+      "th": "โฉมใหม่ทั้งแอปกับ 8 สไตล์; แจ้งเตือนและพักเด้งเป็นการ์ดบนจอไหนก็ได้ และรอไว้ตอนโฟกัส; เพื่อนเดินสบาย ๆ ได้; เสียง Milk กับ Love เป็นเสียงเตือน; ทำเป็นรูป; ทุกสติกเกอร์บอกเครดิต; ตัวทำสติกเกอร์ใหม่; และดาวน์โหลดเล็กลง (รูปดาวน์โหลดในแอปครั้งเดียว)",
+      "short": {
+        "en": "A new look (8 styles), pop-up cards on any screen, a calmer buddy, Milk & Love ringtones and a smaller download.",
+        "zh": "新風格（8 種）、任何螢幕都能跳出的小卡片、更悠閒的夥伴、Milk 和 Love 的鈴聲，下載也變小了。",
+        "th": "โฉมใหม่ (8 สไตล์) การ์ดเด้งบนจอไหนก็ได้ เพื่อนที่สบาย ๆ ขึ้น เสียงเตือน Milk กับ Love และดาวน์โหลดเล็กลง"
+      }
+    },
     {
       "version": "1.1.0",
       "date": "2026-10-24",
