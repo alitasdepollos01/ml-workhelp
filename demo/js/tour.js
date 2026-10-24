@@ -11,9 +11,9 @@ const ALL = [
   { tab: "today", find: ["#nav"], t: ["Everything is here", "東西都在這裡"],
     p: ["One window, with tabs down the left: your work things first, then the fan corner (stickers, the desktop buddy, photo credits), and Settings at the bottom. Open it any time from the menu bar icon, or right-click the buddy.",
       "所有東西都在這個視窗，分頁在左邊：上面是工作用的，接著是粉絲角落（貼圖、桌面夥伴、照片來源），設定在最下面。隨時可以從選單列的圖示打開，或在夥伴上按右鍵。"] },
-  { tab: "today", find: [".ways"], t: ["Two ways to work", "兩種工作方式"],
-    p: ["The work clock, or the Pomodoro (each round counts as today's work): the same as in the welcome. Switch any time; it's from now on.",
-      "工作時鐘，或番茄鐘（每一輪都算進今天的工作），跟歡迎頁選的一樣。隨時可以切換，切換後馬上就用新的方式。"] },
+  { tab: "today", find: [".now-top"], t: ["Two ways to work", "兩種工作方式"],
+    p: ["The switch at the top of the timer: the work clock, or the Pomodoro (each round counts as today's work), the same as in the welcome. Switch any time; it's from now on. The ? beside it says how it counts.",
+      "計時卡最上面的切換：工作時鐘，或番茄鐘（每一輪都算進今天的工作），跟歡迎頁選的一樣。隨時可以切換，切換後馬上就用新的方式。旁邊的 ? 會說明怎麼計時。"] },
   { tab: "today", find: [".now-card"], t: ["Now", "現在"],
     p: () => keepOf() === "work"
       ? ["The clock counts what you're working on (click its name to switch). The big button is always the next step: a break, then I'm back. Done for today logs what you've done so far and ends the day.",

@@ -1,10 +1,10 @@
-// Today: the two ways of keeping time, the focus of the day, the "now" card (today-now.js:
+// Today: the focus of the day, the "now" card (today-now.js:
 // the work clock, the Pomodoro, a break, 收工), and today's log, every entry editable where
 // it is (name, times, category, note; work ⇄ break; delete), time away to label, and time
 // you forgot to add.
 
 import { L, el, work, state, host, hm, clock, catName, catColor, catOf, deco, toast, enterKey, pageTop, LOC } from "./app-common.js";
-import { waysRow, nowCard, askNewTask } from "./today-now.js";
+import { nowCard, askNewTask } from "./today-now.js";
 import { dayLog } from "./day-log.js";
 import { wordCard } from "./word-card.js";
 import { icon } from "./icons.js";
@@ -67,7 +67,7 @@ export function renderToday(main, { ask, redraw, go: goTo }) {
     sessions.length ? dayLog(new Date().setHours(0, 0, 0, 0), sessions, { redraw, ms: true })
       : el("div", { className: "empty" }, deco("app-reminders-empty", "", "position:static"), L("Nothing logged yet today.", "今天還沒有紀錄。")));
 
-  main.append(datalist, topBand, ...(st.whatsNew ? [whatsNewCard(st.whatsNew)] : []), waysRow(st, redraw), ...now, top, head, list);
+  main.append(datalist, topBand, ...(st.whatsNew ? [whatsNewCard(st.whatsNew)] : []), ...now, top, head, list);
   if (ask?.word) requestAnimationFrame(() => main.querySelector(".word-card")?.scrollIntoView({ block: "center", behavior: "smooth" }));
   if (ask?.focusTheme) focusIn.focus();
 }

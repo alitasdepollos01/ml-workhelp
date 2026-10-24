@@ -33,12 +33,11 @@ const WAYS = () => [
 ];
 const wayName = (k) => WAYS().find((w) => w[0] === k)?.[1] || "";
 
-/** The two ways (= Settings › Keeping time): switching is from now on. */
-export function waysRow(st, redraw) {
+/** The two ways (= Settings › Keeping time), a small switch at the top of the timer card: switching is from now on. */
+function waySwitch(st, redraw) {
   const keep = st.keep || "work";
-  return el("div", { className: "ways", role: "radiogroup", "aria-label": L("How you keep time", "怎麼計時") }, WAYS().map(([k, title, sub]) => {
-    const b = el("button", { type: "button", className: "way" + (keep === k ? " on" : ""), role: "radio", "aria-checked": String(keep === k), "data-keep": k },
-      el("b", { textContent: title }), el("small", { textContent: sub }));
+  const seg = el("div", { className: "seg way-switch", role: "radiogroup", "aria-label": L("How you keep time", "怎麼計時") }, WAYS().map(([k, title, sub]) => {
+    const b = el("button", { type: "button", className: keep === k ? "on" : "", role: "radio", "aria-checked": String(keep === k), "data-keep": k, title: sub, textContent: title });
     b.addEventListener("click", () => {
       if (keep === k) return;
       // One go, nothing lost (main.js "switch-keep"): what's been done so far is kept, and the other clock carries on.
@@ -52,7 +51,26 @@ export function waysRow(st, redraw) {
     });
     return b;
   }));
+  return seg;
 }
+/** The ? beside the switch: what each way does and how this one counts (point at it, or click). */
+function helpTip(lines) {
+  const id = "now-tip-" + Math.random().toString(36).slice(2, 7);
+  const b = el("button", { type: "button", className: "help-q", "aria-label": L("How it counts", "怎麼計時的"), "aria-describedby": id, "aria-expanded": "false", textContent: "?" });
+  const pop = el("div", { className: "tip-pop", id, role: "tooltip" }, lines.map((t) => el("p", { textContent: t })));
+  const wrap = el("span", { className: "help-tip" }, b, pop);
+  const close = () => { wrap.classList.remove("open"); b.setAttribute("aria-expanded", "false"); };
+  b.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const on = !wrap.classList.contains("open");
+    wrap.classList.toggle("open", on); b.setAttribute("aria-expanded", String(on));
+    if (on) setTimeout(() => document.addEventListener("click", close, { once: true })); // (a click anywhere else closes it)
+  });
+  b.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+  return wrap;
+}
+/** (kept for anything that still asks for the old row: the switch now) */
+export function waysRow(st, redraw) { return waySwitch(st, redraw); }
 
 // ---- parts of the card ----------------------------------------------------------
 
@@ -65,7 +83,8 @@ function goalBar(st, ms, note = "") {
 }
 const goalText = (st, ms, note) => (st.goal ? L(`Today ${hmLong(ms)} of ${st.goal} h`, `今天工作 ${hmLong(ms)} / 目標 ${st.goal} 小時`) : L(`Today ${hmLong(ms)}`, `今天工作 ${hmLong(ms)}`)) + note;
 const pill = (cls, text) => el("span", { className: "pill " + cls, textContent: text });
-const explain = (text) => el("div", { className: "explain", textContent: "ⓘ " + text });
+let tipLines = []; // (this card's "how it counts" lines: in the ? tip at the top, not as grey text)
+const explain = (text) => { tipLines.push(text); return null; };
 function ring(color, pct, big, label, live = "") {
   const r = el("div", { className: "now-ring", style: `--c:${color};--p:${Math.max(0, Math.min(100, pct))}`, "data-live": live ? live + "-ring" : null },
     el("div", {}, el("span", { className: "time", textContent: big, "data-live": live || null }), label ? el("span", { className: "lab", textContent: label }) : null));
@@ -188,7 +207,12 @@ export function nowCard(st, { redraw }) {
   const keep = st.keep || "work", p = st.pomoNow, b = st.onBreak;
   const card = el("section", { className: "card now-card" });
   const row = el("div", { className: "nowc" });
-  put(card, row);
+  tipLines = [];
+  const top = el("div", { className: "now-top" }, waySwitch(st, redraw));
+  put(card, top, row);
+  // (the ? tip: what this way is, then how it counts right now)
+  const WAY_TIP = { work: L("Work clock: it counts while you're at the computer, task by task.", "工作時鐘：在電腦前就計時，記下每件事。"), both: L("Pomodoro: focus in rounds, with breaks between.", "番茄鐘：一輪專注、一段休息。") };
+  queueMicrotask(() => top.append(helpTip([WAY_TIP[keep] || "", ...tipLines].filter(Boolean))));
   const endBtn = () => btn(L("Done for today", "收工"), () => endDay(st, redraw), "btn end-day");
   const counting = keep === "work" ? !b && !st.doneToday && (st.started || st.dayStart !== "ask") : keep === "both" && p?.phase === "focus" && p.pausedLeft == null;
   // (from when the app last counted: a status that arrives for something else mustn't restart the count)
