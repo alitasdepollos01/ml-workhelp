@@ -545,6 +545,211 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
 .nw { white-space: nowrap; }
 .th-note { background: color-mix(in oklab, var(--a) 12%, var(--bg)); border-bottom: 1.5px solid var(--line); font-size: 13.5px; padding: 8px 0; }
 :lang(th) body { font-family: "Mali", var(--font-b); }
+/* What it does (three big things + chips) and the Desktop buddy block: assets/features.js draws them */
+:is(#ml-does, #ml-buddy) .ticks { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+:is(#ml-does, #ml-buddy) .ticks li { display: flex; gap: 8px; align-items: flex-start; color: var(--ink-2); font-size: 15px; line-height: 1.45; }
+:is(#ml-does, #ml-buddy) .ticks .ic { color: var(--p); width: 17px; height: 17px; margin-top: 2px; }
+:is(#ml-does, #ml-buddy) .more { display: inline-flex; gap: 6px; align-items: center; margin-top: 14px; font-weight: 800; text-decoration: none; color: var(--a-deep); min-height: 44px; }
+:is(#ml-does, #ml-buddy) .more:hover { text-decoration: underline; text-underline-offset: 3px; }
+:is(#ml-does, #ml-buddy) .more .ic { width: 16px; height: 16px; }
+:is(#ml-does, #ml-buddy) .ftag { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 800; padding: 3px 10px; border-radius: 99px; background: var(--a-soft); color: var(--a-deep); }
+:is(#ml-does, #ml-buddy) .ftag .ic { width: 14px; height: 14px; }
+:is(#ml-does, #ml-buddy) .cred-cap { margin-top: 16px; }
+:is(#ml-does, #ml-buddy) .mini { font: 700 13px/1.25 var(--font-b); color: var(--ink); background: var(--surface); border: 2px solid var(--line-strong); border-radius: 14px; padding: 7px 11px; box-shadow: var(--shadow-sm); display: inline-flex; gap: 7px; align-items: center; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .mini { background: rgba(30, 22, 48, .82); border-color: rgba(255,255,255,.18); color: var(--ink); }
+:is(#ml-does, #ml-buddy) .mini b { font: 800 17px/1 var(--font-h); color: var(--p-deep); }
+:is(#ml-does, #ml-buddy) .mini .ic { width: 15px; height: 15px; color: var(--a-deep); }
+:is(#ml-does, #ml-buddy) .mbtn { display: inline-flex; align-items: center; justify-content: center; border-radius: 99px; padding: 5px 11px; font: 800 12px/1.1 var(--font-b); background: var(--surface); color: var(--ink); border: 1.5px solid var(--line-strong); white-space: nowrap; }
+:is(#ml-does, #ml-buddy) .mbtn.p { background: var(--p); color: var(--p-ink); border-color: var(--p); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .mbtn { background: rgba(255,255,255,.1); color: var(--ink); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .mbtn.p { background: var(--p); color: var(--p-ink); }
+:is(#ml-does, #ml-buddy) .th { font-family: "Mali", var(--font-b); }
+:is(#ml-does, #ml-buddy) .scene { position: relative; overflow: hidden; border-radius: 18px; background: color-mix(in oklab, var(--a) 12%, var(--surface)) conic-gradient(rgba(255,255,255,.55) 25%, transparent 0 50%, rgba(255,255,255,.55) 0 75%, transparent 0) 0 0 / 24px 24px; border: 1.5px solid var(--line); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .scene { background: radial-gradient(circle at 50% 120%, rgba(255,143,184,.38), transparent 62%), linear-gradient(160deg, #2a1d44, #1a1230); border-color: rgba(255,255,255,.12); }
+:is(#ml-does, #ml-buddy) .scene img.stk { position: absolute; bottom: 0; height: 88%; width: auto; max-width: none; }
+:is(#ml-does, #ml-buddy) .scene .mini { position: absolute; z-index: 2; }
+:is(#ml-does, #ml-buddy) .desk { background: linear-gradient(160deg, #f6d8e4, #e9dcf4 55%, #d9ece2); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .desk { background: linear-gradient(160deg, #3b2a55, #2a1d44 55%, #23324a); }
+:is(#ml-does, #ml-buddy) .desk .mb { position: absolute; left: 0; right: 0; top: 0; height: 22px; background: rgba(255,255,255,.55); display: flex; align-items: center; gap: 12px; padding: 0 10px; font: 700 11px/1 -apple-system, sans-serif; color: #2b2430; z-index: 1; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .desk .mb { background: rgba(10,6,20,.5); color: #efe9f7; }
+:is(#ml-does, #ml-buddy) .desk .mb .sp { flex: 1; }
+:is(#ml-does, #ml-buddy) .desk .mb svg, :is(#ml-does, #ml-buddy) .desk .mb .ic { width: 12px; height: 12px; color: #e0507f; }
+:is(#ml-does, #ml-buddy) .desk .win { position: absolute; background: rgba(255,255,255,.62); border-radius: 9px; box-shadow: 0 8px 22px -12px rgba(60,20,40,.5); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .desk .win { background: rgba(255,255,255,.08); box-shadow: 0 10px 26px -12px rgba(0,0,0,.8); }
+:is(#ml-does, #ml-buddy) .desk .win::before { content: ""; position: absolute; left: 9px; top: 8px; width: 34px; height: 8px; background: radial-gradient(circle at 4px 4px, #ee6a6a 3.4px, transparent 3.9px), radial-gradient(circle at 16px 4px, #f2bf4c 3.4px, transparent 3.9px), radial-gradient(circle at 28px 4px, #5cc26f 3.4px, transparent 3.9px); }
+:is(#ml-does, #ml-buddy) .lbl2 { position: absolute; transform: translateX(-50%); z-index: 2; background: rgba(255,255,255,.92); color: #2b2430; border-radius: 10px; padding: 3px 9px; font: 700 10.5px/1.35 var(--font-b); text-align: center; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+:is(#ml-does, #ml-buddy) .lbl2 span { display: block; font-weight: 600; color: #7a5b6c; }
+:is(#ml-does, #ml-buddy) .bubble { position: absolute; z-index: 3; background: #fff; color: #2b2430; border-radius: 14px; padding: 7px 11px; font: 700 12px/1.3 var(--font-b); box-shadow: 0 6px 16px -6px rgba(0,0,0,.3); border: 2px solid var(--a); white-space: nowrap; }
+:is(#ml-does, #ml-buddy) .bubble b { display: block; font: 700 19px/1.15 "Mali", var(--font-b); color: #2f6a4b; }
+:is(#ml-does, #ml-buddy) .bubble::after { content: ""; position: absolute; left: 22px; bottom: -8px; width: 12px; height: 12px; background: #fff; border-right: 2px solid var(--a); border-bottom: 2px solid var(--a); transform: rotate(45deg); }
+:is(#ml-does, #ml-buddy) .fa-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; }
+:is(#ml-does, #ml-buddy) .fa-card { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px 12px; }
+:is(#ml-does, #ml-buddy) .fa-card .scene { height: 170px; margin-bottom: 4px; }
+:is(#ml-does, #ml-buddy) .fa-card.big { grid-row: span 2; }
+:is(#ml-does, #ml-buddy) .fa-card.big .scene { height: 300px; }
+:is(#ml-does, #ml-buddy) .fa-card h3 { font-size: 25px; font-weight: 800; }
+:is(#ml-does, #ml-buddy) .fa-card.big h3 { font-size: 30px; }
+:is(#ml-does, #ml-buddy) .fa-card p { margin: 0; color: var(--ink-2); font-size: 16px; }
+:is(#ml-does, #ml-buddy) .fa-card .more { margin-top: auto; }
+:is(#ml-does, #ml-buddy) .fa-also { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+:is(#ml-does, #ml-buddy) .fa-also > span { font: 800 14px/1 var(--font-b); color: var(--muted); margin-right: 4px; }
+:is(#ml-does, #ml-buddy) .chipx { display: inline-flex; gap: 7px; align-items: center; background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: 99px; padding: 8px 14px; font-weight: 700; font-size: 14.5px; color: var(--ink-2); }
+:is(#ml-does, #ml-buddy) .chipx .ic { width: 16px; height: 16px; color: var(--a-deep); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .chipx { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.16); }
+@media (max-width: 900px) {
+:is(#ml-does, #ml-buddy) .fa-grid { grid-template-columns: minmax(0, 1fr); }
+:is(#ml-does, #ml-buddy) .fa-card.big { grid-row: auto; }
+:is(#ml-does, #ml-buddy) .fa-card.big .scene { height: 250px; }
+:is(#ml-does, #ml-buddy) .fa-card h3, :is(#ml-does, #ml-buddy) .fa-card.big h3 { font-size: 24px; }
+}
+:is(#ml-does, #ml-buddy) .ring { width: 92px; aspect-ratio: 1; border-radius: 50%; background: conic-gradient(#f7b8cf 68%, #3a3236 0); display: grid; place-items: center; position: relative; }
+:is(#ml-does, #ml-buddy) .ring::before { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: #101614; }
+:is(#ml-does, #ml-buddy) .ring b { position: relative; font: 700 24px/1 var(--font-h); color: #b5ead7; font-variant-numeric: tabular-nums; }
+:is(#ml-does, #ml-buddy) .seg2 { display: inline-flex; background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: 99px; padding: 3px; gap: 2px; font: 800 12px/1 var(--font-b); }
+:is(#ml-does, #ml-buddy) .seg2 span { padding: 6px 10px; border-radius: 99px; color: var(--muted); white-space: nowrap; }
+:is(#ml-does, #ml-buddy) .seg2 span.on { background: var(--a); color: #fff; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .seg2 { background: rgba(30,22,48,.85); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .seg2 span.on { color: #1b0f22; }
+:is(#ml-does, #ml-buddy) .mon { position: absolute; background: #1b1e1d; border-radius: 10px; padding: 6px; box-shadow: var(--shadow); }
+:is(#ml-does, #ml-buddy) .mon .scr { position: relative; aspect-ratio: 16 / 10; border-radius: 5px; overflow: hidden; background: #0e1311; }
+:is(#ml-does, #ml-buddy) .mon .scr > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .9; }
+:is(#ml-does, #ml-buddy) .mon .scr .ring { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40%; }
+:is(#ml-does, #ml-buddy) .mon .scr .ring b { font-size: clamp(14px, 3.4vw, 22px); }
+:is(#ml-does, #ml-buddy) .mon .scr .t { position: absolute; left: 0; right: 0; top: 7%; text-align: center; color: #fff; font: 700 11px/1 var(--font-b); text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+:is(#ml-does, #ml-buddy) .rcard { position: absolute; z-index: 2; width: 210px; max-width: 70%; background: var(--surface); border: 2px solid var(--a); border-radius: 16px; padding: 10px 12px; box-shadow: var(--shadow); font-size: 12.5px; color: var(--ink-2); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .rcard { background: #2a1f3f; }
+:is(#ml-does, #ml-buddy) .rcard .h { display: flex; gap: 6px; align-items: center; font: 800 11px/1 var(--font-b); text-transform: uppercase; letter-spacing: .05em; color: var(--a-deep); }
+:is(#ml-does, #ml-buddy) .rcard .h .ic { width: 13px; height: 13px; }
+:is(#ml-does, #ml-buddy) .rcard b { display: block; font: 800 16px/1.2 var(--font-h); color: var(--ink); margin: 5px 0 2px; }
+:is(#ml-does, #ml-buddy) .rcard .acts { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+:is(#ml-does, #ml-buddy) .bars { position: absolute; display: flex; align-items: flex-end; gap: 7%; padding: 10px 12px 22px; background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: 14px; box-shadow: var(--shadow-sm); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bars { background: rgba(30,22,48,.85); }
+:is(#ml-does, #ml-buddy) .bars i { flex: 1; border-radius: 5px 5px 2px 2px; background: var(--p); position: relative; }
+:is(#ml-does, #ml-buddy) .bars i:nth-child(odd) { background: color-mix(in oklab, var(--p) 70%, var(--a)); }
+:is(#ml-does, #ml-buddy) .bars i::after { content: attr(data-d); position: absolute; bottom: -17px; left: 50%; transform: translateX(-50%); font: 700 10px/1 var(--font-b); color: var(--muted); }
+:is(#ml-does, #ml-buddy) .bars .goal { position: absolute; left: 8px; right: 8px; border-top: 2px dashed var(--a); }
+:is(#ml-does, #ml-buddy) .conf { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(circle, #f7b8cf 3px, transparent 3.5px), radial-gradient(circle, #8fd1a8 3px, transparent 3.5px), radial-gradient(circle, #ffe27a 2.5px, transparent 3px); background-size: 46px 52px, 58px 44px, 38px 61px; background-position: 0 0, 20px 14px, 9px 30px; opacity: .8; }
+:is(#ml-does, #ml-buddy) .bd-stage { position: relative; user-select: none; -webkit-user-select: none; }
+:is(#ml-does, #ml-buddy) .bd-screens { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1.1fr); gap: 16px; align-items: end; }
+:is(#ml-does, #ml-buddy) .bd-scr { position: relative; border-radius: 16px; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--a), var(--shadow); overflow: hidden; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-scr { border-color: rgba(255,255,255,.18); box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 0 50px -14px rgba(255,143,184,.5); }
+:is(#ml-does, #ml-buddy) .bd-main { aspect-ratio: 16 / 9.4; }
+:is(#ml-does, #ml-buddy) .bd-second { aspect-ratio: 16 / 10; }
+:is(#ml-does, #ml-buddy) .bd-scr .tagx { position: absolute; left: 10px; top: 30px; z-index: 1; font: 700 11.5px/1 var(--font-b); background: rgba(255,255,255,.75); color: #4a3a44; border-radius: 99px; padding: 5px 9px; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-scr .tagx { background: rgba(255,255,255,.12); color: #efe9f7; }
+:is(#ml-does, #ml-buddy) .bd-buddy { position: absolute; z-index: 4; touch-action: none; cursor: grab; display: grid; justify-items: center; outline: none; }
+:is(#ml-does, #ml-buddy) .bd-buddy:focus-visible .bd-imgs { outline: 3px solid var(--p); outline-offset: 4px; border-radius: 12px; }
+:is(#ml-does, #ml-buddy) .bd-buddy.drag { cursor: grabbing; }
+:is(#ml-does, #ml-buddy) .bd-imgs { display: flex; align-items: flex-end; gap: 2px; height: var(--bh, 104px); }
+:is(#ml-does, #ml-buddy) .bd-imgs img { height: 100%; width: auto; max-width: none; pointer-events: auto; -webkit-user-drag: none; filter: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 5px 8px rgba(60,20,40,.25)); }
+:is(#ml-does, #ml-buddy) .bd-buddy.walk .bd-imgs img { animation: fx-bob .5s ease-in-out infinite alternate; }
+:is(#ml-does, #ml-buddy) .bd-buddy.walk .bd-imgs img + img { animation-delay: .25s; }
+:is(#ml-does, #ml-buddy) .bd-buddy.flip .bd-imgs { transform: scaleX(-1); }
+@keyframes fx-bob{ from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-4px) rotate(2deg); } }
+:is(#ml-does, #ml-buddy) .bd-buddy .lbl2 { position: static; transform: none; margin-top: 2px; }
+:is(#ml-does, #ml-buddy) .bd-buddy .bubble { left: 50%; bottom: calc(100% + 6px); transform: translateX(-30%); }
+:is(#ml-does, #ml-buddy) .bd-buddy.gone { opacity: 0; pointer-events: none; transform: translateY(14px); }
+:is(#ml-does, #ml-buddy) .bd-buddy { transition: opacity .35s, transform .35s; }
+:is(#ml-does, #ml-buddy) .bd-buddy.drag, :is(#ml-does, #ml-buddy) .bd-buddy.moving { transition: opacity .35s; }
+:is(#ml-does, #ml-buddy) .bd-pop { position: absolute; z-index: 5; right: 10px; top: 30px; width: 230px; max-width: calc(100% - 20px); transition: opacity .3s, transform .3s; }
+:is(#ml-does, #ml-buddy) .bd-pop[hidden] { display: block; opacity: 0; transform: translateY(-8px); pointer-events: none; }
+:is(#ml-does, #ml-buddy) .bd-qc { position: absolute; z-index: 6; width: 300px; max-width: calc(100% - 16px); background: #fff; color: #2b2430; border: 2px solid var(--a); border-radius: 18px; box-shadow: 0 18px 40px -16px rgba(40,10,30,.55); padding: 12px; font: 600 13px/1.3 var(--font-b); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-qc { background: #221a30; color: #f3edf9; }
+:is(#ml-does, #ml-buddy) .bd-qc[hidden] { display: none; }
+:is(#ml-does, #ml-buddy) .bd-qc .row1 { display: flex; gap: 6px; align-items: baseline; }
+:is(#ml-does, #ml-buddy) .bd-qc .row1 b { font: 800 20px/1 var(--font-h); }
+:is(#ml-does, #ml-buddy) .bd-qc .row1 span { color: #8a7480; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-qc .row1 span, html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-qc .sub { color: #b7abd0; }
+:is(#ml-does, #ml-buddy) .bd-qc .task { display: flex; justify-content: space-between; align-items: center; background: #f6eef2; border-radius: 10px; padding: 7px 9px; margin: 8px 0; font-weight: 800; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-qc .task { background: rgba(255,255,255,.08); }
+:is(#ml-does, #ml-buddy) .bd-qc .task em { font-style: normal; font-size: 11.5px; background: #fff; border: 1px solid #ecd2dd; border-radius: 99px; padding: 3px 8px; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-qc .task em { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.18); }
+:is(#ml-does, #ml-buddy) .bd-qc .big4 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+:is(#ml-does, #ml-buddy) .bd-qc .big4 span { display: grid; justify-items: center; gap: 3px; border: 1.5px solid #ecd2dd; border-radius: 12px; padding: 8px 4px; font-weight: 800; font-size: 12px; text-align: center; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-qc .big4 span { border-color: rgba(255,255,255,.16); }
+:is(#ml-does, #ml-buddy) .bd-qc .big4 .ic { width: 16px; height: 16px; color: var(--p-deep); }
+html[data-look="scrapbook"] :is(#ml-does, #ml-buddy) .bd-qc .big4 .ic { color: #3f7d5c; }
+:is(#ml-does, #ml-buddy) .bd-qc .sub { font-size: 11.5px; color: #8a7480; font-weight: 800; margin: 10px 0 5px; }
+:is(#ml-does, #ml-buddy) .bd-qc .faces { display: flex; gap: 6px; }
+:is(#ml-does, #ml-buddy) .bd-qc .faces button { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; padding: 0; border: 2px solid transparent; background: #f3e6ec; cursor: pointer; }
+:is(#ml-does, #ml-buddy) .bd-qc .faces button[aria-pressed="true"] { border-color: var(--a); }
+:is(#ml-does, #ml-buddy) .bd-qc .faces img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+:is(#ml-does, #ml-buddy) .bd-qc .bot { display: flex; justify-content: space-around; border-top: 1.5px solid #f0dfe6; margin-top: 10px; padding-top: 8px; font-size: 11.5px; color: #8a7480; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-qc .bot { border-color: rgba(255,255,255,.12); color: #b7abd0; }
+:is(#ml-does, #ml-buddy) .bd-qc .bot span { display: grid; justify-items: center; gap: 2px; }
+:is(#ml-does, #ml-buddy) .bd-qc .bot .ic { width: 14px; height: 14px; }
+:is(#ml-does, #ml-buddy) .bd-try { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+:is(#ml-does, #ml-buddy) .bd-try > span { font-weight: 800; color: var(--muted); font-size: 14px; margin-right: 2px; }
+:is(#ml-does, #ml-buddy) .bd-try button, :is(#ml-does, #ml-buddy) .bd-set button { font: 700 14px/1.1 var(--font-b); color: var(--ink); background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: 99px; padding: 9px 13px; min-height: 40px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+:is(#ml-does, #ml-buddy) .bd-try button .ic { width: 15px; height: 15px; color: var(--a-deep); }
+:is(#ml-does, #ml-buddy) .bd-try button:hover, :is(#ml-does, #ml-buddy) .bd-set button:hover { border-color: var(--a); }
+:is(#ml-does, #ml-buddy) .bd-set button[aria-pressed="true"] { background: var(--a-soft); border-color: var(--a); color: var(--a-deep); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-try button, html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-set button { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.18); }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-set button[aria-pressed="true"] { background: var(--a-soft); border-color: var(--a); color: var(--a-deep); }
+:is(#ml-does, #ml-buddy) .bd-set { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 22px; }
+:is(#ml-does, #ml-buddy) .bd-set .print { padding: 16px 18px; }
+:is(#ml-does, #ml-buddy) .bd-set h3 { font-size: 19px; font-weight: 800; display: flex; gap: 9px; align-items: center; }
+:is(#ml-does, #ml-buddy) .bd-set h3 em { font-style: normal; width: 26px; height: 26px; border-radius: 50%; background: var(--a); color: #fff; display: grid; place-items: center; font: 800 14px/1 var(--font-b); flex: none; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-set h3 em { color: #1b0f22; }
+:is(#ml-does, #ml-buddy) .bd-set p { margin: 6px 0 10px; color: var(--ink-2); font-size: 15px; }
+:is(#ml-does, #ml-buddy) .bd-set .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+:is(#ml-does, #ml-buddy) .bd-set .opts button { font-size: 13px; padding: 7px 11px; min-height: 36px; }
+:is(#ml-does, #ml-buddy) .bd-set .opts button img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; object-position: top; }
+:is(#ml-does, #ml-buddy) .bd-set .sw { display: inline-flex; gap: 8px; align-items: center; }
+:is(#ml-does, #ml-buddy) .bd-set .note2 { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+:is(#ml-does, #ml-buddy) .bd.compact .bd-set { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+:is(#ml-does, #ml-buddy) .bd.compact .bd-set .print { padding: 14px; }
+:is(#ml-does, #ml-buddy) .bd.compact .bd-set .opts, :is(#ml-does, #ml-buddy) .bd.compact .bd-set .note2 { display: none; }
+:is(#ml-does, #ml-buddy) .bd.compact .bd-set h3 { font-size: 16.5px; }
+:is(#ml-does, #ml-buddy) .bd.compact .bd-set p { font-size: 14px; margin-bottom: 0; }
+@media (max-width: 1000px) {
+:is(#ml-does, #ml-buddy) .bd.compact .bd-set { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+:is(#ml-does, #ml-buddy) .bd-screens { grid-template-columns: minmax(0, 1fr); }
+:is(#ml-does, #ml-buddy) .bd-second { display: none; }
+:is(#ml-does, #ml-buddy) .bd-main { aspect-ratio: 4 / 3.3; }
+:is(#ml-does, #ml-buddy) .bd-set, :is(#ml-does, #ml-buddy) .bd.compact .bd-set { grid-template-columns: minmax(0, 1fr); }
+:is(#ml-does, #ml-buddy) .bd-qc { width: 260px; }
+:is(#ml-does, #ml-buddy) [data-act="screen"] { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+:is(#ml-does, #ml-buddy) .bd-buddy.walk .bd-imgs img { animation: none; }
+}
+:is(#ml-does, #ml-buddy) .bd-stage { overflow: clip; padding: 4px; margin: -4px; }
+:is(#ml-does, #ml-buddy) .fa-card.big .scene { flex: 1 1 auto; height: auto; min-height: 300px; }
+@media (max-width: 900px) {
+:is(#ml-does, #ml-buddy) .fa-card.big .scene { flex: none; min-height: 0; height: 260px; }
+}
+@media (max-width: 480px) {
+:is(#ml-does, #ml-buddy) .scene .hide-sm { display: none; }
+}
+:is(#ml-does, #ml-buddy) .fb-card { grid-template-columns: minmax(0, 1fr) 360px; }
+:is(#ml-does, #ml-buddy) .fb-card .scene { height: 196px; }
+:is(#ml-does, #ml-buddy) .scene .mini { max-width: 60%; }
+:is(#ml-does, #ml-buddy) .bd-stage { padding: 18px; margin: -18px; }
+html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-scr { box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 0 24px -8px rgba(255,143,184,.55); }
+@media (max-width: 900px) {
+:is(#ml-does, #ml-buddy) .fb-card { grid-template-columns: minmax(0, 1fr); }
+:is(#ml-does, #ml-buddy) .fb-card .scene { height: 200px; }
+}
+@media (max-width: 600px) {
+:is(#ml-does, #ml-buddy) .fa-card:not(.big) .scene { height: 140px; }
+:is(#ml-does, #ml-buddy) .fa-card .ticks li { font-size: 14.5px; }
+:is(#ml-does, #ml-buddy) .fa-also { gap: 7px; }
+:is(#ml-does, #ml-buddy) .fa-also > span { width: 100%; }
+:is(#ml-does, #ml-buddy) .chipx { padding: 6px 11px; font-size: 13.5px; }
+:is(#ml-does, #ml-buddy) .fc-row .scene { height: 210px; }
+}
+@media (max-width: 767px) {
+:is(#ml-does, #ml-buddy) .bd-qc { position: relative; left: auto !important; top: auto !important; margin: 12px auto 0; width: 100%; max-width: 340px; }
+:is(#ml-does, #ml-buddy) .bd-qc::before { content: ""; position: absolute; top: -9px; left: 50%; width: 14px; height: 14px; background: inherit; border-left: 2px solid var(--a); border-top: 2px solid var(--a); transform: translateX(-50%) rotate(45deg); }
+}
+@media (max-width: 600px) {
+:is(#ml-does, #ml-buddy) .fb-card .rcard { width: 66% !important; }
+:is(#ml-does, #ml-buddy) .fb-card .scene { height: 180px; }
+}
+
 </style>
 </head>
 <body>
@@ -642,7 +847,7 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
       <h1 class="title-big" style="font-size:clamp(36px,5vw,58px);margin-top:12px" data-zh="陪你度過工作日的 <em>MilkLove 夥伴</em>" data-th="เพื่อน &lt;em&gt;MilkLove&lt;/em&gt; สำหรับวันทำงานของคุณ">A <em>MilkLove buddy</em> for your work day</h1>
       <p class="lead" data-zh="工作時鐘或番茄鐘、專注全螢幕、提醒與活動、用自己的照片做貼圖，還有一週、一個月、一年的工作數據，Milk 和 Love 一直在螢幕上陪著你。" data-th="นาฬิกาทำงานหรือโพโมโดโร่ หน้าจอโฟกัส แจ้งเตือนและกิจกรรม สติกเกอร์จากรูปของคุณเอง และสถิติรายสัปดาห์ เดือน ปี โดยมีมิลค์กับเลิฟอยู่เป็นเพื่อนบนหน้าจอ">A work clock or the Pomodoro, a focus screen, reminders and events, stickers from your own photos, and your week, month and year in numbers, with Milk and Love keeping you company on screen.</p>
       <div class="acts"><a class="btn btn-p" href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載 Mac 版" data-th="ดาวน์โหลดสำหรับ Mac">Download for Mac</span></a><a class="btn btn-s" href="#ml-try"><i data-lucide="eye" class="ic"></i><span data-zh="先試試看" data-th="ลองเล่นที่นี่ก่อน">Try it here first</span></a></div>
-      <div class="badges"><span><i data-lucide="check" class="ic"></i><span data-zh="免費" data-th="ฟรี">Free</span></span><span><i data-lucide="check" class="ic"></i><span data-zh="資料只存在你的電腦裡" data-th="ข้อมูลอยู่ในเครื่องของคุณเท่านั้น">Everything stays on your computer</span></span><span><i data-lucide="check" class="ic"></i>English · 繁中 · ไทย (beta)</span><span><i data-lucide="check" class="ic"></i><span data-zh="Windows 版即將推出" data-th="เวอร์ชัน Windows กำลังมา">Windows coming</span></span></div>
+      <div class="badges"><span><i data-lucide="check" class="ic"></i><span data-zh="免費" data-th="ฟรี">Free</span></span><span><i data-lucide="check" class="ic"></i><span data-zh="資料只存在你的電腦裡" data-th="ข้อมูลอยู่ในเครื่องของคุณเท่านั้น">Everything stays on your computer</span></span><span><i data-lucide="check" class="ic"></i>English · 繁中 · ไทย (beta)</span><span><i data-lucide="check" class="ic"></i><span data-zh="目前只有 Mac 版 · Windows 版即將推出" data-th="ตอนนี้มีแค่ Mac · เวอร์ชัน Windows กำลังมา">Mac only for now · Windows coming</span></span></div>
     </div>
     <div class="collage">
       <div class="frame"></div>
@@ -657,15 +862,20 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
   <p class="cap wrap hero-cred" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;otter&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p>
 
   <nav class="subnav" aria-label="On this page"><div class="wrap">
-    <a href="#ml-try"><i data-lucide="eye" class="ic"></i><span data-zh="試試看" data-th="ลองเล่น">Try it</span></a>
     <a href="#ml-does"><i data-lucide="sparkles" class="ic"></i><span data-zh="能做什麼" data-th="ทำอะไรได้บ้าง">What it does</span></a>
+    <a href="#ml-buddy"><i data-lucide="smile" class="ic"></i><span data-zh="桌面夥伴" data-th="เพื่อนบนเดสก์ท็อป">Desktop buddy</span></a>
+    <a href="#ml-try"><i data-lucide="eye" class="ic"></i><span data-zh="試試看" data-th="ลองเล่น">Try it</span></a>
     <a href="#ml-focus"><i data-lucide="maximize-2" class="ic"></i><span data-zh="專注全螢幕" data-th="หน้าจอโฟกัส">Focus screen</span></a>
     <a href="#ml-stickers"><i data-lucide="sticker" class="ic"></i><span data-zh="做貼圖" data-th="สติกเกอร์ของคุณ">Your stickers</span></a>
     <a href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載" data-th="ดาวน์โหลด">Download</span></a>
-    <a href="#ml-photos"><i data-lucide="camera" class="ic"></i><span data-zh="照片來源" data-th="เครดิตภาพ">Photos & credits</span></a>
+    <a href="#ml-photos"><i data-lucide="camera" class="ic"></i><span data-zh="照片來源" data-th="เครดิตภาพ">Photos &amp; credits</span></a>
     <a href="#ml-news"><i data-lucide="mail" class="ic"></i><span data-zh="新版本通知" data-th="ข่าวทางอีเมล">News by email</span></a>
     <a href="#ml-privacy"><i data-lucide="lock" class="ic"></i><span data-zh="隱私" data-th="ความเป็นส่วนตัว">Privacy</span></a>
   </div></nav>
+
+  <section class="sec" id="ml-does"><div class="wrap" id="ml-does-in"></div></section>
+
+  <section class="sec" id="ml-buddy"><div class="wrap" id="ml-buddy-in"></div></section>
 
   <section class="sec" id="ml-try"><div class="wrap">
     <div class="sec-h"><span class="kick" data-zh="直接在這裡試" data-th="ลองเล่นได้ที่นี่เลย">Try it right here</span><h2 class="sparkle" data-zh="看看 App 長什麼樣子，換成你喜歡的風格" data-th="ดูแอปในสไตล์ที่คุณชอบ">See the app, in the style you like</h2><p data-zh="這是真的可以點的預覽。挑一頁、換風格、切換淺色或深色，就跟 App 裡的「設定 › 外觀」一樣。" data-th="นี่คือตัวอย่างที่กดเล่นได้จริง เลือกหน้า เปลี่ยนสไตล์ สลับโหมดสว่างหรือมืด เหมือนใน การตั้งค่า › หน้าตา ของแอปเลย">This is a real, clickable preview. Pick a page, change the style, switch light or dark, just like Settings › Look in the app.</p></div>
@@ -729,20 +939,6 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
 
   <div class="band"><div class="marquee" aria-hidden="true"><div class="mq-track"><img src="assets/fan/fan-15.webp" alt=""><img src="assets/fan/muv-app-look.webp" alt=""><img src="assets/fan/fan-16.webp" alt=""><img src="assets/fan/fan-17.webp" alt=""><img src="assets/fan/fan-18.webp" alt=""><img src="assets/fan/muv-muv-plain.webp" alt=""><img src="assets/fan/fan-19.webp" alt=""><img src="assets/fan/fan-20.webp" alt=""><img src="assets/fan/fan-05.webp" alt=""><img src="assets/fan/muv-w2-own.webp" alt=""><img src="assets/fan/fan-12.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""><img src="assets/fan/fan-15.webp" alt=""><img src="assets/fan/muv-app-look.webp" alt=""><img src="assets/fan/fan-16.webp" alt=""><img src="assets/fan/fan-17.webp" alt=""><img src="assets/fan/fan-18.webp" alt=""><img src="assets/fan/muv-muv-plain.webp" alt=""><img src="assets/fan/fan-19.webp" alt=""><img src="assets/fan/fan-20.webp" alt=""><img src="assets/fan/fan-05.webp" alt=""><img src="assets/fan/muv-w2-own.webp" alt=""><img src="assets/fan/fan-12.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""></div></div>
     <p class="cap wrap" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;otter&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p></div>
-  <section class="sec" id="ml-does"><div class="wrap">
-    <div class="sec-h"><span class="kick" data-zh="能做什麼" data-th="ทำอะไรได้บ้าง">What it does</span><h2 class="sparkle" data-zh="一個小 App，陪你過完工作的一天" data-th="แอปเล็ก ๆ ที่อยู่กับคุณทั้งวันทำงาน">A little app for your whole work day</h2><p data-zh="挑一種你喜歡的風格（共 8 種），然後：" data-th="เลือกสไตล์ที่ชอบ (มี 8 แบบ) แล้ว:">Pick one of eight styles, and then:</p></div>
-    <div class="newgrid">
-      <div class="print newc"><i data-lucide="bell-ring" class="ic"></i><b data-zh="在你正在用的螢幕跳出小卡片" data-th="การ์ดเด้งบนจอที่คุณใช้อยู่">A card on whichever screen you're on</b><span data-zh="夥伴收起來時，提醒和休息會在你正在用的螢幕右上角跳出一張小卡片。" data-th="ถ้าซ่อนเพื่อนไว้ การแจ้งเตือนและพักจะเด้งเป็นการ์ดเล็ก ๆ มุมขวาบนของจอที่คุณใช้อยู่">With the buddy hidden, reminders and breaks pop up as a small card at the top right of the screen you're using.</span></div>
-      <div class="print newc"><i data-lucide="headphones" class="ic"></i><b data-zh="專注時不打擾" data-th="ไม่กวนตอนโฟกัส">Quiet while you focus</b><span data-zh="專注全螢幕或番茄鐘進行中，提醒會先等等，結束後一起告訴你；活動照樣會跳出來。" data-th="ระหว่างหน้าจอโฟกัสหรือรอบโพโมโดโร่ การแจ้งเตือนจะรอ แล้วบอกรวดเดียวตอนจบ ส่วนกิจกรรมยังเด้งตามปกติ">During the focus screen or a Pomodoro round, reminders wait and come together at the end; events still come through.</span></div>
-      <div class="print newc"><i data-lucide="footprints" class="ic"></i><b data-zh="活潑程度你決定" data-th="จะให้เพื่อนซนแค่ไหนก็เลือกได้">A buddy as lively as you like</b><span data-zh="活潑、悠閒、更悠閒或安靜：越悠閒越省電。" data-th="ซน ชิล ชิลกว่า หรือนิ่ง ๆ: ยิ่งชิลยิ่งประหยัดแบต">Lively, calm, calmer or still: the calmer, the less battery it uses.</span></div>
-      <div class="print newc"><i data-lucide="music-2" class="ic"></i><b data-zh="Milk 和 Love 的聲音" data-th="เสียงของ Milk กับ Love">Milk and Love's voices</b><span data-zh="提醒時間到，可以響「P'Ink！」、「牙蟲」、「พี่มิว！」⋯" data-th="ถึงเวลาแจ้งเตือน ให้ดังเป็น “P'Ink!”, “牙蟲”, “พี่มิว!”…">Reminders can ring with “P'Ink!”, “牙蟲”, “พี่มิว!” and more.</span></div>
-      <div class="print newc"><i data-lucide="image" class="ic"></i><b data-zh="做成圖片" data-th="ทำเป็นรูป">Make a picture</b><span data-zh="把這一週或今天做成一張小卡片，貼圖自己挑，卡片上標明照片來源。" data-th="ทำสัปดาห์นี้หรือวันนี้เป็นการ์ดเล็ก ๆ เลือกสติกเกอร์เอง พร้อมเครดิตรูปบนการ์ด">Turn your week or your day into a little card, with a sticker you pick and its photo's credit.</span></div>
-      <div class="print newc"><i data-lucide="mouse-pointer-2" class="ic"></i><b data-zh="每張貼圖都看得到來源" data-th="ทุกสติกเกอร์บอกเครดิต">Every sticker shows its credit</b><span data-zh="滑鼠移到任何貼圖上，就知道照片是誰拍的；在夥伴上按右鍵，可以看原始照片。" data-th="ชี้ที่สติกเกอร์ไหนก็ได้ จะรู้ว่าใครถ่าย คลิกขวาที่เพื่อนเพื่อดูรูปต้นฉบับ">Point at any sticker to see who took the photo; right-click the buddy for the original.</span></div>
-      <div class="print newc"><i data-lucide="scissors" class="ic"></i><b data-zh="自己做貼圖" data-th="ทำสติกเกอร์เอง">Make your own stickers</b><span data-zh="一步一步來：放大、擦除、柔邊、清掉小雜點，按住 H 對照原圖。" data-th="ทีละขั้น: ซูม ลบ ขอบนุ่ม เก็บจุดเล็ก ๆ กด H ค้างไว้เพื่อเทียบรูปเดิม">Step by step: zoom, erase, soft edges, tidy the specks, hold H to compare.</span></div>
-      <div class="print newc"><i data-lucide="download" class="ic"></i><b data-zh="下載很輕巧" data-th="ดาวน์โหลดเบา ๆ">A light download</b><span data-zh="App 約 200 MB；照片在 App 裡下載一次。之後更新不用再下載全部照片。" data-th="แอปประมาณ 200 MB รูปดาวน์โหลดในแอปครั้งเดียว อัปเดตครั้งต่อไปไม่ต้องโหลดรูปใหม่ทั้งหมด">The app is about 200 MB; the photos download inside it, once. Updates don't fetch them all again.</span></div>
-    </div>
-  </div></section>
-
   <section class="sec" id="ml-get"><div class="wrap">
     <div class="sec-h"><span class="kick" data-zh="下載" data-th="ดาวน์โหลด">Download</span><h2 class="sparkle" data-zh="下載 ML WorkHelp" data-th="ดาวน์โหลด ML WorkHelp">Get ML WorkHelp</h2></div>
     <div class="dl">
@@ -924,6 +1120,7 @@ html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { bor
 </div></footer>
 
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script src="assets/features.js"></script>
 <script>
 /* The page: ML WorkHelp and Thai Mascot Buddy, in English, 繁中 and ไทย (beta). Light = Scrapbook, dark = Concert night.
    latest.json (next to this page) gives the version and its notes; the app reads it too. */
@@ -1107,7 +1304,7 @@ function applyLang() {
   document.querySelectorAll("[data-zh]").forEach((e) => { if (e.dataset.en == null) e.dataset.en = e.innerHTML; const t = lang === "zh" ? e.dataset.zh : lang === "th" ? (e.dataset.th || e.dataset.en) : e.dataset.en; e.innerHTML = e.matches(PLAIN) ? glue(t) : t; });
   document.getElementById("thnote").hidden = lang !== "th";
   document.querySelectorAll("[data-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
-  drawTry(); drawQuiz(); buildFocus(); drawDl();
+  drawTry(); drawQuiz(); buildFocus(); drawDl(); window.drawFeatures?.();
   lucide.createIcons();
 }
 function applyTheme() {
@@ -1151,7 +1348,7 @@ fetch("credits/credits.json", { cache: "no-store" }).then((r) => r.json()).then(
   const WHO = {"assets/fan/fan-01.webp": "Blumoon", "assets/fan/fan-02.webp": "Blumoon", "assets/fan/fan-03.webp": "Blumoon", "assets/fan/fan-04.webp": "Lyrac", "assets/fan/fan-05.webp": "Blumoon", "assets/fan/fan-06.webp": "NGMin", "assets/fan/fan-07.webp": "Lyrac", "assets/fan/fan-08.webp": "Blumoon", "assets/fan/fan-09.webp": "NGMin", "assets/fan/fan-10.webp": "NGMin", "assets/fan/fan-11.webp": "Lyrac", "assets/fan/fan-12.webp": "Blumoon", "assets/fan/fan-13.webp": "Lyrac", "assets/fan/fan-14.webp": "Blumoon", "assets/fan/fan-15.webp": "Blumoon", "assets/fan/fan-16.webp": "otter", "assets/fan/fan-17.webp": "otter", "assets/fan/fan-18.webp": "otter", "assets/fan/fan-19.webp": "NGMin", "assets/fan/fan-20.webp": "Blumoon", "assets/fan/muv-muv-baby.webp": "@wanwannjeab", "assets/fan/muv-muv-cartoon.webp": "@wanwannjeab", "assets/fan/muv-muv-heart.webp": "@wanwannjeab", "assets/fan/muv-muv-plain.webp": "@wanwannjeab", "assets/fan/muv-w2-own.webp": "alitasdepollos", "assets/fan/muv-w3-keep.webp": "alitasdepollos", "assets/fan/muv-app-look.webp": "alitasdepollos", "assets/stickers/photo-1.jpg": "alitasdepollos", "assets/stickers/auto-1.webp": "alitasdepollos", "assets/stickers/final-1.webp": "alitasdepollos", "assets/focus/sticker-1.png": "alitasdepollos", "assets/stickers/photo-2.jpg": "alitasdepollos", "assets/stickers/auto-2.webp": "alitasdepollos", "assets/stickers/final-2.webp": "alitasdepollos", "assets/focus/sticker-2.png": "alitasdepollos", "assets/stickers/photo-3.jpg": "alitasdepollos", "assets/stickers/auto-3.webp": "alitasdepollos", "assets/stickers/final-3.webp": "alitasdepollos", "assets/focus/sticker-3.png": "alitasdepollos", "assets/focus/blumoon-1.jpg": "Blumoon", "assets/focus/blumoon-2.jpg": "Blumoon", "assets/focus/blumoon-3.jpg": "Blumoon", "assets/focus/blumoon-4.jpg": "Blumoon", "assets/focus/blumoon-5.jpg": "Blumoon"};
   const tip = document.getElementById("creditTip");
   const credit = (img) => {
-    const src = (img.getAttribute("src") || "").replace(/^\.\//, ""), by = WHO[src];
+    const src = (img.getAttribute("src") || "").replace(/^\.\//, ""), by = WHO[src] || window.MLWH_WHO?.[src];
     if (!by) return "";
     const draw = by.startsWith("@") || /muv-/.test(src) && by === "alitasdepollos" && !/photo/.test(src);
     return (draw ? T("Drawing: ", "插畫：", "ภาพวาด: ") : T("Photo: ", "照片：", "รูป: ")) + by;
