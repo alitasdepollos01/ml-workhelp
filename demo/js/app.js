@@ -11,6 +11,7 @@ import { renderWeek, dataState } from "./tab-week.js";
 import { renderSettings, settingsGroup } from "./tab-settings.js";
 import { renderStickers } from "./tab-stickers.js";
 import { renderCredits } from "./tab-credits.js";
+import { renderBuddy } from "./tab-buddy.js";
 import { renderHelp } from "./tab-help.js";
 import { nowBusy } from "./today-now.js";
 import { openFocus, focusUpdate } from "./focus-screen.js";
@@ -24,6 +25,7 @@ const TABS = [
   ["reminders", "", "Reminders & events", "提醒與活動", renderReminders],
   ["week", "", "Data", "數據", renderWeek],
   ["stickers", "", "Stickers", "貼圖", renderStickers],
+  ["buddy", "", "Desktop buddy", "桌面夥伴", renderBuddy],
   ["credits", "", "Photo credits", "照片來源", renderCredits],
   ["settings", "", "Settings", "設定", renderSettings],
   ["help", "", "Help", "幫助", renderHelp, true], // (not in the list: Muv opens it)
@@ -35,7 +37,7 @@ let lastDraw = 0;
 // Each tab's own parts, opened under it in the menu while it's the one shown: Settings' six groups,
 // Data's three tabs.
 const SUB = {
-  settings: [["look", "Look & menu bar", "外觀與選單列"], ["buddy", "Desktop buddy & Thai", "桌面夥伴與泰文"], ["keep", "Keeping time & the day", "計時與每天的節奏"],
+  settings: [["look", "Look & menu bar", "外觀與選單列"], ["keep", "Keeping time & the day", "計時與每天的節奏"],
     ["rem", "Reminders & events", "提醒與活動"], ["cats", "Categories", "分類"], ["about", "About & updates", "關於與更新"]],
   week: [["sum", "Summary", "總覽"], ["ana", "Analysis", "分析"], ["cal", "Calendar", "日曆"]],
 };
@@ -79,8 +81,8 @@ function renderNav() {
     return [b, sub];
   };
   const T = (id) => TABS.find((t) => t[0] === id);
-  const buddyBtn = el("button", { type: "button", className: tab === "settings" && settingsGroup() === "buddy" ? "on" : "", "data-tab": "buddy" }, icon("buddy") || el("span"), el("span", { className: "t", textContent: L("Desktop buddy", "桌面夥伴") }));
-  buddyBtn.addEventListener("click", () => go("settings", { group: "buddy" }));
+  const buddyBtn = el("button", { type: "button", className: tab === "buddy" ? "on" : "", "data-tab": "buddy", ...(tab === "buddy" ? { "aria-current": "page" } : {}) }, icon("buddy") || el("span"), el("span", { className: "t", textContent: L("Desktop buddy", "桌面夥伴") }));
+  buddyBtn.addEventListener("click", () => go("buddy"));
   $("nav").replaceChildren(
     ...item(T("today")), ...item(T("reminders")), ...item(T("week")),
     el("div", { className: "nav-h", textContent: L("Fan corner", "粉絲角落") }),
@@ -123,8 +125,12 @@ export function draw() {
   else show();
 }
 let drawToken = 0;
+let lastBuddySig = null;
+const buddySig = (st) => JSON.stringify([st?.deskOut, st?.hiddenUntil, st?.deskWho, st?.thai, st?.keep, (st?.screens || []).length, st?.deskScreen]);
 
 function go(id, more = {}) {
+  // (Settings' old "Desktop buddy & Thai" group is a page of its own now)
+  if (id === "settings" && (more?.group === "buddy" || more?.card === ".buddy-card" || more?.card === ".thai-card")) { more = more.card === ".thai-card" ? { card: "#g-thai" } : {}; id = "buddy"; }
   if (!TABS.some((t) => t[0] === id)) id = "today";
   if (id !== tab || more.tab || more.range || (more && "group" in more)) window.scrollTo(0, 0); // (another tab, or another part of it: from the top)
   if (id !== tab) {
@@ -164,6 +170,7 @@ async function start() {
       // few seconds swapped the buttons under your pointer.
       if (tab === "reminders" && remSig(arg) === lastSig) return;
       if (tab === "today" && todaySig(arg) === lastSig) return;
+      if (tab === "buddy") { const sig = buddySig(arg); if (sig !== lastBuddySig && !busy()) { lastBuddySig = sig; draw(); } return; }
       if (every != null && !busy() && Date.now() - lastDraw >= every) draw();
     } else if (cmd === "ask") {
       go(arg?.tab || tab, arg || {});

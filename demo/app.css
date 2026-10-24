@@ -987,3 +987,187 @@ html[data-style="f"] .appwin main .page-sub h2::after { content: none; }
 /* a credit card's profile picture, in place of the icon (only for those who said yes) */
 .appwin .credit-card .cc-ic.has-pic { background: none; padding: 0; overflow: hidden; }
 .appwin .credit-card .cc-ic.has-pic img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; box-shadow: 0 0 0 2px var(--control-bg), 0 0 0 3.5px var(--line); }
+
+/* ===== the Desktop buddy page ===== */
+/* The Desktop buddy page (tab-buddy.js). Everything else comes from the app's own CSS; this only adds the
+   page's pieces, built on the same tokens (--sk-*, --primary, --line…) so every style dresses them. */
+
+.bp-page { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.appwin .page-top.bp-top > .deco { height: 112px; max-width: 190px; }
+.ico.sm { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; }
+
+/* ---- headings inside cards ---- */
+.appwin .bp-h { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; }
+
+/* ---- the one big button: Bring it out / Put it away ---- */
+.bp-main { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.appwin .btn.bp-go { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; }
+.bp-go .ico { width: 20px; height: 20px; }
+.bp-main.wide { display: grid; gap: 6px; }
+.bp-main.wide .bp-go { justify-content: center; width: 100%; }
+.bp-main.wide .bp-status { justify-self: center; }
+.bp-status { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--desk-muted); }
+.bp-status i { width: 9px; height: 9px; border-radius: 50%; background: var(--desk-muted); flex: none; }
+.bp-status.on { color: var(--desk-ink); }
+.bp-status.on i { background: var(--focus); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 25%, transparent); }
+
+/* ---- the live preview: a little desktop, the buddy walking along its bottom ---- */
+.bp-pv { position: relative; overflow: hidden; border-radius: var(--sk-r-md, 12px); border: 1px solid var(--line);
+  background: linear-gradient(160deg, #b9d7ef 0%, #e9d6ef 55%, #f6e3d3 100%); --h: 128px; --k: 1; --roam: 120px; }
+:where(html[data-mode="dark"]) .bp-pv{ background: linear-gradient(160deg, #1d2840 0%, #3a2a44 55%, #4a3330 100%); }
+ 
+.bp-pv[data-size="0.75"] { --k: .75; } .bp-pv[data-size="1.25"] { --k: 1.25; } .bp-pv[data-size="1.5"] { --k: 1.5; }
+.bp-pv-hero { height: 290px; --roam: 220px; }
+
+.bp-roam { position: absolute; left: 50%; bottom: 10px; translate: -50% 0; z-index: 2; }
+.bp-walker { position: relative; display: grid; justify-items: center; gap: 4px; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; transition: opacity .3s, filter .3s; }
+.bp-walker:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 12px; }
+.appwin .bp-pv .pv-pair { overflow: visible; }
+.appwin .bp-pv .pv-pair .deco { position: static; height: calc(var(--h) * var(--k)); width: auto; max-width: none; transition: height .25s; }
+.appwin .bp-pv .pv-label { white-space: nowrap; }
+.bp-pv[data-hidden="true"] .bp-walker { opacity: .14; filter: grayscale(1); }
+
+/* how lively: lively walks all the time (and hops), calm strolls now and then, calmer less, still stays */
+@keyframes bpWalk { from { translate: calc(var(--roam) * -1) 0; } to { translate: var(--roam) 0; } }
+@keyframes bpStroll { 0%, 55% { translate: calc(var(--roam) * -.5) 0; } 100% { translate: calc(var(--roam) * .5) 0; } }
+@keyframes bpStroll2 { 0%, 80% { translate: calc(var(--roam) * -.4) 0; } 100% { translate: calc(var(--roam) * .4) 0; } }
+.bp-pv[data-pace="lively"] .bp-walker { animation: bpWalk 6s ease-in-out infinite alternate; }
+.appwin .bp-pv[data-pace="lively"] .pv-pair .deco { animation: pvhop .7s ease-in-out infinite alternate; }
+.appwin .bp-pv[data-pace="lively"] .pv-pair .deco + .deco { animation-delay: .35s; }
+.bp-pv[data-pace="calm"] .bp-walker { animation: bpStroll 9s ease-in-out infinite alternate; }
+.bp-pv[data-pace="calmer"] .bp-walker { animation: bpStroll2 18s ease-in-out infinite alternate; }
+.bp-pv[data-hidden="true"] .bp-walker, .appwin .bp-pv[data-hidden="true"] .pv-pair .deco { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .bp-pv .bp-walker, .appwin .bp-pv .pv-pair .deco { animation: none !important; } }
+
+/* the Thai word (or a hello) when you click them */
+.bp-pv .bubble.bp-bubble { position: absolute; bottom: 52%; left: calc(100% - 6px); text-align: left; z-index: 4; cursor: pointer; }
+.bp-pv .bubble.bp-bubble .th { font-family: var(--thai); }
+
+/* put away / hiding in a call */
+.bp-note { position: absolute; left: 50%; top: 46%; translate: -50% -50%; z-index: 3; max-width: 80%; text-align: center;
+  background: rgba(255, 255, 255, .92); color: #3b2a32; border-radius: 12px; padding: 7px 14px; font-size: 13px; font-weight: 600; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .35); }
+.bp-note.soft { top: auto; bottom: 46%; font-weight: 500; }
+
+/* a pretend Mac: menu bar and two windows (as on the website's demo, buddy.html) */
+.bp-menubar { position: absolute; left: 0; right: 0; top: 0; height: 24px; display: flex; gap: 14px; align-items: center; padding: 0 12px; z-index: 1;
+  background: rgba(255, 255, 255, .55); color: #222; font: 500 12px/1 -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.bp-menubar b { font-weight: 800; } .bp-menubar .sp { flex: 1; } .bp-menubar .heart { color: #c94f7e; font-weight: 700; }
+:where(html[data-mode="dark"]) .bp-menubar{ background: rgba(30, 30, 36, .6); color: #eee; }
+ 
+.bp-win { position: absolute; border-radius: 10px; background: rgba(255, 255, 255, .6); box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .3); }
+.bp-win::before { content: ""; position: absolute; left: 11px; top: 9px; width: 42px; height: 9px; background: radial-gradient(circle, #ff5f57 3.5px, transparent 4px) 0 0/14px 9px repeat-x; opacity: .8; }
+:where(html[data-mode="dark"]) .bp-win{ background: rgba(50, 46, 56, .7); }
+ 
+.bp-pv-hero .w1 { left: 4%; top: 42px; width: 30%; height: 48%; } .bp-pv-hero .w2 { left: 66%; top: 70px; width: 28%; height: 38%; opacity: .85; }
+.bp-cap { position: absolute; left: 12px; top: 32px; z-index: 2; background: rgba(255, 255, 255, .85); color: #3b2a32; border-radius: 99px; padding: 2px 11px; font-size: 12px; }
+
+/* moments: working, or in a call (to see "Hide during calls") */
+.bp-moments { gap: 6px; }
+.bp-pv .bp-moments { position: absolute; top: 32px; right: 12px; z-index: 3; }
+.appwin .bp-moments .chip { display: inline-flex; align-items: center; }
+
+/* the right-click card, open beside the buddy (C) */
+
+/* ---- the settings ---- */
+.bp-faces { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.bp-face { font: inherit; display: grid; justify-items: center; gap: 5px; padding: 8px 4px 7px; min-width: 0; cursor: pointer; color: var(--desk-ink);
+  border-radius: var(--sk-r-md, 11px); border: var(--sk-bw, 1px) solid var(--line); background: var(--control-bg); transition: border-color .15s, background .15s; }
+.bp-face:hover { border-color: color-mix(in srgb, var(--primary) 50%, var(--line)); }
+.bp-face[aria-checked="true"] { border-color: var(--primary); box-shadow: inset 0 0 0 1.5px var(--primary); background: color-mix(in srgb, var(--primary) 10%, var(--control-bg)); font-weight: 650; }
+.bp-face-img { width: 54px; height: 54px; border-radius: 50%; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;
+  background: color-mix(in srgb, var(--desk-muted) 12%, var(--control-bg)); }
+.bp-face-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.bp-face-img.two img { width: 50%; }
+
+.appwin .seg.bp-seg { display: flex; width: 100%; }
+.appwin .seg.bp-seg button { flex: 1; white-space: nowrap; padding: 6px 8px; }
+.bp-desc { font-size: 13.5px; }
+.bp-batt { display: flex; gap: 2px; align-items: flex-start; }
+.bp-batt .ico { margin-top: 1px; flex: none; }
+
+
+
+.bp-hint { font-size: 12.5px; }
+
+/* ---- A: the preview on top, cards below ---- */
+.appwin .bp-hero { padding: 10px; gap: 10px; }
+.bp-hero-bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 0 4px 2px; }
+
+/* ---- B: the preview at the left, staying in view; the settings stacked at the right ---- */
+
+/* ---- C: the pretend desktop, settings in a side column ---- */
+
+@media (max-width: 900px) {
+  .bp-faces { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+
+/* ===== A-full: every setting of the old Settings › Desktop buddy & Thai, in four groups ===== */
+.appwin .bp-grp { gap: 12px; padding: 14px 16px 12px; }
+.bp-gh { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding-bottom: 2px; }
+.bp-gh > .ico { width: 21px; height: 21px; flex: none; color: var(--sk-accent-ink, var(--bar)); }
+.appwin .bp-gh .bp-h { font-size: 16px; }
+.bp-gsum { margin-left: auto; font-size: 12.5px; text-align: right; }
+.bp-gh .switch { margin-left: 4px; }
+.bp-fs { display: grid; gap: 7px; min-width: 0; align-content: start; }
+.bp-fs-l { font-size: 13.5px; }
+.bp-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 22px; }
+.appwin .bp-grp select { width: 100%; max-width: 100%; min-height: 32px; }
+.bp-pomo-hint { margin: -2px 0 0; }
+.bp-p { margin: 0; }
+
+/* a setting as a row, like Settings: what it is on the left, the control on the right */
+.bp-fr { display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; padding: 9px 0; border-top: 1px dashed color-mix(in srgb, var(--sk-accent, var(--bar)) 25%, var(--line)); }
+.bp-fr:first-child { border-top: 0; padding-top: 2px; }
+.bp-fr-l { display: grid; gap: 1px; min-width: 0; flex: 1 1 220px; font-size: 13.5px; }
+.bp-fr-c { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.bp-fr-c select { width: auto; min-width: 210px; }
+.bp-fr-deck { border-top: 0; padding-top: 0; }
+.bp-until { font-size: 13px; font-weight: 600; }
+.appwin .bp-chips { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+
+/* the app's days-pick (Settings' choice buttons), filling the width */
+.appwin .days-pick.bp-dp { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; }
+.appwin .days-pick.bp-dp button { text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 6px 8px; font-size: 13px; }
+.bp-fr-c .days-pick.bp-dp { width: auto; min-width: 240px; }
+
+/* "More": the rarely-changed ones, folded */
+.bp-det { border-radius: var(--sk-r-md, 11px); background: color-mix(in srgb, var(--sk-accent, var(--bar)) 6%, transparent); border: 1px dashed color-mix(in srgb, var(--sk-accent, var(--bar)) 35%, var(--line)); }
+.bp-det > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 8px; padding: 8px 12px; border-radius: inherit; }
+.bp-det > summary::-webkit-details-marker { display: none; }
+.bp-det > summary::before { content: "›"; display: inline-block; width: 10px; color: var(--sk-accent-ink, var(--bar)); font-weight: 800; transition: rotate .2s; }
+.bp-det[open] > summary::before { rotate: 90deg; }
+.bp-det > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.bp-det-t { font-weight: 700; color: var(--sk-accent-ink, var(--bar)); font-size: 13.5px; }
+.bp-det > summary .muted { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.bp-det-b { padding: 0 12px 6px 30px; }
+
+.bp-link { display: flex; gap: 4px 8px; align-items: baseline; flex-wrap: wrap; padding-top: 9px; border-top: 1px dashed color-mix(in srgb, var(--sk-accent, var(--bar)) 25%, var(--line)); }
+.appwin .bp-link .linkish { color: var(--sk-accent-ink, var(--bar)); padding: 0; }
+
+/* the preview: white edge and shadow as set (above the style's own sticker look) */
+.appwin .bp-pv[data-edge="none"][data-shadow="true"] .pv-pair .deco { filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .25)); }
+.appwin .bp-pv[data-edge="none"][data-shadow="false"] .pv-pair .deco { filter: none; }
+.appwin .bp-pv[data-edge="thin"][data-shadow="true"] .pv-pair .deco { filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff) drop-shadow(0 4px 6px rgba(0, 0, 0, .25)); }
+.appwin .bp-pv[data-edge="thin"][data-shadow="false"] .pv-pair .deco { filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff); }
+.appwin .bp-pv[data-edge="thick"][data-shadow="true"] .pv-pair .deco { filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(0 4px 6px rgba(0, 0, 0, .25)); }
+.appwin .bp-pv[data-edge="thick"][data-shadow="false"] .pv-pair .deco { filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff); }
+.appwin .bp-pv .pv-sign.bp-sign { top: 34px; left: 14px; z-index: 3; }
+
+@media (max-width: 760px) { .bp-two { grid-template-columns: 1fr; } .bp-gsum { margin-left: 0; text-align: left; flex-basis: 100%; } .bp-fr-c select, .bp-fr-c .days-pick.bp-dp { min-width: 0; width: 100%; } }
+.bp-grp .bp-faces { grid-template-columns: repeat(5, minmax(0, 116px)); }
+
+.bp-face-t { font-size: 12px; text-align: center; line-height: 1.2; overflow-wrap: anywhere; }
+.appwin .bp-face-img .deco { position: static; width: 100%; height: 100%; object-fit: cover; object-position: top; max-width: none; zoom: 1 !important; }
+.appwin .bp-face-img.two .deco { width: 50%; }
+.appwin .bp-pv .pv-pair .deco { zoom: 1 !important; }
+.appwin .bp-grp .buddy-pick-card { margin: 0; }
+/* Which screen: a one-off move (a little menu of the screens) */
+.bp-move { position: relative; display: inline-flex; }
+.bp-menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 20; display: grid; min-width: 240px; padding: 4px; border-radius: 12px; background: var(--control-bg); border: 1px solid var(--line); box-shadow: 0 12px 28px -12px rgba(0, 0, 0, .35); }
+.bp-menu[hidden] { display: none; }
+.bp-menu button { font: inherit; text-align: left; padding: 7px 10px; border: 0; background: none; border-radius: 8px; color: var(--desk-ink); cursor: pointer; }
+.bp-menu button:hover, .bp-menu button.on { background: color-mix(in srgb, var(--primary) 12%, transparent); }
+.appwin .bp-card-field .bp-fr-l { flex-basis: 320px; }
+.appwin .bp-cardlink { margin: 0; font-size: 13px; }
+

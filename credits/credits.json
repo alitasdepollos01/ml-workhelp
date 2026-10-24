@@ -1,6 +1,22 @@
 {
- "version": 0,
- "people": {},
+ "version": 5,
+ "people": {
+  "Blumoon": {
+   "avatar": "blumoon.jpg"
+  },
+  "Lyrac": {
+   "avatar": "lyrac.jpg"
+  },
+  "NGMin": {
+   "avatar": "ngmin.jpg"
+  },
+  "otter": {
+   "avatar": "otter.jpg"
+  },
+  "wanwannjeab": {
+   "avatar": "wanwannjeab.jpg"
+  }
+ },
  "photos": {},
  "removed": []
 }

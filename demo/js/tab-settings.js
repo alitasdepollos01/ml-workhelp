@@ -1,25 +1,21 @@
-// Settings: a home page (what's changed most often, and a tile for each of six groups, with what it's
-// set to now), and each group on a page of its own: look & the menu bar; the desktop buddy & Thai words;
+// Settings: a home page (what's changed most often, and a tile for each of five groups, with what it's
+// set to now), and each group on a page of its own: look & the menu bar;
 // keeping time & the day (the two ways, the focus screen, the Pomodoro's lengths, breaks, goals, starting the day);
 // reminders & events (the sound, Apple Reminders, Apple Calendar); categories; about & updates.
 // "Find a setting" searches all of them.
 
 import { stylePicker } from "./style-pick.js";
 import { L, el, host, work, state, deco, toast, saveCategoryFromText, enterKey, thaiNote, pageTop, pageSub } from "./app-common.js";
-import { deckOptions } from "./deck.js";
-import { labelLines, labelItems } from "./label.js";
 import { connectCard, known } from "./connect.js";
 import { lengthsPicker } from "./tab-pomodoro.js";
 import { startTour } from "./tour.js";
 import { openFocus } from "./focus-screen.js";
-import { buddyStickersField } from "./buddy-picker.js";
+import { buddySearchIndex } from "./tab-buddy.js";
 import { REMINDER_SOUNDS, playSound } from "./alarm.js";
 import { icon } from "./icons.js";
 import { LOOK_DEFAULTS, lookControls } from "./clock-look.js";
 
 const SWATCH = { matcha: ["#86c79b", "#f3aac0"], mint: ["#6ed6aa", "#ffa6c4"], rose: ["#f0a9bf", "#93cfa9"], lavender: ["#b6a5e6", "#ffc3a3"], sky: ["#8fbfee", "#ffe083"], classic: ["#1f2340", "#e8508a"] };
-const DECK_ZH = { "All cards": "全部卡片", "All song words": "所有歌曲單字", "All everyday words": "所有日常單字", "Song lines": "歌詞句", Songs: "歌曲", "Everyday Thai": "日常泰文" };
-let decks = null;
 
 const field = (label, ...ctrl) => el("label", { className: "field" }, el("span", { textContent: label }), el("span", { className: "inline" }, ...ctrl));
 function number(value, { min, max, step = 1, onChange, label }) {
@@ -50,15 +46,22 @@ function searchBox(go) {
         for (const f of sec.querySelectorAll(".field")) { const label = f.firstElementChild?.textContent || ""; if (label) searchIndex.push({ group: g, label, sel: label }); }
       }
     }
+    // (and the Desktop buddy page's: they open there)
+    const page = { id: "buddy-page", title: L("Desktop buddy", "桌面夥伴"), words: "buddy stickers size calls lines thai words hide screen 夥伴 貼圖 大小 通話 泰文 單字 躲 螢幕" };
+    for (const x of buddySearchIndex()) searchIndex.push({ group: page, label: x.label, sel: x.field, card: x.card });
     return searchIndex;
   };
   const show = () => {
     const q = input.value.trim().toLowerCase();
     if (!q) { list.hidden = true; return; }
-    const hits = index().filter((x) => (x.label + " " + x.group.title + " " + x.group.words).toLowerCase().includes(q)).slice(0, 8);
+    // (a setting whose name says it first; then the ones whose group is about it)
+    const byName = index().filter((x) => x.label.toLowerCase().includes(q));
+    const hits = (byName.length ? byName : index().filter((x) => (x.group.title + " " + x.group.words).toLowerCase().includes(q))).slice(0, 8);
     list.replaceChildren(...(hits.length ? hits.map((x) => {
       const b = el("button", { type: "button", role: "option" }, el("b", { textContent: x.label }), el("span", { className: "muted", textContent: ` · ${x.group.title}` }));
-      b.addEventListener("click", () => { list.hidden = true; input.value = ""; go("settings", { group: x.group.id, field: x.sel, cardTitle: x.sel ? null : x.label }); });
+      b.addEventListener("click", () => { list.hidden = true; input.value = "";
+        if (x.group.id === "buddy-page") return go("buddy", x.card ? { card: x.card } : { field: x.sel });
+        go("settings", { group: x.group.id, field: x.sel, cardTitle: x.sel ? null : x.label }); });
       return b;
     }) : [el("span", { className: "muted", textContent: L("Nothing like that here.", "這裡沒有相關的設定。") })]));
     list.hidden = false;
@@ -149,37 +152,7 @@ function startCard(st, redraw) {
 }
 
 
-let previewAt = "work";
-/** A preview of the desktop buddy with these settings, at a few moments of the day. */
-function buddyPreview(st, redraw) {
-  const keep = st.keep || "work", t = Date.now();
-  const moments = [["work", L("Working", "工作中")], ...(keep !== "work" ? [["focus", L("Focus", "專注")], ["pbreak", L("Break", "休息")]] : []), ["brk", L("Break", "休息")], ["wait", L("Not started", "還沒開始")]];
-  if (!moments.some(([k]) => k === previewAt)) previewAt = "work";
-  const base = { ...st, name: st.name || L("Thesis", "論文"), stretch: 25 * 60e3, today: 3 * 3600e3 + 20 * 60e3, started: true, onBreak: null, pomoNow: null, rounds: st.rounds || 5, dayStart: "ask",
-    reminders: (st.reminders || []).length ? st.reminders : [{ text: L("Call the bank", "打給銀行"), at: t + 85 * 60e3 }] };
-  const w = { ...base, ...({
-    focus: { pomoNow: { phase: "focus", endsAt: t + (18 * 60 + 42) * 1000, round: 2, every: 4 } },
-    pbreak: { pomoNow: { phase: "break", endsAt: t + (3 * 60 + 51) * 1000, round: 2, every: 4 } },
-    brk: { onBreak: { kind: "coffee", since: t - 6 * 60e3, until: t + 4 * 60e3 } },
-    wait: { started: false },
-  }[previewAt] || {}) };
-  const [l1, l2] = labelLines(w, "", () => "น้ำ · " + L("water", "水"));
-  const lively = previewAt === "pbreak" && (st.breakMood || "lively") === "lively";
-  const hidden = previewAt === "focus" && st.focusMood === "hide";
-  const box = el("div", { className: "buddy-preview", "aria-label": L("What the desktop buddy will look like", "桌面夥伴大概長這樣") },
-    lively ? el("span", { className: "pv-sign", textContent: L("Break time!", "休息時間！") }) : null,
-    el("div", { className: "pv-b" + (hidden ? " pv-hide" : "") + (lively ? " pv-lively" : "") },
-      el("div", { className: "pv-pair" }, deco("preview-milk", ""), deco("preview-love", "")),
-      l1 || l2 ? el("div", { className: "pv-label" }, l1 ? el("span", { className: "l1", textContent: l1 }) : null, l2 ? el("span", { className: "l2", textContent: l2 }) : null) : null));
-  const seg = el("div", { className: "pv-moments" }, moments.map(([k, txt]) => {
-    const b = el("button", { type: "button", className: "chip" + (previewAt === k ? " on" : ""), textContent: txt });
-    b.addEventListener("click", () => { previewAt = k; redraw(); });
-    return b;
-  }));
-  return el("div", { className: "buddy-pv" }, box, seg, el("span", { className: "muted", textContent: L("A preview: try the moments.", "示意圖：切換看看不同時候的樣子。") }));
-}
-
-// ---- the six groups: what's in each, and a line of what it's set to now (the home page's tiles) ----
+// ---- the five groups: what's in each, and a line of what it's set to now (the home page's tiles) ----
 
 let group = null; // the group open, or null for the home page
 const KEEP_NAME = () => ({ work: L("Work clock", "工作時鐘"), pomo: L("Pomodoro", "番茄鐘"), both: L("Pomodoro", "番茄鐘") }); // ("both" is the Pomodoro now)
@@ -194,9 +167,6 @@ function GROUPS() {
     { id: "look", title: L("Look & menu bar", "外觀與選單列"), words: "theme colour language dark light menu bar 顏色 語言 深色 淺色 選單列",
       sum: [theme, { zh: "繁體中文", th: "ไทย" }[host.lang] || "English", { system: L("like my Mac", "跟系統一樣"), light: L("light", "淺色"), dark: L("dark", "深色") }[st.appearance || "system"]].filter(Boolean).join(" · "),
       has: L("Colour, language, light or dark, the menu bar", "顏色、語言、深淺色、選單列"), draw: lookGroup },
-    { id: "buddy", title: L("Desktop buddy & Thai", "桌面夥伴與泰文"), words: "buddy stickers size calls label thai words 夥伴 貼圖 大小 通話 泰文 單字",
-      sum: [{ pair: L("Milk and Love, side by side", "Milk 和 Love 並排"), together: L("together", "同框"), milk: "Milk", love: "Love", others: L("your own", "你自己的") }[st.deskWho || "pair"], st.thai === false ? L("Thai off", "泰文關閉") : L("Thai on", "泰文開啟")].join(" · "),
-      has: L("Who, stickers, size, the lines under it, calls, Thai words", "是誰、貼圖、大小、下面兩行、通話時、泰文單字"), draw: buddyGroup },
     { id: "keep", title: L("Keeping time & the day", "計時與每天的節奏"), words: "keep time pomodoro break reminder video goal weekend start day focus screen full reading away 計時 番茄鐘 休息 提醒 影片 目標 週末 每天開始 專注 全螢幕 看書",
       sum: [KEEP_NAME()[st.keep || "work"], goal, st.dayStart === "auto" ? L("starts by itself", "自動開始") : L("asks each day", "每天問我")].join(" · "),
       has: L("The two ways, Pomodoro lengths, the focus screen, breaks, goals, starting the day", "兩種方式、番茄鐘長度、專注全螢幕、休息、目標、每天開始"), draw: keepGroup },
@@ -218,7 +188,7 @@ let searchIndex = null; // every setting's words and its group: [{ group, label,
 
 export function renderSettings(main, { redraw, go, ask }) {
   if (ask && "group" in ask) group = ask.group || null;
-  if (ask?.card) { const g = { ".look-card": "look", ".buddy-card": "buddy", ".keep-card": "keep", ".goals-card": "keep", ".start-card": "keep", ".thai-card": "buddy", ".cats-card": "cats", ".connect-card.apple": "rem", ".connect-card.calendar": "rem", ".about-card": "about" }[ask.card]; if (g) group = g; }
+  if (ask?.card) { const g = { ".look-card": "look", ".keep-card": "keep", ".goals-card": "keep", ".start-card": "keep", ".cats-card": "cats", ".connect-card.apple": "rem", ".connect-card.calendar": "rem", ".about-card": "about" }[ask.card]; if (g) group = g; }
   searchIndex = null;
   // Asked for a card (the menu, a link) or a setting (the search): there once it's drawn, with a flash.
   const target = ask?.card || null, field = ask?.field || null, title = ask?.cardTitle || null;
@@ -237,7 +207,7 @@ export function renderSettings(main, { redraw, go, ask }) {
   // The overview: a main page's top (search and the tour in it), then every group's card.
   if (!g) {
     main.append(pageTop({ title: L("Settings", "設定"), sub: L("Everything in one place: pick a card.", "所有設定都在這裡：點一張卡片。"), spot: "app-settings-look", tools: [searchBox(go), tourBtn], className: "settings-band" }));
-    home(main, groups, redraw); return;
+    home(main, groups, redraw, go); return;
   }
   // A group: a sub-page ("Settings › name", one sticker), then back to all, and the one before or after.
   const i = groups.indexOf(g), prev = groups[(i + groups.length - 1) % groups.length], next = groups[(i + 1) % groups.length];
@@ -249,7 +219,7 @@ export function renderSettings(main, { redraw, go, ask }) {
 }
 
 /** The home page: what's changed most often, right here; then a tile for each group, with what it's set to. */
-function home(main, groups, redraw) {
+function home(main, groups, redraw, go) {
   const st = state.st || {};
   const q = (label, ctrl) => el("span", { className: "qi" }, el("span", { className: "muted", textContent: label }), ctrl);
   main.append(el("section", { className: "set-quick", "aria-label": L("Used most", "常用") }, el("b", { className: "muted", textContent: L("Used most", "常用") }),
@@ -264,11 +234,11 @@ function home(main, groups, redraw) {
     b.addEventListener("click", () => { group = g.id; window.scrollTo(0, 0); redraw(); });
     return b;
   })));
-  main.append(setupList(st, redraw));
+  main.append(setupList(st, redraw, go));
 }
 
 /** Getting set up: the few things worth setting, each with whether it's done and the way straight to it. */
-function setupList(st, redraw) {
+function setupList(st, redraw, go) {
   const k = known(), conn = (a) => a?.access === "full" && a.on;
   const to = (g, card) => () => { group = g; window.scrollTo(0, 0); redraw(); if (card) setTimeout(() => { const c = document.querySelector(card); c?.scrollIntoView({ behavior: "smooth", block: "start" }); c?.classList.add("flash"); }, 150); };
   const items = [
@@ -276,7 +246,7 @@ function setupList(st, redraw) {
     [st.dailyGoal > 0, L("A daily goal", "每日目標"), st.dailyGoal ? L(`${st.dailyGoal} h a day`, `每天 ${st.dailyGoal} 小時`) : L("not set", "還沒設定"), to("keep", ".goals-card")],
     [!!st.focusScreen, L("The focus screen, for reading or studying away from the computer", "專注全螢幕：看書、讀書不在電腦前也能用"), st.focusScreen?.auto ? L("opens with every round", "每一輪都會打開") : L("from Today, or the menu", "從「今天」或選單打開"), to("keep", ".focus-card")],
     [conn(k.apple) || conn(k.calendar), L("Apple Reminders & Calendar (if you use them)", "Apple 提醒事項與行事曆（有在用的話）"), conn(k.apple) || conn(k.calendar) ? L("connected", "已連結") : L("not connected: the app works without them", "未連結：不連也能用"), to("rem", ".connect-card")],
-    [(host.lib?.buddyOff || []).length > 0 || !!st.deskWho, L("The buddy and its stickers", "桌面夥伴和它的貼圖"), { pair: L("Milk and Love, side by side", "Milk 和 Love 並排"), together: L("together", "同框"), milk: "Milk", love: "Love", others: L("your own", "你自己的") }[st.deskWho || "pair"], to("buddy", ".buddy-card")],
+    [(host.lib?.buddyOff || []).length > 0 || !!st.deskWho, L("The buddy and its stickers", "桌面夥伴和它的貼圖"), { pair: L("Milk and Love, side by side", "Milk 和 Love 並排"), together: L("together", "同框"), milk: "Milk", love: "Love", others: L("your own", "你自己的") }[st.deskWho || "pair"], () => go("buddy", { card: "#g-look" })],
     [(st.workTypes || []).length > 0, L("Your kinds of work and break", "你的工作和休息分類"), L(`${(st.workTypes || []).length} kinds of work · ${(st.breakTypes || []).length} of break`, `工作 ${(st.workTypes || []).length} 種 · 休息 ${(st.breakTypes || []).length} 種`), to("cats", ".cats-card")],
   ];
   const done = items.filter((x) => x[0]).length;
@@ -328,91 +298,6 @@ function lookGroup(main, redraw) {
 }
 
 /** How often the buddies change sticker (seconds; 0 = keep one). Kept in the windows' own storage: the buddies hear at once. */
-function switchEvery() {
-  const sel = el("select", { "aria-label": L("How often the buddy changes sticker", "夥伴多久換一張貼圖") },
-    [[30, L("30 seconds", "30 秒")], [60, L("1 minute", "1 分鐘")], [120, L("2 minutes", "2 分鐘")], [300, L("5 minutes", "5 分鐘")], [600, L("10 minutes", "10 分鐘")],
-      [1800, L("30 minutes", "30 分鐘")], [0, L("Never: keep one", "不換：一直用同一張")]].map(([v, t]) => new Option(t, String(v))));
-  // (the buddy pages keep it in this origin's storage, "mlwh:pose", and hear a change at once)
-  let now = 120; try { const v = localStorage.getItem("mlwh:pose"); if (v != null) now = Number(JSON.parse(v)); } catch { /* the default */ }
-  sel.value = [30, 60, 120, 300, 600, 1800, 0].includes(now) ? String(now) : "120";
-  sel.addEventListener("change", () => { try { localStorage.setItem("mlwh:pose", JSON.stringify(Number(sel.value))); } catch { /* (private window) */ } toast(L("Saved", "已儲存")); });
-  return sel;
-}
-
-function buddyGroup(main, redraw) {
-  const st = state.st || {}, w = work;
-  const who = el("select", { "aria-label": L("Who the desktop buddy is", "桌面夥伴是誰") }, [["pair", L("Milk and Love, side by side", "Milk 和 Love 並排")], ["together", L("Milk and Love together", "Milk 和 Love 同框")],
-    ["milk", "Milk"], ["love", "Love"], ["others", L("Others (your own stickers)", "其他（你自己的貼圖）")]].map(([v, t]) => new Option(t, v)));
-  who.value = st.deskWho || "pair";
-  who.addEventListener("change", () => { host.settingText("deskWho", who.value); toast(L("Saved", "已儲存")); });
-  const pace = () => {
-    const sel = el("select", { "aria-label": L("How lively the desktop buddy is", "桌面夥伴有多活潑") }, [["lively", L("Lively: walks about all the time", "活潑：一直走來走去")],
-      ["calm", L("Calm: a stroll every half a minute or so", "悠閒：每半分鐘左右散步一下")], ["calmer", L("Calmer: a stroll every minute or two", "更悠閒：每一兩分鐘散步一下")],
-      ["still", L("Still: stays where you put it", "安靜：待在你放的地方")]].map(([v, t]) => new Option(t, v)));
-    sel.value = st.deskPace || "calm";
-    sel.addEventListener("change", () => { state.st.deskPace = sel.value; host.settingText("deskPace", sel.value); toast(L("Saved", "已儲存")); });
-    return sel;
-  };
-  const onTop = el("select", { "aria-label": L("Where windows overlap", "跟視窗重疊時") }, new Option(L("On top of them", "在視窗上面"), "1"), new Option(L("Behind them", "在視窗後面"), "0"));
-  onTop.value = st.deskOnTop === false ? "0" : "1";
-  onTop.addEventListener("change", () => { w.setting("deskOnTop", Number(onTop.value)); toast(L("Saved", "已儲存")); });
-  const out = el("button", { type: "button", className: "btn small", textContent: L("Bring it out", "叫出夥伴") });
-  out.addEventListener("click", () => host.setBuddies("desk", true));
-  const keep = st.keep || "work";
-  const items = labelItems(keep, st.thai !== false);
-  const line = (k) => {
-    const sel = el("select", { "aria-label": k === "label1" ? L("First line under the buddy", "夥伴下面第一行") : L("Second line under the buddy", "夥伴下面第二行") }, items.map(([v, t]) => new Option(t, v)));
-    sel.value = items.some(([v]) => v === st[k]) ? st[k] : "auto";
-    sel.addEventListener("change", () => { host.settingText(k, sel.value); toast(L("Saved", "已儲存")); setTimeout(redraw, 150); });
-    return sel;
-  };
-  const mood = (k, opts) => {
-    const sel = el("select", { "aria-label": k }, opts.map(([v, t]) => new Option(t, v)));
-    sel.value = st[k] || opts[0][0];
-    sel.addEventListener("change", () => { host.settingText(k, sel.value); toast(L("Saved", "已儲存")); setTimeout(redraw, 150); });
-    return sel;
-  };
-  main.append(el("section", { className: "card buddy-card" }, el("h3", { textContent: L("Desktop buddy", "桌面夥伴") }), el("div", { className: "buddy-cols" }, el("div", { className: "buddy-fields" },
-    field(L("The desktop buddy", "桌面夥伴"), out),
-    field(L("Who", "是誰"), who),
-    field(L("How lively", "活潑程度"), pace()),
-    field(L("A new sticker every", "多久換一張貼圖"), switchEvery()),
-    host.setBuddyOff ? buddyStickersField() : null,
-    el("div", { className: "field" }, el("span", { textContent: L("Size", "大小") }), seg([[0.75, L("Small", "小")], [1, L("Medium", "中")], [1.25, L("Large", "大")], [1.5, L("Extra large", "特大")]], st.size, (v) => { state.st.size = v; w.setting("buddySize", v); setTimeout(redraw, 120); }, L("Buddy size", "夥伴大小"))),
-    field(L("White edge", "白邊"), seg([["none", L("None", "無")], ["thin", L("Thin", "細")], ["thick", L("Thick", "粗")]], st.stkEdge || "thin", (v) => { state.st.stkEdge = v; host.settingText("stkEdge", v); toast(L("Saved", "已儲存")); }, L("White edge around the stickers", "貼圖的白邊"))),
-    field(L("Shadow", "陰影"), check((st.stkShadow || "soft") === "soft", (v) => { state.st.stkShadow = v ? "soft" : "none"; host.settingText("stkShadow", v ? "soft" : "none"); }, L("A soft shadow under the stickers", "貼圖下面的柔和陰影"))),
-    field(L("Where windows overlap", "跟視窗重疊時"), onTop),
-    field(L("Hide during calls (microphone or camera on)", "通話時先躲起來（麥克風或相機開著時）"), check(st.hideInCalls, (v) => w.setting("hideInCalls", v ? 1 : 0), L("Hide during calls", "通話時躲起來"))),
-    field(L("Under the buddy: first line", "夥伴下面：第一行"), line("label1")),
-    field(L("Second line", "第二行"), line("label2")),
-    keep !== "work" ? field(L("During a Pomodoro focus", "番茄鐘專注時"), mood("focusMood", [["usual", L("Carry on as usual", "跟平常一樣")], ["calm", L("Keep calm and quiet", "安靜地陪你")], ["hide", L("Out of sight until the break", "先躲起來，休息時再出來")]])) : null,
-    keep !== "work" ? field(L("During a Pomodoro break", "番茄鐘休息時"), mood("breakMood", [["lively", L("Lively, with a sign", "活潑起來，舉牌提醒你")], ["usual", L("As usual", "跟平常一樣")]])) : null),
-    buddyPreview(st, redraw))));
-  // Thai words: the buddy teaches them.
-  const deck = el("select", { "aria-label": L("The buddies teach words from", "夥伴教的單字從哪來") });
-  const fill = (lib) => {
-    const opts = deckOptions(lib), groups = new Map();
-    deck.replaceChildren();
-    for (const o of opts) {
-      let parent = deck;
-      if (o.group) { if (!groups.has(o.group)) { const g = el("optgroup", { label: L(o.group, DECK_ZH[o.group]) }); deck.append(g); groups.set(o.group, g); } parent = groups.get(o.group); }
-      parent.append(new Option(L(o.label, DECK_ZH[o.label]), o.value));
-    }
-    let cur = "all"; try { cur = JSON.parse(localStorage.getItem("mlwh:deck")) || "all"; } catch { /* fine */ }
-    deck.value = opts.some((o) => o.value === cur) ? cur : "all";
-  };
-  if (decks) fill(decks); else host.library?.().then((lib) => { decks = lib || {}; fill(decks); }).catch(() => {});
-  deck.addEventListener("change", () => { try { localStorage.setItem("mlwh:deck", JSON.stringify(deck.value)); } catch { /* fine */ } toast(L("Saved", "已儲存")); });
-  const thai = st.thai !== false;
-  const thaiSw = el("button", { type: "button", className: "switch" + (thai ? " on" : ""), role: "switch", "aria-checked": String(thai), "aria-label": L("Thai words", "泰文單字") });
-  thaiSw.addEventListener("click", () => { host.settingText("thai", thai ? "off" : "on"); toast(thai ? L("Thai words off", "泰文單字已關閉") : L("Thai words on", "泰文單字已開啟")); setTimeout(redraw, 150); });
-  main.append(el("section", { className: "card thai-card" }, el("h3", {}, el("span", { textContent: L("Thai words (the buddy teaches them)", "泰文單字（夥伴教的）") }), thaiSw),
-    thai ? field(L("The buddies teach words from", "夥伴教的單字從哪來"), deck) : null,
-    el("p", { className: "muted", textContent: thai
-      ? L("Click a buddy for a Thai word card; each reminder and break comes with a Thai word from here too.", "點夥伴會跳出泰文單字卡；每次提醒和休息，也會從這裡附上一個泰文單字。")
-      : L("Off: no Thai word cards anywhere (clicking a buddy just says hi, and reminders and breaks come without a word). Turn it on any time.", "已關閉：不會出現任何泰文單字卡（點夥伴只會打招呼，提醒和休息也不附單字）。想學時隨時可以再打開。") })));
-}
-
 function keepGroup(main, redraw) {
   const st = state.st || {}, w = work, keep = st.keep || "work";
   // ① How the app keeps time (the same as the two ways at the top of Today).
@@ -482,14 +367,15 @@ function focusCard(st, redraw) {
     field(L("A little dimmer after 22:00", "22:00 以後暗一點"), check(f.dim !== false, (v) => save({ dim: v }), L("Dimmer at night", "晚上暗一點"))));
 }
 
-function remGroup(main, redraw) {
+function remGroup(main, redraw, go) {
   const st = state.st || {};
-  // The desktop buddy hidden: a card on screen, or nothing at all.
+  // (the desktop buddy hidden: a card on screen, or nothing: its switch is on the Desktop buddy page, When to hide)
   const cardOn = st.cardWhenHidden !== false;
-  const cardField = el("div", { className: "field" }, el("span", {}, el("b", { textContent: L("When the desktop buddy is hidden, show a card on screen", "桌面夥伴收起來時，在螢幕上跳出卡片") }), el("br"),
-      el("small", { className: "muted", textContent: L("Breaks, events and reminders pop up as a small card at the top right of the screen you're on, above every app, until you answer.", "休息、活動和提醒會在你正在用的那個螢幕右上角跳出小卡片，在所有 App 上面，回應了才會消失。") })),
-    check(cardOn, (v) => { state.st.cardWhenHidden = v; host.settingText("cardWhenHidden", v ? "on" : "off"); toast(L("Saved", "已儲存")); setTimeout(redraw, 120); }, L("Show a card when the buddy is hidden", "夥伴收起來時跳出卡片")));
-  const warn = cardOn ? null : el("p", { className: "card-warn", textContent: L("This is off: while the desktop buddy is hidden, nothing will remind you of breaks, events or reminders.", "已關閉：桌面夥伴收起來的時候，休息、活動和提醒都不會有任何提示。") });
+  const toBuddy = el("button", { type: "button", className: "linkish", textContent: L("Desktop buddy › When to hide ›", "桌面夥伴 › 什麼時候躲起來 ›") });
+  toBuddy.addEventListener("click", () => go("buddy", { card: "#g-hide" }));
+  const cardField = el("p", { className: "muted bp-cardlink" }, cardOn ? L("With the desktop buddy hidden, these pop up as a small card on the screen you're on. ", "桌面夥伴收起來時，這些會在你正在用的螢幕跳出小卡片。")
+    : L("Off: with the desktop buddy hidden, nothing pops up. ", "已關閉：桌面夥伴收起來時，什麼都不會跳出來。"), toBuddy);
+  const warn = null;
   main.append(el("section", { className: "card sound-card" }, el("h3", { textContent: L("When it's time", "時間到的時候") }), st.sound ? soundField(st) : null, cardField, warn,
     el("p", { className: "muted", textContent: L("Add reminders and events in Reminders & events; without Apple Calendar, events stay in the app and still remind you.", "在「提醒與活動」新增提醒和活動；沒連結 Apple 行事曆也能加活動，會存在 App 裡，時間到一樣會提醒你。") })));
   // What pops up, and holding reminders while you focus.

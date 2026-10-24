@@ -1,7 +1,7 @@
 // Which stickers the buddies use: every sticker by set, click to leave one out or put it back
 // (Settings › Desktop buddy, and the top of the Stickers tab).
 
-import { L, el, host, modal, toast } from "./app-common.js";
+import { L, el, host, modal, toast, creditFor } from "./app-common.js";
 
 /** Which stickers the buddies use: a count, and a picker (every sticker, by set; click to leave one out or put it back). */
 function buddyStickers(row) {
@@ -16,6 +16,9 @@ function buddyStickers(row) {
     count.textContent = L(`${on} of ${all.length} in use`, `用了 ${on} / ${all.length} 張`);
   };
   host.library().then((l) => { lib = l; showCount(); }).catch(() => { count.textContent = ""; });
+  let names = new Map(), creds = {}; // (whose photo each sticker is, for pointing at one in the picker)
+  host.photoCredits?.().then((c) => { names = new Map((c?.stickers || []).map((x) => [x.name, x.source])); creds = c?.credits || {}; }).catch(() => {});
+  const creditOf = (s) => { const src = names.get(decodeURIComponent(String(s.url).split("?")[0].split("/").pop())); return src ? creditFor(creds[src]) || null : null; };
   open.addEventListener("click", () => {
     if (!lib) return;
     const off = new Set(lib.buddyOff || []);
@@ -35,7 +38,7 @@ function buddyStickers(row) {
       grid.replaceChildren(...list.map((s) => {
         const k = keyOf(set, s);
         const b = el("button", { type: "button", className: "bp-st" + (off.has(k) ? " off" : ""), "aria-pressed": String(!off.has(k)), title: off.has(k) ? L("Left out: click to use it", "沒在用：點一下就會用") : L("In use: click to leave it out", "使用中：點一下就不用") },
-          el("img", { src: s.url, alt: "", loading: "lazy" }), el("i", { textContent: off.has(k) ? "" : "✓" }));
+          el("img", { src: s.url, alt: "", loading: "lazy", "data-credit": creditOf(s) }), el("i", { textContent: off.has(k) ? "" : "✓" }));
         b.addEventListener("click", () => { if (off.has(k)) off.delete(k); else off.add(k); b.classList.toggle("off", off.has(k)); b.setAttribute("aria-pressed", String(!off.has(k))); b.querySelector("i").textContent = off.has(k) ? "" : "✓"; tabsOnly(); });
         return b;
       }));
@@ -60,9 +63,14 @@ export const buddyStickersField = () => buddyStickers((count, open) => el("div",
 
 /** Stickers tab: a card at the top. */
 export const buddyStickersCard = () => buddyStickers((count, open) => {
-  const thumbs = el("span", { className: "bp-thumbs", "aria-hidden": "true" });
-  host.library().then((l) => thumbs.replaceChildren(...["milk", "love", "together"].map((k) => (l.stickers?.[k] || [])[Math.floor(Math.random() * (l.stickers?.[k] || []).length)])
-    .filter(Boolean).map((x) => el("img", { src: x.url, alt: "" })))).catch(() => {});
+  const thumbs = el("span", { className: "bp-thumbs" });
+  // (three of them, one from each set; point at one: whose photo it is)
+  Promise.all([host.library(), host.photoCredits?.().catch(() => null)]).then(([l, c]) => {
+    const byName = new Map((c?.stickers || []).map((x) => [x.name, x.source]));
+    const credit = (x) => { const name = decodeURIComponent(String(x.url).split("?")[0].split("/").pop()); const src = byName.get(name); return src ? creditFor(c.credits?.[src]) : ""; };
+    thumbs.replaceChildren(...["milk", "love", "together"].map((k) => (l.stickers?.[k] || [])[Math.floor(Math.random() * (l.stickers?.[k] || []).length)])
+      .filter(Boolean).map((x) => el("img", { src: x.url, alt: "", "data-credit": credit(x) || null })));
+  }).catch(() => {});
   return el("div", { className: "buddy-pick-card" }, thumbs,
     el("div", { className: "bp-t" }, el("b", { textContent: L("Stickers your desktop buddies use", "桌面夥伴用的貼圖") }), count), open);
 });

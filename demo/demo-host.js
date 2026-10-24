@@ -55,8 +55,8 @@
   (function seed() {
     const PLAN = [ // [start h, minutes, kind, name / type, category]
       [9, 30, 50, "work", T("Email & planning", "信件與規劃", "อีเมลและวางแผน"), "admin"], [10, 25, 50, "work", T("Chapter 3 draft", "第三章初稿", "ร่างบทที่ 3"), "focus"], [11, 15, 10, "break", "stretch"],
-      [11, 25, 65, "work", T("Chapter 3 draft", "第三章初稿"), "focus"], [12, 30, 50, "break", "meal"], [13, 30, 45, "work", T("Team meeting", "團隊會議", "ประชุมทีม"), "meeting"],
-      [14, 20, 80, "work", T("Reading for the thesis", "論文閱讀", "อ่านทำวิทยานิพนธ์"), "study"], [15, 40, 15, "break", "coffee"], [16, 0, 70, "work", T("Chapter 3 draft", "第三章初稿"), "focus"],
+      [11, 25, 65, "work", T("Chapter 3 draft", "第三章初稿", "ร่างบทที่ 3"), "focus"], [12, 30, 50, "break", "meal"], [13, 30, 45, "work", T("Team meeting", "團隊會議", "ประชุมทีม"), "meeting"],
+      [14, 20, 80, "work", T("Reading for the thesis", "論文閱讀", "อ่านทำวิทยานิพนธ์"), "study"], [15, 40, 15, "break", "coffee"], [16, 0, 70, "work", T("Chapter 3 draft", "第三章初稿", "ร่างบทที่ 3"), "focus"],
     ];
     const FOCUS = [T("Finish chapter 3 ♡", "寫完第三章 ♡", "เขียนบทที่ 3 ให้จบ ♡"), T("Reading day", "閱讀日", "วันอ่านหนังสือ"), T("Clear the inbox", "清空收件匣", "เคลียร์อีเมล"), T("Meeting notes + slides", "會議紀錄和投影片", "สรุปประชุม + สไลด์"), T("Chapter 3, part 2", "第三章第二段", "บทที่ 3 ตอนที่ 2")];
     for (let d = 13; d >= 1; d--) {
@@ -77,7 +77,7 @@
     }
     work.setFocus(FOCUS[0]);
     try { work.startDay(); } catch { /* fine */ }
-    work.setName(T("Chapter 3 draft", "第三章初稿"));
+    work.setName(T("Chapter 3 draft", "第三章初稿", "ร่างบทที่ 3"));
     for (const [text, min, rep] of [[T("Stretch", "伸展", "ยืดเส้น"), 25, null], [T("Call the bank", "打給銀行", "โทรหาธนาคาร"), 140, null], [T("Drink water", "喝水", "ดื่มน้ำ"), 60 * 20, "daily"]]) {
       try { work.addReminder({ text, at: now + min * M, repeat: rep }); } catch { /* fine */ }
     }
