@@ -418,6 +418,9 @@ body { background: var(--bg) radial-gradient(color-mix(in oklab, var(--a) 16%, t
 .side-tip { margin: 0; font-size: 12.5px; color: var(--muted); }
 .try-cap { grid-column: 1 / -1; margin: 0; }
 @media (max-width: 900px) { .try3 { grid-template-columns: 1fr; } .try-side .styles { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px) { html[lang="th"] .try-side .styles { grid-template-columns: 1fr; } }
+/* (phones: the menu scrolls sideways; a fade at the right edge says there's more) */
+@media (max-width: 900px) { .nav { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); padding-right: 24px; } }
 .lookbar { position: fixed; z-index: 60; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 4px; align-items: center; background: #1e1d22; color: #f3f1f6; border-radius: 99px; padding: 5px 6px 5px 14px; box-shadow: 0 10px 30px rgba(0,0,0,.3); font: 600 13px/1 -apple-system, system-ui, sans-serif; }
 .lookbar span { margin-right: 6px; opacity: .7; }
 .lookbar button { border: 0; background: transparent; color: #d9d6df; border-radius: 99px; padding: 8px 12px; cursor: pointer; font: inherit; }
