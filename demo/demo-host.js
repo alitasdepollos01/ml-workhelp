@@ -119,11 +119,15 @@
     "back-next": () => { if (work.status().onBreak) work.endBreak({ breakEvery: S.breakEvery }); if (S.keep === "both") pomoStart(); },
     "pomo-break-now": () => { const p = pomoLengths(); pomoNow = { ...(pomoNow || {}), kind: "focus", phase: "break", endsAt: Date.now() + p.rest * M, round: pomoNow?.round || 1, every: p.every }; },
     "start-day": () => work.startDay(), "start": () => work.startDay(), "skip-day": () => work.skipDay(),
-    "done-today": () => work.endDay(), "end-day": () => work.endDay(), "done": () => work.endDay(),
+    // 收工, and "Carry on after all" (the app: work.endDay / work.startDay; the round stops, as the app's alarm does)
+    "done-today": () => { work.endDay(); pomoNow = null; }, "end-day": () => { work.endDay(); pomoNow = null; }, "done": () => { work.endDay(); pomoNow = null; },
+    "resume-day": () => work.startDay(),
+    "back-hold": () => { if (work.status().onBreak) work.endBreak({ breakEvery: S.breakEvery }); if (pomoNow && pomoNow.phase !== "focus") pomoNow = null; },
+    "switch": (id) => work.setName(String(id || "")),
     "whats-new-seen": () => {}, "focus-screen": () => { if (!EMBED) alert(T("The focus screen fills your whole screen in the app.", "在 App 裡，專注全螢幕會佔滿整個螢幕。")); },
   };
   const act = (action, id) => {
-    try { if (ACT[action]) ACT[action](id); else if (typeof work[action] === "function") work[action](id); } catch (e) { console.warn("demo:", action, e.message); }
+    try { if (ACT[action]) ACT[action](id); else if (typeof work[action] === "function") work[action](id); else console.warn("demo: nothing does", action); } catch (e) { console.warn("demo:", action, e.message); }
     later(tellWork);
   };
   const setText = (key, value) => {
