@@ -1,5 +1,5 @@
 {
- "version": 5,
+ "version": 6,
  "people": {
   "Blumoon": {
    "avatar": "blumoon.jpg"
@@ -15,8 +15,17 @@
   },
   "wanwannjeab": {
    "avatar": "wanwannjeab.jpg"
+  },
+  "PKYU": {
+   "avatar": "pkyu.jpg"
+  },
+  "KIU": {
+   "avatar": "kiu.jpg"
   }
  },
  "photos": {},
- "removed": []
+ "removed": [
+  "love-077.jpg",
+  "love-120.jpg"
+ ]
 }
