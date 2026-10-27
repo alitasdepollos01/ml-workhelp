@@ -86,7 +86,7 @@ const ALL = [
 const MORE3 = [
   ["pins", "#ml-fan", ["Your fan pin collection", "你的粉絲徽章收藏", "คอลเลกชันเข็มกลัดของแฟน"], ["Pins from their shows, earned as you work; turn them over to read the back.", "來自她們作品的徽章，工作時慢慢收到；翻過來看背面。", "เข็มกลัดจากซีรีส์ของพวกเธอ ได้มาระหว่างทำงาน พลิกดูด้านหลังได้"]],
   ["looks", "#ml-looks", ["Ten looks", "10 種風格", "10 สไตล์"], ["From Purikura to Y2K emo and Whimsical, light or dark.", "從拍貼機到 Y2K emo 和 Whimsical，淺色或深色。", "ตั้งแต่ตู้สติกเกอร์ถึง Y2K และ Whimsical สว่างหรือมืด"]],
-  ["words", "#ml-words", ["Thai from the songs", "歌裡的泰文", "ภาษาไทยจากเพลง"], ["A word from Milk and Love's songs on your Today page.", "「今天」頁面上有一個來自她們歌裡的單字。", "คำจากเพลงของมิลค์กับเลิฟบนหน้าวันนี้"]],
+  ["words", "#ml-words", ["Thai from songs and daily life", "歌裡和生活裡的泰文", "ภาษาไทยจากเพลงและชีวิตประจำวัน"], ["A word on your Today page, from the songs or everyday life, easy to advanced.", "「今天」頁面上的單字，來自歌裡或生活裡，從簡單到進階。", "คำบนหน้าวันนี้ จากเพลงหรือชีวิตประจำวัน ตั้งแต่ง่ายถึงยาก"]],
 ];
 const TK = {
   drag: ["Drag them to any screen", "想放哪個螢幕，拖過去就好", "ลากไปไว้จอไหนก็ได้"],
