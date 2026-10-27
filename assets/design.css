@@ -259,3 +259,4 @@ html[data-look="scrapbook"] #p-tmb .tmb-rights { background: color-mix(in oklab,
 @media (max-width: 560px) { .hist div { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
 /* the demo's window keeps its own shape (1100 x 740) even when the style list beside it is taller (10 styles) */
 .try3 > .screen { align-self: start; width: 100%; min-width: 0; }
+.credit-ai { margin-top: 14px; text-align: center; }
