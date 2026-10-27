@@ -102,7 +102,7 @@ const more = (href, a) => `<a class="more" href="${href}">${L(a)}${ic("arrow-dow
 const head = (kick, h2, p) => `<div class="sec-h"><span class="kick">${L(kick)}</span><h2 class="sparkle">${L(h2)}</h2>${p ? `<p>${L(p)}</p>` : ""}</div>`;
 
 function does() {
-  return `${head(["What it does", "能做什麼", "ทำอะไรได้บ้าง"], ["Your work day, with Milk & Love", "Milk 和 Love 陪你工作一整天", "วันทำงานของคุณ มี Milk กับ Love อยู่ด้วย"],
+  return `${head(["What it does", "能做什麼", "ทำอะไรได้บ้าง"], ["Your work day, with Milk & Love", "從開工到收工，Milk 和 Love 都陪著你", "วันทำงานของคุณ มี Milk กับ Love อยู่ด้วย"],
     ["What's at the heart of it, and what else is in the app.", "最重要的幾件事，還有 App 裡的其他功能。", "หัวใจของแอป และอย่างอื่นที่มีในแอป"])}
   <div class="fa-grid">
     <article class="print fa-card big">${SC.desk()}<span class="ftag">${ic("smile")}${T("Desktop buddy", "桌面夥伴", "เพื่อนบนเดสก์ท็อป")}</span>
