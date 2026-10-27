@@ -75,16 +75,16 @@ const F = {
 const ALL = [
   ["layers", ["Categories & a daily goal", "分類和每日目標", "หมวดงานและเป้าหมายรายวัน"], ["See your time by kind of work, and how close you are to today's goal.", "看看時間花在哪一類工作，離今天的目標還差多少。", "ดูว่าใช้เวลากับงานแต่ละแบบเท่าไร และใกล้เป้าหมายของวันนี้แค่ไหน"]],
   ["calendar-days", ["A calendar you can edit", "可以修改的日曆", "ปฏิทินที่แก้ไขได้"], ["Forgot to start the clock? Fix the day afterwards.", "忘了開始計時？之後再補上就好。", "ลืมกดจับเวลา? แก้ย้อนหลังได้"]],
-  ["refresh-cw", ["Apple sync", "同步 Apple", "ซิงก์กับ Apple"], ["Reminders and events can sync with Apple's apps if you like.", "提醒和活動可以同步到 Apple 的 App。", "แจ้งเตือนและกิจกรรมซิงก์กับแอปของ Apple ได้ ถ้าต้องการ"]],
+  ["refresh-cw", ["Apple sync", "和 Apple 同步", "ซิงก์กับ Apple"], ["Reminders and events can sync with Apple's apps if you like.", "想要的話，提醒和活動也能和 Apple 的 App 同步。", "แจ้งเตือนและกิจกรรมซิงก์กับแอปของ Apple ได้ ถ้าต้องการ"]],
   ["party-popper", ["Done for today", "收工", "เลิกงาน"], ["Call it a day and your stickers celebrate with you.", "按下收工，你的貼圖會陪你一起慶祝。", "กดเลิกงาน แล้วสติกเกอร์ของคุณจะฉลองไปด้วยกัน"]],
   ["layout-panel-left", ["Work corner & Fan corner", "工作角落和粉絲角落", "มุมทำงานกับมุมแฟนคลับ"], ["The menu keeps your work and your fan things apart.", "選單把工作和追星的東西分開放。", "เมนูแยกเรื่องงานกับเรื่องแฟนคลับไว้คนละมุม"]],
-  ["cloud-download", ["New photos and words by themselves", "新照片和單字自己來", "รูปกับคำใหม่มาเอง"], ["More photos, pins and words arrive with no reinstall.", "更多照片、徽章和單字會自己送到，不用重新安裝。", "รูป เข็มกลัด และคำใหม่ ๆ มาเองโดยไม่ต้องติดตั้งใหม่"]],
+  ["cloud-download", ["New photos and words by themselves", "新照片和單字自動送到", "รูปกับคำใหม่มาเอง"], ["More photos, pins and words arrive with no reinstall.", "更多照片、徽章和單字會自己送到，不用重新安裝。", "รูป เข็มกลัด และคำใหม่ ๆ มาเองโดยไม่ต้องติดตั้งใหม่"]],
   ["languages", ["Three languages", "三種語言", "สามภาษา"], ["English, Traditional Chinese and Thai (beta).", "英文、繁體中文和泰文（測試版）。", "อังกฤษ จีนตัวเต็ม และไทย (beta)"]],
-  ["map", ["A tour to start", "一開始的導覽", "ทัวร์แนะนำตอนเริ่ม"], ["The first time you open it, Muv shows you around.", "第一次打開時，Muv 會帶你逛一圈。", "เปิดแอปครั้งแรก Muv จะพาคุณทัวร์"]],
+  ["map", ["A tour to start", "新手導覽", "ทัวร์แนะนำตอนเริ่ม"], ["The first time you open it, Muv shows you around.", "第一次打開時，Muv 會帶你逛一圈。", "เปิดแอปครั้งแรก Muv จะพาคุณทัวร์"]],
 ];
 /* a few more at the heart of it: one line and a small picture each (the pictures follow the language / light-dark via next.js data-nxpic) */
 const MORE3 = [
-  ["pins", "#ml-fan", ["Your fan pin collection", "你的粉絲徽章收藏", "คอลเลกชันเข็มกลัดของแฟน"], ["Pins from their shows, earned as you work; turn them over to read the back.", "來自她們作品的徽章，工作時慢慢收到；翻過來看背面。", "เข็มกลัดจากซีรีส์ของพวกเธอ ได้มาระหว่างทำงาน พลิกดูด้านหลังได้"]],
+  ["pins", "#ml-fan", ["Your fan pin collection", "你的粉絲徽章收藏", "คอลเลกชันเข็มกลัดของแฟน"], ["Pins from their shows, earned as you work; turn them over to read the back.", "來自她們作品的徽章，工作時慢慢收集；翻過來看看背面。", "เข็มกลัดจากซีรีส์ของพวกเธอ ได้มาระหว่างทำงาน พลิกดูด้านหลังได้"]],
   ["looks", "#ml-looks", ["Ten looks", "10 種風格", "10 สไตล์"], ["From Purikura to Y2K emo and Whimsical, light or dark.", "從拍貼機到 Y2K emo 和 Whimsical，淺色或深色。", "ตั้งแต่ตู้สติกเกอร์ถึง Y2K และ Whimsical สว่างหรือมืด"]],
   ["words", "#ml-words", ["Thai from songs and daily life", "歌裡和生活裡的泰文", "ภาษาไทยจากเพลงและชีวิตประจำวัน"], ["A word on your Today page, from the songs or everyday life, easy to advanced.", "「今天」頁面上的單字，來自歌裡或生活裡，從簡單到進階。", "คำบนหน้าวันนี้ จากเพลงหรือชีวิตประจำวัน ตั้งแต่ง่ายถึงยาก"]],
 ];
@@ -92,7 +92,7 @@ const TK = {
   drag: ["Drag them to any screen", "想放哪個螢幕，拖過去就好", "ลากไปไว้จอไหนก็ได้"],
   calls: ["They step aside during calls", "通話時會先躲起來", "ตอนคุยสายหรือประชุมจะหลบไปก่อน"],
   lively: ["As lively or as calm as you like", "活潑或安靜，你決定", "จะให้ซนหรือนิ่งก็เลือกได้"],
-  focusT: ["A focus screen for reading and paper work", "看書、寫紙本時用專注全螢幕", "หน้าจอโฟกัส ตอนอ่านหนังสือหรือทำงานบนกระดาษ"],
+  focusT: ["A focus screen for reading and paper work", "看書、手寫時用專注全螢幕", "หน้าจอโฟกัส ตอนอ่านหนังสือหรือทำงานบนกระดาษ"],
   remT: ["Reminders pop up on the screen you're using", "提醒會在你正在用的螢幕跳出來", "การแจ้งเตือนเด้งบนจอที่คุณใช้อยู่"],
   dataT: ["Your week, month and year in numbers", "每週、每月、每年的工作數據", "สถิติรายสัปดาห์ เดือน และปี"],
   credT: ["Every sticker shows whose photo it is", "每張貼圖都標明是誰拍的", "ทุกสติกเกอร์บอกว่าเป็นรูปของใคร"],
@@ -102,7 +102,7 @@ const more = (href, a) => `<a class="more" href="${href}">${L(a)}${ic("arrow-dow
 const head = (kick, h2, p) => `<div class="sec-h"><span class="kick">${L(kick)}</span><h2 class="sparkle">${L(h2)}</h2>${p ? `<p>${L(p)}</p>` : ""}</div>`;
 
 function does() {
-  return `${head(["What it does", "能做什麼", "ทำอะไรได้บ้าง"], ["Your work day, with Milk & Love", "Milk 和 Love 陪你過完工作的一天", "วันทำงานของคุณ มี Milk กับ Love อยู่ด้วย"],
+  return `${head(["What it does", "能做什麼", "ทำอะไรได้บ้าง"], ["Your work day, with Milk & Love", "Milk 和 Love 陪你工作一整天", "วันทำงานของคุณ มี Milk กับ Love อยู่ด้วย"],
     ["What's at the heart of it, and what else is in the app.", "最重要的幾件事，還有 App 裡的其他功能。", "หัวใจของแอป และอย่างอื่นที่มีในแอป"])}
   <div class="fa-grid">
     <article class="print fa-card big">${SC.desk()}<span class="ftag">${ic("smile")}${T("Desktop buddy", "桌面夥伴", "เพื่อนบนเดสก์ท็อป")}</span>
@@ -131,7 +131,7 @@ const B = {
   desk: ["Your desktop (pretend)", "你的桌面（示意）", "เดสก์ท็อปของคุณ (จำลอง)"], second: ["Second screen", "第二個螢幕", "จอที่สอง"],
   tryL: ["Try it:", "試試看：", "ลองดู:"], click: ["Click them", "點她們一下", "คลิกที่เพื่อน"], rclick: ["Right-click them", "按右鍵", "คลิกขวา"],
   move: ["Move to the other screen", "移到另一個螢幕", "ย้ายไปอีกจอ"],
-  g1: ["Who & look", "是誰與樣子", "ใครและหน้าตา"], g2: ["How it behaves", "怎麼活動", "ท่าทางของเพื่อน"], g3: ["Thai words", "泰文單字", "การ์ดคำศัพท์"], g4: ["When to hide", "什麼時候躲起來", "ซ่อนเมื่อไร"],
+  g1: ["Who & look", "誰出場、長什麼樣", "ใครและหน้าตา"], g2: ["How it behaves", "怎麼活動", "ท่าทางของเพื่อน"], g3: ["Thai words", "泰文單字", "การ์ดคำศัพท์"], g4: ["When to hide", "什麼時候躲起來", "ซ่อนเมื่อไร"],
   p1: ["Both side by side, together in one sticker, just Milk, just Love, or your own stickers. Four sizes.", "兩人並排、同框、只有 Milk、只有 Love，或用你自己的貼圖。大小有四種。", "เดินคู่กัน อยู่ในสติกเกอร์เดียวกัน เฉพาะ Milk เฉพาะ Love หรือใช้สติกเกอร์ของคุณเอง มีให้เลือก 4 ขนาด"],
   p2: ["Lively, calm, calmer or still: the calmer, the less battery it uses. Under them, two lines: what you're on and what's next.", "活潑、悠閒、更悠閒或安靜：越悠閒越省電。下面兩行顯示你正在做的事和接下來的事。", "ซน ชิล ชิลกว่า หรือนิ่ง ๆ ยิ่งชิลยิ่งประหยัดแบต ใต้ตัวมีสองบรรทัด บอกงานที่ทำอยู่และเรื่องถัดไป"],
   p3: ["Click them for a Thai word card, from MilkLove's songs or everyday Thai, with how to say it; reminders and breaks bring one too. Switch it off if you'd rather not.",

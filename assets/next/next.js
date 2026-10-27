@@ -64,7 +64,7 @@
     const st = $("pinStage"), board = $("pinBoard"); if (!st || !window.Pin3D) return;
     openId = id;
     const name = T(...PN[id]), tier = T("Plain", "素面", "แบบเรียบ");
-    st.innerHTML = `<div class="pg-hero"></div><b class="pg-name">${esc(name)}</b><div class="pg-btns"><button type="button" class="pg-flip"><i data-lucide="refresh-cw" class="ic"></i><span>${esc(T("Turn it over", "翻過來", "พลิกดู"))}</span></button><button type="button" class="pg-back"><i data-lucide="x" class="ic"></i><span>${esc(T("Back to the board", "回到板子", "กลับไปที่บอร์ด"))}</span></button></div>`;
+    st.innerHTML = `<div class="pg-hero"></div><b class="pg-name">${esc(name)}</b><div class="pg-btns"><button type="button" class="pg-flip"><i data-lucide="refresh-cw" class="ic"></i><span>${esc(T("Turn it over", "翻過來", "พลิกดู"))}</span></button><button type="button" class="pg-back"><i data-lucide="x" class="ic"></i><span>${esc(T("Back to the board", "回到徽章板", "กลับไปที่บอร์ด"))}</span></button></div>`;
     const p = Pin3D.make({ id, front: `assets/pins/front/${id}.svg`, back: `assets/pins/back/${id}.svg`, lines: [name, tier, ""], lang: L(), flip: "click", label: name, max: 18 });
     st.querySelector(".pg-hero").append(p); Pin3D.attach(st);
     st.hidden = false; board.setAttribute("aria-hidden", "true"); board.inert = true;
