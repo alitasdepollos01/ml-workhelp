@@ -31,7 +31,7 @@
     const look = $("mlLook"); if (look) look.alt = T(`The Today page in ${NAMES[S.st][0]}, ${dm}`, `「${NAMES[S.st][1]}」風格的「今天」頁面（${dm === "dark" ? "深色" : "淺色"}）`, `หน้าวันนี้ในสไตล์ ${NAMES[S.st][2]} (${dm === "dark" ? "มืด" : "สว่าง"})`);
     set("mlDq", `assets/next/doodles-quiet-${lg}.jpg`); set("mlDc", `assets/next/doodles-settings-${lg}.jpg`);
     const dq = $("mlDq"), dc = $("mlDc");
-    if (dq) dq.alt = T("The Today page with the quiet doodle wallpaper", "淡淡的塗鴉壁紙", "วอลเปเปอร์ดูเดิลจาง ๆ");
+    if (dq) dq.alt = T("The quiet doodle wallpaper behind an empty Reminders page", "空空的提醒頁後面，淡淡的塗鴉壁紙", "วอลเปเปอร์ดูเดิลจาง ๆ หลังหน้าแจ้งเตือนที่ยังว่าง");
     if (dc) dc.alt = T("Settings › Look › Doodles: quiet wallpaper, corner stickers or off, and the drawing style", "設定 › 外觀 › 塗鴉：安靜的壁紙、角落貼紙或關閉，還有塗鴉的畫風", "การตั้งค่า › หน้าตา › ดูเดิล: วอลเปเปอร์เบา ๆ สติกเกอร์ตามมุม หรือปิด และสไตล์ของดูเดิล");
     set("mlWords", `assets/next/words-${d}-${lg}.jpg`);
     document.querySelectorAll("[data-nxpic]").forEach((el) => {
