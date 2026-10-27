@@ -2,7 +2,8 @@
 // window or menu); English elsewhere (a browser tab). In code: L("English", "中文"); Thai is looked
 // up by the English (th.json, th.js), and anything not there yet stays in English. In a page: the
 // English in the markup, the Chinese beside it in data-zh (the element's HTML), data-zh-title,
-// data-zh-placeholder or data-zh-aria-label; translatePage() swaps them in (Thai: by the English).
+// data-zh-placeholder or data-zh-aria-label; translatePage() swaps them in (Thai: data-th beside it when the
+// page has its own, else by the English: th.json's page HTML, then its strings).
 import "./th.js";
 
 export const lang = ["zh", "th"].includes(globalThis.MLHost?.lang) ? globalThis.MLHost.lang : "en";
@@ -12,6 +13,8 @@ const TH = th ? globalThis.MLTH.make(await fetch(new URL("./th.json", import.met
 export const L = (en, zhText) => (zh && zhText != null ? zhText : th ? TH.thai(en) : en);
 /** Thai for a page's own HTML (an element's English), or null. */
 export const thaiHtml = (html) => (th ? TH.html(html) : null);
+/** Thai for exactly this English (th.json's own entry, no patterns), or null. */
+export const thaiExact = (en) => (th ? TH.exact(en) : null);
 
 export function translatePage(root = document) {
   document.documentElement.lang = zh ? "zh-Hant" : th ? "th" : "en";
@@ -27,7 +30,7 @@ export function translatePage(root = document) {
   } else if (th) {
     document.title = TH.thai(document.title);
     // (inner ones first: an element's English is looked up before the one around it changes)
-    for (const el of [...root.querySelectorAll("body [data-zh]")].reverse()) { const t = TH.html(el.innerHTML) ?? TH.thai(el.innerHTML.trim()); if (t != null && t !== el.innerHTML.trim()) el.innerHTML = t; }
+    for (const el of [...root.querySelectorAll("body [data-zh], body [data-th]")].reverse()) { const t = el.dataset.th ?? TH.html(el.innerHTML) ?? TH.thai(el.innerHTML.trim()); if (t != null && t !== el.innerHTML.trim()) el.innerHTML = t; }
     for (const attr of ["title", "placeholder", "aria-label", "alt"]) {
       for (const el of root.querySelectorAll(`[data-zh-${attr}]`)) el.setAttribute(attr, TH.thai(el.getAttribute(attr)));
     }

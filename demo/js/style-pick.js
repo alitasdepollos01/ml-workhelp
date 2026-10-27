@@ -1,12 +1,17 @@
-// The Style picker (Settings › Look, and the first welcome page): eight little cards, each a
-// tiny drawing of that style; picking one changes every window at once (host.setStyle).
+// The Style picker (Settings › Look): ten little cards, each a tiny drawing of that style (skins.css, and
+// skins-new.css for the two new ones); picking one changes every window at once (host.setStyle).
+// The two new styles' display names (Myra, 27 Oct): "Y2K emo" (id i) and "Whimsical" (id m) in English and 中文,
+// "Y2K" and "Whimsical" in ไทย (Latin letters, never translated). Ids and folders (sk8er/) stay as they are.
 
 const L = (en, zh, th) => (document.documentElement.lang === "zh-Hant" || window.MLHost?.lang === "zh" ? zh : window.MLHost?.lang === "th" ? (th || en) : en);
 const NAMES = {
   a: ["Sticker Book", "貼紙手帳", "สมุดสติกเกอร์"], b: ["Milk Tea Clay", "奶茶黏土", "ดินปั้นชานม"], c: ["Clean Pastel", "清爽粉彩", "พาสเทลสะอาดตา"],
   d: ["Fan Zine Pop", "應援小誌", "แฟนซีนป๊อป"], e: ["Concert Night", "演唱會之夜", "คืนคอนเสิร์ต"], f: ["Purikura", "拍貼機", "ตู้สติกเกอร์"],
   g: ["Retro Desktop", "復古桌面", "เดสก์ท็อปย้อนยุค"], h: ["Fan Magazine", "粉絲雜誌", "นิตยสารแฟนคลับ"],
+  i: ["Y2K emo", "Y2K emo", "Y2K"], m: ["Whimsical", "Whimsical", "Whimsical"],
 };
+/** A style's display name in the page's language (the 10 ids above). */
+export const styleName = (id) => (NAMES[id] ? L(...NAMES[id]) : id);
 
 /** The cards; onPick(id) after the host has been told (to redraw a page, say). */
 export function stylePicker(onPick) {

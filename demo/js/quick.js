@@ -1,8 +1,23 @@
 // Right-clicking the desktop buddy (quick.html): main.js sends what to show ("quick", a model of
 // labels in your language); a click goes back as host.quick.act(id, x, y), and main.js runs it, or
-// opens that button's choices (breaks, reminders, tasks) as a small menu at the button.
+// opens that button's choices (breaks, reminders, tasks) in the card, with ‹ Back.
+// 1.3.0: the card is 235 px wide; one doodle at the end of the top row by who is out (BUDDY_DOODLE), in the doodle
+// style in use; and the pin worn on the buddy card (m.buddyPin, from the pins engine) in its slot beside it.
+
+import "./look-rules.js";
+
+import { wearPin } from "./pin-wear.js";   // (track B2: the pin worn on the card)
+import { attach as pinAttach } from "./pin3d.js";
+// (merge of B2 and E: one worn pin, in E's slot on the top row; B2's CSS pin drawn into it through E's hook)
+window.MLWH_QUICK_PIN = (slot, bp) => {
+  const w = wearPin(document.createElement("div"), bp);
+  if (!w) return false;
+  slot.append(...w.childNodes); pinAttach(slot);
+  return true;
+};
 
 const host = window.MLHost;
+const LOOK = window.MLWH_LOOK_RULES;
 const NS = "http://www.w3.org/2000/svg";
 const P = {
   brk: ["M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z", "M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16", "M9 3.5v2.5", "M12 3.5v2.5"],
@@ -44,7 +59,51 @@ function button(b, cls) {
 // The faces on "On my desktop": the app's own preview stickers (web/deco), the same as Settings' preview.
 const FACES = { pair: ["preview-milk-25d9980b.webp", "preview-love-3e1da30c.webp"], together: ["together-17.webp"], milk: ["preview-milk-25d9980b.webp"], love: ["preview-love-3e1da30c.webp"], others: ["muv-cartoon.webp"] };
 
+// Who is out → the doodle on the card (Myra, 27 Oct): Both and Together → Sun & Earth, Milk → whale, Love → seal, Others → milk carton (Muv)
+export const BUDDY_DOODLE = { pair: "sunearth", together: "sunearth", milk: "whale", love: "seal", others: "milk" };
+// The look (Settings › Look): main.js sends it with the card (m.look); else it's asked for once from the work status.
+let look = null, asked = false;
+function lookOf(m) {
+  if (m.look) { look = m.look; return look; }
+  if (!asked && host?.work?.status) {
+    asked = true;
+    Promise.resolve(host.work.status()).then((st) => { if (st?.look) { look = st.look; if (last) topExtras(last); } }).catch(() => {});
+  }
+  return look;
+}
+const dark = () => matchMedia("(prefers-color-scheme: dark)").matches;
+/** The doodle file for who is out ("doodles/<style>/<motif>.svg"), or null with the doodles off. */
+export function buddyDoodle(who, lk, style = document.documentElement.dataset.style || "f", isDark = dark()) {
+  const motif = BUDDY_DOODLE[who] || BUDDY_DOODLE.pair;
+  if (lk?.doodles === "off") return null;
+  let st = lk?.doodleStyle && lk.doodleStyle !== "auto" ? lk.doodleStyle : LOOK?.OWN_DOODLES?.[style] || "kawaii-soft";
+  if ((st === "marker" || st === "riso") && isDark) st += "-dark";
+  return { file: `doodles/${st}/${motif}.svg`, motif, pixel: st === "pixel" };
+}
+let last = null;
+/** The top row's pin slot and doodle (kept in step with the look; never changes the card's height). */
+function topExtras(m) {
+  const top = document.querySelector("#qp .top");
+  if (!top) return;
+  top.querySelectorAll(".qp-pin, .qp-doodle").forEach((x) => x.remove());
+  // the pin worn on the buddy card (track B2 draws it: window.MLWH_QUICK_PIN(slot, pin); else its flat picture)
+  if (m.buddyPin?.id) {
+    const slot = el("span", { className: "qp-pin" });
+    slot.dataset.pin = m.buddyPin.id; slot.setAttribute("aria-hidden", "true");
+    if (typeof window.MLWH_QUICK_PIN === "function") window.MLWH_QUICK_PIN(slot, m.buddyPin);
+    top.append(slot);
+  }
+  const d = buddyDoodle(m.who, lookOf(m));
+  if (d) {
+    const i = el("img", { className: "qp-doodle" + (d.pixel ? " px" : ""), src: d.file, alt: "", draggable: false });
+    i.dataset.m = d.motif;
+    i.setAttribute("aria-hidden", "true");
+    top.append(i);
+  }
+}
+
 function draw(m) {
+  last = m;
   const qp = document.getElementById("qp");
   const name = el("span", { className: "n" + (m.name ? "" : " none"), textContent: m.name || m.nameHint, title: m.nameTip });
   name.addEventListener("click", act("name"));
@@ -70,9 +129,29 @@ function draw(m) {
     el("div", { className: "big" }, m.big.map((b) => button(b))),
     who,
     el("div", { className: "row" }, m.small.map((b) => button(b)))].filter(Boolean));
+  topExtras(m);
   requestAnimationFrame(() => host.quick.size(Math.ceil(document.body.getBoundingClientRect().height)));
 }
 
-host.onCommand((cmd, arg) => { if (cmd === "quick") draw(arg); });
+/** A button's choices, in the card in place of its buttons: { title, back, items: [{ label, path, off, checked, sub } | { sep }] }. */
+function drawChoices(c) {
+  const qp = document.getElementById("qp");
+  const back = el("button", { type: "button", className: "qback", textContent: "‹ " + c.back });
+  back.addEventListener("click", () => host.quick.act("back"));
+  const list = (items) => items.map((i) => {
+    if (i.sep) return el("hr");
+    if (i.sub) return el("div", { className: "grp" }, el("span", { className: "lbl", textContent: i.label }), list(i.sub));
+    if (i.off) return el("span", { className: "lbl", textContent: i.label });
+    const b = el("button", { type: "button", role: "menuitem", textContent: (i.checked ? "✓ " : "") + i.label });
+    b.addEventListener("click", () => host.quick.act("pick:" + i.path));
+    return b;
+  });
+  qp.replaceChildren(el("div", { className: "ch-top" }, back, el("b", { textContent: c.title })), el("div", { className: "choices" }, list(c.items)));
+  qp.querySelector(".choices button")?.focus();
+  requestAnimationFrame(() => host.quick.size(Math.ceil(document.body.getBoundingClientRect().height)));
+}
+
+window.__mlwhQuick = { last: () => last, draw, buddyDoodle }; // (for the tests)
+host.onCommand((cmd, arg) => { if (cmd === "quick") draw(arg); else if (cmd === "quick-choices") drawChoices(arg); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") host.quick.act("close"); });
 host.quick.ready();

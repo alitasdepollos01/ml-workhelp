@@ -3,7 +3,7 @@
 // live in the desktop app (app/desktop/work.js); a tab shows them and asks
 // for changes. Opened on a tab by the menus: #{"tab":"reminders","in":15}.
 
-import { translatePage } from "./i18n.js";
+import { translatePage, lang } from "./i18n.js";
 import { L, $, el, host, work, state, loadDeco, deco } from "./app-common.js";
 import { renderToday } from "./tab-today.js";
 import { renderReminders } from "./tab-reminders.js";
@@ -19,12 +19,19 @@ import { dayLogBusy } from "./day-log.js";
 import { startTour, tourOn, tourSteps } from "./tour.js";
 import { icon } from "./icons.js";
 import { wordMini } from "./word-card.js";
+import "./work-heading.js";
+import { applyLook, currentLook, lookFromStatus, onLook } from "./look.js";
+import { startDoodles } from "./doodles.js";
+import { startTitleFit } from "./title-fit.js";
+import { renderPins } from "./tab-pins.js";
+import { pinsEvent, pinsWake } from "./pins-moment.js";
 
 const TABS = [
   ["today", "", "Today", "今天", renderToday],
   ["reminders", "", "Reminders & events", "提醒與活動", renderReminders],
   ["week", "", "Data", "數據", renderWeek],
   ["stickers", "", "Stickers", "貼圖", renderStickers],
+  ["pins", "", "Pins", "徽章", renderPins],
   ["buddy", "", "Desktop buddy", "桌面夥伴", renderBuddy],
   ["credits", "", "Photo credits", "照片來源", renderCredits],
   ["settings", "", "Settings", "設定", renderSettings],
@@ -37,7 +44,7 @@ let lastDraw = 0;
 // Each tab's own parts, opened under it in the menu while it's the one shown: Settings' six groups,
 // Data's three tabs.
 const SUB = {
-  settings: [["look", "Look & menu bar", "外觀與選單列"], ["keep", "Keeping time & the day", "計時與每天的節奏"],
+  settings: [["look", "Look & menu bar", "外觀與選單列"], ["pins", "Pins", "徽章"], ["keep", "Keeping time & the day", "計時與每天的節奏"],
     ["rem", "Reminders & events", "提醒與活動"], ["cats", "Categories", "分類"], ["about", "About & updates", "關於與更新"]],
   week: [["sum", "Summary", "總覽"], ["ana", "Analysis", "分析"], ["cal", "Calendar", "日曆"]],
 };
@@ -83,10 +90,12 @@ function renderNav() {
   const T = (id) => TABS.find((t) => t[0] === id);
   const buddyBtn = el("button", { type: "button", className: tab === "buddy" ? "on" : "", "data-tab": "buddy", ...(tab === "buddy" ? { "aria-current": "page" } : {}) }, icon("buddy") || el("span"), el("span", { className: "t", textContent: L("Desktop buddy", "桌面夥伴") }));
   buddyBtn.addEventListener("click", () => go("buddy"));
+  // (the top group's heading, "Work corner": work-heading.js; look.menuHeading "off" leaves it out)
+  const WH = window.MLWH_WORK_HEADING, workHead = currentLook().menuHeading !== "off" && WH ? el("div", { className: "nav-h nav-h-work", textContent: WH[lang] || WH.en }) : null;
   $("nav").replaceChildren(
-    ...item(T("today")), ...item(T("reminders")), ...item(T("week")),
+    ...(workHead ? [workHead] : []), ...item(T("today")), ...item(T("reminders")), ...item(T("week")),
     el("div", { className: "nav-h", textContent: L("Fan corner", "粉絲角落") }),
-    ...item(T("stickers")), buddyBtn, ...item(T("credits")),
+    ...item(T("stickers")), ...(host?.pins ? item(T("pins")) : []), buddyBtn, ...item(T("credits")),
     el("div", { className: "nav-foot" }, wordMini(() => go("today", { word: true })), ...item(T("settings")), muvHelp()));
 }
 /** Muv at the bottom: "Need help?" when you point at it; click for Help. */
@@ -157,11 +166,13 @@ async function start() {
   translatePage();
   await loadDeco();
   state.st = (await work?.status()) || null;
+  applyLook(); // (the doodles and the wallpaper: look.js; before the first page is drawn)
   let first = {};
   try { first = JSON.parse(decodeURIComponent(location.hash.slice(1)) || "{}"); } catch { /* none */ }
   host?.onCommand?.((cmd, arg) => {
     if (cmd === "work") {
       state.st = arg;
+      lookFromStatus(arg);
       focusUpdate(arg);
       // Today and Reminders follow the clock; the rest when it's worth it.
       // (Data: at once while a day's log is open there, so a change made in it shows)
@@ -176,6 +187,9 @@ async function start() {
       go(arg?.tab || tab, arg || {});
     } else if (cmd === "theme") {
       if (tab === "settings") draw();
+    } else if (cmd === "pins-event") {
+      pinsEvent(arg);
+      if (["earned", "tier-up", "code", "reset", "backfill"].includes(arg?.kind)) pinsVisible();
     }
   });
   // Reloaded (a new language, photos reloaded): back where you were.
@@ -185,6 +199,23 @@ async function start() {
   // (where you are, kept as the window goes: a new language reloads it, and it comes back here, not to the first tab)
   addEventListener("pagehide", () => { try { sessionStorage.setItem("mlwh:where", JSON.stringify({ tab, group: settingsGroup(), range: dataState().range })); } catch { /* fine */ } });
   go(first.tab || "today", first);
+  startDoodles(); startTitleFit();
+  // (pins: the moments that came while the window was closed, the first start's back-fill note; and what earned pins
+  // let the doodles and the card tray show)
+  if (host?.pins) { pinsWake(); pinsVisible(); }
+  // (the menu's heading on or off: the menu again)
+  let head = currentLook().menuHeading;
+  onLook((L) => { if (L.menuHeading !== head) { head = L.menuHeading; renderNav(); } });
+}
+
+/** The earned pins → visible-set.js (doodles, the burst, the card tray). */
+async function pinsVisible() {
+  try {
+    const v = await host?.pins?.call("visibleDoodles");
+    if (!v) return;
+    const earned = Array.isArray(v.earned) ? v.earned : [];
+    window.MLWH_VISIBLE?.setEarned(earned);
+  } catch { /* the pins engine isn't up yet: the next event */ }
 }
 
 window.__mlwhApp = { go, draw, tab: () => tab, state, tour: () => startTour(go), tourAt: tourOn, tourSteps };

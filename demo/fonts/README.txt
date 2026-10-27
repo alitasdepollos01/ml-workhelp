@@ -11,3 +11,6 @@ each font's copyright notice is kept inside the font file. Converted to woff2, n
   gf/*.woff2, latin.css Fredoka, Nunito, Mali, DM Sans, Plus Jakarta Sans, Noto Sans Thai, Bricolage Grotesque,
                         Itim, Outfit, Kanit, Baloo 2, Sriracha, VT323, IBM Plex Sans, Chakra Petch,
                         DM Serif Display, Caveat (Google Fonts; latin, latin-ext and thai only)
+  gf2/*.woff2,          Lilita One, Lily Script One, Lobster Two, Mitr, Permanent Marker (Google Fonts; latin, latin-ext
+  latin-new.css         and thai only): the Y2K emo and Whimsical styles (skins-new.css; tools/styles/gen.py --ship)
+  zh/goround.woff2      寒蟬圓黑體 Bold (Chiron GoRound TC), the two styles' Chinese titles   https://fonts.google.com/specimen/Chiron+GoRound+TC

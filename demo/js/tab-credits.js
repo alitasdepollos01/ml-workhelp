@@ -31,17 +31,17 @@ export function showOriginal(s) {
 export async function renderCredits(main, { ask }) {
   try { data = await host.photoCredits(); } catch { data = null; }
   main.append(pageTop({ crumb: L("Photos & credits", "照片來源"), title: L("Thank you to the photographers and artist", "謝謝攝影師和畫家"),
-    sub: L("We've been given permission to use photos by Blumoon, Lyrac, NGMin and otter, and the cartoon drawings by wanwannjeab. Click any sticker to see its original photo and who took it.",
-      "我們已經得到 Blumoon、Lyrac、NGMin、otter 的照片，以及 wanwannjeab 的卡通插畫的使用許可。點任何一張貼圖，就能看到原始照片和拍攝者。"), spot: "app-credits-top", className: "credits-band" }));
+    sub: L("We've been given permission to use photos by Blumoon, KIU, Lyrac, NGMin, otter and PKYU, and the cartoon drawings by wanwannjeab. Click any sticker to see its original photo and who took it.",
+      "我們已經得到 Blumoon、KIU、Lyrac、NGMin、otter、PKYU 的照片，以及 wanwannjeab 的卡通插畫的使用許可。點任何一張貼圖，就能看到原始照片和拍攝者。"), spot: "app-credits-top", className: "credits-band" }));
   if (!data) { main.append(el("p", { className: "muted", textContent: "…" })); return; }
   const c = data.contact;
-  // The ones who said yes: a card each.
-  const FEATURED = [["Blumoon", "photo"], ["Lyrac", "photo"], ["NGMin", "photo"], ["otter", "photo"], ["wanwannjeab", "draw"]];
+  // The ones who said yes: a card each, first, with their profile picture (app/shared/avatars; a ✓ only while it's off).
+  const FEATURED = [["Blumoon", "photo"], ["KIU", "photo"], ["Lyrac", "photo"], ["NGMin", "photo"], ["otter", "photo"], ["PKYU", "photo"], ["wanwannjeab", "draw"]];
   const svg = (kind) => { const ns = "http://www.w3.org/2000/svg", s = document.createElementNS(ns, "svg");
     for (const [k, v] of Object.entries({ viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": "1.8", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" })) s.setAttribute(k, v);
     for (const d of kind === "draw" ? ["M12 20h9", "M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"] : ["M4 8h3l2-3h6l2 3h3v11H4z", "M12 16.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"]) { const p = document.createElementNS(ns, "path"); p.setAttribute("d", d); s.append(p); }
     return s; };
-  // Everyone whose photos (or drawings) are in the app: the same card each; the ones who gave permission marked ✓.
+  // Everyone whose photos (or drawings) are in the app: the same card each; the ones who gave permission first.
   const featured = new Set(FEATURED.map(([k]) => k));
   const SHORT = { Milk: "Milk", Love: "Love", wanwannjeab: "wanwannjeab", alitasdepollo: "alitasdepollos" };
   const what = (k) => k === "wanwannjeab" ? L("Cartoon Muv drawings", "卡通 Muv 插畫") : k === "GMMTV" ? L("Official photos", "官方照片") : k === "Milk" || k === "Love" ? L("Her posts", "她的貼文")
@@ -49,7 +49,7 @@ export async function renderCredits(main, { ask }) {
   const all = [...FEATURED.map(([k]) => k), ...data.order.filter((k) => !featured.has(k))].filter((k) => data.people[k]);
   main.append(el("section", { className: "credit-cards all" }, all.map((k) => { const p = data.people[k];
     return el("div", { className: "credit-card" + (featured.has(k) ? " ok" : "") },
-      featured.has(k) ? el("span", { className: "cc-ok", textContent: "✓", title: L("Gave us permission", "已同意我們使用") }) : null,
+      featured.has(k) && !p.avatar ? el("span", { className: "cc-ok", textContent: "✓", title: L("Gave us permission", "已同意我們使用") }) : null,
       el("span", { className: "cc-ic" + (p.avatar ? " has-pic" : "") }, p.avatar ? el("img", { src: p.avatar, alt: "" }) : svg(k === "wanwannjeab" ? "draw" : "photo")), el("b", { textContent: SHORT[k] || p.name }),
       p.url ? el("a", { href: p.url, target: "_blank", rel: "noopener", textContent: p.handle }) : null,
       el("span", { className: "muted", textContent: what(k) })); })));

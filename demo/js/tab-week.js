@@ -2,19 +2,28 @@
 // Summary (how did it go: the numbers with their trend, what stands out, each day by category; a year: a
 // square for every day too), Analysis (where, when and how: where the time went, breaks, when you work,
 // your typical day, focus quality, side by side) and Calendar (the days; a day opens below, to look at
-// and change, day-log.js). A year: click a month and Summary and Analysis are that month. Export CSV: every entry.
+// and change, day-log.js). A year: click a month and its numbers and days open under the chart; the page stays the year.
+// Analysis: a task clicked marks its days (a card in the range's shape; Calendar keeps the marks). A month's calendar ends
+// each row with its whole week. The sums that draw nothing are in data-calc.js. Export CSV: every entry.
 // Whatever way you keep time, it's the same: it shows what's in the log (🍅 rounds when there are some).
 
-import { L, zh, el, host, work, state, hm, hours, clock, dayKey, addDays, weekStart, dayName, dateShort, catName, catOf, catColor, deco, modal, toast, LOC, pageTop } from "./app-common.js";
+import { L, zh, th, el, host, work, state, hm, hours, clock, dayKey, addDays, weekStart, dayName, dateShort, catName, catOf, catColor, deco, modal, toast, LOC, pageTop } from "./app-common.js";
 import { dayLog, closeDayLog } from "./day-log.js";
 import { wordOfDay } from "./word-card.js";
 import { startTour } from "./tour.js";
+import { openPicture } from "./card-deco.js";
+import { metGoal, goalFor, isoWeek, sameDays, changes, monthNumbers, weekRows, weekNumbers, taskDays } from "./data-calc.js";
 
 let range = "week";              // "week" | "month" | "year"
 let shown = weekStart(Date.now()); // the first day of the one shown
 let tab = "sum";       // "sum" (Summary) | "ana" (Analysis) | "cal" (Calendar)
 let openDay = null;    // the day open in the calendar (its dayKey), or null
-let yearMonth = null;  // a year's overview: the month picked (0–11): the page is that month
+let pickedMonth = null; // Year › Summary: the month opened under the chart (0–11); the page stays the year
+let markTask = null;    // a task whose days are marked (Analysis; Calendar keeps the marks); "" is the unnamed one
+let backTo = null;      // "‹ Back to …": where a jump from the month strip or a Week cell came from
+let refocus = null;     // after the next drawing: what gets the keyboard focus back (a selector), and what to scroll to
+let reveal = null;
+let redrawData = null;  // (the keys on the month strip draw the page again)
 
 const monthStart = (t) => { const d = new Date(t); return new Date(d.getFullYear(), d.getMonth(), 1).getTime(); };
 const yearStart = (t) => new Date(new Date(t).getFullYear(), 0, 1).getTime();
@@ -85,14 +94,16 @@ function byMonth(days) {
 const topFocus = (days) => Object.entries(days.reduce((o, d) => (d.focus ? ((o[d.focus] = (o[d.focus] || 0) + 1), o) : o), {})).sort((a, b) => b[1] - a[1]);
 
 /** A few plain sentences about the week (month, year). */
-export function insights(days, last, goalH, r = "week") {
+export function insights(days, last, goalH, r = "week", st = null, soFar = false) {
   const out = [], w = WORDS[r];
+  // (soFar: `last` is the same days of the one before, as on the tiles; the sentence says so)
+  const prevTxt = soFar ? { week: L("the same days of the week before", "上週的同幾天"), month: L("the same days of the month before", "上個月的同幾天"), year: L("the same days of the year before", "去年的同幾天") }[r] : w.prev();
   const work = total(days, "work"), breaks = total(days, "breaks");
   if (!work && !breaks) return [L(`Nothing logged ${w.it()} yet. Your work, breaks and time away show up here as they happen.`, `${w.now()}還沒有紀錄。你一開始工作、休息或離開，這裡就會跟著出現。`)];
   const lastWork = total(last, "work");
   if (lastWork > 0) {
     const pct = Math.round(((work - lastWork) / lastWork) * 100);
-    out.push(L(`${hours(work)} of work, ${pct >= 0 ? `${pct}% more` : `${-pct}% less`} than ${w.prev()} (${hours(lastWork)}).`, `工作 ${hours(work)}，比${w.prev()}（${hours(lastWork)}）${pct >= 0 ? `多 ${pct}%` : `少 ${-pct}%`}。`));
+    out.push(L(`${hours(work)} of work, ${pct >= 0 ? `${pct}% more` : `${-pct}% less`} than ${prevTxt} (${hours(lastWork)}).`, `工作 ${hours(work)}，比${prevTxt}（${hours(lastWork)}）${pct >= 0 ? `多 ${pct}%` : `少 ${-pct}%`}。`));
   }
   if (r === "year") {
     const ms = byMonth(days).map((m) => ({ ...m, work: total(m.days, "work") })).filter((m) => m.work);
@@ -122,7 +133,7 @@ export function insights(days, last, goalH, r = "week") {
   if (brk[0]) out.push(L(`Most of your break time went to ${catName(catOf("break", brk[0][0]), true)}: ${hm(brk[0][1])}.`, `休息時大多在${catName(catOf("break", brk[0][0]), true)}：${hm(brk[0][1])}。`));
   const away = total(days, "away");
   if (away >= 20 * 60e3) out.push(L(`${hm(away)} away you haven't labelled. Say what it was in Today${r === "week" ? "" : " (or open the day here)"}.`, `有 ${hm(away)} 的離開時間還沒標記，可以到「今天」${r === "week" ? "" : "（或在這裡打開那天）"}說明是在做什麼。`));
-  if (goalH) { const n = days.filter((d) => d.work >= goalH * 3600e3).length; out.push(L(`Daily goal (${goalH} h) reached on ${n} day${n === 1 ? "" : "s"}.`, `有 ${n} 天達成每日目標（${goalH} 小時）。`)); }
+  if (goalH) { const n = days.filter((d) => (st ? metGoal(d, st) : d.work >= goalH * 3600e3)).length; out.push(L(`Daily goal (${goalH} h) reached on ${n} day${n === 1 ? "" : "s"}.`, `有 ${n} 天達成每日目標（${goalH} 小時）。`)); }
   const withFocus = days.filter((d) => d.focus && d.work), without = days.filter((d) => !d.focus && d.work);
   if (withFocus.length && without.length) {
     const avg = (l) => l.reduce((a, d) => a + d.work, 0) / l.length, diff = avg(withFocus) - avg(without);
@@ -141,21 +152,23 @@ export const dataState = () => ({ range, tab, page: 0 });
 const RANGE = () => ({ week: L("Week", "週"), month: L("Month", "月"), year: L("Year", "年") });
 const TABS = () => [["sum", L("Summary", "總覽")], ["ana", L("Analysis", "分析")], ["cal", L("Calendar", "日曆")]];
 export async function renderWeek(main, { redraw, ask, go: goTo }) {
-  goTab = goTo;
+  goTab = goTo; redrawData = redraw;
   if (ask?.tab && ["sum", "cal", "ana"].includes(ask.tab)) tab = ask.tab;
-  if (ask?.range) { range = ask.range; shown = startOf(range, Date.now()); peek = null; openDay = null; yearMonth = null; catOpen = null; }
+  if (ask?.range) { range = ask.range; shown = startOf(range, Date.now()); peek = null; openDay = null; pickedMonth = null; backTo = null; catOpen = null; }
   if (ask?.openDay) { openDay = dayKey(Date.now()); tab = "cal"; } // (the tour: today, opened in the calendar)
   const st = state.st;
   const end = step(range, shown, 1), prevStart = step(range, shown, -1);
   // (and for the little trend lines: the eight before it; a year: its months)
   const trailStart = range === "year" ? shown : step(range, shown, -7);
-  const [h, prev, hTrail] = await Promise.all([work.history(shown, end), work.history(prevStart, shown), range === "year" ? null : work.history(trailStart, end)]);
-  const days = analyse(h, shown, end), last = analyse(prev, prevStart, shown);
+  // (a month's calendar: its rows are whole weeks, so the days before the 1st and after the last too)
+  const calFrom = weekStart(shown), calTo = addDays(weekStart(addDays(end, -1)), 7), withWeeks = range === "month" && tab === "cal";
+  const [h, prev, hTrail, hCal] = await Promise.all([work.history(shown, end), work.history(prevStart, shown), range === "year" ? null : work.history(trailStart, end), withWeeks ? work.history(calFrom, calTo) : null]);
+  const days = analyse(h, shown, end), last = analyse(prev, prevStart, shown), weeks = withWeeks ? analyse(hCal, calFrom, calTo) : null;
   const trail = range === "year" ? byMonth(days).filter((m) => m.start <= Date.now()).map((m) => m.days)
     : Array.from({ length: 8 }, (_, i) => { const a = step(range, shown, i - 7); return analyse(hTrail, a, step(range, a, 1)); });
   const prev2 = range === "year" ? null : trail[5];
   const isNow = shown === startOf(range, Date.now());
-  const go = (t) => { shown = t; peek = null; openDay = null; yearMonth = null; window.scrollTo(0, 0); redraw(); };
+  const go = (t) => { shown = t; peek = null; openDay = null; pickedMonth = null; backTo = null; window.scrollTo(0, 0); redraw(); };
   const btn = (label, fn, extra = {}) => { const b = el("button", { type: "button", className: "btn small", textContent: label, ...extra }); b.addEventListener("click", fn); return b; };
   // The bar: week, month or year; ‹ which one ›; back to now; export; the tour. It stays at the top.
   const ranges = el("div", { className: "seg", role: "radiogroup", "aria-label": L("Week, month or year", "週、月或年") }, Object.entries(RANGE()).map(([k, t]) => {
@@ -170,7 +183,7 @@ export async function renderWeek(main, { redraw, ask, go: goTo }) {
   main.append(pageTop({ title: L("Data", "數據"), sub: L("Your weeks, months and years of work", "你每週、每月、每年的工作"), spot: "app-data-top" }));
   main.append(el("div", { className: "dbar" }, ranges,
     btn("‹", () => go(step(range, shown, -1)), { "aria-label": L("The one before", "上一個") }),
-    el("h2", { className: "period", textContent: title }),
+    el("h2", { className: "period" }, title, range === "week" ? el("span", { className: "wk-chip", textContent: L(`Week ${isoWeek(shown)}`, `第 ${isoWeek(shown)} 週`) }) : null),
     btn("›", () => go(Math.min(step(range, shown, 1), startOf(range, Date.now()))), { "aria-label": L("The one after", "下一個"), disabled: isNow }),
     isNow ? null : btn(L(`Back to ${WORDS[range].it()}`, `回到${WORDS[range].now()}`), () => go(startOf(range, Date.now()))),
     el("span", { style: "flex:1" }),
@@ -182,9 +195,12 @@ export async function renderWeek(main, { redraw, ask, go: goTo }) {
       b.addEventListener("click", () => { tab = k; window.scrollTo(0, 0); redraw(); });
       return b;
     })));
-  if (tab === "cal") calendarTab(main, days, st, redraw);
+  if (backTo) main.append(backChip(redraw));
+  if (tab === "cal") calendarTab(main, days, st, redraw, weeks);
   else if (tab === "ana") analysis(main, days, last, st, redraw, prev2);
   else summary(main, days, last, st, redraw, trail);
+  // (after the page is swapped in: the keyboard focus back where it was, or the task's card into view)
+  if (refocus || reveal) { const f = refocus, r = reveal; refocus = reveal = null; setTimeout(() => { if (f) document.querySelector(f)?.focus(); if (r) document.querySelector(r)?.scrollIntoView({ block: "nearest", behavior: "smooth" }); }, 0); }
 }
 
 // ---- Summary ("how did it go?"): the numbers, each with its little trend (the goal days as a ring), what stands
@@ -198,20 +214,6 @@ let peek = null;         // a week's or a month's day, looked at under the chart
 let chartShow = "work";  // the chart: "work" | "breaks" | "both"
 let compareBack = 1;     // Analysis › Side by side: with the one before (1) or the one before that (2)
 
-/** What a page is about: all of it, or (a year) the month picked; and the one before it. */
-function selection(days, last) {
-  const yr = range === "year", months = yr ? byMonth(days) : null;
-  if (yr && yearMonth != null && !months.find((m) => m.i === yearMonth)) yearMonth = null;
-  const sel = yr && yearMonth != null ? months.find((m) => m.i === yearMonth).days : days;
-  const selLast = yr && yearMonth != null ? (yearMonth > 0 ? months.find((m) => m.i === yearMonth - 1)?.days || [] : last.filter((d) => new Date(d.start).getMonth() === 11)) : last;
-  return { yr, months, sel, selLast, sr: yr && yearMonth != null ? "month" : range };
-}
-function monthChip(main, months, redraw) {
-  if (range !== "year" || yearMonth == null) return;
-  const back = el("button", { type: "button", className: "chip on month-chip", textContent: L(`Showing ${monthName(months.find((m) => m.i === yearMonth).start)} · ✕ the whole year`, `正在看 ${monthName(months.find((m) => m.i === yearMonth).start)} · ✕ 看全年`) });
-  back.addEventListener("click", () => { yearMonth = null; redraw(); });
-  main.append(back);
-}
 const NS = "http://www.w3.org/2000/svg";
 function svgEl(tag, attrs = {}, text) { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (text != null) e.textContent = text; return e; }
 /** A little line of the periods before this one (the last point: this one). */
@@ -228,13 +230,15 @@ function ring(frac) {
 }
 
 function summary(main, days, last, st, redraw, trail) {
-  const { yr, months, sel, selLast, sr } = selection(days, last), w = WORDS[sr];
-  monthChip(main, months, redraw);
+  const yr = range === "year", months = yr ? byMonth(days) : null, sel = days, selLast = last, sr = range, w = WORDS[sr];
   const soFar = sel.filter((d) => d.start <= Date.now());
   const work = total(sel, "work"), breaks = total(sel, "breaks"), away = total(sel, "away"), rounds = total(sel, "rounds");
-  const lastWork = total(selLast, "work");
-  const workdays = sel.filter((d) => d.work >= 15 * 60e3).length, lastWorkdays = selLast.filter((d) => d.work >= 15 * 60e3).length;
-  const goalH = st?.dailyGoal || 0, goalDays = goalH ? sel.filter((d) => d.work >= goalH * 3600e3).length : 0;
+  // (the ▲▼%: while this one isn't over, against the SAME days of the one before, as Side by side and the month strip
+  // do (data-calc.js sameDays); a finished one, whole with whole. The note under the tiles says which.)
+  const same = sameDays(range, sel, selLast), was = same.soFar ? same.other : selLast;
+  const lastWork = total(was, "work");
+  const workdays = sel.filter((d) => d.work >= 15 * 60e3).length, lastWorkdays = was.filter((d) => d.work >= 15 * 60e3).length;
+  const goalH = st?.dailyGoal || 0, goalDays = goalH ? sel.filter((d) => metGoal(d, st)).length : 0;
   // 1. The numbers, each with the periods before it as a little line.
   const cmp = (now, was) => {
     if (!was) return el("span", { className: "muted", textContent: L(`nothing ${w.prev()}`, `${w.prev()}沒有紀錄`) });
@@ -255,6 +259,7 @@ function summary(main, days, last, st, redraw, trail) {
     goalTile,
     rounds || total(selLast, "rounds") ? tile(L("Pomodoros", "番茄鐘"), L(`${rounds}`, `${rounds} 輪`), L(`${hm(rounds * (st?.pomo?.focus || 25) * 60e3)} of focus`, `專注 ${hm(rounds * (st?.pomo?.focus || 25) * 60e3)}`), sparkline(series((t) => total(t, "rounds"))))
       : tile(L("Breaks", "休息"), hm(breaks), away >= 60e3 ? L(`away ${hm(away)}`, `離開 ${hm(away)}`) : "", sparkline(series((t) => total(t, "breaks"))))));
+  if (lastWork || lastWorkdays) { const n = cmpNote(range, same, 1, shown, step(range, shown, -1)); n.classList.add("tiles-note"); main.append(n); }
   // 2. What stands out.
   let longest = null; for (const d of sel) for (const s of d.segs) if (s.kind === "work" && (!longest || s.e.worked > longest.worked)) longest = s.e;
   const focus = topFocus(sel)[0];
@@ -266,15 +271,14 @@ function summary(main, days, last, st, redraw, trail) {
       rounds ? el("span", { className: "dpill", textContent: L(`${rounds} Pomodoro${rounds === 1 ? "" : "s"}`, `番茄鐘 ${rounds} 輪`) }) : null,
       focus && sr !== "week" ? el("span", { className: "dpill", textContent: L(`Focus set most: ${focus[0]} · ${focus[1]} day${focus[1] === 1 ? "" : "s"}`, `最常的主題：${focus[0]} · ${focus[1]} 天`) }) : null,
       away >= 60e3 ? el("span", { className: "dpill warn", textContent: L(`${hm(away)} away not labelled yet (label it in Calendar)`, `${hm(away)} 的離開還沒標記（到「日曆」那天標記）`) }) : null),
-    el("ul", { className: "ins" }, insights(sel, selLast, goalH, sr).map((t) => el("li", { textContent: t })))));
+    el("ul", { className: "ins" }, insights(sel, was, goalH, sr, st, same.soFar).map((t) => el("li", { textContent: t })))));
   // 3. The chart, by category; a year: also a square for every day.
   main.append(workChart(days, last, st, redraw, months, yr ? byMonth(last) : null));
-  if (yr) main.append(yearSquares(days, redraw));
+  if (yr) main.append(yearSquares(days, redraw, months));
 }
 
 function analysis(main, days, last, st, redraw, prev2) {
-  const { months, sel, selLast } = selection(days, last);
-  monthChip(main, months, redraw);
+  const sel = days, selLast = last;
   const breaks = total(sel, "breaks"), away = total(sel, "away");
   // Where the time went (and each category's tasks), and the breaks.
   const byW = merge(sel, "byWork"), byB = merge(sel, "byBreak"), tasks = mergeTasks(sel);
@@ -282,26 +286,27 @@ function analysis(main, days, last, st, redraw, prev2) {
     const name = el("span", { className: "ell", textContent: catName(catOf(kind, c), true) + (open ? (catOpen === c ? " ▾" : " ▸") : "") });
     const row = el("div", { className: open ? "clickable" : "" }, name, el("span", { className: "meter" }, el("i", { style: `width:${(ms / top) * 100}%;background:${catColor(kind, c)}` })), el("span", { className: "muted", textContent: `${hm(ms)} · ${Math.round((ms / tot) * 100)}%` }));
     if (open) { row.tabIndex = 0; row.setAttribute("role", "button"); row.setAttribute("aria-expanded", String(catOpen === c)); const t = () => { catOpen = catOpen === c ? null : c; redraw(); }; row.addEventListener("click", t); row.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } }); }
-    const sub = open && catOpen === c ? el("div", { className: "subtasks" }, tasks.filter((x) => (x.cat || "focus") === c).slice(0, 8).map((x) => el("span", {}, `${x.name || L("(not named)", "（未命名）")} `, el("b", { textContent: hm(x.ms) })))) : null;
+    const sub = open && catOpen === c ? el("div", { className: "subtasks" }, tasks.filter((x) => (x.cat || "focus") === c).slice(0, 8).map((x) => taskButton(x.name, hm(x.ms), c, redraw))) : null;
     return [row, sub];
   })); };
   // (its sticker grows with what the card holds: more categories, or a category's tasks open, a bigger sticker)
   const whereRows = Object.keys(byW).length + (catOpen && byW[catOpen] ? Math.ceil(Math.min(8, tasks.filter((x) => (x.cat || "focus") === catOpen).length) / 2) : 0);
   const whereArt = Math.round(Math.max(72, Math.min(170, 40 + whereRows * 22)));
-  const whereCard = el("section", { className: "card where-card" }, deco("app-week-analysis", "where-deco"), el("h3", { textContent: L("Where the time went", "時間花在哪裡") }), el("p", { className: "muted small", textContent: L("Click a category for its tasks.", "點一個分類，看裡面的每件事。") }),
+  const whereCard = el("section", { className: "card where-card" }, deco("app-week-analysis", "where-deco"), el("h3", { textContent: L("Where the time went", "時間花在哪裡") }), el("p", { className: "muted small", textContent: L("Click a category for its tasks; click a task to mark its days.", "點一個分類看裡面的事情；點一件事，標出做它的日子。") }),
       Object.keys(byW).length ? ranked("work", byW, true) : el("span", { className: "muted", textContent: L("No work here yet.", "這裡還沒有工作紀錄。") }));
   whereCard.style.setProperty("--where-art", whereArt + "px");
-  main.append(el("div", { className: "two-col dash-row" },
-    whereCard,
-    el("section", { className: "card breaks-card" }, el("h3", { textContent: L("Breaks", "休息") + (breaks ? ` · ${hm(breaks)}` : "") }),
-      away >= 60e3 ? el("p", { className: "muted small", textContent: L(`Away from the computer: ${hm(away)}`, `離開電腦：${hm(away)}`) }) : null,
-      Object.keys(byB).length ? ranked("break", byB, false) : el("span", { className: "muted", textContent: L("No breaks logged.", "沒有休息紀錄。") }))));
+  const breaksCard = el("section", { className: "card breaks-card" }, el("h3", { textContent: L("Breaks", "休息") + (breaks ? ` · ${hm(breaks)}` : "") }),
+    away >= 60e3 ? el("p", { className: "muted small", textContent: L(`Away from the computer: ${hm(away)}`, `離開電腦：${hm(away)}`) }) : null,
+    Object.keys(byB).length ? ranked("break", byB, false) : el("span", { className: "muted", textContent: L("No breaks logged.", "沒有休息紀錄。") }));
+  // A task marked: its days in a card, full width under "Where the time went"; Breaks moves down a row.
+  if (markTask != null) main.append(whereCard, taskCard(sel, st, redraw), breaksCard);
+  else main.append(el("div", { className: "two-col dash-row" }, whereCard, breaksCard));
   // When you work, and your typical day.
   main.append(el("div", { className: "two-col dash-row" },
     el("section", { className: "card when-card" }, el("h3", { textContent: L("When you work", "什麼時候工作") }), heatmap(sel)),
     typicalDay(sel)));
   // Focus quality, and two periods side by side.
-  main.append(el("div", { className: "two-col dash-row" }, focusQuality(sel), sideBySide(sel, selLast, prev2, st, redraw)));
+  main.append(el("div", { className: "two-col dash-row" }, focusQuality(sel), sideBySide(sel, selLast, prev2, redraw)));
 }
 
 /** Your typical day: when you usually start, have lunch and stop (days with work). */
@@ -353,41 +358,230 @@ function focusQuality(sel) {
   return card;
 }
 
-/** Two periods side by side: the numbers and each category, with what grew and what shrank. */
-function sideBySide(sel, selLast, prev2, st, redraw) {
-  const other = compareBack === 2 && prev2 ? prev2 : selLast;
+// ---- 1.3: the month strip (Year › Summary), what changed (Analysis › Side by side), a task's days, and the way back ----
+
+/** Hours, short: "25 min" under an hour, "2.5 h" from there. */
+const hS = (ms) => (Math.abs(ms) < 3600e3 ? hm(Math.abs(ms)) : hours(Math.abs(ms)));
+const taskName = (n) => n || L("(not named)", "（未命名）");
+/** A week's dates, Monday to Sunday: "19 – 25 Oct", "28 Sep – 4 Oct". */
+function weekRange(mon) {
+  const sun = addDays(mon, 6);
+  const a = new Date(mon), b = new Date(sun);
+  if (zh) return `${a.getMonth() + 1}/${a.getDate()} – ${b.getMonth() + 1}/${b.getDate()}`; // (10/19 – 10/25: fits the Week cell)
+  return !th && a.getMonth() === b.getMonth() ? `${a.getDate()} – ${dateShort(sun)}` : `${dateShort(mon)} – ${dateShort(sun)}`;
+}
+const monthLong = (t) => new Date(t).toLocaleDateString(LOC, { year: "numeric", month: "long" });
+
+/** "‹ Back to 2026": after a jump from the month strip, a year's square or a Week cell. */
+function backChip(redraw) {
+  const b = el("button", { type: "button", className: "chip back-chip", textContent: backTo.label });
+  b.addEventListener("click", () => { const x = backTo; backTo = null; range = x.range; shown = x.shown; tab = x.tab; pickedMonth = x.pickedMonth ?? null; openDay = null; peek = null; window.scrollTo(0, 0); redraw(); });
+  return b;
+}
+
+/** Year › Summary: the month picked, under the chart: its numbers and its days. The page stays the year. */
+function monthStrip(months, lastMonths, st, redraw) {
+  const m = pickedMonth, y = new Date(shown).getFullYear(), start = new Date(y, m, 1).getTime(), prevStart = new Date(y, m - 1, 1).getTime();
+  const ds = months.find((x) => x.i === m)?.days || [];
+  const before = m > 0 ? months.find((x) => x.i === m - 1)?.days || [] : lastMonths?.find((x) => x.i === 11)?.days || [];
+  const s = monthNumbers(ds, before, st), goalH = st?.dailyGoal || 0, pShort = new Date(prevStart).toLocaleDateString(LOC, { month: "short" });
+  const openIn = (d) => {
+    backTo = { label: L(`‹ Back to ${y}`, `‹ 回到 ${y} 年`), range: "year", shown, tab: "sum", pickedMonth: m };
+    range = "month"; shown = start; tab = "cal"; openDay = d ? d.key : null; pickedMonth = null; peek = null; window.scrollTo(0, 0); redraw();
+  };
+  const item = (label, value, sub, fn, cls = "") => {
+    const x = el(fn ? "button" : "div", { className: "ms-it " + cls, ...(fn ? { type: "button" } : {}) }, el("span", { textContent: label }), el("b", { textContent: value, title: value }), sub || null);
+    if (fn) x.addEventListener("click", fn);
+    return x;
+  };
+  const pct = s.was.total ? Math.round(((s.total - s.was.total) / s.was.total) * 100) : null;
+  const vs = pct == null ? el("span", { textContent: L(`no work in ${pShort}`, `${pShort}沒有紀錄`) })
+    : el("span", { className: pct > 0 ? "up" : pct < 0 ? "down" : "", textContent: pct === 0 ? L(`same as ${pShort}`, `跟${pShort}一樣`) : `${pct > 0 ? "▲" : "▼"} ${Math.abs(pct)}% ` + L(`on ${pShort}`, `比${pShort}`) });
+  const most = Math.max(3600e3, ...ds.map((d) => d.work)), cols = `grid-template-columns:repeat(${ds.length},minmax(0,1fr))`;
+  const close = el("button", { type: "button", className: "btn small", textContent: "✕", "aria-label": L("Close the month", "關起這個月") });
+  close.addEventListener("click", () => { refocus = `.wchart .col[data-m="${m}"]`; pickedMonth = null; redraw(); });
+  const open = el("button", { type: "button", className: "linkish ms-open", textContent: L("Open in Calendar ›", "在日曆打開 ›") });
+  open.addEventListener("click", () => openIn(null));
+  return el("div", { className: "month-strip", role: "region", "aria-label": monthLong(start) },
+    el("div", { className: "spread" }, el("b", { className: "ms-title", textContent: monthLong(start) + (s.soFar ? L(" · so far", " · 到目前") : "") }), el("span", { className: "row-flex" }, open, close)),
+    el("div", { className: "ms-items" },
+      item(L("Work", "工作"), hm(s.total), vs, null, "ms-work"),
+      item(L("Days with work", "有工作的天數"), String(s.workdays), el("span", { textContent: s.was.workdays === 1 ? L(`1 day in ${pShort}`, `${pShort}：1 天`) : L(`${s.was.workdays} days in ${pShort}`, `${pShort}：${s.was.workdays} 天`) }), null, "ms-days-n"),
+      goalH ? item(L("Goal days", "達標天數"), `${s.goalDays} / ${s.daysSoFar}`, el("span", { textContent: L(`${goalH} h a day`, `每天 ${goalH} 小時`) }), null, "ms-goal")
+        : item(L("A workday", "平均每個工作天"), s.workdays ? hm(s.avg) : "–", el("span", { textContent: s.was.avg ? L(`${hm(s.was.avg)} a workday in ${pShort}`, `${pShort}：${hm(s.was.avg)}`) : "" }), null, "ms-avg"),
+      item(L("Best day", "最好的一天"), s.best ? new Date(s.best.start).toLocaleDateString(LOC, { weekday: "short", day: "numeric", month: "short" }) : "–",
+        s.best ? el("span", { textContent: L(`${hm(s.best.work)} · open it ›`, `${hm(s.best.work)} · 打開 ›`) }) : null, s.best ? () => openIn(s.best) : null, "ms-best"),
+      item(L("Longest run", "連續最久"), s.run === 1 ? L("1 day", "1 天") : L(`${s.run} days`, `${s.run} 天`), el("span", { textContent: L("workdays in a row", "連續有工作的天數") }), null, "ms-run"),
+      item(L("Most time on", "花最多時間在"), s.top ? s.top.name : "–", s.top ? el("span", { textContent: hm(s.top.ms) }) : null, null, "ms-top")),
+    s.soFar ? cmpNote("month", { soFar: true, n: s.n }, 1, start, prevStart) : null,
+    el("div", {}, el("div", { className: "ms-cap", textContent: goalH ? L("Its days · a pink dot: the goal met · click a day to open it", "每一天 · 粉紅點：達標 · 點一天打開") : L("Its days · click a day to open it", "每一天 · 點一天打開") }),
+      el("div", { className: "ms-days", style: cols }, ds.map((d) => {
+        const future = d.start > Date.now(), wd = new Date(d.start).getDay(), when = new Date(d.start).toLocaleDateString(LOC, { weekday: "short", day: "numeric", month: "short" });
+        const b = el("button", { type: "button", className: wd === 0 || wd === 6 ? "we" : "", disabled: future, title: `${when}: ${d.work ? hm(d.work) : "–"}`, "aria-label": `${when}: ${d.work ? hm(d.work) : "–"}`, "data-key": d.key, "data-ms": String(Math.round(d.work)) },
+          !future && metGoal(d, st) ? el("span", { className: "gd" }) : null, el("i", { style: `height:${Math.round((d.work / most) * 52)}px` }));
+        b.addEventListener("click", () => openIn(d));
+        return b;
+      })),
+      el("div", { className: "ms-ticks", style: cols }, ds.map((d) => { const x = new Date(d.start); return el("span", { textContent: x.getDay() === 1 || x.getDate() === 1 ? String(x.getDate()) : "" }); }))));
+}
+// Esc closes the month strip, ← → move to the month before or after (not while typing, a popup or the tour is open).
+document.addEventListener("keydown", (e) => {
+  if (pickedMonth == null || range !== "year" || tab !== "sum" || e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (!document.querySelector("main .month-strip") || document.querySelector(".viewer") || /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement?.tagName || "")) return;
+  if (e.key === "Escape") { e.preventDefault(); refocus = `.wchart .col[data-m="${pickedMonth}"]`; pickedMonth = null; redrawData?.(); }
+  else if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+    const n = pickedMonth + (e.key === "ArrowLeft" ? -1 : 1);
+    if (n < 0 || n > 11 || new Date(new Date(shown).getFullYear(), n, 1).getTime() > Date.now()) return;
+    e.preventDefault(); pickedMonth = n; refocus = `.wchart .col[data-m="${n}"]`; redrawData?.();
+  }
+});
+
+/** A task in "Where the time went": click it to mark its days (again: unmark). */
+function taskButton(name, time, cat, redraw) {
+  const on = markTask === name;
+  const b = el("button", { type: "button", className: on ? "on" : "", "aria-pressed": String(on), title: L("Click: mark its days", "點一下：標出做它的日子") }, `${taskName(name)} `, el("b", { textContent: time }));
+  b.addEventListener("click", () => markIt(name, cat, redraw));
+  return b;
+}
+function markIt(name, cat, redraw) {
+  markTask = markTask === name ? null : name;
+  if (markTask != null) { if (cat) catOpen = cat; reveal = "main .task-days"; }
+  redraw();
+}
+/** Calendar with a task marked: "Marking “Thesis” · ✕". */
+function markRow(redraw) {
+  const b = el("button", { type: "button", className: "chip on mark-chip", textContent: L(`Marking “${taskName(markTask)}” · ✕`, `標出「${taskName(markTask)}」 · ✕`), "aria-label": L("Stop marking it", "不再標出") });
+  b.addEventListener("click", () => { markTask = null; redraw(); });
+  return el("div", { className: "mark-row" }, b, el("span", { className: "muted small", textContent: L("The badge is that day's time on it.", "標籤是那天花在上面的時間。") }));
+}
+
+/** Analysis: the days a task was done on, in the range's shape: a week's day cards, a month's calendar, a year's months. */
+function taskCard(days, st, redraw) {
+  const t = markTask, td = taskDays(days, t), today = dayKey(Date.now()), y = new Date(shown).getFullYear();
+  const what = range === "week" ? weekRange(shown) : range === "month" ? monthLong(shown) : (zh ? `${y} 年` : String(y));
+  const toDay = (d) => { if (d.start > Date.now()) return; tab = "cal"; openDay = d.key; peek = null; window.scrollTo(0, 0); redraw(); };
+  let body;
+  if (range === "week") {
+    body = el("div", { className: "week-cards" }, days.map((d) => {
+      const ms = td.byDay[d.key], future = d.start > Date.now();
+      const c = el("button", { type: "button", className: "wcard" + (ms ? " mark" : "") + (future ? " future" : "") + (d.key === today ? " today" : ""), disabled: future },
+        el("span", { className: "muted", textContent: `${dayName(d.start)} · ${dateShort(d.start)}` }), el("b", { textContent: ms ? hS(ms) : "–" }),
+        el("span", { className: "muted", textContent: d.work >= 60e3 ? L(`of ${hS(d.work)} that day`, `當天共 ${hS(d.work)}`) : "" }));
+      c.addEventListener("click", () => toDay(d));
+      return c;
+    }));
+  } else if (range === "month") {
+    const most = Math.max(3600e3, ...days.map((d) => d.work)), lead = (new Date(days[0].start).getDay() + 6) % 7;
+    body = el("div", { className: "cal-grid" }, Array.from({ length: 7 }, (_, k) => el("span", { className: "cal-wd", textContent: dayName(addDays(weekStart(days[0].start), k)) })),
+      Array.from({ length: lead }, () => el("span")), days.map((d) => {
+        const ms = td.byDay[d.key], future = d.start > Date.now();
+        const c = el("div", { className: "cal-day" + (ms ? " mark" : "") + (future ? " future" : "") + (d.key === today ? " today" : ""), role: "button", tabIndex: future ? -1 : 0, "data-key": d.key },
+          el("b", { textContent: String(new Date(d.start).getDate()) }), el("span", { className: "muted hrs", textContent: d.work >= 3 * 60e3 ? `${(d.work / 3600e3).toFixed(1)} h` : "" }),
+          ms ? el("span", { className: "tdot", textContent: hS(ms) }) : null);
+        c.style.setProperty("--h", String(ms ? d.work / most : 0));
+        c.addEventListener("click", () => toDay(d));
+        c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toDay(d); } });
+        return c;
+      }));
+  } else {
+    body = el("div", { className: "year-grid" }, byMonth(days).map((m) => {
+      const x = taskDays(m.days, t), future = m.start > Date.now();
+      const b = el("button", { type: "button", className: "year-month" + (x.days ? " mark" : "") + (future ? " future" : ""), disabled: future },
+        el("b", { textContent: monthName(m.start) }), el("span", { textContent: x.days ? hS(x.ms) : "–" }),
+        x.days ? el("span", { className: "tdot", textContent: x.days === 1 ? L("1 day", "1 天") : L(`${x.days} days`, `${x.days} 天`) }) : null);
+      b.addEventListener("click", () => { range = "month"; shown = m.start; openDay = null; peek = null; window.scrollTo(0, 0); redraw(); }); // (Month › Analysis, still marked)
+      return b;
+    }));
+  }
+  const open = el("button", { type: "button", className: "btn small", textContent: L("Open in Calendar ›", "在日曆打開 ›") });
+  open.addEventListener("click", () => { tab = "cal"; window.scrollTo(0, 0); redraw(); });
+  const close = el("button", { type: "button", className: "btn small", textContent: "✕", "aria-label": L("Stop marking it", "不再標出") });
+  close.addEventListener("click", () => { markTask = null; redraw(); });
+  const n = td.days;
+  return el("section", { className: "card task-days", "aria-label": L(`Days with “${taskName(t)}”`, `有「${taskName(t)}」的日子`) },
+    el("div", { className: "spread" }, el("h3", { textContent: L(`Days with “${taskName(t)}” · ${what}`, `有「${taskName(t)}」的日子 · ${what}`) }), el("span", { className: "row-flex" }, open, close)),
+    el("p", { className: "muted small", style: "margin:0", textContent: !n ? L("Not done on any day here.", "這段時間沒有做這件事。")
+      : `${n === 1 ? L(`1 day, ${hm(td.ms)} on it.`, `1 天，花了 ${hm(td.ms)}。`) : L(`${n} days, ${hm(td.ms)} on it.`, `${n} 天，花了 ${hm(td.ms)}。`)} ` + (range === "year"
+        ? L("Each month: its days with it and the time. Click a month for its days.", "每個月：有做的天數和時間。點一個月看那個月的日子。")
+        : L("The badge is that day's time on it; click a day to open it.", "標籤是那天花在上面的時間；點一天就能打開。")) }),
+    body);
+}
+
+/**
+ * Side by side: what grew and what shrank, per category and per task, against the one before (or the one before that).
+ * While this one isn't over, against the SAME days of that one (data-calc.js sameDays); a note under it says which.
+ * The totals and their ▲▼% are on the Summary tiles, so they're not here again.
+ */
+function sideBySide(days, last, prev2, redraw) {
+  const back = compareBack === 2 && prev2 ? 2 : 1, before = back === 2 ? prev2 : last, oStart = step(range, shown, -back);
+  const cmp = sameDays(range, days, before), now = cmp.soFar ? days.filter((d) => d.start <= Date.now()) : days;
+  const { cats, tasks } = changes(now, cmp.other);
+  const top = tasks.slice(0, 8), topD = Math.max(1, ...cats.map((r) => Math.abs(r.d)), ...top.map((r) => Math.abs(r.d)));
+  const short = (t) => (range === "week" ? L(`Week ${isoWeek(t)}`, `第 ${isoWeek(t)} 週`) : range === "month" ? new Date(t).toLocaleDateString(LOC, { month: "short" }) : String(new Date(t).getFullYear()));
+  const full = (t) => (range === "week" ? `${short(t)} (${weekRange(t)})` : range === "month" ? monthLong(t) : zh ? `${new Date(t).getFullYear()} 年` : String(new Date(t).getFullYear()));
   const pick = el("select", { "aria-label": L("Compare with", "跟哪一段比") },
-    new Option(L(`with ${WORDS[range].prev()}`, `跟${WORDS[range].prev()}比`), "1"), prev2 ? new Option(L(`with the one before that`, `跟再前一段比`), "2") : null);
-  pick.value = String(compareBack);
+    new Option(L(`with ${WORDS[range].prev()}`, `跟${WORDS[range].prev()}比`), "1"), prev2 ? new Option(L("with the one before that", "跟再前一段比"), "2") : null);
+  pick.value = String(back);
   pick.addEventListener("change", () => { compareBack = Number(pick.value); redraw(); });
-  const row = (label, a, b, fmt = hm) => [el("span", { textContent: label }), el("b", { textContent: fmt(a) }), el("span", { className: "muted", textContent: fmt(b) }),
-    el("span", { className: a > b ? "up" : a < b ? "down" : "muted", textContent: a === b ? "–" : `${a > b ? "▲" : "▼"} ${fmt(Math.abs(a - b))}` })];
-  const cats = [...new Set([...Object.keys(merge(sel, "byWork")), ...Object.keys(merge(other, "byWork"))])];
-  const A = merge(sel, "byWork"), B = merge(other, "byWork");
+  const bar = (d) => { const w = (Math.abs(d) / topD) * 50; return el("div", { className: "bar" }, el("i", { className: d >= 0 ? "up" : "down", style: `left:${d >= 0 ? 50 : 50 - w}%;width:${w}%` })); };
+  const delta = (d) => el("span", { className: "delta " + (Math.abs(d) < 60e3 ? "muted" : d > 0 ? "up" : "down"), textContent: Math.abs(d) < 60e3 ? "=" : `${d > 0 ? "+" : "−"}${hS(d)}` });
+  const num = (ms, cls, none) => (ms >= 60e3 ? el(cls === "b" ? "b" : "span", { className: "num" + (cls === "b" ? " v-now" : " v-then muted"), textContent: hS(ms), "data-ms": String(Math.round(ms)) })
+    : el("span", { className: "tag " + (cls === "b" ? "v-now" : "v-then"), textContent: none, "data-ms": String(Math.round(ms)) }));
+  const grow = el("div", { className: "grow" },
+    el("span", { className: "h", textContent: L("Category", "分類") }), el("span", { className: "h", textContent: short(oStart) }), el("span", { className: "h", textContent: short(shown) }),
+    el("span", { className: "h", style: "text-align:center", textContent: L("▼ less · more ▲", "▼ 少 · 多 ▲") }), el("span"),
+    cats.flatMap((r) => [el("span", { className: "nm cat", "data-cat": r.k, textContent: catName(catOf("work", r.k), true) || r.k }), num(r.then, "", "–"), num(r.now, "b", "–"), bar(r.d), delta(r.d)]),
+    top.length ? [el("div", { className: "sep" }), el("span", { className: "h", style: "grid-column:1/-1", textContent: L("Task · click one to mark its days", "事情 · 點一件，標出做它的日子") })] : null,
+    top.flatMap((r) => {
+      const nm = el("button", { type: "button", className: "nm" + (markTask === r.k ? " on" : ""), "aria-pressed": String(markTask === r.k), textContent: taskName(r.k), title: `${taskName(r.k)}: ${hS(r.then)} → ${hS(r.now)}` });
+      nm.addEventListener("click", () => markIt(r.k, r.cat, redraw));
+      return [nm, num(r.then, "", L("new", "新的")), num(r.now, "b", L("none", "沒有")), bar(r.d), delta(r.d)];
+    }));
   return el("section", { className: "card compare-card" }, el("div", { className: "spread" }, el("h3", { textContent: L("Side by side", "前後比較") }), pick),
-    el("div", { className: "cmp-grid" }, el("span"), el("span", { className: "muted small", textContent: L("now", "這段") }), el("span", { className: "muted small", textContent: L("then", "那段") }), el("span"),
-      row(L("Work", "工作"), total(sel, "work"), total(other, "work")), row(L("Breaks", "休息"), total(sel, "breaks"), total(other, "breaks")),
-      row(L("Pomodoros", "番茄鐘"), total(sel, "rounds"), total(other, "rounds"), (x) => String(x)),
-      cats.sort((x, y) => (A[y] || 0) - (A[x] || 0)).slice(0, 6).flatMap((c) => row(catName(catOf("work", c), true), A[c] || 0, B[c] || 0))));
+    el("p", { className: "muted small", style: "margin:0", textContent: L(`${full(oStart)} → ${full(shown)}. The totals and their ▲▼% are on the Summary tiles; here, what grew and what shrank.`, `${full(oStart)} → ${full(shown)}。總數和 ▲▼% 在「總覽」的數字上；這裡看什麼變多、什麼變少。`) }),
+    cats.length || top.length ? grow : el("p", { className: "muted", textContent: L("Nothing to compare yet.", "還沒有可以比較的紀錄。") }),
+    cmpNote(range, cmp, back, shown, oStart));
+}
+
+/** The note under Side by side (and the month strip): what is compared with what. */
+function cmpNote(r, cmp, back, start, oStart) {
+  const n = cmp.n, y = new Date(start).getFullYear(), oy = new Date(oStart).getFullYear();
+  let text;
+  if (r === "week") {
+    const span = n === 1 ? dayName(start) : `${dayName(start)}–${dayName(addDays(start, n - 1))}`;
+    if (cmp.soFar) text = back === 2
+      ? L(`This week so far (${span}) compared with the same ${n === 1 ? "day" : "days"} two weeks ago`, `這週到目前（${span}）跟兩週前的同${n === 1 ? "一天" : "幾天"}比`)
+      : L(`This week so far (${span}) compared with the same ${n === 1 ? "day" : "days"} last week`, `這週到目前（${span}）跟上週的同${n === 1 ? "一天" : "幾天"}比`);
+    else text = L(`Week ${isoWeek(start)} (${weekRange(start)}), the whole week, compared with the whole of Week ${isoWeek(oStart)}`, `第 ${isoWeek(start)} 週（${weekRange(start)}）整週，跟第 ${isoWeek(oStart)} 週整週比`);
+  } else if (r === "month") {
+    const M = monthName(start), O = monthName(oStart);
+    text = cmp.soFar ? L(`This month so far (1–${n}) compared with the same days of ${O} (1–${n})`, `${M}到目前（1–${n} 日）跟${O}的同幾天比`)
+      : L(`The whole month of ${M} compared with the whole month of ${O}`, `${M}整個月跟${O}整個月比`);
+  } else {
+    const a = dateShort(start), b = cmp.lastDay ? dateShort(cmp.lastDay.start) : "";
+    text = cmp.soFar ? L(`This year so far (${a} – ${b}) compared with the same days of ${oy}`, `${y} 年到目前（${a}–${b}）跟 ${oy} 年的同幾天比`)
+      : L(`The whole year ${y} compared with the whole year ${oy}`, `${y} 年整年跟 ${oy} 年整年比`);
+  }
+  return el("div", { className: "cmp-note" + (cmp.soFar ? " so-far" : ""), textContent: "ⓘ " + text });
 }
 
 /** A year: a square for every day, darker for more work; click one to open it in the calendar. */
-function yearSquares(days, redraw) {
+function yearSquares(days, redraw, months = null) {
   const first = days[0]?.start || Date.now(), pad = (new Date(first).getDay() + 6) % 7, most = Math.max(4 * 3600e3, ...days.map((d) => d.work));
   const grid = el("div", { className: "ysq", role: "img", "aria-label": L("Every day of the year", "這一年的每一天") });
   for (let i = 0; i < pad; i++) grid.append(el("i", { className: "blank" }));
   for (const d of days) {
-    const future = d.start > Date.now(), sq = el("i", { className: future ? "future" : "", title: `${new Date(d.start).toLocaleDateString(LOC, { weekday: "short", month: "short", day: "numeric" })}: ${hm(d.work)}` });
-    if (!future) { sq.style.opacity = String(d.work ? 0.18 + 0.82 * Math.min(1, d.work / most) : 0.07); sq.addEventListener("click", () => { range = "month"; shown = monthStart(d.start); tab = "cal"; openDay = d.key; yearMonth = null; window.scrollTo(0, 0); redraw(); }); }
+    const future = d.start > Date.now(), sq = el("i", { className: (future ? "future" : "") + (pickedMonth === new Date(d.start).getMonth() ? " pk" : ""), title: `${new Date(d.start).toLocaleDateString(LOC, { weekday: "short", month: "short", day: "numeric" })}: ${hm(d.work)}` });
+    if (!future) { sq.style.opacity = String(d.work ? 0.18 + 0.82 * Math.min(1, d.work / most) : 0.07); sq.addEventListener("click", () => { backTo = { label: L(`‹ Back to ${new Date(shown).getFullYear()}`, `‹ 回到 ${new Date(shown).getFullYear()} 年`), range: "year", shown, tab: "sum", pickedMonth }; range = "month"; shown = monthStart(d.start); tab = "cal"; openDay = d.key; pickedMonth = null; window.scrollTo(0, 0); redraw(); }); }
     grid.append(sq);
   }
   return el("section", { className: "card ysq-card" }, el("div", { className: "spread" }, el("h3", { textContent: L("The year, a square a day", "這一年，一天一格") }),
-    el("span", { className: "muted small", textContent: L("Darker: more work. Click a day to open it.", "顏色越深，做得越多。點一天就能打開。") })),
+    el("span", { className: "muted small", textContent: pickedMonth != null && months ? L(`${monthName(new Date(new Date(shown).getFullYear(), pickedMonth, 1))} is framed. Click a day to open it.`, `${monthName(new Date(new Date(shown).getFullYear(), pickedMonth, 1))}有框。點一天就能打開。`) : L("Darker: more work. Click a day to open it.", "顏色越深，做得越多。點一天就能打開。") })),
     el("div", { className: "ysq-wrap" }, grid), el("div", { className: "peek-ticks muted" }, Array.from({ length: 12 }, (_, i) => el("span", { textContent: zh ? `${i + 1}月` : new Date(2026, i, 1).toLocaleDateString(L("en-GB", "en-GB"), { month: "short" }) }))));
 }
 
 /** The chart: each day (a year: each month), split by category: the work, the breaks, or both; the one before as an
- *  outline; the daily goal as a line. A week or a month: click a day for a quick look. A year: click a month and the page is that month. */
+ *  outline; the daily goal as a line. A week or a month: click a day for a quick look. A year: click a month and its strip opens under the chart. */
 function workChart(days, last, st, redraw, months, lastMonths) {
   const yr = range === "year", goalH = st?.dailyGoal || 0, today = dayKey(Date.now());
   const parts = (ds) => {
@@ -411,10 +605,10 @@ function workChart(days, last, st, redraw, months, lastMonths) {
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, class: "wchart", role: "img", "aria-label": yr ? L("Each month", "每個月") : L("Each day", "每一天") });
   for (let t = 0; t < max; t += step0) { svg.append(svgEl("line", { x1: padL, x2: W, y1: y(t), y2: y(t), class: "grid" }), svgEl("text", { x: padL - 6, y: y(t) + 4, "text-anchor": "end", class: "lab" }, `${Math.round(t / 3600e3)}h`)); }
   if (showGoal) svg.append(svgEl("line", { x1: padL, x2: W, y1: y(goalH * 3600e3), y2: y(goalH * 3600e3), class: "goal" }), svgEl("text", { x: W - 2, y: y(goalH * 3600e3) - 5, "text-anchor": "end", class: "lab" }, L(`goal ${goalH} h`, `目標 ${goalH} 小時`)));
-  const picked = yr ? yearMonth : peek;
+  const picked = yr ? pickedMonth : peek;
   units.forEach((u, i) => {
     const cx = padL + slot * i + slot / 2, x = cx - bw / 2, on = picked === u.key;
-    const g = svgEl("g", { class: "col" + (on ? " on" : "") + (picked != null && !on ? " dim" : "") + (u.future ? " future" : ""), tabindex: u.future ? "-1" : "0", role: "button", "aria-label": `${u.long}: ${hm(u.v)}`, "data-ms": String(Math.round(u.work)) });
+    const g = svgEl("g", { class: "col" + (on ? " on" : "") + (picked != null && !on ? " dim" : "") + (u.future ? " future" : ""), tabindex: u.future ? "-1" : "0", role: "button", "aria-label": `${u.long}: ${hm(u.v)}`, "data-ms": String(Math.round(u.work)), ...(yr ? { "data-m": String(u.key), "aria-expanded": String(on) } : {}) });
     g.append(svgEl("rect", { x: cx - slot / 2, y: top, width: slot, height: H - top - padB, class: "hit" }));
     if (u.was > 0) g.append(svgEl("rect", { x: x - 2, y: y(u.was), width: bw + 4, height: Math.max(1, y(0) - y(u.was)), rx: 3, class: "was" }));
     let acc = 0;
@@ -427,7 +621,7 @@ function workChart(days, last, st, redraw, months, lastMonths) {
     svg.append(g);
     if (n <= 12 || i % 2 === 0 || u.today) svg.append(svgEl("text", { x: cx, y: H - 7, "text-anchor": "middle", class: "lab" + (on || u.today ? " strong" : "") }, u.label));
     if (!u.future) {
-      const pickIt = () => { if (yr) yearMonth = yearMonth === u.key ? null : u.key; else peek = peek === u.key ? null : u.key; redraw(); };
+      const pickIt = () => { if (yr) { pickedMonth = pickedMonth === u.key ? null : u.key; refocus = `.wchart .col[data-m="${u.key}"]`; } else peek = peek === u.key ? null : u.key; redraw(); };
       g.addEventListener("click", pickIt); g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pickIt(); } });
     }
   });
@@ -441,7 +635,8 @@ function workChart(days, last, st, redraw, months, lastMonths) {
   const head = el("div", { className: "spread" }, el("h3", { textContent: yr ? L("Each month, by category", "每個月，依分類") : L("Each day, by category", "每一天，依分類") }), show);
   const legendRow = el("span", { className: "legend" }, ...[...new Map(units.flatMap((u) => u.parts.map((p) => [p[2], p[0]]))).entries()].slice(0, 8).map(([nm, c]) => legend(c, nm)), legend("transparent", prevName));
   legendRow.lastChild.classList.add("was-legend");
-  const hint = el("p", { className: "muted small", textContent: yr ? L("Click a month: the whole page shows that month.", "點一個月，整頁就換成那個月。") : L("Click a day for a quick look.", "點一天，看那天的樣子。") });
+  const hint = el("p", { className: "muted small", textContent: !yr ? L("Click a day for a quick look.", "點一天，看那天的樣子。") : pickedMonth == null ? L("Click a month: it opens here, under the chart. The year stays.", "點一個月，它會在圖表下面打開，這一頁還是整年。")
+    : L("Click it again, ✕ or Esc to close it. ← → the month before or after.", "再點一次、按 ✕ 或 Esc 關起來。← → 看前一個月、後一個月。") });
   // A week's or a month's day: a quick look, and the way to change it.
   let look = null;
   const d = !yr && peek ? days.find((x) => x.key === peek) : null;
@@ -461,16 +656,17 @@ function workChart(days, last, st, redraw, months, lastMonths) {
       el("span", { className: "muted small", textContent: L(`Work ${hm(d.work)} · breaks ${hm(d.breaks)}${d.rounds ? ` · ${d.rounds} Pomodoros` : ""}${d.away >= 60e3 ? ` · away ${hm(d.away)}` : ""}`, `工作 ${hm(d.work)} · 休息 ${hm(d.breaks)}${d.rounds ? ` · 番茄鐘 ${d.rounds} 輪` : ""}${d.away >= 60e3 ? ` · 離開 ${hm(d.away)}` : ""}`) }),
       strip, el("div", { className: "peek-ticks muted" }, ["6", "9", "12", "15", "18", "21", "23"].map((h) => el("span", { textContent: h }))));
   }
-  return el("section", { className: "card chart-card" }, head, legendRow, hint, svg, look);
+  return el("section", { className: "card chart-card" }, head, legendRow, hint, svg, look, yr && pickedMonth != null ? monthStrip(months, lastMonths, st, redraw) : null);
 }
 const legend = (c, t) => { const s = el("span", { textContent: t }); s.style.setProperty("--c", c); return s; };
 
 /**
  * Make a picture: a little card of this week (month, year) or today, saved as an image in Downloads. Nothing is sent
  * anywhere. Six designs; the sticker is one of ten picked at random from photos by the photographers who let us
- * share their photos (PICTURE_BY), with their credit on the card.
+ * share their photos (PICTURE_BY), with their credit on the card. Then, if you like, Decorate (card-deco.js: doodles
+ * and badges, up to 6, each design with its own layout) and Download. The card is drawn on a canvas (card-draw.js).
  */
-const PICTURE_BY = ["Blumoon", "Lyrac", "NGMin", "otter", "alitasdepollo"];
+const PICTURE_BY = ["Blumoon", "Lyrac", "NGMin", "otter", "KIU", "PKYU", "alitasdepollo"];
 let pictureKind = "week";
 async function sharePicture(days, st) {
   const work = total(days, "work"), rounds = total(days, "rounds"), top = mergeTasks(days).find((t) => t.name), best = days.reduce((a, d) => (d.work > a.work ? d : a), days[0]);
@@ -483,118 +679,130 @@ async function sharePicture(days, st) {
   const pool = (credits?.stickers || []).filter((s) => { const t = [].concat(credits.credits?.[s.source] || []); return t.length && t.every((x) => PICTURE_BY.includes(x)); });
   const nameOf = (s) => [].concat(credits.credits[s.source]).map((t) => credits.people?.[t]?.name || (t === "alitasdepollo" ? "alitasdepollos" : t)).join(" & ");
   const urlOf = (s) => `photos/stickers/${s.set}/${String(s.name).split("/").map(encodeURIComponent).join("/")}`;
-  let ten = [], pick = null;
-  const shuffle = () => { ten = pool.slice().sort(() => Math.random() - 0.5).slice(0, 10); pick = ten[0] || null; };
-  shuffle();
 
   const KINDS = [["week", range === "week" ? L("My week", "我的這一週") : range === "month" ? L("My month", "我的這個月") : L("My year", "我的這一年")], ["day", L("My day", "我的今天")], ["pomo", L("Pomodoros", "番茄鐘")],
     ["thai", L("Thai word of the day", "今日泰文")], ["goal", L("Goal days", "達標天數")], ["month", range === "week" ? L("My week at a glance", "這一週一覽") : L("At a glance", "一覽")]];
-  const card = el("div", { className: "share-card" });
-  const bar = (i, h, hit) => el("i", { className: hit ? "hit" : "", style: `height:${Math.max(4, h)}px` });
-  function body() {
-    if (pictureKind === "day") return [el("span", { className: "share-k", textContent: new Date().toLocaleDateString(LOC, { weekday: "short", day: "numeric", month: "short" }) }),
-      st?.focus ? el("b", { className: "share-focus", textContent: st.focus }) : null, el("b", { className: "share-n", textContent: hm(st?.today || 0) }),
-      el("span", { textContent: [st?.rounds ? L(`${st.rounds} Pomodoros`, `番茄鐘 ${st.rounds} 輪`) : L("of work today", "今天的工作"), word ? L(`Thai word: ${word.th} (${word.en})`, `泰文：${word.th}（${word.en}）`) : ""].filter(Boolean).join(" · ") })];
-    if (pictureKind === "pomo") return [el("span", { className: "share-k", textContent: L(`Pomodoros · ${what}`, `番茄鐘 · ${what}`) }), el("b", { className: "share-n", textContent: String(rounds) }),
-      el("div", { className: "share-dots" }, Array.from({ length: Math.min(rounds, 40) }, () => el("i"))), rounds > 40 ? el("span", { textContent: L(`and ${rounds - 40} more`, `還有 ${rounds - 40} 輪`) }) : null];
-    if (pictureKind === "thai") return word ? [el("span", { className: "share-k", textContent: L("Thai word of the day", "今日泰文") }), el("b", { className: "share-th", lang: "th", textContent: word.th }),
-      el("span", {}, el("b", { textContent: word.rom || "" }), word.rom ? " · " : "", word.en)] : [el("b", { className: "share-what", textContent: L("No Thai word today", "今天沒有泰文單字") })];
-    if (pictureKind === "goal") { const most = Math.max(goal * 3600e3, ...past.map((d) => d.work), 1);
-      return [el("span", { className: "share-k", textContent: L(`Goal days · ${what}`, `達標天數 · ${what}`) }), el("b", { className: "share-n", textContent: goal ? `${goalDays} / ${past.length}` : "–" }),
-        el("span", { textContent: goal ? L(`days with ${goal} h of work`, `天工作滿 ${goal} 小時`) : L("No daily goal set", "還沒設每日目標") }),
-        el("div", { className: "share-bars" }, past.slice(-14).map((d, i) => bar(i, (d.work / most) * 80, goal && d.work >= goal * 3600e3)))]; }
-    if (pictureKind === "month") { const most = Math.max(...days.map((d) => d.work), 1);
-      return [el("span", { className: "share-k", textContent: what }), el("b", { className: "share-n", textContent: hm(work) }), el("span", { textContent: L(`of work · ${past.filter((d) => d.work > 60e3).length} days`, `的工作 · ${past.filter((d) => d.work > 60e3).length} 天`) }),
-        el("div", { className: "share-cal" }, days.slice(0, 31).map((d) => el("i", { style: `opacity:${d.work ? 0.25 + 0.75 * d.work / most : 0.1}` })))]; }
-    return [el("span", { className: "share-k", textContent: what }), el("b", { className: "share-n", textContent: hm(work) }), el("span", { textContent: rounds ? L(`of work · ${rounds} Pomodoros`, `的工作 · 番茄鐘 ${rounds} 輪`) : L("of work", "的工作") }),
-      top ? el("span", { textContent: L(`Most: ${top.name}`, `做最多：${top.name}`) }) : null,
-      best?.work ? el("span", { textContent: L(`Best day: ${new Date(best.start).toLocaleDateString(LOC, { weekday: "short", month: "short", day: "numeric" })}`, `最好的一天：${new Date(best.start).toLocaleDateString(LOC, { month: "numeric", day: "numeric", weekday: "short" })}`) }) : null];
+  // Each design's words and little pictures (card-draw.js draws them): { kicker, focus, big, thai, lines, marks }
+  function model(kind) {
+    if (kind === "day") return { kicker: new Date().toLocaleDateString(LOC, { weekday: "short", day: "numeric", month: "short" }), focus: st?.focus || "", big: hm(st?.today || 0),
+      lines: [[st?.rounds ? L(`${st.rounds} Pomodoros`, `番茄鐘 ${st.rounds} 輪`) : L("of work today", "今天的工作"), word ? L(`Thai word: ${word.th} (${word.en})`, `泰文：${word.th}（${word.en}）`) : ""].filter(Boolean).join(" · ")] };
+    if (kind === "pomo") return { kicker: L(`Pomodoros · ${what}`, `番茄鐘 · ${what}`), big: String(rounds), lines: [],
+      marks: { dots: Math.min(rounds, 40), more: rounds > 40 ? L(`and ${rounds - 40} more`, `還有 ${rounds - 40} 輪`) : "" } };
+    if (kind === "thai") return word ? { kicker: L("Thai word of the day", "今日泰文"), big: word.th, thai: true, lines: [[word.rom || "", word.en].filter(Boolean).join(" · ")] }
+      : { kicker: L("Thai word of the day", "今日泰文"), big: "", lines: [L("No Thai word today", "今天沒有泰文單字")] };
+    if (kind === "goal") { const most = Math.max(goal * 3600e3, ...past.map((d) => d.work), 1);
+      return { kicker: L(`Goal days · ${what}`, `達標天數 · ${what}`), big: goal ? `${goalDays} / ${past.length}` : "–",
+        lines: [goal ? L(`days with ${goal} h of work`, `天工作滿 ${goal} 小時`) : L("No daily goal set", "還沒設每日目標")],
+        marks: { bars: past.slice(-14).map((d) => ({ f: d.work / most, hit: !!goal && d.work >= goal * 3600e3 })) } }; }
+    if (kind === "month") { const most = Math.max(...days.map((d) => d.work), 1);
+      return { kicker: what, big: hm(work), lines: [L(`of work · ${past.filter((d) => d.work > 60e3).length} days`, `的工作 · ${past.filter((d) => d.work > 60e3).length} 天`)],
+        marks: { cal: days.slice(0, 31).map((d) => (d.work ? d.work / most : 0)) } }; }
+    return { kicker: what, big: hm(work), lines: [rounds ? L(`of work · ${rounds} Pomodoros`, `的工作 · 番茄鐘 ${rounds} 輪`) : L("of work", "的工作"),
+      top ? L(`Most: ${top.name}`, `做最多：${top.name}`) : "",
+      best?.work ? L(`Best day: ${new Date(best.start).toLocaleDateString(LOC, { weekday: "short", month: "short", day: "numeric" })}`, `最好的一天：${new Date(best.start).toLocaleDateString(LOC, { month: "numeric", day: "numeric", weekday: "short" })}`) : ""] };
   }
-  const kinds = el("div", { className: "share-kinds", role: "radiogroup", "aria-label": L("Which card", "哪一種卡片") });
-  const strip = el("div", { className: "share-strip", role: "radiogroup", "aria-label": L("The sticker", "貼圖") });
-  function draw() {
-    card.className = `share-card k-${pictureKind}`;
-    card.replaceChildren(el("span", { className: "muted small share-brand", textContent: "ML WorkHelp" }), ...body().filter(Boolean),
-      pick ? el("img", { className: "share-st", src: urlOf(pick), alt: "" }) : deco("app-data-sum", "share-deco"),
-      pick ? el("span", { className: "share-credit", textContent: L(`Sticker from a photo by ${nameOf(pick)}`, `貼圖取自 ${nameOf(pick)} 的照片`) }) : null);
-    kinds.replaceChildren(...KINDS.map(([k, t]) => { const b = el("button", { type: "button", className: "chip" + (k === pictureKind ? " on" : ""), role: "radio", "aria-checked": String(k === pictureKind), textContent: t }); b.addEventListener("click", () => { pictureKind = k; draw(); }); return b; }));
-    strip.replaceChildren(...ten.map((s) => { const b = el("button", { type: "button", className: s === pick ? "on" : "", role: "radio", "aria-checked": String(s === pick), "aria-label": L(`Sticker, photo by ${nameOf(s)}`, `貼圖，照片：${nameOf(s)}`) },
-      el("img", { src: urlOf(s), alt: "", "data-credit": L(`Photo: ${nameOf(s)}`, `照片：${nameOf(s)}`) })); b.addEventListener("click", () => { pick = s; draw(); }); return b; }));
-  }
-  const { box } = modal(L("Make a picture", "存成圖片"));
-  box.classList.add("share-box");
-  const again = el("button", { type: "button", className: "btn small", textContent: L("Shuffle: 10 new ones", "換一批：10 張") });
-  again.addEventListener("click", () => { shuffle(); draw(); });
-  const save = el("button", { type: "button", className: "btn primary", textContent: L("Save to Downloads", "存到下載") });
-  save.addEventListener("click", async () => {
-    const r = card.getBoundingClientRect();
-    const file = await host.savePicture?.({ x: Math.round(r.x), y: Math.round(r.y), width: Math.round(r.width), height: Math.round(r.height) }, what);
-    toast(file ? L("Saved to Downloads", "已存到下載") : L("Couldn't save it", "沒辦法存"));
-  });
-  box.append(el("div", { className: "share-layout" }, el("div", {}, card, el("p", { className: "muted small", textContent: L("Saved as an image in your Downloads folder; nothing is sent anywhere.", "存成圖片放在「下載」資料夾，不會傳到任何地方。") }), el("div", { className: "row-flex" }, save)),
-    el("div", { className: "share-side" }, el("b", { textContent: L("Card", "卡片") }), kinds,
-      pool.length ? el("div", { className: "spread" }, el("b", { textContent: L("Sticker", "貼圖") }), again) : null, pool.length ? strip : null,
-      pool.length ? el("p", { className: "muted small", textContent: L("Ten at random, from photos by Blumoon, Lyrac, NGMin, otter and alitasdepollos.", "隨機 10 張，來自 Blumoon、Lyrac、NGMin、otter 和 alitasdepollos 的照片。") }) : null)));
-  draw();
+  const fileWords = (kind) => (kind === "week" || kind === "month" ? what : KINDS.find(([k]) => k === kind)?.[1] || what);
+  await openPicture({ kinds: KINDS, kind: pictureKind, model, pool, urlOf, creditOf: nameOf, what: fileWords, onKind: (k) => { pictureKind = k; } });
 }
 
 // ---- 📅 Calendar: a week's day cards, a month's calendar, a year's months; a day opens below, to look at and change ----
 
-function calendarTab(main, days, st, redraw) {
+function calendarTab(main, days, st, redraw, weeks = null) {
   const pomo = false, today = dayKey(Date.now()); // (the hours, whatever way you keep time)
   const openIt = (d) => { if (d.start > Date.now()) return; openDay = openDay === d.key ? null : d.key; closeDayLog(); redraw(); };
   const keyed = (node, fn) => { node.addEventListener("click", fn); node.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn(); } }); return node; };
+  if (markTask != null) main.append(markRow(redraw));
+  const td = markTask != null ? taskDays(days, markTask) : null;
   if (range === "week") {
     main.append(el("section", { className: "week-cards", "aria-label": L("Each day", "每一天") }, days.map((d) => {
       const future = d.start > Date.now();
-      return keyed(el("div", { className: "wcard" + (d.key === today ? " today" : "") + (openDay === d.key ? " open" : "") + (future ? " future" : ""), role: "button", tabIndex: future ? -1 : 0, "aria-expanded": String(openDay === d.key) },
+      const tms = td?.byDay[d.key];
+      return keyed(el("div", { className: "wcard" + (d.key === today ? " today" : "") + (openDay === d.key ? " open" : "") + (future ? " future" : "") + (tms ? " mark" : ""), role: "button", tabIndex: future ? -1 : 0, "aria-expanded": String(openDay === d.key) },
         el("span", { className: "muted", textContent: `${dayName(d.start)} · ${dateShort(d.start)}` }),
         el("b", { textContent: pomo ? (d.rounds ? `🍅 ${d.rounds}` : "–") : d.work >= 60e3 ? hm(d.work) : "–" }),
         el("div", { className: "mini" }, el("i", { style: `width:${Math.min(100, (d.work / (10 * 3600e3)) * 100)}%;background:var(--work)` }), el("i", { style: `width:${Math.min(40, (d.breaks / (10 * 3600e3)) * 100)}%;background:var(--break)` })),
         el("span", { className: "ell muted", textContent: d.focus ? "" + d.focus : future ? "" : L("(no focus set)", "（沒有設定主題）") }),
-        !pomo && d.rounds ? el("span", { className: "tom", textContent: `🍅 ${d.rounds}` }) : null), () => openIt(d));
+        !pomo && d.rounds ? el("span", { className: "tom", textContent: `🍅 ${d.rounds}` }) : null, tms ? el("span", { className: "tdot", textContent: `${taskName(markTask)} · ${hS(tms)}` }) : null), () => openIt(d));
     })));
-  } else if (range === "month") main.append(calendar(days, st, openIt, pomo));
+  } else if (range === "month") main.append(calendar(days, st, openIt, pomo, weeks, redraw));
   else main.append(months(days, redraw, pomo));
   const d = range !== "year" && days.find((x) => x.key === openDay);
   if (d) main.append(dayPanel(d, st, redraw));
   else if (range !== "year") main.append(el("p", { className: "muted", textContent: L("Click a day to see what you did, and change it.", "點一天看那天做了什麼，也能直接改。") }));
 }
 
-/** A month: a calendar, each day with its focus and hours (the deeper the green, the more work). */
-function calendar(days, st, openIt, roundsOnly = false) {
+/**
+ * A month: a calendar, each day with its focus and hours (the deeper the green, the more work), a pink dot on the days
+ * that reached the goal. With `weeks` (the whole weeks around the month, analysed): every row is a whole week, Monday
+ * to Sunday, and ends in a Week cell (its number, dates, hours and goal days; click it for that week). Days of the month
+ * before or after are faded, count in their week's total, and a note under the row says so.
+ */
+function calendar(days, st, openIt, roundsOnly = false, weeks = null, redraw = null) {
   const most = Math.max(3600e3, ...days.map((d) => d.work)), today = dayKey(Date.now());
-  const lead = (new Date(days[0].start).getDay() + 6) % 7;
-  const grid = el("div", { className: "cal-grid" },
-    Array.from({ length: 7 }, (_, k) => el("span", { className: "cal-wd", textContent: dayName(addDays(weekStart(days[0].start), k)) })),
-    Array.from({ length: lead }, () => el("span")));
-  for (const d of days) {
-    const future = d.start > Date.now();
-    const cell = el("div", { className: "cal-day" + (d.key === today ? " today" : "") + (openDay === d.key ? " open" : "") + (future ? " future" : ""), role: "button", tabIndex: future ? -1 : 0,
-      title: future ? "" : L("Click to see this day", "點一下看這一天"), "aria-expanded": String(openDay === d.key) },
+  const first = days[0].start, end = days[days.length - 1].end, withWeeks = !!weeks && !roundsOnly;
+  const lead = (new Date(first).getDay() + 6) % 7, td = markTask != null ? taskDays(days, markTask) : null;
+  const grid = el("div", { className: "cal-grid" + (withWeeks ? " with-weeks" : "") },
+    Array.from({ length: 7 }, (_, k) => el("span", { className: "cal-wd", textContent: dayName(addDays(weekStart(first), k)) })),
+    withWeeks ? el("span", { className: "cal-wd cal-wk-head", textContent: L("Week", "週") }) : null);
+  const cellOf = (d, row) => {
+    const future = d.start > Date.now(), tms = td?.byDay[d.key];
+    const cell = el("div", { className: "cal-day" + (d.key === today ? " today" : "") + (openDay === d.key ? " open" : "") + (future ? " future" : "") + (tms ? " mark" : ""), role: "button", tabIndex: future ? -1 : 0,
+      title: future ? "" : L("Click to see this day", "點一下看這一天"), "aria-expanded": String(openDay === d.key), "data-row": row, "data-key": d.key },
       el("b", { textContent: String(new Date(d.start).getDate()) }),
+      !roundsOnly && !future && metGoal(d, st) ? el("i", { className: "gdot", title: L(`Goal met (${goalFor(d.start, st)} h)`, `達標（${goalFor(d.start, st)} 小時）`) }) : null,
       d.focus ? el("span", { className: "ell", textContent: d.focus }) : null,
-      el("span", { className: "muted", textContent: roundsOnly ? (d.rounds ? `🍅 ${d.rounds}` : "") : d.work >= 3 * 60e3 ? `${(d.work / 3600e3).toFixed(1)} h` : "" }));
+      el("span", { className: "muted hrs", textContent: roundsOnly ? (d.rounds ? `🍅 ${d.rounds}` : "") : d.work >= 3 * 60e3 ? `${(d.work / 3600e3).toFixed(1)} h` : "" }),
+      tms ? el("span", { className: "tdot", textContent: hS(tms) }) : null);
     cell.style.setProperty("--h", String(roundsOnly ? Math.min(1, d.rounds / 8) : d.work / most));
     cell.addEventListener("click", () => openIt(d));
     cell.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openIt(d); } });
-    grid.append(cell);
+    return cell;
+  };
+  if (!withWeeks) { grid.append(...Array.from({ length: lead }, () => el("span")), ...days.map((d) => cellOf(d))); }
+  else {
+    const byKey = new Map(weeks.map((d) => [d.key, d])), inMonth = new Map(days.map((d) => [d.key, d]));
+    weekRows(first, end, weekStart, addDays).forEach((mon, row) => {
+      const seven = Array.from({ length: 7 }, (_, k) => byKey.get(dayKey(addDays(mon, k)))).filter(Boolean);
+      const n = isoWeek(mon), s = weekNumbers(seven, first, end, st, markTask);
+      for (const d of seven) {
+        if (inMonth.has(d.key)) { grid.append(cellOf(inMonth.get(d.key), row)); continue; }
+        grid.append(el("div", { className: "cal-day out", "data-row": row, title: L(`${monthName(d.start)}: counted in Week ${n}'s total`, `${monthName(d.start)}：算在第 ${n} 週的總數裡`) },
+          el("b", { textContent: dateShort(d.start) }), el("span", { className: "muted hrs", textContent: d.work >= 3 * 60e3 ? `${(d.work / 3600e3).toFixed(1)} h` : "" })));
+      }
+      const label = L(`Week ${n}`, `第 ${n} 週`), dates = weekRange(mon);
+      const wk = el("button", { type: "button", className: "cal-wk", "data-row": row, "data-week": String(n), "data-ms": String(Math.round(s.total)), title: L(`${label}, Monday ${dateShort(mon)} to Sunday ${dateShort(addDays(mon, 6))}: open it in Data › Week`, `${label}，${dateShort(mon)}（一）到 ${dateShort(addDays(mon, 6))}（日）：在「數據 › 週」打開`) },
+        el("span", { className: "wk-chip", textContent: label }), el("span", { className: "rg", textContent: dates }),
+        el("b", { textContent: s.total ? hS(s.total) : "–" }), s.soFar ? el("span", { className: "gl so-far", textContent: L("so far", "到目前") }) : null,
+        s.goalDays ? el("span", { className: "gl", textContent: L(`${s.goalDays} at goal`, `${s.goalDays} 天達標`) }) : null,
+        s.task ? el("span", { className: "tdot", textContent: hS(s.task) }) : null);
+      wk.addEventListener("click", () => { backTo = { label: L(`‹ Back to ${new Date(first).toLocaleDateString(LOC, { year: "numeric", month: "long" })}`, `‹ 回到 ${new Date(first).toLocaleDateString(LOC, { year: "numeric", month: "long" })}`), range: "month", shown: first, tab: "cal" };
+        range = "week"; shown = mon; tab = "cal"; openDay = null; peek = null; window.scrollTo(0, 0); redraw?.(); });
+      wk.addEventListener("mouseenter", () => grid.querySelectorAll(`[data-row="${row}"]`).forEach((x) => x.classList.add("hl")));
+      wk.addEventListener("mouseleave", () => grid.querySelectorAll(".hl").forEach((x) => x.classList.remove("hl")));
+      grid.append(wk);
+      if (s.out) grid.append(el("div", { className: "cal-wk-note", "data-row": row, textContent: s.out === 1 ? L(`Week ${n} · includes 1 day of ${monthName(s.outMonth)}`, `第 ${n} 週・含${monthName(s.outMonth)}的 1 天`)
+        : L(`Week ${n} · includes ${s.out} days of ${monthName(s.outMonth)}`, `第 ${n} 週・含${monthName(s.outMonth)}的 ${s.out} 天`) }));
+    });
   }
+  const goalH = st?.dailyGoal || 0;
   return el("section", { className: "card cal-card" }, el("div", { className: "spread" }, el("h3", { textContent: roundsOnly ? L("Each day's rounds", "每天的番茄鐘") : L("Each day's focus and hours", "每天的主題和時數") }),
-    el("span", { className: "muted", textContent: L("Today has a frame", "今天有外框") })), grid);
+    el("span", { className: "muted", textContent: L("Today has a frame", "今天有外框") })), grid,
+    withWeeks ? el("div", { className: "cal-legend" }, goalH ? el("span", { className: "gd", textContent: L(`Goal met (${goalH} h)`, `達標（${goalH} 小時）`) }) : null,
+      el("span", { textContent: L("Week: Monday to Sunday, the whole week, with the days from the month before or after (faded). Click one for that week.", "週：週一到週日一整週，也算進前後月份的日子（淡色）。點一下看那一週。") })) : null);
 }
 
 /** A year: the twelve months; click one to see its calendar. */
 function months(days, redraw, roundsOnly = false) {
-  const ms = byMonth(days).map((m) => ({ ...m, work: total(m.days, "work"), rounds: total(m.days, "rounds"), top: mergeTasks(m.days).find((t) => t.name) }));
+  const ms = byMonth(days).map((m) => ({ ...m, work: total(m.days, "work"), rounds: total(m.days, "rounds"), top: mergeTasks(m.days).find((t) => t.name), td: markTask != null ? taskDays(m.days, markTask) : null }));
   const most = Math.max(3600e3, ...ms.map((m) => m.work));
   return el("section", { className: "card year-card" }, el("h3", { textContent: L("Each month · click one to see its calendar", "每個月・點一個月看那個月的月曆") }),
     el("div", { className: "year-grid" }, ms.map((m) => {
       const future = m.start > Date.now();
-      const b = el("button", { type: "button", className: "year-month" + (future ? " future" : ""), disabled: future },
+      const b = el("button", { type: "button", className: "year-month" + (future ? " future" : "") + (m.td?.days ? " mark" : ""), disabled: future },
         el("b", { textContent: monthName(m.start) }),
         el("span", { textContent: roundsOnly ? (m.rounds ? `🍅 ${m.rounds}` : "–") : m.work ? hm(m.work) : "–" }),
         el("span", { className: "muted ell", textContent: !roundsOnly && m.top ? L(`Most: ${m.top.name}`, `最多：${m.top.name}`) : "" }),
+        m.td?.days ? el("span", { className: "tdot", textContent: `${m.td.days === 1 ? L("1 day", "1 天") : L(`${m.td.days} days`, `${m.td.days} 天`)} · ${hS(m.td.ms)}` }) : null,
         el("i", { style: `width:${(roundsOnly ? Math.min(1, m.rounds / 80) : m.work / most) * 100}%` }));
       b.addEventListener("click", () => { range = "month"; shown = m.start; openDay = null; redraw(); });
       return b;

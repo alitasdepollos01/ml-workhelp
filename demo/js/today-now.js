@@ -153,7 +153,7 @@ export function doneForToday() { endDay(state.st, () => window.__mlwhApp?.draw()
 
 /** The celebration: three stickers from the buddies' own (a different three each time), confetti, today in a few lines. */
 export async function celebrate(st, ended = "") {
-  document.querySelector(".cele")?.remove();
+  document.querySelector(".cele:not(.pins-cele)")?.remove(); // (a pin moment stays: it has its own Later)
   let pics = [];
   try {
     const lib = await host.library();
@@ -362,7 +362,7 @@ function undoNote(text, undo) {
 }
 
 /** A picker is open (a redraw from the clock would close it). */
-export const nowBusy = () => !!picker || !!document.querySelector(".cele");
+export const nowBusy = () => !!picker || !!document.querySelector(".cele:not(.pins-cele)");
 /** Open the task picker on a new task (the menu's "Name what I'm working on…"). */
 export function askNewTask() { picker = "new-task"; }
 export { wayName };

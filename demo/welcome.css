@@ -75,6 +75,7 @@ html[data-style="f"] .welcome .wframe::before { z-index: 6; pointer-events: none
 .choice-body > b { font-size: 15px; }
 .choice-body > span { font-size: 13px; line-height: 1.45; }
 .choice .count { font-size: 12.5px; }
+.choice .own-note { font-size: 12.5px; }
 .choice.keep .for { color: var(--focus, #3f7d5c); font-size: 12.5px; }
 
 /* the photos page: the disclaimer, then the download */
@@ -147,6 +148,7 @@ html[data-style="f"] .welcome .wframe::before { z-index: 6; pointer-events: none
 .s9w .pics figure { margin: 0; } .s9w .pics img { width: 100%; display: block; border-radius: 10px; border: 1px solid var(--line); }
 .s9w .pics figcaption { font-size: 12px; color: var(--desk-muted, #888); margin-top: 3px; }
 .s9w .art.peek { position: absolute; right: -8px; bottom: -18px; max-height: 92px; }
+.s9w .pics { padding-bottom: 72px; } /* (Muv peeks in under the second caption, not over it: en and th captions run long) */
 .keep-pomo .s9w .pics { display: none; }
 
 /* 11. the email */
@@ -217,3 +219,28 @@ img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
 /* a thank-you card's profile picture (only for those who said yes); wanwannjeab's Muvs small beside it */
 .ty-card .ty-pic { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--control-bg), 0 0 0 3px var(--line); }
 .ty-card .muvs.small { position: absolute; left: 6px; top: 5px; height: 16px; } .ty-card .muvs.small img { height: 16px; }
+
+/* ---- 1.3: the lean welcome's own pieces (proto/welcome, welcome-new.css round 2) ---- */
+/* page 1: the doodles line under the style picker; the restore offer is about-cards.css (.welcome .pd-offer) */
+.doodle-line { font-size: 13px; color: var(--desk-muted); margin: -2px 0 0; }
+.doodle-line b:first-child { color: var(--bar); }
+.s1 .prefs { gap: 5px; }
+.s1 .col { gap: 9px; }
+.s1.step { padding-top: 16px; }
+/* pictures of the app (art/welcome-<name>-<lang>.jpg) */
+.wpic { border-radius: 10px; border: 1px solid var(--line); background: var(--control-bg); }
+img[data-pic] { aspect-ratio: auto !important; height: auto; object-fit: contain; }
+/* 7. pins: four lines and the Board, Muv peeking at its side */
+.lean-pins .how { gap: 9px; }
+.s13p .pic { align-content: center; position: relative; }
+.board-fig { margin: 0; width: 100%; }
+.board-fig img { width: 100%; display: block; max-height: 340px; object-fit: cover !important; object-position: top; }
+.board-fig figcaption { font-size: 12px; color: var(--desk-muted); margin-top: 4px; }
+.welcome .art.peek.muv-peek { position: absolute; right: -16px; top: 92px; bottom: auto; max-height: 76px; z-index: 2; }
+@media (max-width: 720px) { .welcome .art.peek.muv-peek { display: none; } }
+/* the email page: backups and new photos, two short lines */
+.s11c .also { font-size: 13.5px; margin-top: 4px; }
+/* the thank-you cards: a profile picture for everyone who said yes (no tick); 13+ cards, two rows */
+.ty-card.said-yes .ty-pic { width: 40px; height: 40px; }
+.ty-cards { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+@media (max-width: 720px) { .ty-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

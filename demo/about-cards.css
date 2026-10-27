@@ -1,0 +1,92 @@
+/* Settings › About: the "Updates" and "Backup & restore" cards, their dialogs, and the welcome window's restore
+   offer (js/about-cards.js loads this file itself). From the approved prototype (proto/settings/app/proto.css), on the
+   app's own tokens (--line, --control-bg, --desk-ink, --desk-muted, --primary, --focus, --bar). Dark: prefers-color-scheme (the app sets it, nativeTheme).
+   The pretend macOS save / open windows aren't here: the app opens the real ones. */
+:root { --pd-red: #e5484d; --pd-ok: #2f8f5b; }
+:root:where([data-mode="dark"]){ --pd-red: #ff6b6f; --pd-ok: #7fd3a2; }
+ 
+
+/* the red dot: a new version is ready (menu, About & updates, the version line) */
+.nav-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--pd-red); box-shadow: 0 0 0 2px var(--control-bg, #fff); flex: none; vertical-align: middle; }
+.appwin #nav button[data-tab="settings"] .nav-dot { margin-left: auto; }
+.appwin #nav .sub button .nav-dot { margin-left: 6px; }
+.pd-newver { display: inline-flex; align-items: center; gap: 6px; color: var(--desk-ink); font-size: 13px; }
+
+/* rows: a label with a small line under it */
+.appwin .pd-field .pd-lbl { display: grid; gap: 1px; min-width: 0; }
+.appwin .pd-field .pd-lbl small { font-size: 12px; }
+.appwin .pd-note { margin: -2px 0 0; }
+.appwin .pd-hr { border: 0; border-top: 1px dashed var(--line); margin: 2px 0; width: 100%; }
+.appwin .pd-btns { justify-content: flex-end; }
+.appwin .pd-new { color: var(--desk-ink); }
+.appwin .pd-new::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--pd-red); margin-right: 6px; vertical-align: 1px; }
+.appwin .pd-quiet { display: flex; gap: 8px; align-items: flex-start; margin: 0; font-size: 12.5px; color: var(--desk-muted); background: color-mix(in srgb, var(--focus) 9%, transparent); border-radius: 8px; padding: 7px 10px; }
+.appwin .pd-tick { color: var(--pd-ok); font-weight: 700; }
+.appwin .pd-seg button { white-space: nowrap; }
+.appwin .pd-sub { display: grid; gap: 4px; padding: 8px 10px; border-left: 3px solid var(--focus); background: color-mix(in srgb, var(--focus) 6%, transparent); border-radius: 0 8px 8px 0; }
+.appwin .pd-where { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; margin-top: -4px; overflow-wrap: anywhere; }
+.appwin .btn.pd-link { border: 0; background: none; padding: 0 2px; color: var(--desk-ink); text-decoration: underline; text-underline-offset: 2px; }
+.appwin .pd-what summary { cursor: pointer; font-size: 12.5px; color: var(--desk-muted); width: max-content; max-width: 100%; }
+.appwin .pd-what[open] summary { margin-bottom: 6px; }
+
+/* busy and progress */
+.pd-busy { display: inline-flex; align-items: center; gap: 8px; }
+.pd-spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--desk-muted, #888) 35%, transparent); border-top-color: var(--focus, #e8508a); animation: pd-spin .8s linear infinite; flex: none; }
+@keyframes pd-spin { to { transform: rotate(1turn); } }
+.pd-prog { display: inline-flex; align-items: center; gap: 8px; }
+.pd-prog progress { width: 160px; height: 8px; appearance: none; border: 0; border-radius: 99px; background: color-mix(in srgb, var(--desk-muted, #888) 25%, transparent); overflow: hidden; }
+.pd-prog progress::-webkit-progress-bar { background: transparent; }
+.pd-prog progress::-webkit-progress-value { background: var(--focus, #e8508a); border-radius: 99px; transition: width .3s; }
+.pd-prog progress::-moz-progress-bar { background: var(--focus, #e8508a); }
+
+/* the list of what's in a backup */
+.pd-inc { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border: 1px solid var(--line, #ddd); border-radius: 10px; overflow: hidden; font-size: 13px; }
+.pd-inc li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 10px; }
+.pd-inc li + li { border-top: 1px solid var(--line, #ddd); }
+.pd-inc li b { font-weight: 600; text-align: right; }
+
+/* the app's dialogs (also used on the welcome window, which has no .appwin) */
+.pd-dlg-back { position: fixed; inset: 0; background: rgba(20, 30, 24, .62); display: grid; place-items: center; z-index: 40; padding: 20px; }
+.pd-dlg-back .pd-dlg { background: var(--control-bg, #fff); color: var(--desk-ink, #222); border-radius: 14px; padding: 16px; display: grid; gap: 10px; width: min(480px, 94vw); max-height: 92vh; overflow: auto; box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .5); border: 1px solid var(--line, #ddd); }
+.pd-dlg .box-head b { font-size: 16px; }
+.pd-dlg-body { display: grid; gap: 10px; font-size: 13.5px; }
+.pd-dlg-body p { margin: 0; }
+.pd-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
+.pd-warn { background: color-mix(in srgb, var(--bar, #b4446a) 11%, transparent); border: 1px solid color-mix(in srgb, var(--bar, #b4446a) 35%, transparent); border-radius: 10px; padding: 8px 10px; }
+.pd-keep { background: color-mix(in srgb, var(--pd-ok) 10%, transparent); border-radius: 10px; padding: 8px 10px; }
+.pd-ok { font-weight: 600; }
+.pd-type { font: inherit; font-size: 15px; letter-spacing: .06em; border: 1px solid var(--line, #ccc); border-radius: 8px; padding: 6px 10px; background: var(--control-bg, #fff); color: var(--desk-ink, #222); width: 100%; box-sizing: border-box; }
+.pd-file { display: flex; gap: 10px; align-items: center; min-width: 0; text-align: left; }
+.pd-file > span:last-child { display: grid; min-width: 0; overflow-wrap: anywhere; }
+.pd-zip { flex: none; width: 30px; height: 36px; border-radius: 4px; background: linear-gradient(#cfd6de, #b4bdc8); color: #fff; font: 700 9px/36px -apple-system, system-ui, sans-serif; text-align: center; letter-spacing: .04em; }
+.pd-zip.folder { height: 24px; width: 32px; border-radius: 3px 3px 4px 4px; background: linear-gradient(#7cc0f5, #4ea3e8); position: relative; }
+.pd-zip.folder::before { content: ""; position: absolute; left: 0; top: -4px; width: 13px; height: 6px; border-radius: 2px 2px 0 0; background: #6cb4ef; }
+.pd-file-line { padding: 8px 10px; border: 1px solid var(--line, #ddd); border-radius: 10px; }
+
+/* buttons for those dialogs: the app's .btn, outside .appwin too */
+.pd-dlg .btn, .welcome .pd-offer .btn { font: inherit; font-size: 13px; border-radius: 8px; padding: 5px 12px; border: 1px solid var(--line, #ccc); background: var(--control-bg, #fff); color: var(--desk-ink, #222); cursor: pointer; }
+.pd-dlg .btn.primary, .welcome .pd-offer .btn.primary { background: var(--primary, var(--desk-ink)); color: var(--primary-ink, #fff); border-color: var(--primary, var(--desk-ink)); font-weight: 600; }
+.btn.danger-fill { background: var(--bar, #b4446a); border-color: var(--bar, #b4446a); color: #fff; font-weight: 600; }
+:where(html[data-mode="dark"]) .btn.danger-fill{ color: #2a1520; }
+ 
+.btn:disabled { opacity: .5; cursor: default; }
+
+/* press and hold to delete: the button fills from the left */
+.pd-hold { position: relative; overflow: hidden; isolation: isolate; min-width: 150px; --hold: 0; touch-action: none; user-select: none; -webkit-user-select: none; }
+.pd-hold .pd-hold-fill { position: absolute; inset: 0; transform-origin: left; transform: scaleX(var(--hold)); background: rgba(0, 0, 0, .28); z-index: -1; }
+:where(html[data-mode="dark"]) .pd-hold .pd-hold-fill{ background: rgba(255, 255, 255, .45); }
+ 
+.pd-hold.ready { box-shadow: 0 0 0 3px color-mix(in srgb, var(--bar, #b4446a) 35%, transparent); }
+
+/* the welcome window's offer (about-cards.js restoreOffer) */
+.welcome .pd-offer { display: grid; gap: 8px; margin: 4px 0 12px; padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--focus, #e8508a); background: color-mix(in srgb, var(--focus, #e8508a) 8%, var(--control-bg, #fff)); color: var(--desk-ink, #222); font-size: 14px; }
+.welcome .pd-offer h2 { margin: 0; font-size: 17px; }
+.welcome .pd-offer p { margin: 0; }
+.welcome .pd-offer .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.welcome .pd-offer .muted { color: var(--desk-muted, #777); font-size: 12.5px; }
+.welcome .pd-offer .pd-inc { background: var(--control-bg, #fff); }
+.welcome .pd-offer .btn.plain { border: 0; background: none; text-decoration: underline; text-underline-offset: 2px; padding: 5px 4px; }
+.welcome .pd-offer h2 { text-transform: none; letter-spacing: 0; font-weight: 700; color: var(--desk-ink, #222); line-height: 1.3; }
+.pd-dlg .box-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.pd-err { color: var(--bar, #b4446a); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .pd-spin { animation-duration: 2.4s; } .pd-prog progress::-webkit-progress-value { transition: none; } }

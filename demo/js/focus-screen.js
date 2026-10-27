@@ -1,7 +1,7 @@
 // ⛶ The focus screen: for work away from the computer (reading, studying on paper). The window
 // goes full screen with one clock: the Pomodoro's ring counting down, or the work clock's big
-// count of today. Behind it one sticker (still, slowly walking, or round the screen's edges, a
-// new one now and then), photos from the photographers who gave permission, or nothing, at the
+// count of this stretch; under either, the day's total so far. Behind it one sticker (still, slowly walking, or round the screen's edges, a
+// new one now and then), photos from the photographers who gave permission and/or your own, or nothing, at the
 // brightness you pick, and the clock's colours, place and size (⚙, or Settings › Keeping time).
 // The buttons show when the mouse moves.
 // While it's open the screen stays on and sitting still isn't "away" (main.js).
@@ -9,11 +9,12 @@
 import { L, el, host, work, state, pad, toast } from "./app-common.js";
 import { doneForToday } from "./today-now.js";
 import { LOOK_DEFAULTS, applyLook, lookControls } from "./clock-look.js";
+import { photosFor, PHOTOGRAPHERS } from "./focus-photos.js";
 
 let box = null, ticker = 0, raf = 0, swapT = 0, hideT = 0, statusAt = 0, popOpen = false;
 let pool = { stickers: {}, photos: [] }, walker = null, lastRound = null;
 
-const opts = () => ({ bg: "sticker", move: "edge", sets: ["milk", "love", "together"], stickerEvery: 10, photosBy: ["Blumoon", "NGMin", "Lyrac", "otter"], photoEvery: 5,
+const opts = () => ({ bg: "sticker", move: "edge", sets: ["milk", "love", "together"], stickerEvery: 10, photosBy: PHOTOGRAPHERS, photoEvery: 5,
   bright: 35, lines: ["worked", "next"], auto: false, dim: true, ...LOOK_DEFAULTS, ...(state.st?.focusScreen || {}) });
 const save = (patch) => { host.settingText("focusScreen", JSON.stringify(patch)); state.st = { ...state.st, focusScreen: { ...opts(), ...patch } }; };
 const mmss = (ms) => { const s = Math.max(0, Math.round(ms / 1000)); return s >= 3600 ? `${Math.floor(s / 3600)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}` : `${Math.floor(s / 60)}:${pad(s % 60)}`; };
@@ -68,7 +69,7 @@ async function loadPool() {
     const off = new Set(lib.buddyOff || []);
     for (const set of ["milk", "love", "together", "others"]) pool.stickers[set] = (lib.stickers?.[set] || []).filter((s) => !off.has(`${set}/${decodeURIComponent(s.url.split("/").pop())}`)).map((s) => s.url);
     const credits = cr?.credits || {};
-    pool.photos = (lib.photos || []).map((p) => ({ url: p.url, by: credits[decodeURIComponent(p.url.split("/").pop())] || [], focus: p.focus || [0.5, 0.4], tall: p.height && p.width ? p.height > p.width * 1.1 : false }));
+    pool.photos = (lib.photos || []).map((p) => ({ url: p.url, by: credits[decodeURIComponent(p.url.split("/").pop())] || [], focus: p.focus || [0.5, 0.4], tall: p.height && p.width ? p.height > p.width * 1.1 : false, shipped: !!p.shipped }));
   } catch { /* nothing to show behind the clock: that's fine */ }
 }
 
@@ -79,27 +80,30 @@ function clockParts() {
   // (from when the app last counted: a status that arrives for something else mustn't restart the count)
   const from = st.measuredAt && Math.abs(now - st.measuredAt) < 60e3 ? st.measuredAt : statusAt;
   const live = (ms, counting) => ms + (counting ? Math.max(0, now - from) : 0);
+  const counting = !st.doneToday && (st.started || st.dayStart !== "ask");
+  // The day so far, under the clock (whichever way you keep time).
+  const today = live(st.today, counting && (st.keep === "both" ? st.pomoNow?.phase === "focus" && st.pomoNow.pausedLeft == null : !st.onBreak));
+  const day = st.goal ? L(`Today ${hm(today)} of ${st.goal} h`, `今天工作 ${hm(today)} / 目標 ${st.goal} 小時`) : L(`Today ${hm(today)}`, `今天工作 ${hm(today)}`);
   if (st.doneToday) return { kind: "big", big: mmss(st.today), sub: L("Done for today", "今天收工了") };
   if (b) {
     const left = b.until ? b.until - now : now - b.since;
     return { kind: st.keep === "both" ? "ring" : "big", color: "var(--fs-ring-brk)", pct: b.until ? ((now - b.since) / (b.until - b.since)) * 100 : 100, big: mmss(left),
-      sub: L("Break · stand up, drink some water", "休息 · 站起來、喝點水"), brk: true };
+      sub: L("Break · stand up, drink some water", "休息 · 站起來、喝點水"), day, brk: true };
   }
   if (st.keep === "both") {
     if (p?.phase === "focus") {
       const left = p.pausedLeft != null ? p.pausedLeft : p.endsAt - now, total = p.focus * 60e3;
       return { kind: "ring", color: "var(--fs-ring)", pct: (1 - left / total) * 100, big: mmss(left),
-        sub: (p.pausedLeft != null ? L("Paused · ", "暫停中 · ") : "") + L(`Round ${st.rounds + 1}`, `第 ${st.rounds + 1} 輪`), focusing: true, paused: p.pausedLeft != null };
+        sub: (p.pausedLeft != null ? L("Paused · ", "暫停中 · ") : "") + L(`Round ${st.rounds + 1}`, `第 ${st.rounds + 1} 輪`), day, focusing: true, paused: p.pausedLeft != null };
     }
-    return { kind: "ring", color: "var(--fs-ring)", pct: 0, big: `${st.pomo?.focus || 25}:00`, sub: L(`Ready for round ${st.rounds + 1}`, `準備開始第 ${st.rounds + 1} 輪`), ready: true };
+    return { kind: "ring", color: "var(--fs-ring)", pct: 0, big: `${st.pomo?.focus || 25}:00`, sub: L(`Ready for round ${st.rounds + 1}`, `準備開始第 ${st.rounds + 1} 輪`), day, ready: true };
   }
-  const counting = !st.doneToday && (st.started || st.dayStart !== "ask");
-  return { kind: "big", big: mmss(live(st.today, counting)), sub: L("worked today", "今天工作") + (st.goal ? L(` · goal ${st.goal} h`, ` · 目標 ${st.goal} 小時`) : "") };
+  // The work clock: this stretch, big (from zero after each break); the day's total under it.
+  return { kind: "big", big: mmss(live(st.stretch || 0, counting && st.stretch > 0)), sub: L("This stretch", "這一段"), day };
 }
 
 function lines() {
   const st = state.st || {}, o = opts(), out = [];
-  if (o.lines.includes("worked") && st.keep === "both") out.push(L(`Worked today <b>${hm(st.today)}</b>`, `今天工作 <b>${hm(st.today)}</b>`) + (st.goal ? L(` of ${st.goal} h`, ` / ${st.goal} 小時`) : ""));
   if (o.lines.includes("next")) {
     const n = (st.reminders || []).filter((r) => r.at > Date.now()).sort((a, b) => a.at - b.at)[0];
     if (n) { const t = new Date(n.at); out.push(`${L("Next", "下一個")}: <b>${pad(t.getHours())}:${pad(t.getMinutes())}</b> ${esc(n.text || "")}`); }
@@ -131,6 +135,7 @@ function drawClock(force = false) {
     ring.append(inner); parts.push(ring);
   } else parts.push(big);
   const sub = html("div", "fs-sub"); sub.textContent = k.sub; parts.push(sub);
+  if (k.day) { const d = html("div", "fs-day"); d.textContent = k.day; parts.push(d); }
   const ls = lines();
   if (ls.length) parts.push(html("div", "fs-lines", ls.join(" &nbsp;·&nbsp; ")));
   c.replaceChildren(...parts);
@@ -192,10 +197,10 @@ function optionsPop() {
     o.bg === "sticker" ? [el("span", { className: "lbl", textContent: L("The sticker", "貼圖") }), seg("move", [["still", L("Still", "不動")], ["slow", L("Walks slowly", "慢慢走")], ["edge", L("Round the edges", "沿著邊緣走")]]),
       ticks("sets", [["milk", "Milk"], ["love", "Love"], ["together", L("Together", "同框")]]),
       el("span", { className: "lbl", textContent: L("A new sticker", "換一張貼圖") }), seg("stickerEvery", [[0, L("Each round", "每一輪")], [10, L("10 min", "10 分鐘")], [30, L("30 min", "30 分鐘")], [-1, L("Keep one", "不換")]])] : null,
-    o.bg === "photos" ? [el("span", { className: "lbl", textContent: L("Photos by", "照片來自") }), ticks("photosBy", [["Blumoon", "Blumoon"], ["NGMin", "NGMin"], ["Lyrac", "Lyrac"], ["otter", "otter"]]),
+    o.bg === "photos" ? [el("span", { className: "lbl", textContent: L("Photos by", "照片來自") }), ticks("photosBy", [...PHOTOGRAPHERS.map((p) => [p, p]), ["mine", L("My own photos", "我自己的照片")]]),
       el("span", { className: "lbl", textContent: L("A new photo", "換一張照片") }), seg("photoEvery", [[1, L("1 min", "1 分鐘")], [5, L("5 min", "5 分鐘")], [15, L("15 min", "15 分鐘")], [30, L("30 min", "30 分鐘")]])] : null,
     o.bg !== "none" ? [el("span", { className: "lbl", textContent: L("Brightness", "亮度") }), el("div", { className: "fs-range" }, range, rv)] : null,
-    el("span", { className: "lbl", textContent: L("Under the clock", "時鐘下面") }), ticks("lines", [["worked", L("Worked today", "今天工作")], ["next", L("Next reminder or event", "下一個提醒或活動")], ["focus", L("Today's focus", "本日主題")]]));
+    el("span", { className: "lbl", textContent: L("Under the clock", "時鐘下面") }), ticks("lines", [["next", L("Next reminder or event", "下一個提醒或活動")], ["focus", L("Today's focus", "本日主題")]]));
   pop.addEventListener("click", (e) => e.stopPropagation());
   return pop;
 }
@@ -217,7 +222,7 @@ function setBackdrop() {
   bg.innerHTML = "";
   bg.classList.toggle("photos", o.bg === "photos");
   if (o.bg === "photos") {
-    const list = pool.photos.filter((p) => p.by.some((w) => o.photosBy.includes(w)));
+    const list = photosFor(pool.photos, o.photosBy);
     if (!list.length) return;
     // Smart: a wide photo fills the screen, centred on the face; tall ones go two side by side, each on its face.
     const any = (l) => l[Math.floor(Math.random() * l.length)];

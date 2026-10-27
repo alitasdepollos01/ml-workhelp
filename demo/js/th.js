@@ -32,7 +32,8 @@
       return out;
     }
     const html = (en) => h[String(en).split(/\s+/).join(" ").trim()] ?? null;
-    return { thai, html };
+    const exact = (en) => x[en] ?? null; // (its own entry only: no patterns)
+    return { thai, html, exact };
   }
   if (typeof module === "object" && module.exports) module.exports = { make };
   else root.MLTH = { make };

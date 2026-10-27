@@ -206,14 +206,19 @@ async function main() {
         $("ringer-title").textContent = msg.title;
         $("ringer-body").textContent = s.kind === "focus" ? msg.body : s.label || "";
         showToday();
-        $("ringer-snooze").hidden = s.kind === "focus";
-        $("ringer-stop").textContent = s.kind === "focus" ? L("OK", "好") : L("Stop", "停止");
+        $("ringer-snooze").hidden = s.kind === "focus" && !s.waiting;
+        $("ringer-snooze").textContent = s.waiting ? L("5 more min", "再 5 分鐘") : L("Snooze 5 min", "5 分鐘後再響");
+        $("ringer-stop").textContent = s.waiting ? L("Back to work", "回去工作") : s.kind === "focus" ? L("OK", "好") : L("Stop", "停止");
         // Buddy windows have no banner, so a bubble carries the buttons: the
         // desktop buddy's if it's out, otherwise a development buddy's.
         const ring = {
           title: msg.title,
           body: s.kind === "focus" ? msg.body : s.label || msg.body,
-          actions: s.kind === "focus"
+          actions: s.kind === "focus" && s.waiting
+            // A break that ran out: the next round waits for "Back to work" (the desktop app's way, so the work clock goes along).
+            ? [{ label: L("Back to work", "回去工作"), run: () => (host.work ? host.work.act("back-next") : alarm.skip()) },
+              { label: L("5 more min", "再 5 分鐘"), run: () => alarm.moreRest(5) }]
+            : s.kind === "focus"
             ? [
               // A break is a good moment for a word.
               ...(s.phase !== "focus" && thaiOn ? [{ label: L("Teach me a word", "教我一個單字"), run: () => { alarm.stop(); teach(); } }] : []),
@@ -224,8 +229,8 @@ async function main() {
         const deskOut = (desk?.running && !desk.stage.hidden) || deskElsewhere;
         desk?.ring({ ...ring, bubble: true });
         dev?.ring({ ...ring, bubble: !deskOut });
-        // A focus-timer phase change doesn't need dismissing.
-        if (s.kind === "focus") setTimeout(() => { if (alarm.state?.ringing) alarm.stop(); }, 20e3);
+        // A focus-timer phase change doesn't need dismissing (a round waiting for you does: it asks until you answer).
+        if (s.kind === "focus" && !s.waiting) setTimeout(() => { if (alarm.state?.ringing && !alarm.state.waiting) alarm.stop(); }, 20e3);
       } else {
         allBuddies.forEach((b) => b.unring());
       }
@@ -279,8 +284,8 @@ async function main() {
     $("alarm-cancel").textContent = s.kind === "focus" ? L("End the Pomodoro", "結束番茄鐘") : L("Cancel alarm", "取消鬧鐘");
   }
 
-  $("ringer-stop").addEventListener("click", () => alarm.stop());
-  $("ringer-snooze").addEventListener("click", () => alarm.snooze());
+  $("ringer-stop").addEventListener("click", () => (alarm.state?.waiting ? (host.work ? host.work.act("back-next") : alarm.skip()) : alarm.stop()));
+  $("ringer-snooze").addEventListener("click", () => (alarm.state?.waiting ? alarm.moreRest(5) : alarm.snooze()));
   const label = () => $("alarm-label").value.trim();
   // Started: fold the section away and clear the label for next time.
   const closeAlarmPanel = () => { $("alarm-pop").open = false; $("alarm-label").value = ""; };
@@ -328,7 +333,9 @@ async function main() {
     else if (cmd === "alarm-cancel") alarm.cancel();
     else if (cmd === "alarm-in") alarm.inMinutes(Number(arg), "");
     else if (cmd === "focus-start") startFocus();
-    else if (cmd === "pomo-start") alarm.focusTimer(Number(arg?.focus) || 25, Number(arg?.rest) || 5, "", Number(arg?.long) || 15, Number(arg?.every) || 4);
+    else if (cmd === "pomo-start") alarm.focusTimer(Number(arg?.focus) || 25, Number(arg?.rest) || 5, "", Number(arg?.long) || 15, Number(arg?.every) || 4, arg?.autoNext === true);
+    else if (cmd === "alarm-more") alarm.moreRest(Number(arg) || 5);
+    else if (cmd === "alarm-auto-next") alarm.setAutoNext(arg === true);
     else if (cmd === "moods") { moodPrefs = { ...moodPrefs, ...(arg || {}) }; showAlarm(alarm.state); }
     else if (cmd === "alarm-pause") alarm.pause();
     else if (cmd === "alarm-resume") alarm.resume();
@@ -363,7 +370,7 @@ async function main() {
     else if (cmd === "work-done") desk?.doneForToday(arg || {});
     else if (cmd === "work-away") askAway(arg || {});
     else if (cmd === "work-eye") {
-      desk?.holdUp({ kind: "eye" }, L("Eye rest", "讓眼睛休息"), arg?.body || "", [[L("Done", "完成"), null], [L("Skip", "略過"), null]]);
+      desk?.holdUp({ kind: "eye" }, L("Eye rest", "讓眼睛休息"), arg?.body || "", [[L("Done", "完成"), "eye-done"], [L("Skip", "略過"), null]]);
       setTimeout(() => desk?.answered({ kind: "eye" }), 25e3); // twenty seconds, and it goes by itself
     } else if (cmd === "work-name-ask") {
       desk?.holdUp({ kind: "name" }, L("What are you working on?", "你在做什麼？"), L("Name it, and Data shows where your time went.", "取個名字，「數據」就能告訴你時間都花去哪了。"),
@@ -375,6 +382,9 @@ async function main() {
         [[L("Let's start!", "開始！"), "start-day"], [L("Today's focus first…", "先寫本日主題⋯"), "start-day-theme"],
           [L("Ask me in 10 min", "10 分鐘後再問我"), "start-later"], [L("Not today", "今天不計時"), "skip-day"]]);
     }
+    // New photos (main.js askPhotos, content-updates.js): Get them / Later / Don't ask again (the last button is the main one)
+    else if (cmd === "content-photos") desk?.holdUp({ kind: "photos" }, arg?.title || "", arg?.body || "", (arg?.buttons || []).map(([label, action]) => [label, action]));
+    else if (cmd === "content-photos-said") { desk?.answered({ kind: "photos" }); desk?.holdUp({ kind: "photos-said" }, arg?.title || "", arg?.body || "", [[L("Got it", "知道了"), null]]); }
     else if (cmd === "work-answered") desk?.answered(arg || {});
     else if (cmd === "buddy-state") showBuddyState(arg || {});
   });

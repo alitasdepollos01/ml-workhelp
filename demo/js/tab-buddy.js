@@ -114,7 +114,7 @@ function preview(st, redraw) {
     el("span", { className: "pv-pair" }, (FACES[st.deskWho || "pair"] || FACES.pair).map((s) => deco(s, ""))),
     l1 || l2 ? el("span", { className: "pv-label" }, l1 ? el("span", { className: "l1", textContent: l1 }) : null, l2 ? el("span", { className: "l2", textContent: l2 }) : null) : null);
   walker.addEventListener("click", () => { bubble = !bubble; redraw(); });
-  const chips = el("div", { className: "pv-moments bp-moments", role: "group", "aria-label": L("Try a moment of the day", "試試一天裡的不同時候") }, moments.map(([k, txt]) => {
+  const chips = el("div", { className: "pv-moments bp-moments", role: "group", "aria-label": L("Try a moment of the day", "看看一天裡不同時刻的樣子") }, moments.map(([k, txt]) => {
     const b = el("button", { type: "button", className: "chip" + (moment === k ? " on" : ""), "aria-pressed": String(moment === k) }, k === "call" ? ico("phone", "ico sm") : null, txt);
     b.addEventListener("click", () => { moment = k; redraw(); });
     return b;

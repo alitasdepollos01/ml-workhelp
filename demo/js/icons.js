@@ -16,6 +16,8 @@ const P = {
   rem: ["M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2H4.5z", "M10 21h4"],
   cats: ["M3.5 7V5.5h6l2 2h9v11h-17z", "M3.5 10.5h17"],
   about: ["M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z", "M12 11v5.5", "M12 7.5v.1"],
+  // (1.3.0) a pin: the nav's Fan corner › Pins and the Settings › Pins tile (pins-common.js ICON.pin)
+  pins: ["M12 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 1 0 0-11", "M9.2 18.5 8 22l4-1.6 4 1.6-1.2-3.5", "M10 8a2.4 2.4 0 0 1 2-1.4"],
 };
 
 /** An icon by name (see P), or nothing if there isn't one. */

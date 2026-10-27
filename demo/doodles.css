@@ -1,0 +1,75 @@
+/* The cartoon doodles on the app's pages (js/doodles.js; plan WP2). Every rule here only touches the doodles
+   themselves or a page that has one (html[data-dlayout], :has(> img.dood)), so with the doodles off the pages are
+   exactly as before. Sizes: title 34 · Whimsical's header and timer slots 48 · card corner 46 · word of the day 32 ·
+   menu heading 24 · bullet 22 · empty state 88. Pixel art snaps to whole-number sizes (24 / 48 / 96). */
+.appwin img.dood { display: inline-block; background: none; border: 0; box-shadow: none; padding: 0; border-radius: 0; filter: none; max-width: none;
+  object-fit: contain; flex: none; user-select: none; -webkit-user-drag: none; vertical-align: middle; }
+.appwin img.dood.px { image-rendering: pixelated; }
+/* the page title's mark, glued to the title's last word */
+.appwin .page-top h2 .dood-glue { white-space: nowrap; }
+.appwin .page-top h2 img.dood-title { width: 34px; height: 34px; margin: -6px 0 -4px 8px; }
+.appwin .page-top h2 img.dood-title.px { width: 32px; height: 32px; }
+/* corners: half outside a card's top corner, like a sticker stuck over the edge (never over words) */
+html[data-dlayout="corners"] .appwin :is(.word-card, .next-card, .focus-box, .now-card, nav.side .wordmini, .dtiles .dtile):has(> img.dood) { position: relative; }
+.appwin img.dood:is(.dood-corner, .dood-slot, .dood-wm) { position: absolute; z-index: 4; pointer-events: none; }
+.appwin img.dood-corner { width: 46px; height: 46px; }
+.appwin img.dood-slot { width: var(--slot, 48px); height: var(--slot, 48px); }
+.appwin img.dood-wm { width: 32px; height: 32px; }
+.appwin img.dood:is(.dood-corner, .dood-slot).px { width: 48px; height: 48px; }
+.appwin .page-top > img.dood-slot { right: 6px; top: -14px; transform: rotate(6deg); }
+.appwin img.dood.k-timer { right: -14px; top: -18px; transform: rotate(-8deg); }
+.appwin img.dood.k-word { top: -25px; right: -18px; transform: rotate(8deg); }
+html[data-style="i"] .appwin img.dood.k-word { right: 58px; transform: rotate(6deg); }   /* (Y2K emo: left of the word card's own badges) */
+.appwin img.dood.k-next { top: -25px; right: -18px; transform: rotate(-6deg); }
+.appwin img.dood.k-focus { top: -28px; left: -18px; transform: rotate(-8deg); }
+.appwin img.dood.k-tile { top: -25px; right: -18px; transform: rotate(7deg); }
+.appwin img.dood.k-wm { top: -15px; right: -10px; transform: rotate(10deg); }
+.appwin img.dood.px { transform: none !important; }
+html[data-style="m"] .appwin img.dood-slot { filter: drop-shadow(1px 3px 2px rgba(120, 40, 90, .25)); }
+/* the menu headings: the doodle after the words */
+.appwin nav.side .nav-h:has(> img.dood) { display: flex; align-items: center; gap: 6px; }
+.appwin nav.side .nav-h img.dood-nav { width: 24px; height: 24px; margin: -4px 0 -4px 0; order: 2; }
+.appwin nav.side .nav-h img.dood-nav.px { width: 24px; height: 24px; }
+/* bullets on the time rows (Today) and the reminders */
+.appwin img.dood-bul { width: 22px; height: 22px; margin: -4px 0; }
+.appwin img.dood-bul.px { width: 24px; height: 24px; }
+html[data-trows="1"] .appwin .dl-row { grid-template-columns: 22px 112px minmax(0, 1fr) auto 16px; }
+html[data-rrows="1"] .appwin .rem { grid-template-columns: 22px 60px minmax(0, 1fr) auto; }
+html[data-rrows="1"] .appwin .rem.with-next { grid-template-columns: 22px 60px minmax(0, 1fr) 64px auto; }
+@media (max-width: 760px) {
+  .appwin img.dood-bul { display: none; }
+  html[data-trows="1"] .appwin .dl-row { grid-template-columns: 1fr auto; }
+  html[data-rrows="1"] .appwin .rem { grid-template-columns: 60px minmax(0, 1fr) auto; }
+}
+/* an empty state: the doodle takes the sticker's place */
+.appwin .empty.dood-empty > img.deco { display: none; }
+.appwin .empty.dood-empty > img.dood-emptyimg { width: 88px; height: 88px; }
+.appwin .empty.dood-empty > img.dood-emptyimg.px { width: 96px; height: 96px; }
+/* the "Work corner" heading above Today (app.js, look.menuHeading), like "Fan corner" below it */
+.appwin nav.side .nav-h.nav-h-work { padding-top: 4px; }
+
+/* ===== Settings › Look › "Doodles" (js/look-card.js) ===== */
+.appwin .doodles-card { display: grid; gap: 12px; }
+.appwin .doodles-card .dd-field { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; align-items: start; justify-content: stretch; }
+.appwin .doodles-card .dd-field > span:first-child { display: grid; gap: 1px; }
+.appwin .doodles-card .dd-field > span:first-child > small { font-size: 12px; }
+.appwin .doodles-card .dd-seg { flex-wrap: wrap; justify-self: start; max-width: 100%; }
+.appwin .doodles-card .dd-seg button { display: grid; text-align: left; align-content: center; min-height: 40px; }
+.appwin .doodles-card .dd-seg button small { font-size: 11px; font-weight: 400; color: var(--desk-muted); }
+.appwin .doodles-card .dd-seg button.on small { color: inherit; opacity: .8; }
+.appwin .doodles-card .dd-opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 6px; }
+.appwin .doodles-card .dd-opts button { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 8px; text-align: left; font: inherit; font-size: 13px; color: inherit;
+  background: var(--control-bg); border: 1.5px solid var(--line); border-radius: var(--sk-r-md, 11px); cursor: pointer; }
+.appwin .doodles-card .dd-opts button:hover { border-color: var(--sk-accent, var(--bar)); }
+.appwin .doodles-card .dd-opts button.on { border-color: var(--sk-accent-ink, var(--bar)); box-shadow: 0 0 0 1px var(--sk-accent-ink, var(--bar)) inset; font-weight: 600; }
+.appwin .doodles-card .dd-opts button > span { display: grid; }
+.appwin .doodles-card .dd-opts small { font-size: 11px; font-weight: 400; color: var(--desk-muted); }
+.appwin .doodles-card img.dd-whale { width: 28px; height: 28px; object-fit: contain; flex: none; }
+.appwin .doodles-card img.dd-whale.px { image-rendering: pixelated; width: 24px; height: 24px; }
+.appwin .doodles-card .dd-wstr { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
+.appwin .doodles-card .dd-sl { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+.appwin .doodles-card .dd-sl input[type="range"] { width: 140px; accent-color: var(--sk-accent-ink, var(--bar)); }
+.appwin .doodles-card .dd-sl output { min-width: 3.4em; font-variant-numeric: tabular-nums; }
+.appwin .doodles-card .dd-bal { font-size: 11px; }
+.appwin .doodles-card .dd-dim { display: grid; gap: 12px; transition: opacity .15s; }
+.appwin .doodles-card .dd-dim.off { opacity: .45; }

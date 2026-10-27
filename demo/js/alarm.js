@@ -2,6 +2,9 @@
 // ("at 14:30"), or a repeating focus timer (25 min focus, 5 min break, and a
 // longer break every 4th round). Countdowns and focus timers can be paused
 // (state.pausedLeft holds what was left), and a focus timer can skip ahead.
+// When a focus timer's break runs out, the next round waits (state.waiting)
+// until you say "Back to work" (skip) or take 5 more minutes (moreRest);
+// state.autoNext (Settings: "Start the next round by itself") goes straight on.
 //
 // The alarm is saved through the host, so it survives a reload and every open
 // view (panel, buddy window, another tab) sees the same one.
@@ -66,8 +69,7 @@ function chime(loud = 1) {
 // A reminder's or event's sound (Settings): the chime, Milk and Love calling each other (sounds/), or none.
 export const REMINDER_SOUNDS = [
   ["ding", "The chime", "內建的叮"],
-  ["pmew-1", "“พี่มิว!” 1", "「พี่มิว！」1"],
-  ["pmew-2", "“พี่มิว!” 2", "「พี่มิว！」2"],
+  ["pmew-1", "“พี่มิว!”", "「พี่มิว！」"], // ("pmew-2" was dropped: too much crowd and echo to clean; a saved "pmew-2" rings the chime)
   ["nonglove", "“น้องเลิฟ”", "「น้องเลิฟ」"],
   ["marimba", "Marimba", "木琴"],
   ["sparkle", "Sparkle", "亮晶晶"],
@@ -75,10 +77,13 @@ export const REMINDER_SOUNDS = [
   ["pa", "“Pa!”", "「Pa！」"],
   ["ohooh", "“Ohooh!”", "「Ohooh！」"],
   ["pmilk-rak-love", "“P'Milk rak Love”", "「P'Milk rak Love」"],
-  ["yachong", "“牙蟲”", "「牙蟲」"],
+  ["yachong", "“Cavity”", "「蛀牙」"], // (id/file stay "yachong": saved settings keep working)
   ["shasha", "“Shasha”", "「Shasha」"],
   ["ongsa", "“Ongsa”", "「Ongsa」"],
   ["sun", "“Sun”", "「Sun」"],
+  ["pmilk-1", "“P'Milk 1”", "「P'Milk 1」"],
+  ["muv-chant", "“Muv chant”", "「Muv 應援」"],
+  ["gengmak", "“Gengmak”", "「Gengmak」"],
   ["off", "No sound", "不出聲"],
 ];
 let playing = null;
@@ -152,9 +157,29 @@ export class Alarm {
     this.start("at", d.getTime(), label);
   }
 
-  /** Focus for `focus` minutes, break for `rest`, and repeat; every `every`th break lasts `longRest` (0 = never). */
-  focusTimer(focus, rest, label, longRest = 0, every = 4) {
-    this.start("focus", Date.now() + focus * 60e3, label, { phase: "focus", focus, rest, longRest, every, round: 1 });
+  /**
+   * Focus for `focus` minutes, break for `rest`, and repeat; every `every`th break lasts `longRest` (0 = never).
+   * autoNext: the next round starts by itself when a break ends (else it waits for you).
+   */
+  focusTimer(focus, rest, label, longRest = 0, every = 4, autoNext = false) {
+    this.start("focus", Date.now() + focus * 60e3, label, { phase: "focus", focus, rest, longRest, every, round: 1, autoNext: !!autoNext });
+  }
+
+  /** The setting changed while a timer runs (a round waiting now goes on if it's turned on). */
+  setAutoNext(on) {
+    const s = this.state;
+    if (s?.kind !== "focus" || !!s.autoNext === !!on) return;
+    if (on && s.waiting) { this.quiet(); return this.save(this.nextPhase({ ...s, autoNext: true }, false)); }
+    this.save({ ...s, autoNext: !!on });
+  }
+
+  /** A break that's over and waiting: rest `min` minutes more, then it asks again. */
+  moreRest(min = SNOOZE_MIN) {
+    const s = this.state;
+    if (s?.kind !== "focus" || s.phase === "focus") return;
+    this.quiet();
+    const { waiting, pausedLeft, ...rest } = s;
+    this.save({ ...rest, ringing: false, endsAt: Date.now() + min * 60e3 });
   }
 
   /** Milliseconds left, paused or not. */
@@ -164,7 +189,7 @@ export class Alarm {
 
   /** Countdowns and focus timers only: a clock-time alarm can't be paused. */
   static canPause(s) {
-    return !!s && !s.ringing && s.kind !== "at";
+    return !!s && !s.ringing && !s.waiting && s.kind !== "at";
   }
 
   pause() {
@@ -201,7 +226,7 @@ export class Alarm {
     }
     const toBreak = s.phase === "focus";
     const long = toBreak && s.longRest > 0 && s.round % (s.every || 4) === 0;
-    const { pausedLeft, ...rest } = s;
+    const { pausedLeft, waiting, ...rest } = s;
     // Come due on time: count the next phase from when this one ended, so every
     // view (and VS Code and the desktop app) works out the same next phase.
     const from = ringing && Date.now() - s.endsAt < 60e3 ? s.endsAt : Date.now();
@@ -236,12 +261,15 @@ export class Alarm {
 
   tick() {
     const s = this.state;
-    if (!s || s.ringing || s.pausedLeft != null || Date.now() < s.endsAt) {
+    if (!s || s.ringing || s.waiting || s.pausedLeft != null || Date.now() < s.endsAt) {
       if (s && !s.ringing) this.onChange(s); // keeps the countdown fresh
       return;
     }
     const due = s.endsAt;
-    if (s.kind === "focus") {
+    if (s.kind === "focus" && s.phase !== "focus" && !s.autoNext) {
+      // A break ran out: the next round waits for you ("Back to work"), asking until you answer.
+      this.save({ ...s, ringing: true, waiting: true });
+    } else if (s.kind === "focus") {
       // Switch phase straight away so the timer keeps going, then ring.
       this.save(this.nextPhase(s, true));
     } else {
@@ -271,8 +299,9 @@ export class Alarm {
 
   announce(s) {
     const { title, body } = message(s);
-    this.host.notify?.(title, body, s.kind === "focus" ? [] : ["snooze", "stop"]);
-    chime();
+    this.host.notify?.(title, body, s.kind === "focus" ? (s.waiting ? ["back", "more"] : []) : ["snooze", "stop"]);
+    // (a waiting round: the desktop app rings the sound picked in Settings itself)
+    if (!(s.waiting && this.host.workClock)) chime();
     const started = Date.now();
     clearInterval(this.chimeTimer);
     // A focus-timer phase change chimes once; a real alarm keeps chiming for a minute.
@@ -292,6 +321,7 @@ export class Alarm {
 /** What to say when an alarm rings. */
 export function message(s) {
   if (s.kind === "focus") {
+    if (s.waiting) return { title: L("Break's over", "休息結束"), body: L(`Round ${s.round + 1} (${s.focus} min) starts when you're back.`, `第 ${s.round + 1} 輪（${s.focus} 分鐘）等你回來再開始。`) };
     if (s.phase === "long") return { title: L("Long break", "長休息"), body: L(`${s.longRest} minutes. You've done ${s.round} rounds, go for a walk.`, `${s.longRest} 分鐘。你已經做完 ${s.round} 輪了，起來走走吧。`) };
     return s.phase === "break"
       ? { title: L("Break time", "休息時間"), body: L(`${s.rest} minutes. Stretch, drink some water.`, `${s.rest} 分鐘。伸展一下、喝點水。`) }

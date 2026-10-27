@@ -10,10 +10,14 @@ import { connectCard, known } from "./connect.js";
 import { lengthsPicker } from "./tab-pomodoro.js";
 import { startTour } from "./tour.js";
 import { openFocus } from "./focus-screen.js";
+import { PHOTOGRAPHERS } from "./focus-photos.js";
 import { buddySearchIndex } from "./tab-buddy.js";
 import { REMINDER_SOUNDS, playSound } from "./alarm.js";
 import { icon } from "./icons.js";
 import { LOOK_DEFAULTS, lookControls } from "./clock-look.js";
+import { doodlesCard } from "./look-card.js";
+import { T as T3, call as pinsCall, api as pinsApi, load as pinsLoad, ensureCss as pinsCss, nameOf as pinName } from "./pins-common.js";   // (track B2: Settings › Pins)
+import { celebrate as pinsMoment, enterCode as pinsCode } from "./pins-moment.js";
 
 const SWATCH = { matcha: ["#86c79b", "#f3aac0"], mint: ["#6ed6aa", "#ffa6c4"], rose: ["#f0a9bf", "#93cfa9"], lavender: ["#b6a5e6", "#ffc3a3"], sky: ["#8fbfee", "#ffe083"], classic: ["#1f2340", "#e8508a"] };
 
@@ -164,9 +168,10 @@ function GROUPS() {
   const conn = (a) => (a?.access === "full" && a.on ? L("connected", "已連結") : L("not connected", "未連結"));
   const k = known();
   return [
-    { id: "look", title: L("Look & menu bar", "外觀與選單列"), words: "theme colour language dark light menu bar 顏色 語言 深色 淺色 選單列",
+    { id: "look", title: L("Look & menu bar", "外觀與選單列"), words: "theme colour language dark light menu bar doodles wallpaper 顏色 語言 深色 淺色 選單列 塗鴉 壁紙",
       sum: [theme, { zh: "繁體中文", th: "ไทย" }[host.lang] || "English", { system: L("like my Mac", "跟系統一樣"), light: L("light", "淺色"), dark: L("dark", "深色") }[st.appearance || "system"]].filter(Boolean).join(" · "),
       has: L("Colour, language, light or dark, the menu bar", "顏色、語言、深淺色、選單列"), draw: lookGroup },
+    pinsCard(), // (1.3.0, track B2: Settings › Pins, a page of its own)
     { id: "keep", title: L("Keeping time & the day", "計時與每天的節奏"), words: "keep time pomodoro break reminder video goal weekend start day focus screen full reading away 計時 番茄鐘 休息 提醒 影片 目標 週末 每天開始 專注 全螢幕 看書",
       sum: [KEEP_NAME()[st.keep || "work"], goal, st.dayStart === "auto" ? L("starts by itself", "自動開始") : L("asks each day", "每天問我")].join(" · "),
       has: L("The two ways, Pomodoro lengths, the focus screen, breaks, goals, starting the day", "兩種方式、番茄鐘長度、專注全螢幕、休息、目標、每天開始"), draw: keepGroup },
@@ -176,9 +181,9 @@ function GROUPS() {
     { id: "cats", title: L("Categories", "分類"), words: "categories work break kinds colours photo sources credits photographers 分類 工作 休息 顏色 照片來源 標註 攝影",
       sum: L(`${(st.workTypes || []).length} kinds of work · ${(st.breakTypes || []).length} of break`, `工作 ${(st.workTypes || []).length} 種 · 休息 ${(st.breakTypes || []).length} 種`),
       has: L("Kinds of work and break: names, colours, usual minutes; who your photos are from", "工作分類、休息種類（名字、顏色、預設分鐘）；照片來源"), draw: catsGroup },
-    { id: "about", title: L("About & updates", "關於與更新"), words: "version update email tour login uninstall credits 版本 更新 通知 導覽 登入 解除安裝 照片來源",
+    { id: "about", title: L("About & updates", "關於與更新"), words: "version update email tour login uninstall credits backup restore delete zip weekly photos pack 版本 更新 通知 導覽 登入 解除安裝 照片來源 備份 還原 刪除 每週 照片 更新包",
       sum: [st.version || "", st.update ? L(`${st.update.version} is out`, `新版本 ${st.update.version}`) : st.updateAsked ? L("up to date", "已是最新版本") : ""].filter(Boolean).join(" · "),
-      has: L("Version, updates, notices, tours, start at login, uninstall", "版本、更新、通知 email、導覽、登入時打開、解除安裝"), draw: aboutGroup },
+      has: aboutHas(), draw: aboutGroup },
   ];
 }
 /** The group open (the menu marks it; the tour and the search open one). */
@@ -188,7 +193,7 @@ let searchIndex = null; // every setting's words and its group: [{ group, label,
 
 export function renderSettings(main, { redraw, go, ask }) {
   if (ask && "group" in ask) group = ask.group || null;
-  if (ask?.card) { const g = { ".look-card": "look", ".keep-card": "keep", ".goals-card": "keep", ".start-card": "keep", ".cats-card": "cats", ".connect-card.apple": "rem", ".connect-card.calendar": "rem", ".about-card": "about" }[ask.card]; if (g) group = g; }
+  if (ask?.card) { const g = { ".look-card": "look", ".keep-card": "keep", ".goals-card": "keep", ".start-card": "keep", ".cats-card": "cats", ".connect-card.apple": "rem", ".connect-card.calendar": "rem", ".about-card": "about", ".updates-card": "about", ".data-card": "about", ".pd-reset": "about", ".doodles-card": "look", ".clockout-field": "keep", ".breaks-card": "keep" }[ask.card]; if (g) group = g; }
   searchIndex = null;
   // Asked for a card (the menu, a link) or a setting (the search): there once it's drawn, with a flash.
   const target = ask?.card || null, field = ask?.field || null, title = ask?.cardTitle || null;
@@ -287,6 +292,7 @@ function lookGroup(main, redraw) {
     el("section", { className: "card look-card" }, el("h3", { textContent: L("Style", "風格") }),
       el("small", { className: "muted", textContent: L("The shape and feel: cards, fonts and how the stickers look. Colours come from the theme beside it.", "整體的感覺：卡片、字型和貼圖的樣子。顏色由旁邊的主題決定。") }),
       stylePicker(() => setTimeout(redraw, 80))), colours) : colours);
+  { const d = lookCard(); if (d) main.append(d); } // (1.3.0, track A: Doodles)
   if (st.menuTimer) main.append(el("section", { className: "card menu-card" }, el("h3", { textContent: L("The menu bar (top right of your screen)", "選單列（螢幕右上角）") }),
     el("div", { className: "field" }, el("span", { textContent: L("Little timer in the menu bar", "選單列小倒數") }),
       seg([["away", L("When the buddies and windows are put away", "夥伴和視窗都收起來時")], ["always", L("Always", "一直顯示")], ["off", L("Off", "不顯示")]], st.menuTimer,
@@ -313,6 +319,11 @@ function keepGroup(main, redraw) {
     el("p", { className: "muted", textContent: keep === "work" ? L("The work clock counts while you're at the computer, and stops by itself when you've been away 5 minutes. Today and Data show where the time went.", "只要你在電腦前，工作時鐘就會計時；離開 5 分鐘以上會自動停下。在「今天」和「數據」可以看到時間都花去哪了。")
       : L("You work in Pomodoro rounds: each focus round counts as work under what you're working on, and each break goes in the log. The time between rounds doesn't count.", "用番茄鐘：每一輪專注都會算進你手上那件事，每次休息也會記下來。兩輪之間的時間不算工作。") }),
     keep !== "work" ? el("div", { className: "field" }, el("span", { textContent: L("Pomodoro lengths", "番茄鐘長度") }), lengthsPicker(st, redraw)) : null,
+    // (off: a break that ends asks, the buddy's bubble or the card, and the next round waits for "Back to work")
+    keep !== "work" ? field(L("When a break ends", "休息結束時"), check(st.pomoAutoNext === true, (v) => { state.st.pomoAutoNext = v; host.settingText("pomoAutoNext", v ? "on" : "off"); toast(L("Saved", "已儲存")); setTimeout(redraw, 120); },
+      L("Start the next round by itself", "自動開始下一輪"))) : null,
+    keep !== "work" ? el("p", { className: "muted", textContent: st.pomoAutoNext === true ? L("The next round starts as soon as the break ends.", "休息一結束，下一輪就會馬上開始。")
+      : L("When a break ends, the buddy (or a card) asks, and the next round waits until you press Back to work.", "休息結束時，夥伴（或卡片）會問你，等你按「回去工作」才會開始下一輪。") }) : null,
     field(L("Ask what I'm working on after 10 unnamed minutes", "超過 10 分鐘沒取名字時，問我在做什麼"), check(st.askName !== false, (v) => w.setting("askName", v ? 1 : 0), L("Ask what I'm working on", "問我在做什麼")))));
   main.append(focusCard(st, redraw));
   // ② Breaks.
@@ -324,12 +335,14 @@ function keepGroup(main, redraw) {
     keep !== "work" ? null : field(L("Gentle break reminders", "溫和的休息提醒"), remindOn, L("after", "工作"), after, L("min of work", "分鐘後")),
     keep !== "work" ? null : field(L("Break length", "休息長度"), number(st.breakLength ?? 10, { min: 1, max: 60, label: L("Break length in minutes", "休息分鐘數"), onChange: (v) => w.setting("breakLength", v) }), L("min", "分鐘")),
     keep !== "work" ? null : field(L("If I don't take it, remind me again after", "沒去休息的話，過多久再提醒我"), number(st.askAgain ?? 10, { min: 5, max: 60, step: 5, label: L("Minutes", "分鐘"), onChange: (v) => w.setting("askAgain", v) }), L("min", "分鐘")),
+    field(L("Eye rests: look far away for 20 seconds", "讓眼睛休息：看遠方 20 秒"), number(st.eyeEvery ?? 0, { min: 0, max: 120, step: 5, label: L("Minutes of work between eye rests", "工作幾分鐘讓眼睛休息一次"), onChange: (v) => w.setting("eyeEvery", v) }), L("min of work (0 = off)", "分鐘（0 = 關閉）")),
     host.breakVideo ? field(L("On a break, suggest a MilkLove video (GMMTV OFFICIAL, on Today)", "休息時推薦一支 MilkLove 的影片（GMMTV OFFICIAL，在「今天」）"),
       check(st.breakVideos !== false, (v) => host.settingText("breakVideos", v ? "on" : "off"), L("Suggest a MilkLove video on a break", "休息時推薦 MilkLove 影片"))) : null));
   // ③ Goals.
   main.append(el("section", { className: "card goals-card" }, el("h3", { textContent: L("③ Goals", "③ 目標") }),
     field(L("Daily goal", "每日目標"), number(st.dailyGoal ?? 6, { min: 0, max: 16, step: 0.5, label: L("Daily goal in hours", "每日目標（小時）"), onChange: (v) => w.setting("dailyGoal", v) }), L("hours a day (0 = no goal)", "小時／天（0 = 不設目標）")),
     field(L("Weekend goal", "週末目標"), number(st.weekendGoal ?? 0, { min: 0, max: 16, step: 0.5, label: L("Weekend goal in hours", "週末目標（小時）"), onChange: (v) => w.setting("weekendGoal", v) }), L("hours (0 = same as the daily goal)", "小時（0 = 跟每日目標一樣）")),
+    clockOutField(st),
     el("p", { className: "muted", textContent: L("The buddy celebrates when you get there, and Data counts the days.", "達標時夥伴會幫你慶祝，「數據」也會算你達標了幾天。") })));
   // ④ Starting the day.
   const start = startCard(st, redraw);
@@ -337,9 +350,28 @@ function keepGroup(main, redraw) {
   main.append(start);
 }
 
+/**
+ * Keeping time › ③ Goals: your clock-out time (settings.clockOut, "19:00"). MUVMUV's milk pin counts the workdays you
+ * press Done for today by then; a change counts from then on. (Track B1; the integrator puts it in the Goals card.)
+ */
+export function clockOutField(st = state.st || {}) {
+  const i = el("input", { type: "time", value: /^\d{2}:\d{2}$/.test(st.clockOut || "") ? st.clockOut : "19:00", step: 300, "aria-label": L("Clock-out time", "收工時間") });
+  i.addEventListener("change", () => {
+    const v = /^\d{2}:\d{2}$/.test(i.value) ? i.value : "19:00";
+    i.value = v;
+    host.settingText("clockOut", v);
+    if (state.st) state.st.clockOut = v;
+    toast(L("Saved", "已儲存"));
+  });
+  return el("label", { className: "field clockout-field" },
+    el("span", {}, el("span", { textContent: L("Your clock-out time", "你的收工時間") }),
+      el("small", { className: "muted", textContent: L("MUVMUV's milk counts the days you press Done for today by then", "MUVMUV 的牛奶會記下你在這個時間前按「收工」的天數") })),
+    el("span", { className: "inline" }, i));
+}
+
 /** ⛶ The focus screen's options (the same as the ⚙ on the screen itself). */
 function focusCard(st, redraw) {
-  const f = { bg: "sticker", move: "edge", sets: ["milk", "love", "together"], stickerEvery: 10, photosBy: ["Blumoon", "NGMin", "Lyrac", "otter"], photoEvery: 5, bright: 35, lines: ["worked", "next"], auto: false, dim: true, ...LOOK_DEFAULTS, ...(st.focusScreen || {}) };
+  const f = { bg: "sticker", move: "edge", sets: ["milk", "love", "together"], stickerEvery: 10, photosBy: PHOTOGRAPHERS, photoEvery: 5, bright: 35, lines: ["worked", "next"], auto: false, dim: true, ...LOOK_DEFAULTS, ...(st.focusScreen || {}) };
   const save = (patch) => { host.settingText("focusScreen", JSON.stringify(patch)); state.st = { ...state.st, focusScreen: { ...f, ...patch } }; toast(L("Saved", "已儲存")); setTimeout(redraw, 120); };
   const pick = (key, items, label) => seg(items, f[key], (v) => save({ [key]: v }), label);
   const ticks = (key, items) => el("span", { className: "row-flex" }, items.map(([v, t]) => {
@@ -360,10 +392,11 @@ function focusCard(st, redraw) {
     f.bg === "sticker" ? field(L("The sticker", "貼圖"), pick("move", [["still", L("Still", "不動")], ["slow", L("Walks slowly", "慢慢走")], ["edge", L("Round the edges", "沿著邊緣走")]], L("The sticker", "貼圖"))) : null,
     f.bg === "sticker" ? field(L("Stickers from", "貼圖來自"), ticks("sets", [["milk", "Milk"], ["love", "Love"], ["together", L("Together", "同框")]]),
       pick("stickerEvery", [[0, L("new each round", "每一輪換")], [10, L("every 10 min", "每 10 分鐘")], [30, L("every 30 min", "每 30 分鐘")], [-1, L("keep one", "不換")]], L("A new sticker", "換貼圖"))) : null,
-    f.bg === "photos" ? field(L("Photos by", "照片來自"), ticks("photosBy", [["Blumoon", "Blumoon"], ["NGMin", "NGMin"], ["Lyrac", "Lyrac"], ["otter", "otter"]]),
+    f.bg === "photos" ? field(L("Photos by", "照片來自"), ticks("photosBy", [...PHOTOGRAPHERS.map((p) => [p, p]), ["mine", L("My own photos", "我自己的照片")]]),
       pick("photoEvery", [[1, L("every minute", "每 1 分鐘")], [5, L("5 min", "5 分鐘")], [15, L("15 min", "15 分鐘")], [30, L("30 min", "30 分鐘")]], L("A new photo", "換照片"))) : null,
+    f.bg === "photos" ? el("p", { className: "muted small", textContent: L("My own photos: the photos you added yourself (Stickers › Photos). The app's own photos are only ever shown, never changed.", "我自己的照片：你自己加進來的照片（貼圖 › 照片）。App 附的照片只會拿來顯示，不會被改。") }) : null,
     f.bg !== "none" ? field(L("Brightness", "亮度"), bright, `${f.bright}%`) : null,
-    field(L("Under the clock", "時鐘下面"), ticks("lines", [["worked", L("Worked today", "今天工作")], ["next", L("Next reminder or event", "下一個提醒或活動")], ["focus", L("Today's focus", "本日主題")]])),
+    field(L("Under the clock", "時鐘下面"), ticks("lines", [["next", L("Next reminder or event", "下一個提醒或活動")], ["focus", L("Today's focus", "本日主題")]])),
     field(L("A little dimmer after 22:00", "22:00 以後暗一點"), check(f.dim !== false, (v) => save({ dim: v }), L("Dimmer at night", "晚上暗一點"))));
 }
 
@@ -388,7 +421,11 @@ function remGroup(main, redraw, go) {
     el("div", { className: "field" }, el("span", {}, el("b", { textContent: L("Hold pop-ups while I'm focusing", "專注的時候先不要跳出來") }), el("br"),
       el("small", { className: "muted", textContent: L("While the focus screen is open or a Pomodoro round is running, reminders wait, then show together in one card when you finish. Break reminders and the Pomodoro's “time's up” always come through.", "專注全螢幕開著、或番茄鐘正在專注時，提醒會先等等，結束後一起用一張卡片告訴你。休息提醒和番茄鐘的「時間到」一定會跳出來。") })),
       sw("holdFocus", L("Hold pop-ups while I'm focusing", "專注的時候先不要跳出來"))),
-    hold ? el("label", { className: "pop through" }, sw("eventsThrough", L("Events still come through", "活動還是會跳出來")), el("span", { textContent: L("Events still come through (so you don't miss a meeting or a fan event)", "活動還是會跳出來（才不會錯過會議或粉絲活動）") })) : null));
+    hold ? el("label", { className: "pop through" }, sw("eventsThrough", L("Events still come through", "活動還是會跳出來")), el("span", { textContent: L("Events still come through (so you don't miss a meeting or a fan event)", "活動還是會跳出來（才不會錯過會議或粉絲活動）") })) : null,
+    // The card with the desktop buddy hidden: over everything (full-screen apps, every desktop), or only over ordinary windows.
+    el("div", { className: "field" }, el("span", {}, el("b", { textContent: L("Alerts on top of everything", "提醒卡片永遠在最上層") }), el("br"),
+      el("small", { className: "muted", textContent: L("The card comes up over every app, full-screen ones too, on whichever desktop you're on. Off: only over ordinary windows.", "卡片會出現在所有 App 上面，全螢幕的也一樣，不管你在哪個桌面。關掉的話：只會在一般視窗上面。") })),
+      sw("alertsOnTop", L("Alerts on top of everything", "提醒卡片永遠在最上層")))));
   if (host.apple || host.calendar) main.append(connectCard("apple", redraw), connectCard("calendar", redraw));
 }
 
@@ -476,14 +513,19 @@ function aboutGroup(main, redraw, go) {
   { const n = thaiNote(); if (n) main.append(n); } // (in Thai: the note about the translation, first)
   const st = state.st || {};
   const btn = (label, fn) => { const b = el("button", { type: "button", className: "btn small", textContent: label }); b.addEventListener("click", fn); return b; };
-  main.append(el("section", { className: "card about-card" }, el("h3", { textContent: L("Version and notices", "版本與通知") }),
-    st.version ? field(L("Version", "版本"), el("div", { className: "row-flex" }, el("b", { textContent: st.version }),
+  // (1.3.0, track D) "Updates" (version, Check now, once a day, new photos) and "Backup & restore" first; where the host
+  // has neither (the website's demo) the old version line stays in the Notices card.
+  const d = [updatesCard(), yourDataCard()].filter(Boolean);
+  main.append(...d);
+  const old = !d.length;
+  main.append(el("section", { className: "card about-card" }, el("h3", { textContent: old ? L("Version and notices", "版本與通知") : L("Notices", "通知") }),
+    old && st.version ? field(L("Version", "版本"), el("div", { className: "row-flex" }, el("b", { textContent: st.version }),
       st.update ? btn(L(`Download ${st.update.version}`, `下載新版本 ${st.update.version}`), () => host.settingText("openPage", "download"))
         : el("span", { className: "muted", textContent: st.updateAsked ? L("You have the latest.", "已是最新版本。") : "" }),
       btn(L("Check now", "現在檢查"), () => { host.settingText("updateNow", "1"); toast(L("Checking…", "檢查中⋯")); setTimeout(redraw, 2500); }))) : null,
-    st.version && st.update && (st.update.notes?.en || st.update.notes?.zh) ? el("p", { className: "muted", textContent: L(st.update.notes.en || "", st.update.notes.zh || st.update.notes.en || "") }) : null,
-    st.version ? field(L("Look for a new version once a day", "每天檢查一次有沒有新版本"), check(st.updateCheck !== false, (v) => host.settingText("updateCheck", v ? "on" : "off"), L("Look for a new version", "檢查新版本"))) : null,
-    st.version ? el("p", { className: "muted", textContent: L("It only reads a small file on the app's page (GitHub); nothing about you or your work is sent.", "只會讀取 App 網頁（GitHub）上的一個小檔案，不會傳送任何關於你或你工作的資料。") }) : null,
+    old && st.version && st.update && (st.update.notes?.en || st.update.notes?.zh) ? el("p", { className: "muted", textContent: L(st.update.notes.en || "", st.update.notes.zh || st.update.notes.en || "") }) : null,
+    old && st.version ? field(L("Look for a new version once a day", "每天檢查一次有沒有新版本"), check(st.updateCheck !== false, (v) => host.settingText("updateCheck", v ? "on" : "off"), L("Look for a new version", "檢查新版本"))) : null,
+    old && st.version ? el("p", { className: "muted", textContent: L("It only reads a small file on the app's page (GitHub); nothing about you or your work is sent.", "只會讀取 App 網頁（GitHub）上的一個小檔案，不會傳送任何關於你或你工作的資料。") }) : null,
     st.contact ? field(L("New versions & important notices go to", "新版本與重要通知寄到"), el("div", { className: "row-flex" },
       el("b", { textContent: st.contact.email || L("(not given yet)", "（還沒填寫）") }),
       st.contact.email && !st.contact.sent ? el("span", { className: "muted", textContent: L("(saved; sent once we can)", "（已記下，連上網路就會送出）") }) : null,
@@ -502,4 +544,93 @@ function aboutGroup(main, redraw, go) {
       : btn(L("Get the full library…", "加上完整貼圖庫⋯"), () => host.openTool("welcome", { only: "photos" }))),
     field(L("Photo credits", "照片來源"), btn(L("Open Photo credits →", "打開「照片來源」→"), () => go("credits"))),
     field(L("Uninstall ML WorkHelp", "解除安裝 ML WorkHelp"), (() => { const b = btn(L("Uninstall…", "解除安裝⋯"), () => host.uninstall()); b.classList.add("danger"); return b; })())));
+}
+
+// ---- Settings › About & updates: "Updates" and "Backup & restore" (track D, plan WP5/WP6) ---------------------------
+// The cards themselves are in about-cards.js (with their dialogs and the welcome window's restore offer); main.js does
+// the work (backup.js, content-updates.js). Each returns null where the host can't (the website's demo, VS Code).
+// To wire (integrator): in aboutGroup(), `main.append(...[updatesCard(), yourDataCard()].filter(Boolean))` first;
+// the old "Version and notices" card keeps only the email and the app's page, renamed "Notices" (the version line,
+// Check now and "once a day" are in Updates now). See app/desktop/backup-ipc.md.
+import { updatesCard as aboutUpdatesCard, yourDataCard as aboutDataCard, aboutHas } from "./about-cards.js";
+/** "Updates": the version (and the red dot for a new one), new photos and stickers (ask / automatic / never), small updates. */
+function updatesCard() { return aboutUpdatesCard(); }
+/** "Backup & restore": Back up now, every week, Restore, Reset pins (when pins.js is in), Delete everything. */
+function yourDataCard() { return aboutDataCard(); }
+
+/** Track A (look): Settings › Look › "Doodles" (look-card.js), shown under the Style card (lookGroup). */
+export function lookCard() {
+  return doodlesCard();
+}
+
+/**
+ * Settings › Pins, a page of its own (track B2; the integrator puts pinsCard() in GROUPS(), after Look, and
+ * ["pins", "Pins", "徽章"] in app.js's SUB.settings): the earning moment (celebrate / a quiet note / nothing; celebrating is always Classic); the pin
+ * on the desktop buddy card; the special-days reminder; a code from a fan event; how pins are counted (the clock-out
+ * time, which lives in Keeping time › Goals; special days; not-yet pins; counted on this Mac; Reset pins, which lives
+ * in Backup & restore). Settings are the pins engine's own (pins.json › settings), set with MLHost.pins.call("setSetting").
+ */
+export function pinsCard() {
+  const st = state.st || {}, ps = st.pins || {};
+  return { id: "pins", title: T3("Pins", "徽章", "เข็มกลัด"), words: "pins code unlock earn celebrate clock-out special days birthday secret reset 徽章 兌換碼 解鎖 收工 特別的日子 生日 祕密 重設",
+    sum: [ps.total ? T3(`${ps.earned || 0} of ${ps.total} pins`, `${ps.earned || 0} / ${ps.total} 個徽章`, `เข็มกลัด ${ps.earned || 0} จาก ${ps.total}`) : ""].filter(Boolean).join(" · "),
+    has: T3("The earning moment, codes, clock-out time, special days", "拿到時的動畫、兌換碼、收工時間、特別的日子", "ตอนได้รับ โค้ด เวลาเลิกงาน วันพิเศษ"), draw: pinsGroup };
+}
+function pinsGroup(main, redraw, go) {
+  pinsCss();
+  const st = state.st || {}, set = (st.pins || {}).settings || {};
+  const save = async (k, v) => { await pinsCall("setSetting", k, v); if (st.pins?.settings) st.pins.settings[k] = v; toast(L("Saved", "已儲存")); };
+  const note = (t, cls = "") => el("p", { className: "muted small pp-note " + cls, textContent: t });
+  const row = (label, sub, ...ctrl) => el("div", { className: "field" }, el("span", {}, el("span", { textContent: label }), sub ? el("small", { className: "muted", textContent: " " + sub }) : null), el("span", { className: "inline" }, ...ctrl));
+  if (!pinsApi()) { main.append(el("section", { className: "card pins-set-card" }, el("h3", { textContent: L("Pins", "徽章") }), note(T3("Pins are collected in the desktop app.", "徽章是在桌面版 App 裡收集的。", "เข็มกลัดสะสมได้ในแอปเดสก์ท็อป")))); return; }
+
+  // 1. how they show
+  const cele0 = set.celebrate || "big";
+  const showMe = el("button", { type: "button", className: "btn small pp-show", textContent: T3("Show me", "播放看看", "ลองดู") });
+  showMe.addEventListener("click", async () => {
+    const s = await pinsCall("summary"), list = (await pinsCall("list")) || [], v = list.find((x) => x.id === s?.newest && x.earned) || list.find((x) => x.earned);
+    if (!v) { toast(T3("No pins yet: the moment comes with your first.", "還沒有徽章：拿到第一個就會看到。", "ยังไม่มีเข็มกลัด ได้อันแรกแล้วจะเห็น")); return; }
+    pinsMoment([{ id: v.id, tier: v.tier, first: v.tier === 0 }], { celebrate: "big", demo: true });
+  });
+  const buddySel = el("select", { "aria-label": T3("On the desktop buddy card", "桌面夥伴卡片上的徽章", "เข็มกลัดบนการ์ดบัดดี้") }, el("option", { value: "", textContent: T3("None", "不放", "ไม่มี") }));
+  buddySel.addEventListener("change", async () => { await pinsCall("wear", buddySel.value || null); toast(L("Saved", "已儲存")); });
+  main.append(el("section", { className: "card pins-set-card pins-show-card" }, el("h3", { textContent: T3("Showing your pins", "徽章怎麼出現", "การแสดงเข็มกลัด") }),
+    row(T3("When you earn one", "拿到新徽章時", "เมื่อได้เข็มกลัดใหม่"), null, seg([["big", T3("Celebrate", "慶祝一下", "ฉลอง")], ["quiet", T3("A quiet note", "低調通知一下", "แจ้งเบา ๆ")], ["none", T3("Nothing", "不用通知", "ไม่ต้องแจ้ง")]], cele0,
+      (v) => save("celebrate", v), T3("When you earn one", "拿到新徽章時", "เมื่อได้เข็มกลัดใหม่")), showMe),
+    el("hr", { className: "pp-hr" }),
+    row(T3("On the desktop buddy card", "桌面夥伴卡片上的徽章", "เข็มกลัดบนการ์ดบัดดี้"), null, buddySel),
+    row(T3("Special days (birthdays)", "特別的日子（生日）", "วันพิเศษ (วันเกิด)"), null, seg([["on", T3("Remind me the day before", "前一天提醒我", "เตือนก่อนหนึ่งวัน")], ["off", T3("No reminder", "不用提醒", "ไม่ต้องเตือน")]], set.sdRemind === "on" ? "on" : "off",
+      (v) => save("sdRemind", v), T3("Special days (birthdays)", "特別的日子（生日）", "วันพิเศษ (วันเกิด)")))));
+
+  // 2. a code from a fan event
+  const input = el("input", { type: "text", className: "pp-code", inputMode: "latin", autocomplete: "off", spellcheck: false, maxLength: 16, placeholder: "MLWH-XXXX-XXXX", "aria-label": T3("Unlock code", "兌換碼", "โค้ดปลดล็อก"), "aria-describedby": "pp-code-msg" });
+  const msg = el("p", { id: "pp-code-msg", className: "small pp-msg", role: "status", "aria-live": "polite" });
+  const go1 = el("button", { type: "button", className: "btn primary small pp-unlock", textContent: T3("Unlock", "兌換", "ปลดล็อก") });
+  const tryCode = async () => { if (!input.value.trim()) return; go1.disabled = true; const m = await pinsCode(input.value); go1.disabled = false; msg.textContent = m.text; msg.className = "small pp-msg " + (m.ok ? "ok" : "bad"); if (m.ok) input.value = ""; };
+  go1.addEventListener("click", tryCode);
+  input.addEventListener("keydown", (e) => { if (enterKey(e)) tryCode(); });
+  main.append(el("section", { className: "card pins-set-card pins-code-card" }, el("h3", { textContent: T3("Enter a code", "輸入兌換碼", "ใส่โค้ด") }),
+    row(T3("Code", "兌換碼", "โค้ด"), null, input, go1), msg,
+    note(T3("A code unlocks pins straight away. No internet or account needed.", "輸入兌換碼，徽章馬上解鎖。不用網路，也不用帳號。", "ใส่โค้ดแล้วเข็มกลัดปลดล็อกทันที ไม่ต้องใช้อินเทอร์เน็ตหรือบัญชี"))));
+
+  // 3. how they're counted
+  const toKeep = el("button", { type: "button", className: "btn small", textContent: T3("Change in Keeping time ›", "到「計時與每天的節奏」修改 ›", "เปลี่ยนที่ การจับเวลาและจังหวะของวัน ›") });
+  toKeep.addEventListener("click", () => go("settings", { group: "keep", card: ".clockout-field" }));
+  const toReset = el("button", { type: "button", className: "btn pp-link", textContent: T3("Reset pins… (in Backup & restore)", "重設徽章⋯（在「備份與還原」）", "รีเซ็ตเข็มกลัด… (ในสำรองและกู้คืน)") });
+  toReset.addEventListener("click", () => go("settings", { group: "about", card: ".pd-reset" }));
+  main.append(el("section", { className: "card pins-set-card pins-count-card" }, el("h3", { textContent: T3("How pins are counted", "徽章怎麼算", "นับเข็มกลัดอย่างไร") }),
+    row(T3("Your clock-out time", "你的收工時間", "เวลาเลิกงานของคุณ"), T3("MUVMUV's milk counts the days you press Done for today by then", "MUVMUV 的牛奶會記下你在這個時間前按「收工」的天數", "นมของเมิฟเมิฟนับวันที่คุณกด \"เลิกงานวันนี้\" ก่อนเวลานี้"),
+      el("b", { className: "pp-clockout", textContent: /^\d{2}:\d{2}$/.test(st.clockOut || "") ? st.clockOut : "19:00" }), toKeep),
+    el("p", { className: "pp-line" }, el("b", { textContent: T3("Special days: ", "特別的日子：", "วันพิเศษ: ") }),
+      T3("a special day counts when you open the app or work on any day of that week (from the birthday on), by your Mac's own clock.", "從生日那天起的一週內，任何一天打開 App 或工作都算，以你 Mac 的時間為準。", "นับเมื่อเปิดแอปหรือทำงานวันไหนก็ได้ในสัปดาห์นั้น (นับจากวันเกิด) ตามเวลาในเครื่อง Mac ของคุณ")),
+    el("p", { className: "pp-line" }, el("b", { textContent: T3("Not-yet pins: ", "還沒拿到的徽章：", "เข็มกลัดที่ยังไม่ได้: ") }),
+      T3("they show how to get them, but not what they look like: a grey silhouette with the rule. A few are secret, with only a hint.", "會顯示怎麼拿，但不顯示長相：灰色剪影加上規則。有幾個是祕密，只有提示。", "จะบอกวิธีได้ แต่ไม่บอกหน้าตา เป็นเงาสีเทากับกติกา มีบางอันเป็นความลับ มีแค่คำใบ้")),
+    note(T3("Pins are counted on this Mac from your own work log; nothing is sent anywhere. They're kept with your data, so updates, reinstalls and backups keep them.", "徽章是用這台 Mac 上你自己的工作紀錄算出來的，不會傳到任何地方。徽章和你的資料存在一起，更新、重新安裝和備份都不會不見。", "เข็มกลัดนับจากบันทึกงานของคุณบนเครื่องนี้ ไม่มีการส่งออก เก็บไว้กับข้อมูลของคุณ อัปเดต ติดตั้งใหม่ หรือสำรองข้อมูลก็ยังอยู่")),
+    el("div", { className: "row-flex pp-btns" }, toReset)));
+
+  // what needs the collection: the buddy card's choices
+  pinsLoad().then(async (d) => {
+    if (!d) return;
+    for (const v of d.list.filter((x) => x.earned)) buddySel.append(el("option", { value: v.id, textContent: pinName(v), selected: d.sum.settings?.buddyPin === v.id }));
+  });
 }

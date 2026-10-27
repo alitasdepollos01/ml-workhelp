@@ -63,7 +63,7 @@ export function dayLog(day, entries, { redraw, focus = null, ms = false }) {
     : L("Click a part to change it.", "點一段來改。") }));
 
   function pick(x) {
-    if (x.open) return toast(L("That's what's going on now", "這段還在進行中"));
+    if (x.open || x.goingOn) return toast(L("That's what's going on now", "這段還在進行中"));
     open = open?.id === x.id ? null : { day: key, id: x.id };
     redraw();
   }
@@ -79,7 +79,7 @@ export function dayLog(day, entries, { redraw, focus = null, ms = false }) {
       el("span", { className: "what" }, el("b", { textContent: title(x) }), c ? el("span", { className: "muted", textContent: catName(c, true) }) : null, tomatoMark(x),
         x.note ? el("span", { className: "muted", textContent: "· " + x.note }) : null,
         x.kind === "away" && !x.open ? el("span", { className: "say", textContent: L("click to say what it was", "點一下說明") }) : null),
-      el("span", { className: "muted", textContent: hm(dur(x)) }), el("span", { className: "pen", "aria-hidden": "true", textContent: x.open ? "" : "✎" }));
+      el("span", { className: "muted", textContent: hm(dur(x)) }), el("span", { className: "pen", "aria-hidden": "true", textContent: x.open || x.goingOn ? "" : "✎" }));
     row.style.setProperty("--c", color(x));
     row.addEventListener("click", () => pick(x));
     rows.append(row);
@@ -124,7 +124,10 @@ export function dayLog(day, entries, { redraw, focus = null, ms = false }) {
     };
     const save = el("button", { type: "button", className: "btn primary small", textContent: L("Save", "儲存") });
     save.addEventListener("click", async () => {
-      const s = at(startIn), e = at(endIn);
+      const s = at(startIn);
+      let e = at(endIn);
+      // (00:00 at the end: the midnight this day ends at, as for work that went on past it)
+      if (e != null && s != null && e <= s && parseClock(endIn.value) === 0) { const m = new Date(day); m.setDate(m.getDate() + 1); e = m.getTime(); }
       if (s == null || e == null) return toast(L("Type the times like 09:30", "請輸入時間，例如 09:30"));
       if (!(e > s)) return toast(L("The end has to be after the start", "結束要晚於開始"));
       const name = nameIn.value.trim(), note = noteIn.value.trim();
@@ -147,8 +150,8 @@ export function dayLog(day, entries, { redraw, focus = null, ms = false }) {
     const del = isNew ? null : el("button", { type: "button", className: "linkish danger", textContent: L("Delete this part", "刪除這一段") });
     del?.addEventListener("click", async () => { await work.call("deleteEntry", x.id); open = null; toast(L("Deleted", "已刪除")); redraw(); });
     for (const i of [startIn, endIn, nameIn, noteIn]) i.addEventListener("keydown", (ev) => { if (enterKey(ev)) save.click(); if (ev.key === "Escape") cancel.click(); });
-    ed.append(el("div", { className: "spread" }, el("b", { textContent: isNew ? L(`Add ${clock(times.start)} – ${clock(times.end)}`, `補登 ${clock(times.start)} – ${clock(times.end)}`) : away ? L("What was this time away?", "這段離開是在做什麼？") : L("Change this part", "改這一段") }),
-      el("span", { className: "muted small", textContent: isNew ? L("The times are filled in for you", "時間已經幫你填好") : `${clock(x.start)} – ${clock(x.end)}` })),
+    ed.append(el("div", { className: "spread" }, el("b", { textContent: isNew ? L(`Add ${clock(times.start)} – ${clock(times.end)}`, `補登 ${clock(times.start)} – ${clock(times.end)}`) : away ? L("What was this time away?", "離開的這段時間，做了什麼？") : L("Change this part", "改這一段") }),
+      el("span", { className: "muted small", textContent: isNew ? L("The times are filled in for you", "時間已經自動填好了") : `${clock(x.start)} – ${clock(x.end)}` })),
       seg, fields, el("div", { className: "spread" }, el("div", { className: "row-flex" }, save, cancel), del));
     queueMicrotask(() => (kind === "work" && !nameIn.value ? nameIn : startIn).focus());
     return ed;

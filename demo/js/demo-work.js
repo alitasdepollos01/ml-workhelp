@@ -35,10 +35,14 @@ const require = (n) => ({ fs: window.__memfs, path: { join: (...a) => a.join("/"
 // meanwhile, and a timed one says when it's over. Coming back starts a new
 // stretch: you say so, or you were away (a minute idle, or locked) during the
 // break and are using the computer again, or the break has been over for two
-// minutes while you're at it.
+// minutes while you're at it. Not once the app has asked "Break's over"
+// (holdOver): then only the answer ends it, and moving the mouse to the
+// answer isn't one; and not while the next Pomodoro round waits for you
+// (holdBreak).
 //
 // Everything goes in a log, kept a year for the weekly report: each stretch
-// of work (its name), each break (its kind), and each time you were away
+// of work (its name; one that goes on past midnight is cut there, an entry for
+// each day), each break (its kind), and each time you were away
 // without saying (five minutes or more, up to three hours; longer is time
 // off). Away time can be labelled later as a kind of break, or as work (you
 // were reading, thinking).
@@ -131,6 +135,31 @@ function nextTime(at, repeat, after, r = {}) {
   return d.getTime();
 }
 
+/** The midnight after `t` (the next day's start), local time. */
+function nextMidnight(t) {
+  const d = new Date(t);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime();
+}
+
+/**
+ * A stretch of work from `start` to `end` (ms), cut at midnight: one piece per day,
+ * [{ key, start, end, worked (s) }]. byDay: the seconds counted each day
+ * ({ "2026-10-24": 600 }); without it (kept before it was counted) the work is
+ * shared out by the clock.
+ */
+function piecesByDay(start, end, worked, byDay = null) {
+  const out = [];
+  for (let s = start; s < end;) { const e = Math.min(end, nextMidnight(s)); out.push({ key: dayKey(s), start: s, end: e, worked: 0 }); s = e; }
+  if (!out.length) return out;
+  if (out.length === 1) { out[0].worked = worked; return out; }
+  if (byDay && out.some((p) => byDay[p.key] > 0)) for (const p of out) p.worked = Math.max(0, byDay[p.key] || 0);
+  else {
+    let left = worked;
+    out.forEach((p, i) => { p.worked = i === out.length - 1 ? left : worked * ((p.end - p.start) / (end - start)); left -= p.worked; });
+  }
+  return out;
+}
+
 /** Midnight at the start of this week (Monday), local time. */
 function weekStart(t) {
   const d = new Date(t);
@@ -176,6 +205,18 @@ function createWork({ dir, now = Date.now }) {
   // [{ id, kind: "work" | "break" | "away", start, end, name (work), worked (s, work), type (break) }]
   const newId = (t) => t.toString(36) + Math.random().toString(36).slice(2, 5);
   const log = (Array.isArray(saved.log) ? saved.log : []).map((e) => ({ id: e.id || newId(e.start), kind: e.kind || "work", ...e }));
+  // Work is logged day by day: a stretch that went on past midnight is two entries, one for each day
+  // (kept whole before 1.2.1: cut here, its work shared out by the clock; the day totals were right all along).
+  const cutAtMidnight = (e) => {
+    if (e.kind !== "work" || !(e.end > nextMidnight(e.start))) return [e];
+    const parts = piecesByDay(e.start, e.end, e.worked ?? Math.round((e.end - e.start) / 1000));
+    return parts.map((p, i) => {
+      const x = { ...e, id: i ? newId(p.start) : e.id, start: p.start, end: p.end, worked: Math.round(p.worked) };
+      if (i < parts.length - 1) delete x.early;
+      return x;
+    });
+  };
+  if (log.some((e) => e.kind === "work" && e.end > nextMidnight(e.start))) log.splice(0, log.length, ...log.flatMap(cutAtMidnight));
   let awaySince = 0; // when you left, while away without saying (see tick)
   const focus = saved.focus && typeof saved.focus === "object" ? saved.focus : {}; // { "2026-10-19": "Finish chapter 3" }
   const taskCat = saved.taskCat && typeof saved.taskCat === "object" ? saved.taskCat : {}; // { Thesis: "study" }
@@ -210,20 +251,35 @@ function createWork({ dir, now = Date.now }) {
     write("work.json", { days, stretch, goalDay, name, cat, onBreak, log, focus, taskCat, startedDay, offDay, doneDay, rounds });
     unsaved = 0;
   };
-  const newStretch = (t, breakEvery) => ({ worked: 0, start: t, last: t, next: breakEvery ? breakEvery * 60 : null, name, cat, ...(roundNow ? { round: roundNow } : {}) });
+  const newStretch = (t, breakEvery) => ({ worked: 0, byDay: {}, start: t, last: t, next: breakEvery ? breakEvery * 60 : null, name, cat, ...(roundNow ? { round: roundNow } : {}) });
   const saveReminders = () => write("reminders.json", reminders);
 
   function endStretch() {
     if (!stretch) return;
-    // The idle minutes before we knew you'd gone weren't work.
+    // The idle minutes before we knew you'd gone weren't work (taken off the last day first: they may go back past midnight).
+    const byDay = stretch.byDay ? { ...stretch.byDay } : null;
     if (idleTail) {
-      const k = dayKey(stretch.last);
-      days[k] = Math.max(0, (days[k] || 0) - idleTail);
+      if (byDay) {
+        let rest = idleTail;
+        for (const k of Object.keys(byDay).sort().reverse()) {
+          const take = Math.min(rest, byDay[k]);
+          byDay[k] -= take; days[k] = Math.max(0, (days[k] || 0) - take); rest -= take;
+          if (rest <= 0) break;
+        }
+      } else {
+        const k = dayKey(stretch.last);
+        days[k] = Math.max(0, (days[k] || 0) - idleTail);
+      }
     }
     const worked = stretch.worked - idleTail;
     if (worked >= LOG_FROM) {
-      log.push({ id: newId(stretch.last), kind: "work", name: stretch.name || "", cat: catFor(stretch.name, stretch.cat), start: stretch.start || stretch.last - worked * 1000,
-        end: stretch.last - idleTail * 1000, worked: Math.round(worked), ...(stretch.round ? { round: stretch.round } : {}), ...(stretch.early ? { early: true } : {}) }); // (ends when you stopped, not when we noticed)
+      // (ends when you stopped, not when we noticed; past midnight, one entry for each day)
+      const start = stretch.start || stretch.last - worked * 1000, end = stretch.last - idleTail * 1000;
+      const parts = piecesByDay(start, Math.max(end, start + 1), worked, byDay).filter((p) => p.worked >= 0.5);
+      parts.forEach((p, i) => {
+        log.push({ id: newId(p.start), kind: "work", name: stretch.name || "", cat: catFor(stretch.name, stretch.cat), start: p.start, end: p.end, worked: Math.round(p.worked),
+          ...(stretch.round ? { round: stretch.round } : {}), ...(stretch.early && i === parts.length - 1 ? { early: true } : {}) });
+      });
     }
     stretch = null;
     idleTail = 0;
@@ -243,10 +299,13 @@ function createWork({ dir, now = Date.now }) {
    * locked: the screen is locked; breakEvery: minutes (0 = no reminders);
    * quiet: a focus timer is running. Returns what's due:
    * [{ type: "break", worked }, { type: "reminder", reminder }].
+   * holdOver: a break that's over waits for its answer ("Back to work" / "5 more min"), however
+   * busy the keyboard and mouse are; holdBreak: the break ends only when you say so (the next
+   * Pomodoro round waits for "Back to work").
    */
   let goalDay = saved.goalDay || "";
 
-  function tick({ idle = 0, locked = false, breakEvery = 0, quiet = false, goal = 0, eyeEvery = 0, askName = false, askAgain = ASK_AGAIN / 60, waitStart = false, count = true, force = false } = {}) {
+  function tick({ idle = 0, locked = false, breakEvery = 0, quiet = false, goal = 0, eyeEvery = 0, askName = false, askAgain = ASK_AGAIN / 60, waitStart = false, count = true, force = false, holdOver = false, holdBreak = false } = {}) {
     const t = now(), dt = (t - last) / 1000;
     // force: a Pomodoro focus round is going on ("both together"): the whole round is work, at the keyboard or not.
     if (force) { idle = 0; locked = false; }
@@ -277,7 +336,7 @@ function createWork({ dir, now = Date.now }) {
         onBreak.over = true;
         saveWork();
         events.push({ type: "break-over", took: t - onBreak.since });
-      } else if (atIt && (onBreak.away || (onBreak.over && t - onBreak.until >= BACK_AFTER_OVER))) {
+      } else if (atIt && !holdBreak && !(holdOver && onBreak.over) && (onBreak.away || (onBreak.over && t - onBreak.until >= BACK_AFTER_OVER))) {
         events.push({ type: "back", took: t - onBreak.since, kind: onBreak.kind });
         endBreakAt(t);
         stretch = newStretch(t, breakEvery);
@@ -299,6 +358,9 @@ function createWork({ dir, now = Date.now }) {
       stretch.last = t;
       const k = dayKey(t);
       days[k] = (days[k] || 0) + dt;
+      // (and this stretch's share of each day: past midnight it's logged as one entry per day)
+      stretch.byDay = stretch.byDay || {};
+      stretch.byDay[k] = (stretch.byDay[k] || 0) + dt;
       idleTail = idle > IDLE_NOT_WORK ? idleTail + dt : 0;
       if (++unsaved >= 6) saveWork();
       if (breakEvery && !quiet && stretch.next != null && stretch.worked >= stretch.next && idle < IDLE_NOT_WORK) {
@@ -342,10 +404,19 @@ function createWork({ dir, now = Date.now }) {
    */
   function history(from, to = now()) {
     const t = now();
-    const entries = log.filter((e) => e.end >= from && e.start <= to).map((e) => ({ ...e }));
+    // (an entry that ended at midnight belongs to the day before)
+    const entries = log.filter((e) => (e.end > from || e.start >= from) && e.start <= to).map((e) => ({ ...e }));
     if (t >= from) {
       if (stretch && stretch.worked >= 1) {
-        entries.push({ id: "now", kind: "work", name: stretch.name || "", cat: catFor(stretch.name, stretch.cat), start: stretch.start || t, end: t, worked: Math.round(stretch.worked), open: true, ...(stretch.round ? { round: stretch.round } : {}) });
+        // Going on since before midnight: the part before it is that day's ("now-<day>"), the rest is today's.
+        const parts = piecesByDay(Math.min(stretch.start || t, t), t, stretch.worked, stretch.byDay);
+        if (!parts.length) parts.push({ key: dayKey(t), start: t, end: t, worked: stretch.worked });
+        parts.forEach((p, i) => {
+          const last = i === parts.length - 1;
+          if (p.start > to || (p.end <= from && p.start < from) || (!last && p.worked < 1)) return;
+          entries.push({ id: last ? "now" : "now-" + p.key, kind: "work", name: stretch.name || "", cat: catFor(stretch.name, stretch.cat), start: p.start, end: p.end,
+            worked: Math.round(p.worked), ...(last ? { open: true } : { goingOn: true }), ...(stretch.round ? { round: stretch.round } : {}) });
+        });
       }
       if (onBreak) entries.push({ id: "now", kind: "break", type: breakType(onBreak.kind), start: onBreak.since, end: t, open: true, ...(onBreak.pomo && breakType(onBreak.kind) !== "pomodoro" ? { pomo: true } : {}) });
       if (awaySince) entries.push({ id: "now", kind: "away", start: awaySince, end: t, open: true });
@@ -518,12 +589,12 @@ function createWork({ dir, now = Date.now }) {
       if (x.kind === "work") { e.name = String(x.name || "").trim().slice(0, 60); e.cat = workType(x.cat || taskCat[e.name] || cat); e.worked = Math.round((en - s) / 1000); remember(e.name, e.cat); }
       else e.type = breakType(x.type);
       if (x.note) e.note = String(x.note).slice(0, 200);
-      log.push(e);
+      const parts = cutAtMidnight(e);
+      for (const p of parts) { log.push(p); addDay(p, 1); }
       log.sort((a, b) => a.start - b.start);
-      addDay(e, 1);
       countTomato(e, 1);
       saveWork();
-      return { ...e };
+      return { ...parts[0] };
     },
     deleteEntry(id) {
       const i = log.findIndex((x) => x.id === id);

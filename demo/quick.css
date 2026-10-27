@@ -1,9 +1,11 @@
 /* Right-clicking the desktop buddy: a small card beside it (quick.html), in place of a long menu.
-   The everyday things as big buttons; the way into the app and Settings as small icons. */
+   The everyday things as big buttons; the way into the app and Settings as small icons.
+   1.3.0 (Myra, round 22): the window is 235 px wide (main.js openQuick()), with tighter padding (body 8, card 10),
+   and one doodle at the end of the top row, by who is out (quick.js); a pin worn on the card sits beside it. */
 html, body.quick { height: auto; background: transparent !important; overflow: hidden; }
-body.quick { margin: 0; padding: 10px; font: 13px/1.35 var(--latin); color: var(--desk-ink); user-select: none; -webkit-user-select: none; }
+body.quick { margin: 0; padding: 8px; font: 13px/1.35 var(--latin); color: var(--desk-ink); user-select: none; -webkit-user-select: none; }
 html[lang="th"] body.quick { font-family: var(--thai); }
-.qp { background: var(--control-bg); border: 1.5px solid #efa3ba; border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, .22); padding: 12px; display: grid; gap: 10px; }
+.qp { background: var(--control-bg); border: 1.5px solid #efa3ba; border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, .22); padding: 10px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; } /* (one column, the card's width: a long task name ends in … rather than widen it) */
 .qp .top { display: flex; align-items: baseline; gap: 8px; }
 .qp .top b { font-size: 22px; font-variant-numeric: tabular-nums; }
 .qp .top span { color: var(--desk-muted); }
@@ -12,24 +14,45 @@ html[lang="th"] body.quick { font-family: var(--thai); }
 .qp .task .n { flex: 1; font-weight: 650; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
 .qp .task .n.none { font-weight: 400; color: var(--desk-muted); }
 .qp .chip { font: inherit; font-size: 12px; border: 1px solid var(--control-line); background: var(--control-bg); color: var(--desk-ink); border-radius: 999px; padding: 2px 9px; cursor: pointer; white-space: nowrap; }
-.qp .big { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.qp .big { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
 .qp .big button { font: inherit; border: 1px solid var(--control-line); background: var(--desk); color: var(--desk-ink); border-radius: 10px; padding: 8px 6px; cursor: pointer; display: grid; gap: 2px; justify-items: center; text-align: center; }
 .qp .big button svg { width: 20px; height: 20px; color: var(--primary, var(--desk-ink)); }
 .qp .row { display: flex; justify-content: space-between; gap: 2px; border-top: 1px solid var(--control-line); padding-top: 8px; }
-.qp .row button { font: inherit; font-size: 11.5px; border: 0; background: none; color: var(--desk-muted); cursor: pointer; display: grid; justify-items: center; gap: 2px; padding: 3px 4px; border-radius: 8px; flex: 1; min-width: 0; }
+.qp .row button { font: inherit; font-size: 11px; border: 0; background: none; color: var(--desk-muted); cursor: pointer; display: grid; justify-items: center; gap: 2px; padding: 3px 2px; border-radius: 8px; flex: 1; min-width: 0; }
 .qp .row button svg { width: 18px; height: 18px; }
 .qp button:hover, .qp button:focus-visible, .qp .task .n:hover { background: color-mix(in srgb, #efa3ba 22%, var(--control-bg)); outline: none; }
 .qp .sub::after { content: " ›"; color: var(--desk-muted); }
 
+/* A button's choices, shown in the card in place of its buttons */
+.qp .ch-top { display: flex; align-items: center; gap: 8px; }
+.qp .ch-top .qback { font: inherit; font-size: 12px; border: 1px solid var(--control-line); background: var(--control-bg); color: var(--desk-ink); border-radius: 999px; padding: 2px 9px; cursor: pointer; }
+.qp .choices { display: grid; gap: 2px; }
+.qp .choices button { font: inherit; text-align: left; border: 0; background: none; color: var(--desk-ink); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
+.qp .choices .lbl { font-size: 11.5px; font-weight: 700; color: var(--desk-muted); padding: 4px 8px 0; }
+.qp .choices .grp { display: grid; gap: 2px; }
+.qp .choices hr { border: 0; border-top: 1px solid var(--control-line); margin: 3px 0; width: 100%; }
+
 /* "On my desktop": who the buddy is, as little faces */
 .qp .who { display: grid; gap: 5px; border-top: 1px solid var(--control-line); padding-top: 8px; }
 .qp .who .lbl { font-size: 11.5px; font-weight: 700; color: var(--desk-muted); }
-.qp .faces { display: flex; gap: 6px; }
-.qp .face { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--control-line); background: color-mix(in srgb, var(--desk-muted) 10%, var(--control-bg)); padding: 0; cursor: pointer; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; }
+.qp .faces { display: flex; gap: 4px; }
+.qp .face { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--control-line); background: color-mix(in srgb, var(--desk-muted) 10%, var(--control-bg)); padding: 0; cursor: pointer; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; }
 .qp .face img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .qp .face.two img { width: 55%; }
 .qp .face[aria-checked="true"] { border-color: var(--primary, #3f7d5c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary, #3f7d5c) 22%, transparent); }
 .qp .who-name { font-size: 11.5px; } .qp .who-name span { color: var(--desk-muted); }
 .qp .top b { font-size: 20px; }
-.qp .big button { padding: 7px 6px; font-size: 12px; }
+.qp .big button { padding: 6px 4px; font-size: 11.5px; }
 .qp .big button svg { width: 18px; height: 18px; }
+
+/* The doodle by who is out (Both / Together → Sun & Earth, Milk → whale, Love → seal, Others → milk carton), in the doodle
+   style in use, at the end of the top row; its negative block margins keep the row (and the card) as tall as before. */
+.qp .top .qp-doodle { margin: -4px 0 -4px auto; align-self: center; width: 28px; height: 28px; flex: none; rotate: 8deg; pointer-events: none; -webkit-user-drag: none; }
+.qp .top .qp-doodle.px { image-rendering: pixelated; }
+/* A pin worn on the buddy card (Pins › a pin › Wear on the buddy card): its slot, before the doodle. The pins page
+   (track B2) draws it there (window.MLWH_QUICK_PIN); until then, its flat picture. */
+.qp .top .qp-pin { margin: -4px 0 -4px auto; align-self: center; width: 22px; height: 22px; flex: none; display: grid; place-items: center; }
+.qp .top .qp-pin + .qp-doodle { margin-left: -4px; }
+.qp .top .qp-pin img { width: 100%; height: 100%; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .25)); pointer-events: none; -webkit-user-drag: none; }
+.qp .top b { flex: none; }
+.qp .top span { min-width: 0; }

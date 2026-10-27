@@ -1,7 +1,9 @@
 // The desktop app's welcome window, one framed card: the language, which photos to start with
 // (the full sticker library, downloaded once after agreeing to the disclaimer; or your own),
 // how to keep time (the work count, the Pomodoro, or both), then a step-by-step tour
-// with Muv, around the app's one window (pages that don't fit how you keep time are skipped).
+// with Muv, around the app's one window (pages that don't fit how you keep time are skipped):
+// 13 pages: 12 with the work clock (the Pomodoro's page is left out), all 13 with the Pomodoro. Page 1 offers a backup to restore when a new
+// install finds one (about-cards.js restoreOffer(): a box, not a choice the welcome makes).
 // How to keep time: the work clock, or the Pomodoro ("both": its rounds are the day's work). Opened the first time the app starts, and
 // from the menu ("Welcome and tour..."). The photos are copied by the app
 // (main.js setup-*).
@@ -9,6 +11,7 @@
 import { L, lang, translatePage } from "./i18n.js";
 import { stylePicker } from "./style-pick.js";
 import { labelLines, labelItems } from "./label.js";
+import { restoreOffer } from "./about-cards.js";
 
 const $ = (id) => document.getElementById(id);
 const setup = window.MLHost?.setup;
@@ -111,7 +114,7 @@ function packUi() {
   if (pk.state === "downloading") { $("dl-say").textContent = L("Downloading the photos…", "正在下載照片⋯"); $("dl-much").textContent = L(`${Math.round(pk.got / 1e6)} of ${mb} MB · you can keep going, it carries on`, `${Math.round(pk.got / 1e6)} / ${mb} MB · 可以繼續往下，下載不會停`); }
   else if (pk.state === "unpacking") { $("dl-say").textContent = L("Putting them in place…", "正在放進 App 裡⋯"); $("dl-much").textContent = ""; }
   else if (pk.state === "done") { const n = total(pk.stickers); $("dl-say").textContent = n ? L(`Done: ${says(pk.stickers)} are ready.`, `完成：${says(pk.stickers)}都準備好了。`) : L("Done: the photos are ready.", "完成：照片都準備好了。"); $("dl-much").textContent = ""; }
-  else if (pk.state === "error") { $("dl-say").textContent = L("The download stopped", "下載中斷了"); $("dl-much").textContent = `${pk.error || ""} `; btn.hidden = false; btn.disabled = !$("agree").checked; btn.textContent = L("Try again", "再試一次"); }
+  else if (pk.state === "error") { $("dl-say").textContent = pk.error || L("Download failed.", "下載失敗。"); $("dl-much").textContent = ""; btn.hidden = false; btn.disabled = !$("agree").checked; btn.textContent = L("Try again", "再試一次"); }
   else if (busy) { $("dl-say").textContent = L("Copying the photos… this can take a moment.", "正在複製照片⋯稍等一下。"); $("dl-much").textContent = ""; }
 }
 
@@ -222,7 +225,8 @@ async function connectButtons() {
  * The last page: everyone behind the photos and drawings, the same card each, popping in one by one;
  * the ones who gave us permission marked ✓. Hearts float up.
  */
-const ALLOWED = ["Blumoon", "Lyrac", "NGMin", "otter", "wanwannjeab"];
+// (everyone who said yes: their profile picture on the card, app/shared/avatars; a ✓ only when the picture is off)
+const ALLOWED = ["Blumoon", "Lyrac", "NGMin", "otter", "KIU", "PKYU", "wanwannjeab"];
 const CAMERA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 async function thankYou() {
   let c = null;
@@ -231,7 +235,7 @@ async function thankYou() {
   hearts.replaceChildren(...["💚", "💖", "🤍", "💗", "💚", "💖", "✨"].map((h, i) => Object.assign(document.createElement("span"), { textContent: h, style: `left:${8 + i * 13}%;animation-delay:${i * 0.5}s` })));
   const people = c?.people || {
     Blumoon: { handle: "@blumoonfoto" }, Lyrac: { handle: "@loveminiheartph" }, NGMin: { handle: "@ngmin" }, otter: { handle: "@Miiiichstabe" }, wanwannjeab: { handle: "@wanwannjeab" },
-    GMMTV: { handle: "@GMMTV" }, Milk: { handle: "@panlyyy" }, Love: { handle: "@loverrukk" }, MilkPansaFamily: { handle: "@milkfamily__" }, KIU: { handle: "@kiu_628ML" }, Sflove0523: { handle: "@sflove0523" }, alitasdepollo: { handle: "@alitasdepollos0" } };
+    PKYU: { handle: "@pee_pumkin" }, GMMTV: { handle: "@GMMTV" }, Milk: { handle: "@panlyyy" }, Love: { handle: "@loverrukk" }, MilkPansaFamily: { handle: "@milkfamily__" }, KIU: { handle: "@kiu_628ML" }, Sflove0523: { handle: "@sflove0523" }, alitasdepollo: { handle: "@alitasdepollos0" } };
   const order = [...ALLOWED, ...(c?.order || Object.keys(people)).filter((k) => !ALLOWED.includes(k) && !["commercial", "other", "me"].includes(k) && people[k] && !people[k].mine)];
   if (people.alitasdepollo && !order.includes("alitasdepollo")) order.push("alitasdepollo"); // (the app's own photos and drawings)
   const SHORT = { Milk: "Milk", Love: "Love", alitasdepollo: "alitasdepollos", wanwannjeab: "wanwannjeab" };
@@ -240,7 +244,8 @@ async function thankYou() {
     const p = people[k] || {}, card = document.createElement("div");
     card.className = "ty-card";
     card.style.animationDelay = `${0.15 + i * 0.09}s`;
-    if (ALLOWED.includes(k)) card.append(Object.assign(document.createElement("span"), { className: "ok", textContent: "✓", title: L("Gave us permission", "已同意我們使用") }));
+    if (ALLOWED.includes(k)) card.classList.add("said-yes");
+    if (ALLOWED.includes(k) && !p.avatar) card.append(Object.assign(document.createElement("span"), { className: "ok", textContent: "✓", title: L("Gave us permission", "已同意我們使用") }));
     if (p.avatar) {
       card.append(Object.assign(document.createElement("img"), { className: "ty-pic", src: p.avatar, alt: "" }));
       if (k === "wanwannjeab") { const m = Object.assign(document.createElement("span"), { className: "muvs small" }); for (const f of ["muv-heart", "muv-baby", "muv-plain"]) m.append(Object.assign(document.createElement("img"), { src: `art/${f}.png`, alt: "" })); card.append(m); }
@@ -274,9 +279,30 @@ async function decorate() {
   }
 }
 
+/** The pictures of the app in this language (art/welcome-<name>-<en|zh|th>.jpg). */
+function pics() { for (const img of document.querySelectorAll("img[data-pic]")) img.src = `art/welcome-${img.dataset.pic}-${lang}.jpg`; }
+
+/** Page 1: a new install that finds a backup offers it (null: nothing to offer, or there's data here already). */
+let offerRun = 0;
+async function placeOffer() {
+  const run = ++offerRun;
+  const box = await restoreOffer().catch(() => null);
+  if (run !== offerRun) return false; // (asked again meanwhile: the newer one places it)
+  document.querySelector(".step.s1 .pd-offer")?.remove();
+  if (box) document.querySelector(".step.s1 .col .kicker")?.after(box);
+  return !!box;
+}
+
+/** The Pins page says how many pins there are (the catalogue can grow without a new version). */
+async function pinTotal() {
+  const n = (await host?.pins?.call?.("summary").catch(() => null))?.total;
+  if (n > 0) for (const s of document.querySelectorAll(".pin-total")) s.textContent = String(n);
+}
+
 async function start() {
   translatePage();
   decorate();
+  pics();
   for (let k = 0; k < steps.length; k++) {
     const li = document.createElement("li");
     li.title = L(steps[k].dataset.title, steps[k].dataset.zhTitle);
@@ -321,6 +347,8 @@ async function start() {
     ap.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { host.settingText("appearance", b.dataset.appearance); st.appearance = b.dataset.appearance; mark(b.dataset.appearance); }));
   }
   thankYou();
+  pinTotal();
+  if (!info.setupDone) placeOffer();
   // Already chosen (the tour opened again): that way of keeping time is picked.
   if (info.setupDone && st.keep) { const r = document.querySelector(`input[name=keep][value=${st.keep}]`); if (r) r.checked = true; }
   document.body.classList.toggle("os-is-win", info.os === "win");
@@ -338,7 +366,7 @@ async function start() {
       `你在 ${info.folder} 已經有 ${says(info.existing)} 了。這些都會保留，你選的會一起加進來。`);
   }
   if (info.setupDone && info.library !== "full") {
-    const was = { starter: L("the starter stickers", "入門貼圖"), own: L("your own photos", "你自己的照片") }[info.library] || L("your own photos", "你自己的照片");
+    const was = L("your own photos", "你自己的照片"); // (an old "starter" library reads as your own: the starter set isn't offered any more)
     $("lib-status").textContent = L(`You started with ${was}. Pick the full library to add it, or just go on.`, `你一開始選的是${was}。可以加上完整貼圖庫，或直接繼續。`);
   }
   setup?.onPack?.((p) => { pk = p; if (p.state === "done") { info.library = "full"; info.setupDone = true; } update(); });
@@ -376,5 +404,5 @@ async function start() {
 }
 
 // For the self-test.
-window.__mlwhWelcome = { show, step: () => at, steps: steps.length, shown, decorate, pack: () => pk };
+window.__mlwhWelcome = { show, step: () => at, steps: steps.length, shown, decorate, pack: () => pk, offer: placeOffer };
 start();

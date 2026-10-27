@@ -21,7 +21,7 @@ export function renderToday(main, { ask, redraw, go: goTo }) {
 
   // ---- focus of the day ----
   const focusIn = el("input", { type: "text", maxLength: 120, value: st.focus || "", id: "focus", className: "pt-focus",
-    placeholder: L("What's today about?", "今天想專心做什麼？"), title: L("e.g. Finish chapter 3", "例如：寫完第三章"), "aria-label": L("Focus of the day", "本日主題") });
+    placeholder: L("What's today about?", "今天的主題是？"), title: L("e.g. Finish chapter 3", "例如：寫完第三章"), "aria-label": L("Focus of the day", "本日主題") });
   focusIn.addEventListener("change", async () => { await work.call("setFocus", focusIn.value); toast(L("Today's focus saved", "已儲存本日主題")); });
   focusIn.addEventListener("keydown", (e) => { if (enterKey(e)) focusIn.blur(); });
   // The page's top: a line for the day (one of the start-of-day lines, yours too, picked at random when the

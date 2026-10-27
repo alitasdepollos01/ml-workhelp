@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="welcome.css">
 <link rel="stylesheet" href="themes.css">
 <link rel="stylesheet" href="skins.css">
+<link rel="stylesheet" href="skins-new.css">
 </head>
 <body class="tool welcome">
 <main class="wframe">
@@ -44,6 +45,7 @@
         <div class="pref-row" id="themes-row"><span data-zh="顏色">Colours</span><div class="themes" id="themes" role="radiogroup" aria-label="Colour theme" data-zh-aria-label="主題顏色"></div></div>
       </div>
       <div class="style-pick" id="style-pick" hidden><b data-zh="挑一個你喜歡的樣子（之後隨時能在「設定」改）">Pick a look you like (you can change it any time in Settings)</b></div>
+      <p class="doodle-line" data-zh="<b>塗鴉：</b>卡片後面淡淡的小圖，是 MilkLove 演過的作品裡的塗鴉。想改成角落貼紙、換畫風或關掉：<b>設定 › 外觀與選單列</b>。" data-th="<b>ดูเดิล:</b> ภาพเล็ก ๆ จาง ๆ หลังการ์ดคือดูเดิลจากซีรีส์ที่มิ้ลค์เลิฟเล่น อยากเปลี่ยนเป็นสติกเกอร์ตามมุม เปลี่ยนสไตล์วาด หรือปิด: <b>การตั้งค่า › หน้าตาและแถบเมนู</b>"><b>Doodles:</b> the faint little drawings behind the cards are from the shows MilkLove were in. Corner stickers, another drawing style, or off: <b>Settings › Look &amp; menu bar</b>.</p>
     </div>
     <div class="pic">
       <span class="say" data-zh="嗨，我是 Muv！<small>叫我 Jubmeow 也可以。我來帶你逛逛。</small>">Hi, I'm Muv! <small>You can call me Jubmeow too. I'll show you around.</small></span>
@@ -72,6 +74,7 @@
           <span class="choice-body">
             <b data-zh="不用了，我自己加照片">None: I'll add my own</b>
             <span data-zh="從零開始，用你自己的照片做貼圖。">Start empty and make stickers from your own photos.</span>
+            <span class="own-note muted" id="own-note" data-zh="桌面夥伴要有貼圖才會出來：只用自己的照片的話，要等你在「貼圖」裁好幾張，它們才會現身。">The desktop buddies need stickers: with your own photos only, they stay away until you've cut some in Stickers.</span>
           </span>
         </label>
       </div>
@@ -185,10 +188,12 @@
         <li data-zh="<b>提醒與活動</b>"><b>Reminders &amp; events</b></li>
         <li data-zh="<b>數據</b>：看一週、一個月、一年"><b>Data</b>: your week, month and year</li>
         <li data-zh="<b>貼圖</b>：用自己的照片做貼圖，標註照片來自誰"><b>Stickers</b>: make your own from your photos, and credit them</li>
+        <li data-zh="<b>徽章</b>：你收集的徽章（徽章板和收藏盒）" data-th="<b>เข็มกลัด</b>: เข็มกลัดที่คุณสะสม (บอร์ดและกล่อง)"><b>Pins</b>: the pins you collect (the Board and the Box)</li>
         <li data-zh="<b>桌面夥伴</b>：誰在桌面、多活潑、用哪些貼圖"><b>Desktop buddy</b>: who's out, how lively, which stickers</li>
         <li data-zh="<b>照片來源</b>"><b>Photo credits</b></li>
         <li data-zh="<b>設定</b>：風格、顏色、語言、計時方式"><b>Settings</b>: style, colours, language, keeping time</li>
       </ol>
+      <p class="muted corners" data-zh="工作用的分頁放在<b>工作角落</b>標題下，貼圖、徽章這些粉絲的東西放在<b>粉絲角落</b>。" data-th="แท็บงานอยู่ใต้หัวข้อ <b>มุมทำงาน</b> ส่วนของแฟนคลับอย่างสติกเกอร์และเข็มกลัดอยู่ใต้ <b>มุมแฟนคลับ</b>">The work tabs sit under a <b>Work corner</b> heading; the fan things, stickers and pins, under <b>Fan corner</b>.</p>
       <p class="muted" data-zh="有問題？點左下角的 <b>Muv</b>：常見問題、寫信給我們">Questions? Click <b>Muv</b> at the bottom left: answers, and a way to email us</p>
       <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小撇步：</b>風格、顏色和語言都在<b>設定</b>裡改，這段介紹的第一頁也可以。"><b>Muv's tip:</b> the style, colours and language are in <b>Settings</b>, and on the first page of this tour.</p></div>
     </div>
@@ -206,7 +211,7 @@
         <li data-zh="<b>休息一下</b>：選這次休息做什麼、休息多久；回來按 <b>我回來了</b>。"><b>Take a break</b>: pick what it is and how long; when you're back, press <b>I'm back</b>.</li>
         <li data-zh="<b>收工</b>：把做到現在的時間記進去，結束今天，還有貼圖慶祝"><b>Done for today</b>: what you've done so far is logged, the day ends, with a sticker celebration</li>
         <li data-zh="今天的紀錄是一條<b>時間軸</b>：點一段就能改，虛線的空白點一下就能補登。">Today's log is a <b>timeline</b>: click a part to change it; click a dashed gap to add time you forgot.</li>
-        <li data-zh="<b>專注全螢幕</b>：要看書、不在電腦前工作時打開，時鐘放大到整個螢幕，不碰電腦也一直計時，顏色、位置、大小都能自己選。"><b>Focus screen</b>: away from the computer? The clock fills the screen and keeps counting; you pick its colours, place and size.</li>
+        <li data-zh="<b>專注全螢幕</b>：要看書、不在電腦前工作時打開，時鐘放大到整個螢幕，不碰電腦也一直計時（大數字是這一段，下面是今天的總時數）。顏色、位置、大小都能自己選，後面可以放攝影師的照片、你自己的照片，或兩種都放。" data-th="<b>หน้าจอโฟกัส</b>: ไม่ได้อยู่หน้าคอม? นาฬิกาขยายเต็มจอและนับต่อไป (ตัวเลขใหญ่คือช่วงนี้ ด้านล่างคือยอดรวมของวันนี้) เลือกสี ตำแหน่ง ขนาด และสิ่งที่อยู่ด้านหลังได้เอง: รูปของช่างภาพ รูปของคุณเอง หรือทั้งสองอย่าง"><b>Focus screen</b>: away from the computer? The clock fills the screen and keeps counting (the big number is this stretch, today's total is under it). You pick its colours, place and size, and what's behind it: the photographers' photos, your own, or both.</li>
       </ul>
       <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小撇步：</b>早上取好名字，之後換事情時切換一下就好。"><b>Muv's tip:</b> name your task once in the morning, then just switch when you change.</p></div>
     </div>
@@ -236,7 +241,7 @@
         <li data-zh="<b>寫下要做什麼，再點時間</b>：15 分鐘後、今晚，或自己選日期和時間。"><b>Write what it is, then tap when</b>: in 15 minutes, tonight, or pick a date and time.</li>
         <li data-zh="<b>提醒</b>：時間一到，夥伴就會把提醒舉給你看，還附上相關的泰文單字。"><b>Reminders</b>: when it's time, the buddy holds it up, with a Thai word that goes with it.</li>
         <li data-zh="<b>活動</b>：不用連結行事曆也能加，會存在 App 裡；開始前夥伴會提醒你。連結 Apple 行事曆後，兩邊會同步。"><b>Events</b>: no calendar needed, they stay in the app; the buddy reminds you before each starts. Connect Apple Calendar and they go both ways.</li>
-        <li data-zh="<b>時間到會響</b>：內建的「叮」，或 Milk 和 Love 的聲音（「พี่มิว！」、「น้องเลิฟ」、「P'Ink！」、「牙蟲」⋯），到<b>設定 › 提醒與活動</b>選。"><b>It rings when it's time</b>: the chime, or Milk and Love's voices (“พี่มิว!”, “น้องเลิฟ”, “P'Ink!”, “牙蟲”…); pick it in <b>Settings › Reminders &amp; events</b>.</li>
+        <li data-zh="<b>時間到會響</b>：內建的「叮」，或 Milk 和 Love 的聲音（「พี่มิว！」、「น้องเลิฟ」、「P'Ink！」、「蛀牙」⋯），到<b>設定 › 提醒與活動</b>選。"><b>It rings when it's time</b>: the chime, or Milk and Love's voices (“พี่มิว!”, “น้องเลิฟ”, “P'Ink!”, “Cavity”…); pick it in <b>Settings › Reminders &amp; events</b>.</li>
         <li data-zh="<b>夥伴收起來的時候</b>，會在你正在用的螢幕右上角跳出一張小卡片。<b>專注時</b>（專注全螢幕或番茄鐘），提醒會先等等，結束後一起告訴你；活動照樣會跳出來。"><b>With the buddy hidden</b>, a small card pops up at the top right of the screen you're on. <b>While you focus</b> (the focus screen or a Pomodoro round), reminders wait and come together at the end; events still come through.</li>
       </ul>
       <div class="connect mac-only">
@@ -261,17 +266,17 @@
     <div class="col">
       <h1 data-zh="5. 數據">5. Data</h1>
       <ul class="how text work-text">
-        <li data-zh="看<b>一週、一個月或一年</b>，三個分頁：<b>總覽</b>（數字、重點整理、每天的長條圖）、<b>分析</b>（時間花在哪裡、休息、什麼時候工作、專注程度）和<b>日曆</b>。看一年時點一個月，整頁就換成那個月。">A <b>week, a month or a year</b>, in three tabs: <b>Summary</b> (the numbers, highlights, each day's bar), <b>Analysis</b> (where the time went, breaks, when you work, how focused) and <b>Calendar</b>. In a year, click a month and the whole page is that month.</li>
-        <li data-zh="<b>日曆</b>：每天的主題和時數；<b>點一天</b>就能看那天做了什麼：一條時間軸，點一段就能改，空白可以補登。"><b>Calendar</b>: each day's focus and hours; <b>click a day</b> to see what you did: a timeline, click a part to change it, fill in a gap.</li>
+        <li data-zh="看<b>一週、一個月或一年</b>，三個分頁：<b>總覽</b>（數字、重點整理、每天的長條圖）、<b>分析</b>（時間花在哪裡、休息、什麼時候工作、專注程度）和<b>日曆</b>。看一年時點一個月，那個月的數字和每一天就會在圖表下面展開。" data-th="ดู<b>สัปดาห์ เดือน หรือปี</b> มีสามแท็บ: <b>สรุป</b> (ตัวเลข สรุป และแท่งของแต่ละวัน) <b>การวิเคราะห์</b> (เวลาหมดไปกับอะไร การพัก ทำงานช่วงไหน โฟกัสแค่ไหน) และ<b>ปฏิทิน</b> เวลาดูทั้งปี คลิกเดือนไหน ตัวเลขและแต่ละวันของเดือนนั้นจะเปิดอยู่ใต้กราฟ">A <b>week, a month or a year</b>, in three tabs: <b>Summary</b> (the numbers, highlights, each day's bar), <b>Analysis</b> (where the time went, breaks, when you work, how focused) and <b>Calendar</b>. In a year, click a month: its numbers and its days open right under the chart.</li>
+        <li data-zh="<b>日曆</b>：每天的主題和時數，旁邊一欄是每週的小計，達標的日子有粉紅點；<b>點一天</b>就能看那天做了什麼：一條時間軸，點一段就能改，空白可以補登。" data-th="<b>ปฏิทิน</b>: โฟกัสและชั่วโมงของแต่ละวัน มีคอลัมน์สรุปรายสัปดาห์ และจุดสีชมพูในวันที่ถึงเป้า <b>คลิกวันไหน</b>ก็เห็นว่าทำอะไรไปบ้าง: เป็นไทม์ไลน์ คลิกช่วงไหนก็แก้ได้ และเติมช่องว่างได้"><b>Calendar</b>: each day's focus and hours, a column for each week, a pink dot on the days you reached your goal; <b>click a day</b> to see what you did: a timeline, click a part to change it, fill in a gap.</li>
         <li data-zh="數字都會跟前一段時間比（▲▼）。也能匯出成試算表；資料都只存在你的電腦裡。">Every number is compared with the period before (▲▼). Export it as a spreadsheet; everything stays on your computer.</li>
-        <li data-zh="<b>做成圖片</b>：六種小卡片（我的這一週、我的今天、番茄鐘⋯），貼圖自己挑，卡片上會標明照片來源。"><b>Make a picture</b>: six little cards (My week, My day, Pomodoros…) with a sticker you pick, and its photo's credit on the card.</li>
+        <li data-zh="<b>做成圖片</b>：六種小卡片（我的這一週、我的今天、番茄鐘⋯），貼圖自己挑，卡片上會標明照片來源；還能用塗鴉和你收集到的徽章<b>裝飾</b>它。" data-th="<b>ทำเป็นรูป</b>: การ์ดเล็ก ๆ หกแบบ (สัปดาห์นี้ของฉัน วันนี้ของฉัน โพโมโดโร…) พร้อมสติกเกอร์ที่คุณเลือก และเครดิตรูปบนการ์ด แล้ว<b>ตกแต่ง</b>ด้วยดูเดิลและเข็มกลัดที่สะสมไว้ได้"><b>Make a picture</b>: six little cards (My week, My day, Pomodoros…) with a sticker you pick, and its photo's credit on the card; <b>Decorate</b> it with doodles and the pins you've collected.</li>
       </ul>
       <div class="pansa"><img class="tip-img" src="art/muv-plain.png" alt="" data-by="wanwannjeab"><p data-zh="<b>Muv 小撇步：</b>月底打開日曆看看，這個月都忙了些什麼。"><b>Muv's tip:</b> open the calendar at the end of the month and see what it was all about.</p></div>
     </div>
     <div class="pic">
       <div class="pics work-text">
-        <figure><img src="art/welcome-data-cal-en.jpg" data-zh-src="art/welcome-data-cal-zh.jpg" alt="" data-zh-alt=""><figcaption data-zh="月：每天的主題和時數">A month: each day's focus and hours</figcaption></figure>
-        <figure><img src="art/welcome-data-day-en.jpg" data-zh-src="art/welcome-data-day-zh.jpg" alt=""><figcaption data-zh="點一天：時間軸，點一段就能改">Click a day: a timeline, click a part to change it</figcaption></figure>
+        <figure><img class="wpic" data-pic="datasum" alt=""><figcaption data-zh="總覽：你的數字，每個都跟前一段時間比" data-th="สรุป: ตัวเลขของคุณ แต่ละตัวเทียบกับช่วงก่อนหน้า">Summary: your numbers, each against the period before</figcaption></figure>
+        <figure><img class="wpic" data-pic="data-day" alt=""><figcaption data-zh="點一天：時間軸，點一段就能改">Click a day: a timeline, click a part to change it</figcaption></figure>
       </div>
       <img class="art bob peek" data-spot="w9" alt="">
     </div>
@@ -297,7 +302,24 @@
     </div>
   </section>
 
-  <!-- 11. New versions & important notices: the email (needed to go on) -->
+  <!-- 11. Pins: four short lines and the Board -->
+  <section class="step s13p lean-pins" data-title="Pins" data-zh-title="徽章">
+    <div class="col">
+      <h1 data-zh="7. 收集徽章" data-th="7. สะสมเข็มกลัด">7. Collect pins</h1>
+      <ul class="how text">
+        <li data-zh="<b><span class=&quot;pin-total&quot;>61</span> 個徽章</b>，來自她們的作品、MilkLove 和 MUVMUV。平常工作就會拿到。" data-th="<b>เข็มกลัด <span class=&quot;pin-total&quot;>61</span> ชิ้น</b> จากซีรีส์ มิ้ลค์เลิฟ และเมิฟเมิฟ ได้มาจากงานที่คุณทำอยู่แล้ว"><b><span class="pin-total">61</span> pins</b> from the shows, MilkLove and MUVMUV. They come with the work you already do.</li>
+        <li data-zh="<b>等級</b>：素面 → 銀邊 → 金邊 → 寶石，每一級都有一句劇中台詞。" data-th="<b>ระดับ</b>: แบบเรียบ → ขอบเงิน → ขอบทอง → อัญมณี ทุกขั้นมีประโยคจากซีรีส์"><b>Tiers</b>: plain → silver → gold → gem, each with a line from the show.</li>
+        <li data-zh="<b>祕密和特別的日子</b>：有幾個是祕密徽章；Love、MUVMUV 和 Milk 的生日各有一個。" data-th="<b>ความลับและวันพิเศษ</b>: บางชิ้นเป็นเข็มกลัดลับ และวันเกิดของเลิฟ เมิฟเมิฟ และมิ้ลค์ก็มีของตัวเอง"><b>Secrets and special days</b>: a few pins are secret, and Love's, MUVMUV's and Milk's birthdays each have one.</li>
+        <li data-zh="<b>不會失去</b>：這週比較安靜，徽章也不會被收回。都在<b>粉絲角落 › 徽章</b>。" data-th="<b>ไม่มีอะไรหาย</b>: สัปดาห์ที่เงียบ ๆ ก็ไม่ทำให้เข็มกลัดหายไป ดูได้ที่ <b>มุมแฟนคลับ › เข็มกลัด</b>"><b>Nothing to lose</b>: a quiet week never takes a pin away. They're in <b>Fan corner › Pins</b>.</li>
+      </ul>
+    </div>
+    <div class="pic">
+      <figure class="board-fig"><img class="wpic" data-pic="board" alt=""><figcaption data-zh="徽章板：灰色的還沒拿到，「？」是祕密徽章" data-th="บอร์ด: สีเทาคือยังไม่ได้ “?” คือเข็มกลัดลับ">The Board: grey ones are still to find, “?” is a secret</figcaption></figure>
+      <img class="art bob peek muv-peek" src="art/muv-heart.png" alt="" data-by="wanwannjeab">
+    </div>
+  </section>
+
+  <!-- 12. New versions & important notices: the email (needed to go on); backups and new photos, as two lines -->
   <section class="step s11c" data-title="Updates" data-zh-title="新版本與重要通知">
     <div class="col">
       <h1 data-zh="新版本與重要通知">New versions &amp; important notices</h1>
@@ -311,11 +333,15 @@
           <li data-zh="隨時可以取消：點信裡的「取消訂閱」，或寫信到 alitasdepollos01@gmail.com">Stop any time: "unsubscribe" in any of our emails, or write to alitasdepollos01@gmail.com.</li>
         </ul>
       </div>
+      <ul class="how text also">
+        <li data-zh="<b>備份與還原</b>：所有東西存成一個檔案，在<b>設定 › 關於與更新</b>。" data-th="<b>สำรองและกู้คืน</b>: เก็บทุกอย่างเป็นไฟล์เดียว ที่ <b>การตั้งค่า › เกี่ยวกับและอัปเดต</b>"><b>Backup &amp; restore</b>: everything in one file, in <b>Settings › About &amp; updates</b>.</li>
+        <li data-zh="<b>新照片</b>不用重新安裝就能拿到，App 會先問你。" data-th="<b>รูปใหม่</b> มาได้โดยไม่ต้องติดตั้งใหม่ และแอปจะถามคุณก่อน"><b>New photos</b> arrive without reinstalling; the app asks you first.</li>
+      </ul>
     </div>
     <div class="pic"><img class="art" data-spot="w-contact" alt=""></div>
   </section>
 
-  <!-- 12. Done: thank you to everyone behind the photos and drawings -->
+  <!-- 13. Done: thank you to everyone behind the photos and drawings -->
   <section class="step s11d one" data-title="Done" data-zh-title="完成">
     <div class="col done">
       <img class="done-st" data-spot="w11-right" alt="">
@@ -328,7 +354,7 @@
         <div class="ty-cards" id="thank-names"></div>
         <span class="hearts" aria-hidden="true"></span>
       </div>
-      <p class="muted small ty-note" id="thank-note" data-zh="<b>✓ 已經同意我們使用：</b>Blumoon、Lyrac、NGMin 和 otter（照片），以及 wanwannjeab（卡通 Muv 插畫）。也謝謝上面的每一位。其他的照片，我們試著聯絡過攝影師但沒有收到回覆，或不知道是誰拍的。如果其中有你的照片，想更改標註或希望移除，隨時告訴我們，我們會在下一次更新修正："><b>✓ Gave us permission:</b> Blumoon, Lyrac, NGMin and otter (photos), and wanwannjeab (the cartoon Muv drawings). Thank you to everyone else above too. For the rest, we tried to reach the photographers but heard nothing back, or we don't know who took them. If a photo is yours and you'd like the credit changed or the photo removed, tell us any time and we'll fix it in the next update:</p>
+      <p class="muted small ty-note" id="thank-note" data-th="<b>อนุญาตให้เราใช้แล้ว (มีรูปโปรไฟล์ด้านบน):</b> Blumoon, KIU, Lyrac, NGMin, otter และ PKYU (รูปภาพ) และ wanwannjeab (ภาพการ์ตูน Muv) ขอบคุณทุกคนข้างบนด้วยนะ ส่วนรูปอื่น ๆ เราพยายามติดต่อช่างภาพแล้วแต่ยังไม่ได้รับคำตอบ หรือไม่รู้ว่าใครถ่าย ถ้ามีรูปของคุณอยู่ และอยากให้แก้เครดิตหรือเอารูปออก บอกเราได้ทุกเมื่อ เราจะแก้ให้ในอัปเดตครั้งถัดไป:" data-zh="<b>已經同意我們使用（上面有他們的頭像）：</b>Blumoon、KIU、Lyrac、NGMin、otter 和 PKYU（照片），以及 wanwannjeab（卡通 Muv 插畫）。也謝謝上面的每一位。其他的照片，我們試著聯絡過攝影師但沒有收到回覆，或不知道是誰拍的。如果其中有你的照片，想更改標註或希望移除，隨時告訴我們，我們會在下一次更新修正："><b>Gave us permission</b> (their pictures are above): Blumoon, KIU, Lyrac, NGMin, otter and PKYU (photos), and wanwannjeab (the cartoon Muv drawings). Thank you to everyone else above too. For the rest, we tried to reach the photographers but heard nothing back, or we don't know who took them. If a photo is yours and you'd like the credit changed or the photo removed, tell us any time and we'll fix it in the next update:</p>
       <p class="muted small" data-zh="之後可以到 <b>設定</b> → <b>關於</b> 再看一次，或從選單選 <b>歡迎與導覽⋯</b>">See it again in <b>Settings</b> → <b>About</b>, or from the menu: <b>Welcome and tour…</b></p>
     </div>
   </section>

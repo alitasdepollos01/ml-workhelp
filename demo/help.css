@@ -1,0 +1,13 @@
+/* Help (tab-help.js): the jump list of sections under the search, and each section's heading. Loaded by tab-help.js. */
+.appwin .help-jump { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 10px; }
+.appwin .help-chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--control-bg); color: var(--desk-ink);
+  border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 13px; cursor: pointer; }
+.appwin .help-chip small { min-width: 18px; padding: 0 5px; border-radius: 999px; font-size: 11px; line-height: 17px; text-align: center;
+  background: color-mix(in srgb, var(--bar, #e8508a) 16%, transparent); color: var(--desk-ink); }
+.appwin .help-chip:hover { border-color: var(--bar, #e8508a); }
+.appwin .help-chip:focus-visible { outline: 2px solid var(--bar, #e8508a); outline-offset: 2px; }
+.appwin .help-chip[hidden] { display: none; }
+.appwin .help-secs { display: grid; gap: 14px; }
+.appwin .help-sec { display: grid; gap: 6px; scroll-margin-top: 12px; }
+.appwin .help-sec[hidden] { display: none; }
+.appwin .help-sec h3 { margin: 4px 0 0; font-size: 15px; }
