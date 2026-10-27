@@ -39,7 +39,7 @@ const W = {
   round2: ["round 2 of 4", "第 2 / 4 輪", "รอบที่ 2 จาก 4"],
   reminder: ["Reminder", "提醒", "แจ้งเตือน"], done: ["Done", "完成", "เสร็จแล้ว"], in10: ["In 10 min", "10 分鐘後", "อีก 10 นาที"],
   word: ["sometimes; maybe", "有時候；也許", "sometimes; maybe"],
-  rings: ["Milk & Love ringtones", "Milk 和 Love 的鈴聲", "เสียงเรียกเข้า Milk กับ Love"],
+
   photoBy: ["Photo: alitasdepollos", "照片：alitasdepollos", "รูป: alitasdepollos"],
 };
 const SC = {

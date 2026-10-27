@@ -126,18 +126,11 @@ html[data-look="stage"] #ml-looks .dood-pair figure > img { border-color: rgba(2
 #ml-looks .dood-pair figcaption { font: 800 14px/1.3 var(--font-b); color: var(--ink-2); margin-top: 10px; text-align: center; }
 @media (max-width: 600px) { #ml-looks .dood-pair { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
 
-/* ---------------------------------------------------------------- For fans: the sticker library and the ringtones */
+/* ---------------------------------------------------------------- For fans: the sticker library */
 .fan-lib .stk { position: absolute; bottom: 0; width: auto; }
 .fan-lib .stk:nth-child(1) { left: 2%; height: 80%; transform: rotate(-6deg); }
 .fan-lib .stk:nth-child(2) { left: 31%; height: 92%; z-index: 1; }
 .fan-lib .stk:nth-child(3) { right: 2%; height: 78%; transform: rotate(5deg); }
-.fan-ring .stk { right: 6%; }
-.bubble2.ring2 { left: 7%; top: 14%; display: grid; gap: 2px; text-align: left; }
-.bubble2.ring2 .r-h { display: inline-flex; gap: 5px; align-items: center; font: 800 11px/1 var(--font-b); color: var(--a-deep); }
-.bubble2.ring2 .r-h .ic { width: 13px; height: 13px; }
-.bubble2.ring2 b { font: 800 15px/1.2 var(--font-h); color: #2b2430; }
-.bubble2.ring2 > span:last-child { font: 700 12px/1.2 var(--font-b); color: #7a5b6c; }
-html[data-look="stage"] .fan-ring { background: linear-gradient(160deg, #3b2a55, #2a1d44 55%, #23324a); }
 
 /* ---------------------------------------------------------------- Thai from the songs: compact */
 #ml-words .ml-two { max-width: 980px; margin: 0 auto; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
@@ -268,3 +261,8 @@ html[data-look="scrapbook"] #p-tmb .tmb-rights { background: color-mix(in oklab,
 .oss-list .lic { justify-self: end; font: 700 12px/1.3 var(--font-b); color: var(--muted); white-space: nowrap; }
 .oss-list .what { grid-column: 1 / -1; color: var(--muted); font-size: 13.5px; }
 @media (max-width: 600px) { .oss-list { grid-template-columns: minmax(0, 1fr); } }
+
+/* Made for MilkLove fans: three cards; narrower screens put the pins playground on a row of its own */
+.fan-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .fan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fan-grid > .fan-play { grid-column: 1 / -1; } }
+@media (max-width: 560px) { .fan-grid { grid-template-columns: minmax(0, 1fr); } }
