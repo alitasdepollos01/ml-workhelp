@@ -260,3 +260,11 @@ html[data-look="scrapbook"] #p-tmb .tmb-rights { background: color-mix(in oklab,
 /* the demo's window keeps its own shape (1100 x 740) even when the style list beside it is taller (10 styles) */
 .try3 > .screen { align-self: start; width: 100%; min-width: 0; }
 .credit-ai { margin-top: 14px; text-align: center; }
+/* Open source in the app: name (its GitHub) · licence · what it is */
+.oss { margin-top: 18px; }
+.oss-list { list-style: none; margin: 12px 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 24px; }
+.oss-list li { display: grid; grid-template-columns: minmax(0, auto) auto; gap: 2px 8px; align-items: baseline; align-content: start; padding: 7px 0; border-bottom: 1.5px dashed var(--line); font-size: 14.5px; }
+.oss-list a { font-weight: 800; color: var(--ink); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+.oss-list .lic { justify-self: end; font: 700 12px/1.3 var(--font-b); color: var(--muted); white-space: nowrap; }
+.oss-list .what { grid-column: 1 / -1; color: var(--muted); font-size: 13.5px; }
+@media (max-width: 600px) { .oss-list { grid-template-columns: minmax(0, 1fr); } }
