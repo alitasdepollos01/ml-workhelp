@@ -1,4 +1,4 @@
-/* Thai Mascot Buddy page (2026-10-27): "Inside the editor" (Myra's pick; the parade is set aside in scratchpad/tmb-a-aside/).
+/* Thai Mascot Buddy page (2026-10-27): "Inside the editor".
    Scrapbook in light, Concert night in dark (html[data-look]), the three languages. The mascots are pre-rendered raster
    clips (assets/tmb/clips/, recorded from the extension's own rig by tools/record-rig.js); no vector art, no rig code.
    html[data-vs] = the VS Code theme the pictures follow (dark in Concert night or the dark theme). */
@@ -223,7 +223,7 @@ html[data-vs="dark"] .pomo { background: linear-gradient(160deg, #2c3550, #3b2a5
   .tmb-intro .badges { font-size: 13px; }
 }
 
-/* ---------------------------------------------------------------- the prototype's bar (look + direction) */
+/* ---------------------------------------------------------------- small fixes */
 .get-steps .term button span { color: #fff; font-size: 12.5px; }
 .vs-card .row i, .pomo-card .row i { white-space: nowrap; }
 .get-alt { margin: 2px 0 0; display: grid; gap: 2px; font-size: 14px; color: var(--muted); }

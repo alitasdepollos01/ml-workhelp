@@ -1,6 +1,6 @@
 /* ML WorkHelp page (2026-10-27): written for a first-time visitor. One picture + a few short lines per section, details
    behind "more". Scrapbook (light) gets tape, polaroids and a washi band; Concert night (dark) gets glow. Pictures are
-   prototype renders (assets/next/README.md lists the re-shoots). */
+   real screens of the app. */
 .ml-top { padding: 40px 0 10px; }
 .ml-hero { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 40px; align-items: center; }
 .ml-name { font-size: clamp(42px, 5.6vw, 70px); margin: 12px 0 0; }

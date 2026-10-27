@@ -1,5 +1,5 @@
 /* ML WorkHelp page (2026-10-27): the pictures follow the language and light/dark (Scrapbook / Concert night), the looks
-   switcher, the series band and the pins board. SPOILER RULE: only the 7 series pins and the visible set (Myra's 12 wall
+   switcher, the series band and the pins board. No spoilers: only the 7 series pins and the always-visible set (the 12 wall
    motifs + camera + Ajarn Maewnam) are ever drawn; every other pin is a "?" silhouette. Uses the page's T() and lang. */
 (function () {
   "use strict";
