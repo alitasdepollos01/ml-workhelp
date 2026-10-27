@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128"><title>Back of the MUVMUV's milk pin</title><defs><linearGradient id="milkbm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#58525e"/><stop offset=".38" stop-color="#2b2730"/><stop offset=".55" stop-color="#6d6773"/><stop offset="1" stop-color="#1f1c23"/></linearGradient>
+<linearGradient id="milkbl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8d8794"/><stop offset="1" stop-color="#4a4550"/></linearGradient>
+<filter id="milkbsil" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="1.9" result="d"/><feFlood flood-color="#fff"/><feComposite in2="d" operator="in"/></filter>
+<filter id="milkbsh" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="1.9" result="d"/><feOffset dx=".9" dy="1.9"/><feGaussianBlur stdDeviation="1.1"/><feFlood flood-color="#1a0d14" flood-opacity=".38"/><feComposite in2="d" operator="in"/><feOffset dx=".9" dy="1.9"/><feGaussianBlur stdDeviation="1"/></filter>
+<filter id="milkbin" x="-30%" y="-30%" width="160%" height="160%"><feFlood flood-color="#fff"/><feComposite in2="SourceAlpha" operator="in"/></filter>
+<g id="milkba"><g transform="matrix(-1 0 0 1 64 0)"><g transform="translate(32 32) scale(0.91) translate(-32.8 -30.8)"><g stroke="#3b2531" stroke-linejoin="round" stroke-linecap="round"><path d="M40 27 L50 20.4 L50 52 L40 58.6 Z" fill="#e7699a" stroke-width="3.4"/><path d="M28 12.6 L38.4 6 L50 20.4 L40 27 Z" fill="#72d8b6" stroke-width="3.4"/><path d="M27 9.6 L37.6 3 L38.4 6 L28 12.6 Z" fill="#fff5e4" stroke-width="3.4"/><path d="M15.6 27 L28 12.6 L40 27 Z" fill="#fff5e4" stroke-width="3.4"/><path d="M17 27H38.6A1.4 1.4 0 0 1 40 28.4V57.2A1.4 1.4 0 0 1 38.6 58.6H17A1.4 1.4 0 0 1 15.6 57.2V28.4A1.4 1.4 0 0 1 17 27Z" fill="#ff8db6" stroke-width="3.4"/><ellipse stroke="none" cx="20" cy="36" rx="2" ry="6" transform="rotate(0 20 36)" fill="#fff" opacity=".85"/><path d="M27.8 55 C22.6 51.2 20.8 48.6 21.2 46.4 C21.6 44 24.8 43.2 27.8 46 C30.8 43.2 34 44 34.4 46.4 C34.8 48.6 33 51.2 27.8 55 Z" fill="#ffffff" stroke-width="2.7"/><ellipse cx="23.6" cy="36.4" rx="1.7" ry="2.2" fill="#3b2531"/><circle cx="23.2" cy="35.6" r="0.7" fill="#fff"/><ellipse cx="32" cy="36.4" rx="1.7" ry="2.2" fill="#3b2531"/><circle cx="31.5" cy="35.6" r="0.7" fill="#fff"/><path d="M26.2 38.5Q27.8 40.4 29.4 38.5" fill="none" stroke="#3b2531" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="20.8" cy="38.7" rx="1.8" ry="1.1" fill="#ff7f9f" opacity=".7"/><ellipse cx="34.8" cy="38.7" rx="1.8" ry="1.1" fill="#ff7f9f" opacity=".7"/></g></g></g></g>
+<mask id="milkbrm" maskUnits="userSpaceOnUse" x="-8" y="-8" width="80" height="80"><use href="#milkba" filter="url(#milkbsil)"/></mask>
+<pattern id="milkbbr" width="64" height="1.2" patternUnits="userSpaceOnUse"><rect width="64" height=".6" fill="#fff" opacity=".18"/></pattern>
+<radialGradient id="milkbcl" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ffd0e3"/><stop offset=".6" stop-color="#ff8db6"/><stop offset="1" stop-color="#c94f82"/></radialGradient>
+</defs>
+<use href="#milkba" filter="url(#milkbsh)"/>
+<g mask="url(#milkbrm)"><rect x="-8" y="-8" width="80" height="80" fill="url(#milkbm)"/><rect x="-8" y="-8" width="80" height="80" fill="url(#milkbbr)"/><rect x="-8" y="-8" width="80" height="80" fill="#000" opacity=".12"/></g>
+
+
+<rect x="14.6" y="30.6" width="34.9" height="11.8" rx="2.2" fill="#000" opacity=".13"/><rect x="14.95" y="30.950000000000003" width="34.199999999999996" height="11.100000000000001" rx="1.9" fill="none" stroke="#fff" stroke-width=".35" opacity=".45"/>
+<circle cx="32.5" cy="23.599999999999998" r="6.7" fill="#000" opacity=".2"/>
+<circle cx="32" cy="22.7" r="6.5" fill="url(#milkbcl)"/><circle cx="32" cy="22.7" r="6.5" fill="none" stroke="#a83d6c" stroke-width=".5"/>
+<circle cx="32" cy="22.7" r="4.03" fill="none" stroke="#a83d6c" stroke-width=".45" opacity=".6"/>
+<circle cx="32" cy="22.7" r="1.56" fill="url(#milkbm)" stroke="#6b6b75" stroke-width=".35"/>
+</svg>

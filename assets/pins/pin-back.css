@@ -1,0 +1,9 @@
+/* the engraving laid over a pin's back (assets/pin-back.js) */
+.pback { position: relative; display: inline-block; line-height: 0; }
+.pback img { width: 100%; height: 100%; display: block; }
+.pplate { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; text-align: center; overflow: hidden;
+  color: #3d3a44; font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans Thai", "Helvetica Neue", Arial, sans-serif; font-weight: 700; line-height: 1.08;
+  text-shadow: 0 .06em 0 rgba(255, 255, 255, .5); overflow-wrap: break-word; word-break: normal; line-break: auto; hyphens: auto; padding: 0 3%; box-sizing: border-box; letter-spacing: .01em; }
+.pplate .l1 { display: block; font-size: 1em; text-transform: none; }
+.pplate .l2 { display: block; font-size: .72em; font-weight: 600; opacity: .85; margin-top: .12em; }
+.pplate .l3 { display: block; font-size: .6em; font-weight: 600; opacity: .65; margin-top: .1em; letter-spacing: .04em; }

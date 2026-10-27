@@ -7,6 +7,7 @@ const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const LG = () => (typeof lang === "string" ? lang : "en");
 const T = (en, zh, th) => (LG() === "zh" ? zh : LG() === "th" ? (th || en) : en);
 const L = (a) => T(a[0], a[1], a[2]);
+const G = (h) => (typeof glue === "function" ? glue(h) : h);   // (the page's: no lonely last character in 中文 / ไทย)
 const ic = (n) => `<i data-lucide="${n}" class="ic"></i>`;
 
 /* whose photo (or drawing) each picture here is */
@@ -24,7 +25,7 @@ const IMG = {
   muv: "assets/fan/muv-muv-cartoon.webp", muv2: "assets/fan/muv-muv-heart.webp",
   pomo: "assets/deco/app-now-pomo-52c6b97f.webp", own: "assets/stickers/final-1.webp",
 };
-const stk = (src, style) => `<img class="stk" src="${src}" alt="" style="${style}" draggable="false">`;
+const stk = (src, style) => `<img loading="lazy" class="stk" src="${src}" alt="" style="${style}" draggable="false">`;
 const R = (src, mw = 44, mh = 92) => stk(src, `right:0;bottom:0;max-width:${mw}%;max-height:${mh}%;height:auto;width:auto`);
 const Lf = (src, mw = 44, mh = 92) => stk(src, `left:0;bottom:0;max-width:${mw}%;max-height:${mh}%;height:auto;width:auto`);
 
@@ -53,11 +54,11 @@ const SC = {
     <div class="ring" style="position:absolute;left:6%;top:34%"><b>18:42</b></div>
     <span class="mini hide-sm" style="left:calc(6% + 104px);top:52%">${ic("timer")}<span>${L(W.round2)}</span></span>
     ${R(IMG.pomo, 38)}</div>`,
-  fan: () => `<div class="scene">
-    ${Lf(IMG.own, 42)}
-    <span class="mini" style="right:4%;top:10%"><span class="th" style="font-size:17px">บางที</span><span>bang thi<span class="hide-sm"> · ${L(W.word)}</span></span></span>
-    <span class="mini hide-sm" style="right:9%;top:44%">${ic("music-2")}<span>${L(W.rings)}</span></span>
-    <span class="mini" style="right:4%;bottom:9%">${ic("camera")}<span>${L(W.photoBy)}</span></span></div>`,
+  fan: () => `<div class="scene mk-scene">
+    <img loading="lazy" class="mk-ph" src="assets/stickers/photo-1.jpg" alt="" draggable="false">
+    <span class="mk-arrow">${ic("arrow-right")}</span>
+    ${stk(IMG.own, "right:6%;bottom:0;height:92%;width:auto")}
+    <span class="mini" style="left:5%;bottom:9%">${ic("camera")}<span>${L(W.photoBy)}</span></span></div>`,
 };
 
 const F = {
@@ -70,15 +71,22 @@ const F = {
       "一件一件記下工作時間，或一輪一輪專注、中間休息，一鍵就能切換。",
       "นับเวลาทีละงาน หรือทำเป็นรอบมีพักคั่น สลับได้ในแตะเดียว"] },
 };
-const CHIPS = [
-  ["bell-ring", ["Reminders & events, Apple sync optional", "提醒與活動，可同步 Apple", "แจ้งเตือนและกิจกรรม ซิงก์กับ Apple ได้"]],
-  ["image", ["Make a picture of your week or your day", "把這一週或今天做成一張圖", "ทำสัปดาห์นี้หรือวันนี้เป็นรูป"]],
-  ["play", ["MilkLove clips for your breaks", "休息時看 MilkLove 影片", "ดูคลิป MilkLove ตอนพัก"]],
-  ["party-popper", ["Done for today, with confetti", "收工，撒花慶祝", "เลิกงาน พร้อมโปรยกระดาษ"]],
-  ["palette", ["Eight styles, your colours", "8 種風格，配色自己選", "8 สไตล์ เลือกสีได้เอง"]],
-  ["globe", ["English · 繁中 · ไทย (beta)", "English · 繁中 · ไทย（測試版）", "English · 繁中 · ไทย (beta)"]],
-  ["lock", ["Stays on your Mac", "資料只留在你的 Mac", "ข้อมูลอยู่ใน Mac ของคุณ"]],
-  ["heart", ["Free", "免費", "ฟรี"]],
+/* also in the app: icon, title, one line (a scannable grid, no fold); only what isn't shown anywhere else on the page */
+const ALL = [
+  ["layers", ["Categories & a daily goal", "分類和每日目標", "หมวดงานและเป้าหมายรายวัน"], ["See your time by kind of work, and how close you are to today's goal.", "看看時間花在哪一類工作，離今天的目標還差多少。", "ดูว่าใช้เวลากับงานแต่ละแบบเท่าไร และใกล้เป้าหมายของวันนี้แค่ไหน"]],
+  ["calendar-days", ["A calendar you can edit", "可以修改的日曆", "ปฏิทินที่แก้ไขได้"], ["Forgot to start the clock? Fix the day afterwards.", "忘了開始計時？之後再補上就好。", "ลืมกดจับเวลา? แก้ย้อนหลังได้"]],
+  ["refresh-cw", ["Apple sync", "同步 Apple", "ซิงก์กับ Apple"], ["Reminders and events can sync with Apple's apps if you like.", "提醒和活動可以同步到 Apple 的 App。", "แจ้งเตือนและกิจกรรมซิงก์กับแอปของ Apple ได้ ถ้าต้องการ"]],
+  ["party-popper", ["Done for today", "收工", "เลิกงาน"], ["Call it a day and your stickers celebrate with you.", "按下收工，你的貼圖會陪你一起慶祝。", "กดเลิกงาน แล้วสติกเกอร์ของคุณจะฉลองไปด้วยกัน"]],
+  ["layout-panel-left", ["Work corner & Fan corner", "工作角落和粉絲角落", "มุมทำงานกับมุมแฟนคลับ"], ["The menu keeps your work and your fan things apart.", "選單把工作和追星的東西分開放。", "เมนูแยกเรื่องงานกับเรื่องแฟนคลับไว้คนละมุม"]],
+  ["cloud-download", ["New photos and words by themselves", "新照片和單字自己來", "รูปกับคำใหม่มาเอง"], ["More photos, pins and words arrive with no reinstall.", "更多照片、徽章和單字會自己送到，不用重新安裝。", "รูป เข็มกลัด และคำใหม่ ๆ มาเองโดยไม่ต้องติดตั้งใหม่"]],
+  ["languages", ["Three languages", "三種語言", "สามภาษา"], ["English, Traditional Chinese and Thai (beta).", "英文、繁體中文和泰文（測試版）。", "อังกฤษ จีนตัวเต็ม และไทย (beta)"]],
+  ["map", ["A tour to start", "一開始的導覽", "ทัวร์แนะนำตอนเริ่ม"], ["The first time you open it, Muv shows you around.", "第一次打開時，Muv 會帶你逛一圈。", "เปิดแอปครั้งแรก Muv จะพาคุณทัวร์"]],
+];
+/* a few more at the heart of it: one line and a small picture each (the pictures follow the language / light-dark via next.js data-nxpic) */
+const MORE3 = [
+  ["pins", "#ml-fan", ["Your fan pin collection", "你的粉絲徽章收藏", "คอลเลกชันเข็มกลัดของแฟน"], ["Pins from their shows, earned as you work; turn them over to read the back.", "來自她們作品的徽章，工作時慢慢收到；翻過來看背面。", "เข็มกลัดจากซีรีส์ของพวกเธอ ได้มาระหว่างทำงาน พลิกดูด้านหลังได้"]],
+  ["looks", "#ml-looks", ["Ten looks", "10 種風格", "10 สไตล์"], ["From Purikura to Y2K emo and Whimsical, light or dark.", "從拍貼機到 Y2K emo 和 Whimsical，淺色或深色。", "ตั้งแต่ตู้สติกเกอร์ถึง Y2K และ Whimsical สว่างหรือมืด"]],
+  ["words", "#ml-words", ["Thai from the songs", "歌裡的泰文", "ภาษาไทยจากเพลง"], ["A word from Milk and Love's songs on your Today page.", "「今天」頁面上有一個來自她們歌裡的單字。", "คำจากเพลงของมิลค์กับเลิฟบนหน้าวันนี้"]],
 ];
 const TK = {
   drag: ["Drag them to any screen", "想放哪個螢幕，拖過去就好", "ลากไปไว้จอไหนก็ได้"],
@@ -95,20 +103,22 @@ const head = (kick, h2, p) => `<div class="sec-h"><span class="kick">${L(kick)}<
 
 function does() {
   return `${head(["What it does", "能做什麼", "ทำอะไรได้บ้าง"], ["Your work day, with Milk & Love", "Milk 和 Love 陪你過完工作的一天", "วันทำงานของคุณ มี Milk กับ Love อยู่ด้วย"],
-    ["Three things at the heart of it, and plenty of small touches.", "最重要的三件事，還有很多貼心的小地方。", "สามอย่างที่เป็นหัวใจของแอป และรายละเอียดเล็ก ๆ อีกเพียบ"])}
+    ["What's at the heart of it, and what else is in the app.", "最重要的幾件事，還有 App 裡的其他功能。", "หัวใจของแอป และอย่างอื่นที่มีในแอป"])}
   <div class="fa-grid">
     <article class="print fa-card big">${SC.desk()}<span class="ftag">${ic("smile")}${T("Desktop buddy", "桌面夥伴", "เพื่อนบนเดสก์ท็อป")}</span>
       <h3>${L(F.buddy.t)}</h3><p>${L(F.buddy.l)}</p>${ticks([TK.drag, TK.calls, TK.lively])}${more("#ml-buddy", ["Meet the buddy", "認識桌面夥伴", "รู้จักเพื่อนบนเดสก์ท็อป"])}</article>
     <article class="print fa-card">${SC.clock()}<span class="ftag">${ic("timer")}${T("Keeping time", "計時", "การจับเวลา")}</span>
       <h3>${L(F.time.t)}</h3><p>${L(F.time.l)}</p>${ticks([TK.focusT, TK.remT, TK.dataT])}${more("#ml-focus", ["Try the focus screen", "試試專注全螢幕", "ลองหน้าจอโฟกัส"])}</article>
-    <article class="print fa-card">${SC.fan()}<span class="ftag">${ic("heart")}${T("For MilkLove fans", "給 MilkLove 粉絲", "สำหรับแฟน MilkLove")}</span>
-      <h3>${T("Made for MilkLove fans", "專為 MilkLove 粉絲做的", "ทำมาเพื่อแฟน MilkLove")}</h3>
-      <p>${T("Stickers from your own photos, Thai words from MilkLove's songs and everyday Thai, and Milk & Love ringtones for your reminders.",
-        "用自己的照片做貼圖，從 MilkLove 的歌和日常泰文學單字，提醒還能用 Milk 和 Love 的鈴聲。",
-        "ทำสติกเกอร์จากรูปของคุณเอง เรียนคำไทยจากเพลงของ MilkLove และคำไทยในชีวิตประจำวัน แถมใช้เสียงเรียกเข้า Milk กับ Love ตอนแจ้งเตือนได้")}</p>
+    <article class="print fa-card">${SC.fan()}<span class="ftag">${ic("sticker")}${T("Stickers", "貼圖", "สติกเกอร์")}</span>
+      <h3>${T("Stickers from your photos", "用你的照片做貼圖", "สติกเกอร์จากรูปของคุณ")}</h3>
+      <p>${T("Add a photo and the people are cut out for you. Sort them into Milk, Love and Together; they walk on your desktop and the focus screen.",
+        "加一張照片，人物會自動剪下來。分成 Milk、Love 和同框，貼圖還會在桌面和專注全螢幕上走來走去。",
+        "เพิ่มรูป แล้วคนในรูปจะถูกไดคัตให้เอง แยกเป็น Milk, Love และคู่กัน แล้วสติกเกอร์ก็เดินเล่นบนเดสก์ท็อปและหน้าจอโฟกัสได้ด้วย")}</p>
       ${ticks([TK.credT])}${more("#ml-stickers", ["Make your own stickers", "動手做貼圖", "ลองทำสติกเกอร์"])}</article>
   </div>
-  <div class="fa-also"><span>${T("And also:", "還有：", "และยังมี:")}</span>${CHIPS.map(([i, t]) => `<span class="chipx">${ic(i)}${L(t)}</span>`).join("")}</div>`;
+  <div class="fa-more">${MORE3.map(([k, href, t, l]) => `<a class="print fa-mini" href="${href}"><span class="fa-mpic" data-nxpic="${k}"></span><b>${L(t)}</b><span>${G(L(l))}</span></a>`).join("")}</div>
+  <h3 class="fa-allh">${T("Also in the app", "App 裡還有", "ในแอปยังมี")}</h3>
+  <ul class="fa-all">${ALL.map(([i, t, l]) => `<li>${ic(i)}<b>${L(t)}</b><span>${G(L(l))}</span></li>`).join("")}</ul>`;
 }
 
 /* ---------- the Desktop buddy block ---------- */
@@ -160,7 +170,7 @@ function buddyBlock() {
       </div>
       <div class="bd-buddy${bs.hide ? " gone" : ""}" id="bdBuddy" tabindex="0" role="button" aria-haspopup="menu" aria-label="${T("Milk and Love. Click for a Thai word, right-click for their card, drag to move.", "Milk 和 Love。點一下看泰文單字，按右鍵打開小卡片，拖曳可以移動。", "Milk กับ Love คลิกเพื่อดูคำไทย คลิกขวาเพื่อเปิดการ์ด ลากเพื่อย้าย")}">
         ${bs.bubble >= 0 ? `<div class="bubble">${bs.thai ? `<b>${W2[0]}</b>${W2[1]} · ${L(W2[2])}` : `<b style="font-family:var(--font-h)">${L(B.hi)}</b>`}</div>` : ""}
-        <div class="bd-imgs" style="--bh:${SIZES[bs.size]}px">${imgs.map((s) => `<img src="${s}" alt="" draggable="false">`).join("")}</div>
+        <div class="bd-imgs" style="--bh:${SIZES[bs.size]}px">${imgs.map((s) => `<img loading="lazy" src="${s}" alt="" draggable="false">`).join("")}</div>
         <div class="lbl2">${L(W.task)} ${T("25 min", "25 分", "25 นาที")} · ${L(W.today)}<span>⏰ ${L(W.call)}</span></div>
       </div>
       <div class="bd-qc" id="bdCard" role="menu" ${bs.card ? "" : "hidden"} aria-label="${T("The buddy's card", "夥伴的小卡片", "การ์ดของเพื่อน")}">
@@ -168,14 +178,14 @@ function buddyBlock() {
         <div class="task"><span>${L(W.task)}</span><em>${T("Switch ▾", "切換 ▾", "สลับ ▾")}</em></div>
         <div class="big4"><span>${ic("coffee")}${T("Take a break ›", "休息一下 ›", "พักสักครู่ ›")}</span><span>${ic("scan")}${T("Focus screen", "專注全螢幕", "หน้าจอโฟกัส")}</span><span>${ic("bell")}${T("Remind me ›", "提醒我 ›", "เตือนฉัน ›")}</span><span>${ic("moon")}${T("Done for today", "收工", "เลิกงานวันนี้")}</span></div>
         <div class="sub">${T("On my desktop", "在桌面上", "บนเดสก์ท็อปตอนนี้")}</div>
-        <div class="faces">${Object.keys(WHOIMG).map((k) => `<button type="button" data-who="${k}" aria-pressed="${bs.who === k}" aria-label="${L(B.who[k])}"><img src="${face(k)}" alt=""></button>`).join("")}</div>
+        <div class="faces">${Object.keys(WHOIMG).map((k) => `<button type="button" data-who="${k}" aria-pressed="${bs.who === k}" aria-label="${L(B.who[k])}"><img loading="lazy" src="${face(k)}" alt=""></button>`).join("")}</div>
         <div class="bot"><span>${ic("eye-off")}${T("Hide ›", "隱藏 ›", "ซ่อน ›")}</span><span>${ic("panel-left")}${T("Open app", "打開 App", "เปิดแอป")}</span><span>${ic("sliders-horizontal")}${T("Settings", "設定", "การตั้งค่า")}</span></div>
       </div>
     </div>
     <div class="bd-try"><span>${L(B.tryL)}</span><button type="button" data-act="click">${ic("mouse-pointer-click")}${L(B.click)}</button><button type="button" data-act="card">${ic("mouse-pointer-2")}${L(B.rclick)}</button><button type="button" data-act="screen">${ic("monitor")}${L(B.move)}</button></div>
     <div class="bd-set">
       <div class="print"><h3><em>1</em>${L(B.g1)}</h3><p>${L(B.p1)}</p>
-        <div class="opts">${Object.keys(WHOIMG).map((k) => `<button type="button" data-who="${k}" aria-pressed="${bs.who === k}"><img src="${face(k)}" alt="">${L(B.who[k])}</button>`).join("")}</div>
+        <div class="opts">${Object.keys(WHOIMG).map((k) => `<button type="button" data-who="${k}" aria-pressed="${bs.who === k}"><img loading="lazy" src="${face(k)}" alt="">${L(B.who[k])}</button>`).join("")}</div>
         <div class="opts" style="margin-top:6px">${B.sizes.map((s, i) => `<button type="button" data-size="${i}" aria-pressed="${bs.size === i}">${L(s)}</button>`).join("")}</div></div>
       <div class="print"><h3><em>2</em>${L(B.g2)}</h3><p>${L(B.p2)}</p>
         <div class="opts">${Object.keys(B.paces).map((k) => `<button type="button" data-pace="${k}" aria-pressed="${bs.pace === k}">${L(B.paces[k])}</button>`).join("")}</div></div>

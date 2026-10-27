@@ -1,0 +1,251 @@
+/* Design pass (2026-10-27, site-design/critique.md): one rhythm, one type scale, AA contrast, one accent per product,
+   tinted bands, sticky download cards, a phone header that scrolls away, the TMB editor letterboxed (close-ups on
+   phones), Concert-night photo frames. Loaded last: it refines index.html's own styles, next.css and tmb.css. */
+
+/* ---------------------------------------------------------------- tokens */
+:root {
+  --fs-cap: 13px; --fs-sm: 15px; --fs-body: 17px; --fs-lead: 19px; --fs-h3: 22px;
+  --fs-h2: clamp(30px, 3.4vw, 42px);
+  --sec: 80px;
+}
+@media (max-width: 760px) { :root { --sec: 56px; } }
+/* Scrapbook: the berry pink and the muted brown reach AA on paper (5.9 : 1 and 5.6 : 1) */
+html[data-look="scrapbook"]:not([data-theme="dark"]) { --a-deep: #a33a5f; --muted: #6f6157; }
+/* the accent: ML pink, Thai Mascot Buddy lilac (html[data-page], set by the router), in both looks */
+html { --acc: var(--a-deep); --acc-on: #fff; --acc-soft: var(--a-soft); }
+html[data-look="stage"] { --acc: var(--a); --acc-on: #1b0f22; }
+html[data-page="tmb"] { --acc: #6b57a8; --acc-on: #fff; --acc-soft: #ece7f8; }
+html[data-page="tmb"][data-look="stage"] { --acc: #c79bff; --acc-on: #1b0f22; --acc-soft: rgba(199, 155, 255, .16); }
+:focus-visible { outline-color: var(--acc); }
+.zh-sys { font-family: "PingFang TC", "Heiti TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif !important; }   /* (language names: never fetch the Chinese font on English or Thai pages) */
+
+/* ---------------------------------------------------------------- AA on the pink: white text sits on the deep accent */
+html[data-look="scrapbook"] .seg button[aria-pressed="true"],
+html[data-look="scrapbook"] .try-tabs button[aria-pressed="true"],
+html[data-look="scrapbook"] .fseg button.on,
+html[data-look="scrapbook"] :is(#ml-does, #ml-buddy) .seg2 span.on,
+html[data-look="scrapbook"] :is(#ml-does, #ml-buddy) .bd-set h3 em,
+html[data-look="scrapbook"] .pg-btns .pg-flip { background: var(--acc); border-color: var(--acc); color: var(--acc-on); }
+html[data-look="scrapbook"] .try-tabs button[aria-pressed="true"] .ic { color: var(--acc-on); }
+.step::before { background: var(--acc); color: var(--acc-on); }
+html[data-look="scrapbook"] .subnav .sn-row a.on, html[data-look] .subnav.tmb .sn-row a.on { background: var(--acc); border-color: var(--acc); color: var(--acc-on); }
+html[data-look="stage"] .subnav.tmb .sn-row a.on { box-shadow: 0 0 18px rgba(185, 166, 242, .55); }
+.subnav .sn-bar i, .subnav.tmb .sn-bar i, html[data-look="stage"] .subnav .sn-bar i, html[data-look="stage"] .subnav.tmb .sn-bar i { background: var(--acc); }
+.subnav .sn-next .ic { color: var(--acc); }
+.nav a[aria-current="page"] { background: var(--acc-soft); color: var(--acc); }
+html[data-look="scrapbook"] .kick { color: var(--acc); }
+/* decorations aren't read aloud */
+.sparkle::after { content: " ✦" / ""; }
+html[data-look="scrapbook"] .sparkle::after { content: none; }
+.ml-lines li::before { content: "♡" / ""; }
+
+/* ---------------------------------------------------------------- type scale: 13 · 15 · 17 · 19 · 22 · h2 30–42 · h1 42–70 */
+.sec-h h2, .ml-txt h2, .h2, #p-tmb .h2, #p-tmb .sec-h h2, .news h2 { font-size: var(--fs-h2) !important; line-height: 1.1; text-wrap: balance; }
+.sec-h { margin-bottom: 32px; }
+.sec-h p, .ml-lines li, #p-tmb .pts li { font-size: var(--fs-body); }
+.fan-card h3, .sp-card h3, .three .print h3, .tw h3, .vs-card2 b:not(.n) { font-size: 20px; }
+:is(#ml-does, #ml-buddy) .fa-card h3 { font-size: 24px; } :is(#ml-does, #ml-buddy) .fa-card.big h3 { font-size: 28px; }
+.fan-card p, .three .print p, .sp-card .mv, .vs-card2 .g, .newc span { font-size: var(--fs-sm); }
+.cap, .small, #p-tmb .cap, .tag, .ftag, :is(#ml-does, #ml-buddy) .ftag, .who a, .people.all .who a, .who span, .side-tip, .seg button { font-size: var(--fs-cap); }
+.ml-what, .tmb-promise { font-size: var(--fs-lead); }
+
+/* ---------------------------------------------------------------- rhythm: sections, bands, folds */
+section.sec { padding: var(--sec) 0; }
+section.sec:not(.band) + section.sec:not(.band) { padding-top: 16px; }
+@media (max-width: 760px) { section.sec:not(.band) + section.sec:not(.band) { padding-top: 8px; } }
+section.sec.band { margin: 0; position: relative; }
+html[data-look="scrapbook"] section.sec.band { background: color-mix(in oklab, var(--a) 6%, var(--bg)); border-top: 1.5px dashed var(--line-strong); border-bottom: 1.5px dashed var(--line-strong); }
+html[data-look="scrapbook"] section.sec.band::before { content: ""; position: absolute; top: -13px; left: calc(50% - 60px); width: 120px; height: 24px; transform: rotate(-2deg); border-radius: 2px; pointer-events: none;
+  background: repeating-linear-gradient(90deg, color-mix(in oklab, var(--p) 40%, transparent) 0 7px, color-mix(in oklab, var(--p) 24%, transparent) 7px 14px); }
+html[data-page="tmb"][data-look="scrapbook"] section.sec.band { background: color-mix(in oklab, #6b57a8 6%, var(--bg)); }
+html[data-page="tmb"][data-look="scrapbook"] section.sec.band::before { background: repeating-linear-gradient(90deg, rgba(107, 87, 168, .38) 0 7px, rgba(107, 87, 168, .2) 7px 14px); }
+html[data-look="stage"] section.sec.band { background: linear-gradient(90deg, rgba(255, 143, 184, .08), rgba(143, 224, 181, .06), rgba(199, 155, 255, .09)); border-top: 1px solid rgba(255, 255, 255, .08); border-bottom: 1px solid rgba(255, 255, 255, .08); }
+/* a "more" fold sits 24 px under its content and looks like what it is: a button that opens */
+.ml-more { margin-top: 24px; }
+details.ml-more > summary, #p-home details.more > summary { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 99px; border: 1.5px dashed var(--line-strong); background: var(--surface); color: var(--p-deep); font-weight: 800; }
+details.ml-more > summary:hover, #p-home details.more > summary:hover { border-style: solid; border-color: var(--acc); }
+details.ml-more[open] > summary { border-style: solid; }
+html[data-look="stage"] details.ml-more > summary, html[data-look="stage"] #p-home details.more > summary { color: var(--p); }
+.sec-cred { margin-top: 18px !important; }
+
+/* ---------------------------------------------------------------- top bar: a page-aware button; on phones it scrolls away */
+.top .btn.tmb-cta { background: #6b57a8; color: #fff; box-shadow: 0 3px 0 #43356f; }
+html[data-look="stage"] .top .btn.tmb-cta { background: linear-gradient(120deg, #c79bff, #ff8fb8); color: #1b0f22; box-shadow: 0 0 24px rgba(199, 155, 255, .5); }
+@media (max-width: 760px) {
+  .wrap { padding-left: 16px; padding-right: 16px; }
+  .top { position: static; }
+  .top .wrap { gap: 6px; }
+  .top .spacer { min-width: 0; }
+  .logo small { display: none; }
+  .logo { font-size: 15px; gap: 7px; }
+  .logo img { width: 26px; height: 26px; }
+  .top .seg { padding: 2px; }
+  .top .seg button { padding: 7px 7px; min-height: 32px; }
+  .top .seg button .ic { width: 16px; height: 16px; }
+  .subnav { top: 0 !important; }
+  html { scroll-padding-top: calc(var(--sub-h, 52px) + 10px) !important; }
+}
+
+/* ---------------------------------------------------------------- home */
+.mq-band { position: relative; }
+.mq-band .marquee .mq-track { animation-duration: 80s; }
+.mq-band.paused .mq-track { animation-play-state: paused; }
+.mq-pause { position: absolute; z-index: 2; right: max(16px, calc((100vw - 1160px) / 2 + 20px)); top: 10px; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line-strong); background: var(--surface); color: var(--ink-2); display: grid; place-items: center; cursor: pointer; }
+.mq-pause .ic { width: 16px; height: 16px; }
+@media (prefers-reduced-motion: reduce) { .mq-pause { display: none; } }
+/* "Made by a fan": one card in three parts, no half-empty boxes */
+#about .three { gap: 0; background: var(--surface); border: 1.5px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+#about .three .print { border: 0; border-radius: 0; box-shadow: none; background: none; padding: 22px 24px; }
+#about .three .print + .print { border-left: 1.5px dashed var(--line); }
+html[data-look="stage"] #about .three { background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .12); }
+html[data-look="stage"] #about .three .print { -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; }
+html[data-look="stage"] #about .three .print + .print { border-left: 1px solid rgba(255, 255, 255, .1); }
+@media (max-width: 900px) { #about .three .print + .print { border-left: 0; border-top: 1.5px dashed var(--line); } }
+
+/* ---------------------------------------------------------------- ML hero: the polaroids sit in the margin, the credit is the picture's caption */
+.ml-shot { padding: 30px 54px 0 70px; }
+.ml-shot .pola { width: 20%; }
+.ml-shot .p1 { left: 0; top: 0; bottom: auto; right: auto; transform: rotate(-7deg); }
+.ml-shot .p2 { right: 0; bottom: 52px; top: auto; left: auto; transform: rotate(6deg); }
+.ml-shot .tape { top: 18px; left: 48%; }
+.shot-cap { position: relative; z-index: 1; text-align: center; margin: 18px 0 0 !important; }
+.shot-cap a { color: inherit; font-weight: 700; }
+@media (max-width: 560px) { .ml-shot { padding: 22px 26px 0 30px; } .ml-shot .p2 { bottom: 44px; } }
+
+/* ---------------------------------------------------------------- What it does: the sticker card's picture */
+:is(#ml-does) .mk-scene .mk-ph { position: absolute; left: 7%; top: 12%; width: 30%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 6px; border: 4px solid #fff; transform: rotate(-4deg); box-shadow: 0 8px 18px -10px rgba(60, 20, 40, .5); }
+:is(#ml-does) .mk-scene .mk-arrow { position: absolute; left: 42%; top: 42%; color: var(--acc); }
+:is(#ml-does) .mk-scene .mk-arrow .ic { width: 26px; height: 26px; }
+
+/* ---------------------------------------------------------------- Looks: the doodles, big enough to see the difference */
+#ml-looks .ml-two > .dood-pair { grid-column: 1 / -1; }
+#ml-looks .dood-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 8px 0 0; }
+#ml-looks .dood-pair figure { margin: 0; }
+#ml-looks .dood-pair figure > img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 7.5; object-fit: cover; object-position: 78% 18%; border-radius: 14px; border: 5px solid var(--surface); box-shadow: var(--shadow); }
+html[data-look="stage"] #ml-looks .dood-pair figure > img { border-color: rgba(255, 255, 255, .12); }
+#ml-looks .dood-pair figcaption { font: 800 14px/1.3 var(--font-b); color: var(--ink-2); margin-top: 10px; text-align: center; }
+@media (max-width: 600px) { #ml-looks .dood-pair { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
+
+/* ---------------------------------------------------------------- For fans: the sticker library and the ringtones */
+.fan-lib .stk { position: absolute; bottom: 0; width: auto; }
+.fan-lib .stk:nth-child(1) { left: 2%; height: 80%; transform: rotate(-6deg); }
+.fan-lib .stk:nth-child(2) { left: 31%; height: 92%; z-index: 1; }
+.fan-lib .stk:nth-child(3) { right: 2%; height: 78%; transform: rotate(5deg); }
+.fan-ring .stk { right: 6%; }
+.bubble2.ring2 { left: 7%; top: 14%; display: grid; gap: 2px; text-align: left; }
+.bubble2.ring2 .r-h { display: inline-flex; gap: 5px; align-items: center; font: 800 11px/1 var(--font-b); color: var(--a-deep); }
+.bubble2.ring2 .r-h .ic { width: 13px; height: 13px; }
+.bubble2.ring2 b { font: 800 15px/1.2 var(--font-h); color: #2b2430; }
+.bubble2.ring2 > span:last-child { font: 700 12px/1.2 var(--font-b); color: #7a5b6c; }
+html[data-look="stage"] .fan-ring { background: linear-gradient(160deg, #3b2a55, #2a1d44 55%, #23324a); }
+
+/* ---------------------------------------------------------------- Thai from the songs: compact */
+#ml-words .ml-two { max-width: 980px; margin: 0 auto; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+#ml-words .pola.big { max-width: 420px; }
+
+/* ---------------------------------------------------------------- credits: seven to a row (13 = 7 + 6), those who said yes first */
+@media (min-width: 1000px) { .people.all { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 12px; } .people.all .who b { font-size: 15px; } }
+@media (min-width: 601px) and (max-width: 999px) { .people.all { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .people.all .who:last-child:nth-child(odd) { grid-column: 1 / -1; } }
+
+/* ---------------------------------------------------------------- download: the card travels with the steps */
+@media (min-width: 901px) {
+  .dl > .print:first-child, .get-grid > .get-card { position: sticky; top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 18px); }
+}
+.dl .ver b { color: var(--acc); }
+
+/* ---------------------------------------------------------------- Concert night: photo cards, not white paper */
+html[data-look="stage"] .pola { background: #241a38; box-shadow: 0 0 0 1px rgba(255, 255, 255, .14), 0 0 30px -6px rgba(255, 143, 184, .5); }
+html[data-look="stage"] .pola img { background: #1a1230; }
+html[data-look="stage"] .pola figcaption { color: #ffb3cf; font: 800 11.5px/1.2 var(--font-b); letter-spacing: .08em; text-transform: uppercase; }
+html[data-look="stage"] .pola.big figcaption { text-transform: none; letter-spacing: 0; font: 600 13px/1.35 var(--font-b); color: var(--muted); }
+
+/* ---------------------------------------------------------------- focus demo: targets at least 24 px */
+.fctl2 .pos { grid-template-columns: repeat(3, 28px); gap: 4px; }
+.fctl2 .pos button { height: 22px; min-width: 28px; }
+
+/* ---------------------------------------------------------------- footer: the rights line on every page */
+footer { margin-top: 0; }
+footer .wrap.foot { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px 56px; align-items: start; }
+footer .foot-rights { display: grid; gap: 10px; }
+footer .foot-rights .logo { margin-bottom: 4px; }
+footer .foot-links { display: grid; gap: 10px; justify-items: start; }
+footer .foot-links nav { display: flex; flex-wrap: wrap; gap: 6px; }
+footer .foot-links nav a { text-decoration: none; font-weight: 800; font-size: 14px; color: var(--ink-2); padding: 6px 12px; border-radius: 99px; border: 1.5px solid var(--line); background: var(--surface); }
+footer .foot-links nav a:hover { border-color: var(--acc); }
+footer p { line-height: 1.55; }
+@media (max-width: 760px) { footer .wrap.foot { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------------------------------------------------------------- Thai Mascot Buddy: the first screen */
+.tmb-top { padding: 26px 0 30px; }
+.tmb-name { margin-top: 10px; }
+.tmb-promise { margin: 6px 0 16px; }
+.tmb-intro .badges { margin-top: 12px; }
+.tmb-hero-b { margin-top: 22px; }
+.tmb-intro .tag.a, #p-tmb .tag.a { background: var(--acc-soft); color: var(--acc); }
+html[data-look="stage"] #p-tmb .tag.a { background: rgba(255, 255, 255, .08); color: var(--ink); }
+/* the editor, letterboxed: the panel at the top of the sidebar, the buddy and the pop-up inside the first screen */
+.vs-fit { max-width: 1000px; aspect-ratio: 1000 / 470; }
+.vs { width: 1000px; height: 470px; }
+.vs-body { grid-template-columns: 48px 300px minmax(0, 1fr); }
+.vs-side > .vs-h { order: 0; }
+.vs-view { order: 1; margin-top: 0; border-top: 1px solid var(--vs-line); border-bottom: 1px solid var(--vs-line); }
+.vs-tree { order: 2; padding-top: 6px; }
+.vs-edge { height: 130px; }
+.vs-pop { height: 170px; }
+.vs-popfig { width: 72px; height: 84px; }
+/* labels on empty space, never on a mascot */
+#p-tmb .num { width: auto; height: 26px; display: inline-flex; gap: 6px; align-items: center; padding: 0 11px 0 3px; border-radius: 99px; background: var(--acc); color: var(--acc-on); font: 800 12.5px/1 var(--font-b); white-space: nowrap; box-shadow: 0 0 0 3px var(--vs-bg), 0 6px 14px -6px rgba(0, 0, 0, .45); text-align: left; }
+#p-tmb .num em { font-style: normal; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--acc-on); color: var(--acc); font-size: 12px; }
+#p-tmb .vs-view .num { left: 8px; right: auto; top: 58%; }
+#p-tmb .vs-edge .num { left: 16px; top: 2px; bottom: auto; }
+#p-tmb .vs-pop .num { right: calc(50% - 190px); top: 0; }
+#p-tmb .vs-status .num { left: 360px; right: auto; top: -15px; }
+#p-tmb .hot.lit, #p-tmb .vs-edge.lit, #p-tmb .vs-pop.lit { box-shadow: inset 0 0 0 3px var(--acc); }
+#p-tmb .vs-card2 .n { background: var(--acc); color: var(--acc-on); }
+#p-tmb .vs-card2:hover, #p-tmb .vs-card2.on { border-color: var(--acc); }
+.vs-thumb { display: none; }
+/* phones: four close-ups instead of a window too small to read */
+@media (max-width: 700px) {
+  .tmb-hero-b .vs-fit { display: none; }
+  .tmb-hero-b { margin-top: 18px; }
+  .vs-cards { margin-top: 0; gap: 12px; }
+  .vs-card2 { padding: 10px 12px 14px; row-gap: 10px; }
+  .vs-thumb { display: block; grid-column: 1 / -1; position: relative; height: 150px; border-radius: 12px; overflow: hidden; background: var(--vs-side); border: 1px solid var(--vs-line); }
+  .vt1 img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .vt2 { background: var(--vs-bg); }
+  .vt2 .vt-code { position: absolute; left: 12px; top: 12px; right: 12px; font: 12px/1.5 ui-monospace, Menlo, monospace; color: var(--vs-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vt2 .vt-code i { color: var(--vs-s); font-style: normal; }
+  .vt2 img { position: absolute; bottom: 0; height: 84px; width: auto; }
+  .vt2 img:nth-of-type(1) { left: 16%; } .vt2 img:nth-of-type(2) { right: 18%; transform: scaleX(-1); }
+  .vt3 { height: auto; padding: 14px 0; background: var(--vs-bg); }
+  .vt3 .vt-st { display: flex; gap: 12px; align-items: center; padding: 6px 12px; background: var(--vs-bar); border-top: 1px solid var(--vs-line); border-bottom: 1px solid var(--vs-line); font: 12.5px/1.3 -apple-system, sans-serif; color: var(--vs-ink); white-space: nowrap; }
+  .vt3 .vt-st .sp { flex: 1; }
+  .vt3 .vt-st .th { font-family: "Thonburi", "Tahoma", sans-serif; color: var(--acc); font-weight: 600; }
+  .vt4 { background: linear-gradient(160deg, #a9c8e8, #e7cfe3 60%, #f3dcc6); display: flex; align-items: flex-end; justify-content: center; gap: 8px; }
+  html[data-vs="dark"] .vt4 { background: linear-gradient(160deg, #2c3550, #3b2a55 60%, #4a3040); }
+  .vt4 img { height: 96px; width: auto; }
+  .vt4 .vt-card { margin-bottom: 18px; background: #fffdf7; color: #2a2234; border: 1px solid #e8a33c; border-radius: 10px; box-shadow: 0 4px 16px rgba(232, 163, 60, .45); padding: 7px 11px; display: grid; font: 12px/1.35 -apple-system, sans-serif; text-align: left; }
+  .vt4 .vt-card .th { font: 600 20px/1.2 "Thonburi", "Tahoma", sans-serif; }
+  .vt4 .vt-card .rom { color: #e8508a; font-size: 11px; }
+  .vs-thumb.go img { animation: vt-hop .5s ease-out; }
+}
+@keyframes vt-hop { 0%, 100% { translate: 0 0; } 40% { translate: 0 -12px; } }
+@media (prefers-reduced-motion: reduce) { .vs-thumb.go img { animation: none; } }
+
+/* ---------------------------------------------------------------- Thai Mascot Buddy: the rest */
+#p-tmb .pv-scenes button[aria-pressed="true"], #p-tmb .sp-cos[aria-pressed="true"] { background: var(--acc-soft); border-color: var(--acc); color: var(--acc); }
+#p-tmb .wk-pick button[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 0 3px var(--acc-soft); }
+#p-tmb .rx button:hover, #p-tmb .rx button:focus-visible { border-color: var(--acc); }
+#p-tmb .rx button .ic, #p-tmb .chipx .ic { color: var(--acc); }
+html[data-look="scrapbook"] #p-tmb .seg button[aria-pressed="true"] { background: var(--acc); color: var(--acc-on); }
+#p-tmb .tmb-rights { margin-top: 32px; }
+#p-tmb .tmb-rights h3 { font-size: 19px; margin: 0 0 6px; }
+#p-tmb .tmb-rights p:first-of-type { font: 800 17px/1.4 var(--font-h); }
+html[data-look="scrapbook"] #p-tmb .tmb-rights { background: color-mix(in oklab, #6b57a8 9%, var(--surface)); border-color: color-mix(in oklab, #6b57a8 32%, transparent); }
+#tmb-mascots.anchor { display: block; height: 0; scroll-margin-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 24px); }
+
+/* ---------------------------------------------------------------- the logo never wraps (small laptops: the second line steps aside) */
+.logo > span { white-space: nowrap; }
+@media (max-width: 1140px) { .top .logo small { display: none; } }
+@media (min-width: 901px) and (max-width: 1140px) { .top .wrap { gap: 10px; } .nav { margin-left: 4px; } .nav a { padding: 7px 10px; } .top .btn-sm { padding: 0 13px; } }

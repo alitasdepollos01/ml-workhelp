@@ -7,9 +7,17 @@
 <link rel="icon" href="assets/heart.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Mali:wght@400;600;700&family=Outfit:wght@400;600;700;800&family=Bricolage+Grotesque:wght@600;800&family=Caveat:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Mali:wght@400;600;700&family=Outfit:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap">
 <style>
-@font-face { font-family: "ML Huninn"; src: url(assets/huninn.woff2) format("woff2"); font-display: swap; }
+/* Chinese: jf open 粉圓, cut down to the site's own characters (tools/subset-fonts.py), only fetched for 中文 text.
+   Thai: Mitr (titles), Anuphan (reading), Sriracha (handwritten notes), Google Fonts' Thai subsets, self-hosted (assets/FONTS.txt). */
+@font-face { font-family: "ML Huninn"; src: url(assets/fonts/huninn-site.woff2) format("woff2"); font-display: swap;
+  unicode-range: U+2E80-2FDF, U+3000-303F, U+3100-312F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF; }
+@font-face { font-family: "Mitr"; src: url(assets/fonts/mitr-thai-500.woff2) format("woff2"); font-weight: 400 500; font-display: swap; unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC; }
+@font-face { font-family: "Mitr"; src: url(assets/fonts/mitr-thai-600.woff2) format("woff2"); font-weight: 600 900; font-display: swap; unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC; }
+@font-face { font-family: "Anuphan"; src: url(assets/fonts/anuphan-thai-var.woff2) format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC; }
+@font-face { font-family: "Sriracha"; src: url(assets/fonts/sriracha-thai.woff2) format("woff2"); font-display: swap; unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC; }
+.zh-sys { font-family: "PingFang TC", "Heiti TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif !important; }   /* (language names in the system font: English and Thai pages never fetch the Chinese one) */
 /* ---- Purikura tokens (the app's default look) ---- */
 :root {
   --p: #3f7d5c; --p-deep: #2f6a4b; --p-ink: #fff; --a: #e48aa6; --a-deep: #b4446a; --hl: #ffe27a;
@@ -19,8 +27,8 @@
   --check: color-mix(in oklab, var(--a) 13%, transparent);
   --shadow: 0 8px 0 -2px color-mix(in oklab, var(--a) 28%, #fff), 0 16px 30px -18px color-mix(in oklab, var(--a) 80%, #000);
   --shadow-sm: 0 4px 0 color-mix(in oklab, var(--a) 26%, #fff);
-  --font-h: "Baloo 2", "ML Huninn", "PingFang TC", "Microsoft JhengHei", sans-serif;
-  --font-b: "Nunito", "ML Huninn", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-h: "Baloo 2", "ML Huninn", "Mitr", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-b: "Nunito", "ML Huninn", "Anuphan", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --r-lg: 28px; --r-md: 18px; --r-sm: 12px;
 }
 :root[data-theme="dark"] {
@@ -451,7 +459,7 @@ html[data-look="scrapbook"] .two .print:first-child { transform: rotate(-.8deg);
 html[data-look="scrapbook"] .title-big { color: var(--ink); }
 html[data-look="scrapbook"] .title-big em { color: var(--ink); background: linear-gradient(transparent 58%, color-mix(in oklab, var(--hl) 85%, transparent) 58% 90%, transparent 90%); padding: 0 4px; }
 html[data-look="scrapbook"][data-theme="dark"] .title-big em { background: linear-gradient(transparent 58%, rgba(255,226,122,.35) 58% 90%, transparent 90%); }
-html[data-look="scrapbook"] .kick { font: 700 22px/1 "Caveat", "Mali", cursive; letter-spacing: 0; text-transform: none; color: var(--a-deep); transform: rotate(-2deg); display: inline-block; }
+html[data-look="scrapbook"] .kick { font: 700 22px/1 "Caveat", "Sriracha", "ML Huninn", cursive; letter-spacing: 0; text-transform: none; color: var(--a-deep); transform: rotate(-2deg); display: inline-block; }
 html[data-look="scrapbook"] .sec-h h2::after { content: none; }
 html[data-look="scrapbook"] .sparkle::after { content: " ♡"; }
 html[data-look="scrapbook"] .collage .frame { background: #fffdf8; border-radius: 4px; transform: rotate(-1.5deg); box-shadow: var(--shadow); }
@@ -467,7 +475,7 @@ html[data-look="scrapbook"] .chip-float { font-family: "Mali", var(--font-b); tr
    =================================================================== */
 html[data-look="stage"] { --bg: #140f22; --surface: rgba(255,255,255,.07); --surface-2: rgba(255,255,255,.1); --line: rgba(255,255,255,.12); --line-strong: rgba(255,255,255,.2);
   --ink: #f6f0ff; --ink-2: #e2d9f2; --muted: #b7abd0; --p: #8fe0b5; --p-deep: #a6ecc5; --p-ink: #10261a; --a: #ff8fb8; --a-deep: #ffb3cf; --a-soft: rgba(255,143,184,.16); --p-soft: rgba(143,224,181,.14);
-  --shadow: 0 20px 40px -20px rgba(0,0,0,.8); --shadow-sm: 0 0 0 1px rgba(255,255,255,.08); --font-h: "Outfit", "ML Huninn", "PingFang TC", sans-serif; }
+  --shadow: 0 20px 40px -20px rgba(0,0,0,.8); --shadow-sm: 0 0 0 1px rgba(255,255,255,.08); --font-h: "Outfit", "ML Huninn", "Mitr", "PingFang TC", sans-serif; }
 html[data-look="stage"] body { background: #140f22; background-image: radial-gradient(700px 500px at 15% -5%, rgba(255,143,184,.35), transparent 70%), radial-gradient(700px 520px at 90% 10%, rgba(143,224,181,.25), transparent 70%), radial-gradient(900px 600px at 50% 120%, rgba(120,90,255,.3), transparent 70%); background-attachment: fixed; }
 html[data-look="stage"] .top, html[data-look="stage"] .subnav { background: rgba(20,15,34,.7); border-color: rgba(255,255,255,.08); }
 html[data-look="stage"] .print, html[data-look="stage"] .try-side, html[data-look="stage"] .fctl2, html[data-look="stage"] .step, html[data-look="stage"] .tile, html[data-look="stage"] .faq details, html[data-look="stage"] .quiz-opts button, html[data-look="stage"] .note { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: var(--ink); }
@@ -489,40 +497,7 @@ html[data-look="stage"] .screen { box-shadow: 0 0 0 1px rgba(255,255,255,.2), 0 
 html[data-look="stage"] a { color: var(--p-deep); }
 html[data-look="stage"] .rights { background: rgba(199,155,255,.12); border-color: rgba(199,155,255,.3); color: var(--ink); }
 
-/* ===================================================================
-   POP MAGAZINE — bold fan-mag spreads: colour-block sections, giant type,
-   stickers bursting out of the frame, a ticker strip.
-   =================================================================== */
-html[data-look="pop"] { --bg: #fffaf2; --surface: #ffffff; --surface-2: #fff1e0; --line: #f1dfcc; --line-strong: #2a2230; --ink: #241c2b; --ink-2: #3a3042; --muted: #6c6274;
-  --shadow: 6px 6px 0 #2a2230; --shadow-sm: 3px 3px 0 #2a2230; --font-h: "Bricolage Grotesque", "ML Huninn", "PingFang TC", sans-serif; }
-html[data-look="pop"][data-theme="dark"] { --bg: #18141c; --surface: #241e2a; --surface-2: #2e2734; --line: #3a3141; --line-strong: #f6e9d6; --ink: #fbf3e8; --ink-2: #eadfd0; --muted: #bfb2c4; --shadow: 6px 6px 0 #ff8fb8; --shadow-sm: 3px 3px 0 #ff8fb8; }
-html[data-look="pop"] body { background: var(--bg); }
-html[data-look="pop"] .print { border: 2px solid var(--line-strong); border-radius: 22px; }
-html[data-look="pop"] .print::before { display: none; }
-html[data-look="pop"] .title-big { font-size: clamp(44px, 7vw, 86px); line-height: .95; letter-spacing: -.03em; color: var(--ink); }
-html[data-look="pop"] .title-big em { color: #fff; background: var(--a); padding: 0 .18em; border-radius: 14px; box-decoration-break: clone; -webkit-box-decoration-break: clone; box-shadow: 4px 4px 0 var(--line-strong); }
-html[data-look="pop"] .sec-h h2 { font-size: clamp(32px, 4.6vw, 52px); letter-spacing: -.02em; }
-html[data-look="pop"] .kick { background: #ffe27a; color: #241c2b; padding: 5px 10px; border-radius: 99px; display: inline-block; border: 2px solid #2a2230; }
-html[data-look="pop"] .sparkle::after { content: none; }
-html[data-look="pop"] main section.sec:nth-of-type(4n+1) { background: #e9f6ee; } html[data-look="pop"] main section.sec:nth-of-type(4n+2) { background: #fde8ef; }
-html[data-look="pop"] main section.sec:nth-of-type(4n+3) { background: #fff4cf; } html[data-look="pop"] main section.sec:nth-of-type(4n) { background: #ece7fb; }
-html[data-look="pop"][data-theme="dark"] main section.sec:nth-of-type(n) { background: transparent; }
-html[data-look="pop"] .btn { border: 2px solid #2a2230; box-shadow: 3px 3px 0 #2a2230; }
-html[data-look="pop"] .btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #2a2230; }
-html[data-look="pop"] .band { background: #2a2230; padding: 0; margin: 0; }
-html[data-look="pop"] .band .marquee { -webkit-mask-image: none; mask-image: none; padding: 16px 0 6px; }
-html[data-look="pop"] .band .cap { color: #d8cfe0; padding-bottom: 12px; margin: 0; }
-html[data-look="pop"] .band::before { content: "MILK ♡ LOVE ✦ WORK HARD ✦ TAKE BREAKS ✦ ทำงาน · tham-ngaan ✦ MILK ♡ LOVE ✦ WORK HARD ✦ TAKE BREAKS ✦ ทำงาน · tham-ngaan ✦"; display: block; white-space: nowrap; overflow: hidden; background: #ffe27a; color: #2a2230; font: 800 15px/1 var(--font-h); letter-spacing: .06em; padding: 10px 0; border-block: 2px solid #2a2230; }
-html[data-look="pop"] .art-ml { background: #ff8fb8; } html[data-look="pop"] .collage .frame { background: #8fd1a8; border: 2px solid #2a2230; transform: rotate(-2deg); border-radius: 26px; box-shadow: 8px 8px 0 #2a2230; }
-html[data-look="pop"] .collage img.stk { filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(5px 5px 0 #2a2230); }
-html[data-look="pop"] .collage img.stk:nth-of-type(1) { height: 90% !important; bottom: -6% !important; }
-html[data-look="pop"] .pola { border: 2px solid #2a2230; box-shadow: 5px 5px 0 #2a2230; }
-html[data-look="pop"] .try-side, html[data-look="pop"] .fctl2, html[data-look="pop"] .step, html[data-look="pop"] .tile, html[data-look="pop"] .quiz-opts button { border: 2px solid var(--line-strong); box-shadow: 3px 3px 0 var(--line-strong); }
-html[data-look="pop"] .screen { box-shadow: 0 0 0 2px #2a2230, 8px 8px 0 #2a2230; border-radius: 18px; }
-html[data-look="pop"] .try-tabs button { border: 2px solid #2a2230; }
-html[data-look="pop"] .try-tabs button[aria-pressed="true"] { background: #2a2230; border-color: #2a2230; color: #ffe27a; } html[data-look="pop"] .try-tabs button[aria-pressed="true"] .ic { color: #ffe27a; }
-html[data-look="pop"] .chip-float { border: 2px solid #2a2230; box-shadow: 3px 3px 0 #2a2230; }
-html[data-look="pop"] .top { background: #fffaf2; border-bottom: 2px solid #2a2230; } html[data-look="pop"][data-theme="dark"] .top { background: #18141c; }
+
 .cap.wrap { margin-left: auto; margin-right: auto; }
 .hero-cred { margin-top: 4px; margin-bottom: 8px; }
 
@@ -542,7 +517,7 @@ html[data-look="scrapbook"] .sparkle::after { content: none; }
 html[data-look="scrapbook"] .try-side, html[data-look="scrapbook"] .screen { border-radius: 16px; }
 .nw { white-space: nowrap; }
 .th-note { background: color-mix(in oklab, var(--a) 12%, var(--bg)); border-bottom: 1.5px solid var(--line); font-size: 13.5px; padding: 8px 0; }
-:lang(th) body { font-family: "Mali", var(--font-b); }
+/* (Thai reads in Anuphan through --font-b; Mali stays for the Thai words in bubbles) */
 /* What it does (three big things + chips) and the Desktop buddy block: assets/features.js draws them */
 :is(#ml-does, #ml-buddy) .ticks { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
 :is(#ml-does, #ml-buddy) .ticks li { display: flex; gap: 8px; align-items: flex-start; color: var(--ink-2); font-size: 15px; line-height: 1.45; }
@@ -784,6 +759,11 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
 .subnav .sn-row.at-end { -webkit-mask-image: none; mask-image: none; }
 @media (max-width: 900px) { .subnav { padding: 8px 0; } }
 </style>
+<link rel="stylesheet" href="assets/tmb/tmb.css">
+<link rel="stylesheet" href="assets/next/next.css">
+<link rel="stylesheet" href="assets/design.css">
+<link rel="stylesheet" href="assets/pins/pin3d.css">
+<link rel="stylesheet" href="assets/pins/pin-back.css">
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -794,9 +774,9 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
     <a href="#tmb" data-p="tmb">Thai Mascot Buddy</a>
   </nav>
   <span class="spacer"></span>
-  <div class="seg" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="zh">中文</button><button type="button" data-lang="th">ไทย<sup>beta</sup></button></div>
+  <div class="seg" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="zh" class="zh-sys" lang="zh-Hant">中文</button><button type="button" data-lang="th">ไทย<sup>beta</sup></button></div>
   <div class="seg" role="group" aria-label="Light or dark"><button type="button" data-sitetheme="light" aria-label="Light"><i data-lucide="sun" class="ic"></i></button><button type="button" data-sitetheme="dark" aria-label="Dark"><i data-lucide="moon" class="ic"></i></button></div>
-  <a class="btn btn-p btn-sm dlbtn" href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載" data-th="ดาวน์โหลด">Download</span></a>
+  <a class="btn btn-p btn-sm dlbtn" id="topCta" href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載" data-th="ดาวน์โหลด">Download</span></a>
 </div></header>
 
 <div class="th-note" id="thnote" hidden><div class="wrap">ภาษาไทยยังเป็นเวอร์ชันทดลอง (beta) คำแปลอาจยังไม่ถูกต้องทั้งหมด ถ้าอยากช่วยตรวจทานคำแปล ติดต่อเราได้ที่ <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> หรือ X <a href="https://x.com/alitasdepollos0" rel="noopener">@alitasdepollos0</a> ขอบคุณค่ะ 🙏</div></div>
@@ -810,13 +790,13 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
     <div class="two">
       <article class="print prod">
         <div class="art art-ml">
-          <img class="stk" src="assets/fan/fan-05.webp" alt="" style="left:4%;height:80%;transform:rotate(-6deg)">
-          <img class="stk" src="assets/fan/fan-12.webp" alt="" style="left:30%;height:86%">
-          <img class="stk" src="assets/fan/fan-16.webp" alt="" style="right:20%;height:74%;transform:rotate(4deg)">
-          <img class="stk" src="assets/fan/muv-muv-heart.webp" alt="" style="right:3%;bottom:auto;top:12px;height:30%;transform:rotate(10deg)">
+          <img loading="lazy" data-hero class="stk" src="assets/fan/fan-05.webp" alt="" style="left:4%;height:80%;transform:rotate(-6deg)">
+          <img loading="lazy" class="stk" src="assets/fan/fan-12.webp" alt="" style="left:30%;height:86%">
+          <img loading="lazy" class="stk" src="assets/fan/fan-16.webp" alt="" style="right:20%;height:74%;transform:rotate(4deg)">
+          <img loading="lazy" class="stk" src="assets/fan/muv-muv-heart.webp" alt="" style="right:3%;bottom:auto;top:12px;height:30%;transform:rotate(10deg)">
           <span class="chip-float" style="left:14px;top:14px"><i data-lucide="timer" class="ic"></i><b>18:42</b><span data-zh="第 2 / 4 輪" data-th="รอบที่ 2 จาก 4">round 2 of 4</span></span>
         </div>
-        <div><span class="tag"><i data-lucide="laptop" class="ic"></i><span data-zh="Mac App · Windows 版即將推出" data-th="แอป Mac · Windows เร็ว ๆ นี้">Mac app · Windows coming</span></span></div>
+        <div><span class="tag"><i data-lucide="laptop" class="ic"></i><span data-zh="Mac 版現已推出・Windows 版即將到來" data-th="Mac มีแล้ว · &lt;span class='nw'&gt;Windows เร็ว ๆ นี้&lt;/span&gt;">Mac now · Windows soon</span></span></div>
         <h3>ML WorkHelp</h3>
         <p data-zh="陪你度過整個工作日的 MilkLove 夥伴：工作時鐘或番茄鐘、專注全螢幕、提醒、用自己的照片做貼圖，還有每週的工作數據。" data-th="เพื่อน MilkLove ตลอดวันทำงาน: นาฬิกาทำงานหรือโพโมโดโร่ หน้าจอโฟกัส การแจ้งเตือน สติกเกอร์จากรูปของคุณเอง และสถิติรายสัปดาห์">A MilkLove buddy for your whole work day: a work clock or the Pomodoro, a focus screen, reminders, stickers from your own photos, and your weeks in numbers.</p>
         <div class="acts"><a class="btn btn-p" href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載 Mac 版" data-th="ดาวน์โหลดสำหรับ Mac">Download for Mac</span></a><a class="btn btn-s" href="#ml"><span data-zh="看看能做什麼" data-th="ดูว่าทำอะไรได้บ้าง">See what it does</span><i data-lucide="arrow-right" class="ic"></i></a></div>
@@ -826,17 +806,17 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
           <pre><span>// today: learn one Thai word</span>
 <b>const</b> word = <i>"ทำงาน"</i>; <span>// to work</span>
 <b>function</b> takeBreak() { … }</pre>
-          <div class="mascots"><img src="assets/devhelp/muvmuv.svg" alt=""><img src="assets/devhelp/lolo.svg" alt=""><img src="assets/devhelp/jewel.svg" alt=""></div>
+          <div class="mascots"><img loading="lazy" src="assets/tmb/clips/muvmuv.png" alt=""><img loading="lazy" src="assets/tmb/clips/lolo.png" alt=""><img loading="lazy" src="assets/tmb/clips/jewel.png" alt=""></div>
         </div>
-        <div><span class="tag a"><i data-lucide="code-xml" class="ic"></i><span data-zh="VS Code 擴充功能 · Kiro 版審核中" data-th="ส่วนขยาย VS Code · เวอร์ชัน Kiro รอตรวจสอบ">VS Code extension · Kiro version in review</span></span></div>
+        <div><span class="tag a"><i data-lucide="code-xml" class="ic"></i><span data-zh="VS Code 擴充功能" data-th="ส่วนขยาย VS Code">VS Code extension</span></span></div>
         <h3>Thai Mascot Buddy</h3>
         <p data-zh="不是 App，是加進 VS Code 的擴充功能。泰國人氣吉祥物會在編輯器周圍散步，教你泰文單字、幫你計番茄鐘，也會提醒你休息。" data-th="ไม่ใช่แอป แต่เป็นส่วนขยายที่เพิ่มใน VS Code มาสคอตไทยยอดนิยมจะเดินรอบหน้าต่างโค้ด สอนคำศัพท์ไทย จับเวลาโพโมโดโร่ และเตือนให้พัก">Not an app: an extension you add to VS Code. A popular Thai mascot walks round your editor, teaches you Thai words, keeps your Pomodoro and reminds you to rest.</p>
         <div class="acts"><a class="btn btn-p" href="https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp" target="_blank" rel="noopener" style="background:#6b57a8;box-shadow:inset 0 0 0 3px rgba(255,255,255,.4),0 5px 0 #43356f"><i data-lucide="plus" class="ic"></i><span data-zh="加到 VS Code" data-th="เพิ่มใน VS Code">Add to VS Code</span></a><a class="btn btn-s" href="#tmb"><span data-zh="看看能做什麼" data-th="ดูว่าทำอะไรได้บ้าง">See what it does</span><i data-lucide="arrow-right" class="ic"></i></a></div>
       </article>
     </div>
   </div></section>
-  <div class="band"><div class="marquee" aria-hidden="true"><div class="mq-track"><img src="assets/fan/fan-01.webp" alt=""><img src="assets/fan/fan-02.webp" alt=""><img src="assets/fan/muv-muv-cartoon.webp" alt=""><img src="assets/fan/fan-03.webp" alt=""><img src="assets/fan/fan-04.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""><img src="assets/fan/muv-muv-baby.webp" alt=""><img src="assets/fan/fan-07.webp" alt=""><img src="assets/fan/fan-08.webp" alt=""><img src="assets/fan/fan-09.webp" alt=""><img src="assets/fan/muv-w3-keep.webp" alt=""><img src="assets/fan/fan-10.webp" alt=""><img src="assets/fan/fan-11.webp" alt=""><img src="assets/fan/fan-13.webp" alt=""><img src="assets/fan/fan-01.webp" alt=""><img src="assets/fan/fan-02.webp" alt=""><img src="assets/fan/muv-muv-cartoon.webp" alt=""><img src="assets/fan/fan-03.webp" alt=""><img src="assets/fan/fan-04.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""><img src="assets/fan/muv-muv-baby.webp" alt=""><img src="assets/fan/fan-07.webp" alt=""><img src="assets/fan/fan-08.webp" alt=""><img src="assets/fan/fan-09.webp" alt=""><img src="assets/fan/muv-w3-keep.webp" alt=""><img src="assets/fan/fan-10.webp" alt=""><img src="assets/fan/fan-11.webp" alt=""><img src="assets/fan/fan-13.webp" alt=""></div></div>
-    <p class="cap wrap" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;otter&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p></div>
+  <div class="band mq-band"><button type="button" class="mq-pause" id="mqPause" aria-pressed="false" aria-label="Pause the stickers" data-zh-aria="暫停貼圖" data-th-aria="หยุดสติกเกอร์"><i data-lucide="pause" class="ic"></i></button><div class="marquee" aria-hidden="true"><div class="mq-track"><img loading="lazy" src="assets/fan/fan-01.webp" alt=""><img loading="lazy" src="assets/fan/fan-02.webp" alt=""><img loading="lazy" src="assets/fan/muv-muv-cartoon.webp" alt=""><img loading="lazy" src="assets/fan/fan-03.webp" alt=""><img loading="lazy" src="assets/fan/kiu-together-1.webp" alt=""><img loading="lazy" src="assets/fan/fan-04.webp" alt=""><img loading="lazy" src="assets/fan/fan-06.webp" alt=""><img loading="lazy" src="assets/fan/muv-muv-baby.webp" alt=""><img loading="lazy" src="assets/fan/fan-07.webp" alt=""><img loading="lazy" src="assets/fan/fan-08.webp" alt=""><img loading="lazy" src="assets/fan/fan-09.webp" alt=""><img loading="lazy" src="assets/fan/kiu-love-2.webp" alt=""><img loading="lazy" src="assets/fan/kiu-milk-2.webp" alt=""><img loading="lazy" src="assets/fan/muv-w3-keep.webp" alt=""><img loading="lazy" src="assets/fan/fan-10.webp" alt=""><img loading="lazy" src="assets/fan/fan-11.webp" alt=""><img loading="lazy" src="assets/fan/fan-13.webp" alt=""><img loading="lazy" src="assets/fan/fan-01.webp" alt=""><img loading="lazy" src="assets/fan/fan-02.webp" alt=""><img loading="lazy" src="assets/fan/muv-muv-cartoon.webp" alt=""><img loading="lazy" src="assets/fan/fan-03.webp" alt=""><img loading="lazy" src="assets/fan/kiu-together-1.webp" alt=""><img loading="lazy" src="assets/fan/fan-04.webp" alt=""><img loading="lazy" src="assets/fan/fan-06.webp" alt=""><img loading="lazy" src="assets/fan/muv-muv-baby.webp" alt=""><img loading="lazy" src="assets/fan/fan-07.webp" alt=""><img loading="lazy" src="assets/fan/fan-08.webp" alt=""><img loading="lazy" src="assets/fan/fan-09.webp" alt=""><img loading="lazy" src="assets/fan/kiu-love-2.webp" alt=""><img loading="lazy" src="assets/fan/kiu-milk-2.webp" alt=""><img loading="lazy" src="assets/fan/muv-w3-keep.webp" alt=""><img loading="lazy" src="assets/fan/fan-10.webp" alt=""><img loading="lazy" src="assets/fan/fan-11.webp" alt=""><img loading="lazy" src="assets/fan/fan-13.webp" alt=""></div></div>
+    <p class="cap wrap" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b>、<b>KIU</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt;, &lt;b&gt;otter&lt;/b&gt; และ &lt;b&gt;KIU&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b>, <b>otter</b> and <b>KIU</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p></div>
 
   <section class="sec"><div class="wrap">
     <div class="sec-h"><h2 class="sparkle" data-zh="哪一個適合我？" data-th="ตัวไหนเหมาะกับฉัน?">Which one is for me?</h2><p data-zh="點一個最像你的說法。" data-th="แตะข้อที่ตรงกับคุณที่สุด">Tap the one that sounds most like you.</p></div>
@@ -852,12 +832,12 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
       <div class="tbl-wrap"><table class="tbl">
         <tr><th></th><th>ML WorkHelp</th><th>Thai Mascot Buddy</th></tr>
         <tr><td data-zh="是什麼" data-th="คืออะไร">What it is</td><td data-zh="下載後就能單獨打開的 App" data-th="แอปที่ดาวน์โหลดแล้วเปิดใช้ได้เลย">An app you download and open on its own</td><td data-zh="在 VS Code 裡運作的擴充功能，開著 VS Code 時才會出現" data-th="ส่วนขยายที่ทำงานใน VS Code ขณะเปิด VS Code อยู่">An extension that runs inside VS Code, while VS Code is open</td></tr>
-        <tr><td data-zh="怎麼取得" data-th="ติดตั้งอย่างไร">How you get it</td><td data-zh="從這個網頁下載" data-th="ดาวน์โหลดจากหน้านี้">Download it from this page</td><td data-zh="到 VS Code 市集一鍵安裝（Kiro 版審核中）" data-th="VS Code Marketplace คลิกเดียว (เวอร์ชัน Kiro รอตรวจสอบ)">VS Code Marketplace, in one click (Kiro version in review)</td></tr>
+        <tr><td data-zh="怎麼取得" data-th="ติดตั้งอย่างไร">How you get it</td><td data-zh="從這個網頁下載" data-th="ดาวน์โหลดจากหน้านี้">Download it from this page</td><td data-zh="到 VS Code 市集一鍵安裝" data-th="ติดตั้งจาก VS Code Marketplace ในคลิกเดียว">VS Code Marketplace, in one click</td></tr>
         <tr><td data-zh="夥伴" data-th="เพื่อน">Buddies</td><td data-zh="Milk 和 Love 在桌面上陪你，也能用自己的照片做貼圖" data-th="มิลค์กับเลิฟบนเดสก์ท็อป และสติกเกอร์จากรูปของคุณเอง">Milk & Love on your desktop, stickers from your own photos</td><td data-zh="泰國人氣吉祥物和小動物在編輯器周圍" data-th="มาสคอตไทยยอดนิยมและสัตว์ รอบหน้าต่างโค้ด">Popular Thai mascots and animals round your editor</td></tr>
         <tr><td data-zh="計時" data-th="จับเวลา">Keeping time</td><td data-zh="工作時鐘、番茄鐘、專注全螢幕" data-th="นาฬิกาทำงาน โพโมโดโร่ หน้าจอโฟกัส">Work clock, Pomodoro, focus screen</td><td data-zh="狀態列顯示工作時間和番茄鐘" data-th="เวลาทำงานและโพโมโดโร่บนแถบสถานะ">Work time and Pomodoro in the status bar</td></tr>
         <tr><td data-zh="提醒" data-th="แจ้งเตือน">Reminders</td><td data-zh="提醒與活動，可同步 Apple" data-th="แจ้งเตือนและกิจกรรม ซิงก์กับ Apple">Reminders and events, with Apple sync</td><td data-zh="簡單的提醒和休息提示" data-th="แจ้งเตือนง่าย ๆ และป๊อปอัปเตือนพัก">Simple reminders and break pop-ups</td></tr>
         <tr><td data-zh="日曆與數據" data-th="ปฏิทินและสถิติ">Calendar & data</td><td data-zh="總覽、分析、可以修改的日曆" data-th="สรุป การวิเคราะห์ ปฏิทินที่แก้ไขได้">Summary, analysis, editable calendar</td><td data-zh="沒有" data-th="ไม่มี">Not included</td></tr>
-        <tr><td data-zh="風格" data-th="หน้าตา">Looks</td><td data-zh="8 種風格、6 種顏色、淺色和深色" data-th="8 สไตล์ 6 ธีมสี มีทั้งโหมดสว่างและมืด">8 styles, 6 colour themes, light and dark</td><td data-zh="卡通或像素吉祥物" data-th="มาสคอตแบบการ์ตูนหรือพิกเซล">Cartoon or pixel mascots</td></tr>
+        <tr><td data-zh="風格" data-th="หน้าตา">Looks</td><td data-zh="10 種風格、6 種配色，淺色或深色" data-th="10 สไตล์ 6 ธีมสี มีทั้งโหมดสว่างและมืด">10 styles, 6 colour themes, light and dark</td><td data-zh="卡通或像素吉祥物" data-th="มาสคอตแบบการ์ตูนหรือพิกเซล">Cartoon or pixel mascots</td></tr>
       </table></div>
     </details>
   </div></section>
@@ -872,72 +852,49 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
   </div></section>
 </div>
 
-<!-- ================= ML WORKHELP ================= -->
+<!-- ================= ML WORKHELP (2026-10-27: written for a first-time visitor; one picture + a few short lines per section, details behind "more") ================= -->
 <div class="page" id="p-ml">
-  <section><div class="wrap phero">
-    <div>
-      <span class="tag"><i data-lucide="laptop" class="ic"></i><span data-zh="Mac App" data-th="แอป Mac">Mac app</span></span>
-      <h1 class="title-big" style="font-size:clamp(36px,5vw,58px);margin-top:12px" data-zh="陪你度過工作日的 <em>MilkLove 夥伴</em>" data-th="เพื่อน &lt;em&gt;MilkLove&lt;/em&gt; สำหรับวันทำงานของคุณ">A <em>MilkLove buddy</em> for your work day</h1>
-      <p class="lead" data-zh="工作時鐘或番茄鐘、專注全螢幕、提醒與活動、用自己的照片做貼圖，還有一週、一個月、一年的工作數據，Milk 和 Love 一直在螢幕上陪著你。" data-th="นาฬิกาทำงานหรือโพโมโดโร่ หน้าจอโฟกัส แจ้งเตือนและกิจกรรม สติกเกอร์จากรูปของคุณเอง และสถิติรายสัปดาห์ เดือน ปี โดยมีมิลค์กับเลิฟอยู่เป็นเพื่อนบนหน้าจอ">A work clock or the Pomodoro, a focus screen, reminders and events, stickers from your own photos, and your week, month and year in numbers, with Milk and Love keeping you company on screen.</p>
-      <div class="acts"><a class="btn btn-p" href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載 Mac 版" data-th="ดาวน์โหลดสำหรับ Mac">Download for Mac</span></a><a class="btn btn-s" href="#ml-try"><i data-lucide="eye" class="ic"></i><span data-zh="先試試看" data-th="ลองเล่นที่นี่ก่อน">Try it here first</span></a></div>
-      <div class="badges"><span><i data-lucide="check" class="ic"></i><span data-zh="免費" data-th="ฟรี">Free</span></span><span><i data-lucide="check" class="ic"></i><span data-zh="資料只存在你的電腦裡" data-th="ข้อมูลอยู่ในเครื่องของคุณเท่านั้น">Everything stays on your computer</span></span><span><i data-lucide="check" class="ic"></i>English · 繁中 · ไทย (beta)</span><span><i data-lucide="check" class="ic"></i><span data-zh="目前只有 Mac 版 · Windows 版即將推出" data-th="ตอนนี้มีแค่ Mac · เวอร์ชัน Windows กำลังมา">Mac only for now · Windows coming</span></span></div>
+  <section class="ml-top"><div class="wrap ml-hero">
+    <div class="ml-intro">
+      <span class="tag"><i data-lucide="laptop" class="ic"></i><span data-zh="Mac 版現已推出・Windows 版即將到來" data-th="Mac มีแล้ว · &lt;span class='nw'&gt;Windows เร็ว ๆ นี้&lt;/span&gt;">Mac now · Windows soon</span></span>
+      <h1 class="title-big ml-name">ML WorkHelp</h1>
+      <p class="ml-promise" data-zh="陪你度過工作日的 <em>MilkLove 夥伴</em>。" data-th="เพื่อน <em>MilkLove</em> สำหรับวันทำงานของคุณ">A <em>MilkLove buddy</em> for your work day.</p>
+      <p class="ml-what" data-zh="工作時鐘或番茄鐘、提醒、用自己的照片做貼圖，還有你每一週的數據，Milk 和 Love 一直在螢幕上陪你。" data-th="นาฬิกาทำงานหรือโพโมโดโร่ แจ้งเตือน สติกเกอร์จากรูปของคุณ และสถิติรายสัปดาห์ โดยมีมิลค์กับเลิฟอยู่บนหน้าจอ">A work clock or Pomodoro, reminders, stickers from your own photos and your weeks in numbers, with Milk and Love on screen.</p>
+      <div class="acts"><a class="btn btn-p" href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載 Mac 版" data-th="ดาวน์โหลดสำหรับ Mac">Download for Mac</span></a><a class="btn btn-s" href="#ml-demo"><i data-lucide="eye" class="ic"></i><span data-zh="先試試看" data-th="ลองเล่นที่นี่ก่อน">Try it here first</span></a></div>
+      <div class="badges"><span><i data-lucide="check" class="ic"></i><span data-zh="免費" data-th="ฟรี">Free</span></span><span><i data-lucide="check" class="ic"></i><span data-zh="資料只存在你的 Mac" data-th="ข้อมูลอยู่ใน Mac ของคุณ">Everything stays on your Mac</span></span><span><i data-lucide="check" class="ic"></i>English · <span class="zh-sys" lang="zh-Hant">繁中</span> · ไทย (beta)</span></div>
     </div>
-    <div class="collage">
-      <div class="frame"></div>
-      <figure class="pola" style="left:2%;top:14%;transform:rotate(-7deg)"><img src="assets/fan/fan-14.webp" alt=""><figcaption>Love ♡</figcaption></figure>
-      <figure class="pola" style="right:2%;top:2%;transform:rotate(6deg)"><img src="assets/fan/fan-19.webp" alt=""><figcaption>Milk ♡</figcaption></figure>
-      <img class="stk" src="assets/fan/fan-10.webp" alt="" style="left:30%;bottom:2%;height:74%">
-      <img class="stk" src="assets/fan/muv-muv-cartoon.webp" alt="" style="right:4%;bottom:4%;height:30%;transform:rotate(8deg)">
-      <span class="chip-float" style="left:10%;top:6%"><i data-lucide="timer" class="ic"></i><b>18:42</b><span data-zh="專注中 · 第 2 / 4 輪" data-th="กำลังโฟกัส · รอบที่ 2 จาก 4">focusing · round 2 of 4</span></span>
-      <span class="chip-float" style="right:6%;top:58%"><span style="font-family:Mali;font-size:20px">ใกล้</span><span>klai · <span data-zh="靠近" data-th="ใกล้">near</span></span></span>
+    <div class="ml-shot">
+      <span class="tape" aria-hidden="true"></span>
+      <div class="shotframe"><img id="mlToday" data-hero loading="lazy" alt="ML WorkHelp's Today page: the work clock, the focus of the day, the next reminder and a Thai word from the songs" data-zh-alt="ML WorkHelp 的「今天」頁面：工作時鐘、本日主題、下一個提醒，還有歌裡的泰文單字" width="1650" height="1080"></div>
+      <figure class="pola p1"><img loading="lazy" src="assets/fan/kiu-love-1.webp" alt=""><figcaption>Love ♡</figcaption></figure>
+      <figure class="pola p2"><img loading="lazy" src="assets/fan/kiu-milk-1.webp" alt=""><figcaption>Milk ♡</figcaption></figure>
+      <p class="cap shot-cap" data-zh="拍立得：<b>KIU</b>（@kiu_628ML）· 卡通 Muv：<b>wanwannjeab</b> · 所有攝影師都在<a href='#ml-photos'>照片來源</a>" data-th="โพลารอยด์: &lt;b&gt;KIU&lt;/b&gt; (@kiu_628ML) · การ์ตูน Muv: &lt;b&gt;wanwannjeab&lt;/b&gt; · ช่างภาพทุกคนอยู่ที่&lt;a href='#ml-photos'&gt;เครดิตภาพ&lt;/a&gt;">Polaroids: <b>KIU</b> (@kiu_628ML) · cartoon Muv: <b>wanwannjeab</b> · every photographer is in <a href="#ml-photos">Photos &amp; credits</a></p>
     </div>
-  </div></section>
-  <p class="cap wrap hero-cred" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;otter&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p>
+  </div>
+  </section>
 
   <nav class="subnav" aria-label="On this page" data-zh-label="這一頁" data-th-label="ในหน้านี้"><div class="wrap">
     <div class="sn-row">
-
     <a href="#ml-does"><i data-lucide="sparkles" class="ic"></i><span data-zh="能做什麼" data-th="ทำอะไรได้บ้าง">What it does</span></a>
-    <a href="#ml-buddy"><i data-lucide="smile" class="ic"></i><span data-zh="桌面夥伴" data-th="เพื่อนบนเดสก์ท็อป">Desktop buddy</span></a>
-    <a href="#ml-try"><i data-lucide="eye" class="ic"></i><span data-zh="試試看" data-th="ลองเล่น">Try it</span></a>
-    <a href="#ml-focus"><i data-lucide="maximize-2" class="ic"></i><span data-zh="專注全螢幕" data-th="หน้าจอโฟกัส">Focus screen</span></a>
-    <a href="#ml-stickers"><i data-lucide="sticker" class="ic"></i><span data-zh="做貼圖" data-th="สติกเกอร์ของคุณ">Your stickers</span></a>
-    <a href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載" data-th="ดาวน์โหลด">Download</span></a>
+    <a href="#ml-looks"><i data-lucide="palette" class="ic"></i><span data-zh="風格" data-th="หน้าตา">Looks</span></a>
+    <a href="#ml-fan"><i data-lucide="heart" class="ic"></i><span data-zh="給粉絲" data-th="เพื่อแฟน ๆ">For fans</span></a>
+    <a href="#ml-words"><i data-lucide="languages" class="ic"></i><span data-zh="泰文單字" data-th="คำไทย">Thai words</span></a>
+    <a href="#ml-data"><i data-lucide="lock" class="ic"></i><span data-zh="你的資料" data-th="ข้อมูลของคุณ">Your data</span></a>
     <a href="#ml-photos"><i data-lucide="camera" class="ic"></i><span data-zh="照片來源" data-th="เครดิตภาพ">Photos &amp; credits</span></a>
-    <a href="#ml-news"><i data-lucide="mail" class="ic"></i><span data-zh="新版本通知" data-th="ข่าวทางอีเมล">News by email</span></a>
-    <a href="#ml-privacy"><i data-lucide="lock" class="ic"></i><span data-zh="隱私" data-th="ความเป็นส่วนตัว">Privacy</span></a>
+    <a href="#ml-get"><i data-lucide="download" class="ic"></i><span data-zh="下載" data-th="ดาวน์โหลด">Download</span></a>
     </div>
     <a class="sn-next" href="#" hidden><span class="sn-k" data-zh="下一段" data-th="ถัดไป">Next</span><b></b><i data-lucide="arrow-down" class="ic"></i></a>
   </div><div class="sn-bar" aria-hidden="true"><i></i></div></nav>
 
-  <section class="sec" id="ml-does"><div class="wrap" id="ml-does-in"></div></section>
-
-  <section class="sec" id="ml-buddy"><div class="wrap" id="ml-buddy-in"></div></section>
-
-  <section class="sec" id="ml-try"><div class="wrap">
-    <div class="sec-h"><span class="kick" data-zh="直接在這裡試" data-th="ลองเล่นได้ที่นี่เลย">Try it right here</span><h2 class="sparkle" data-zh="看看 App 長什麼樣子，換成你喜歡的風格" data-th="ดูแอปในสไตล์ที่คุณชอบ">See the app, in the style you like</h2><p data-zh="這是真的可以點的預覽。挑一頁、換風格、切換淺色或深色，就跟 App 裡的「設定 › 外觀」一樣。" data-th="นี่คือตัวอย่างที่กดเล่นได้จริง เลือกหน้า เปลี่ยนสไตล์ สลับโหมดสว่างหรือมืด เหมือนใน การตั้งค่า › หน้าตา ของแอปเลย">This is a real, clickable preview. Pick a page, change the style, switch light or dark, just like Settings › Look in the app.</p></div>
-    <div class="try3">
-      <div class="try-tabs" id="tryList" role="tablist"></div>
-      <div class="try-desc" id="tryDesc"></div>
-      <div class="screen"><iframe id="appFrame" title="ML WorkHelp preview" loading="lazy"></iframe>
-        <figure class="phone-shot"><picture><source srcset="demo/shot-today-dark.jpg" media="(prefers-color-scheme: dark)"><img src="demo/shot-today-light.jpg" alt="ML WorkHelp's Today page" data-zh-alt="ML WorkHelp 的「今天」頁" loading="lazy"></picture>
-          <figcaption data-zh="在 Mac 上就能在這裡試玩。" data-th="เปิดบน Mac เพื่อลองเล่นได้ที่นี่">Try it here on a Mac.</figcaption></figure></div>
-      <aside class="try-side">
-        <div><span class="lbl" data-zh="風格" data-th="สไตล์">Style</span><div class="styles" id="styleChips"></div></div>
-        <div><span class="lbl" data-zh="淺色或深色" data-th="สว่างหรือมืด">Light or dark</span><div class="seg" role="group" id="modeSeg"><button type="button" data-m="light"><i data-lucide="sun" class="ic"></i><span data-zh="淺色" data-th="สว่าง">Light</span></button><button type="button" data-m="dark"><i data-lucide="moon" class="ic"></i><span data-zh="深色" data-th="มืด">Dark</span></button></div></div>
-        <div><span class="lbl" data-zh="顏色" data-th="สี">Colours</span><div class="dots" id="themeDots"></div></div>
-        <p class="side-tip" data-zh="小提示：預覽裡的按鈕都能點，在桌面夥伴頁按右鍵試試看。" data-th="ทิป: ปุ่มในตัวอย่างกดได้จริงนะ ในหน้าเพื่อนบนเดสก์ท็อป ลองคลิกขวาดูสิ">Tip: the buttons in the preview work too. On Desktop buddy, try a right-click.</p>
-      </aside>
-      <p class="cap try-cap" data-zh="預覽裡的貼圖取自 <b>Blumoon</b>、<b>otter</b>、<b>NGMin</b>、<b>Lyrac</b> 的照片（已獲授權）；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。休息影片的縮圖來自 YouTube 上的 GMMTV OFFICIAL。" data-th="สติกเกอร์ในตัวอย่างนี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;otter&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;Lyrac&lt;/b&gt; (ได้รับอนุญาตแล้ว) ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab) ภาพปกวิดีโอช่วงพักมาจาก GMMTV OFFICIAL บน YouTube">Stickers in this preview are made from photos by <b>Blumoon</b>, <b>otter</b>, <b>NGMin</b> and <b>Lyrac</b>, used with permission; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab). Break-video thumbnails are from GMMTV OFFICIAL on YouTube.</p>
-    </div>
-  </div></section>
-
-  <section class="sec" id="ml-focus"><div class="wrap">
+  <!-- what it does: the heart of it + everything it does (no fold); the focus-screen demo behind "more" -->
+  <section class="sec" id="ml-does"><div class="wrap" id="ml-does-in"></div>
+  <div class="wrap"><details class="more ml-more"><summary><i data-lucide="maximize-2" class="ic"></i><span data-zh="試試專注全螢幕" data-th="ลองหน้าจอโฟกัส">Try the focus screen</span></summary>
+    <div id="ml-focus" class="ml-fold">
     <div class="sec-h"><span class="kick" data-zh="專注全螢幕" data-th="หน้าจอโฟกัส">Focus screen</span><h2 class="sparkle" data-zh="離開鍵盤時也能用的專注全螢幕" data-th="หน้าจอโฟกัส สำหรับงานที่ไม่ได้ใช้คีย์บอร์ด">A focus screen for work away from the keyboard</h2><p data-zh="看書、寫紙本、畫畫的時候，時鐘會放大到整個螢幕，就算沒碰電腦也不會被當成離開。在這裡試試看：換換時鐘背後的畫面和時鐘的樣子，就跟 App 裡一樣。" data-th="อ่านหนังสือ เรียนจากกระดาษ วาดรูป? นาฬิกาขยายเต็มจอ และการนั่งนิ่ง ๆ ไม่นับว่าไม่อยู่ ลองได้ที่นี่: เปลี่ยนฉากหลังและหน้าตานาฬิกาได้เหมือนในแอป">Reading, studying on paper, drawing? The clock fills the screen, and sitting still isn't counted as away. Try it here: change what's behind the clock and how it looks, just like in the app.</p></div>
     <div class="fdemo">
       <div class="monitor"><div class="bezel"><div class="fsd" id="fsd" aria-label="Focus screen preview">
-        <img class="ph on" src="assets/focus/blumoon-1.jpg" alt=""><img class="ph" src="assets/focus/blumoon-2.jpg" alt=""><img class="ph" src="assets/focus/blumoon-3.jpg" alt=""><img class="ph" src="assets/focus/blumoon-4.jpg" alt=""><img class="ph" src="assets/focus/blumoon-5.jpg" alt="">
-        <img class="fstk" src="assets/focus/sticker-1.png" alt="">
+        <img loading="lazy" class="ph on" src="assets/focus/blumoon-1.jpg" alt=""><img loading="lazy" class="ph" src="assets/focus/blumoon-2.jpg" alt=""><img loading="lazy" class="ph" src="assets/focus/blumoon-3.jpg" alt=""><img loading="lazy" class="ph" src="assets/focus/blumoon-4.jpg" alt=""><img loading="lazy" class="ph" src="assets/focus/blumoon-5.jpg" alt="">
+        <img loading="lazy" class="fstk" src="assets/focus/sticker-1.png" alt="">
         <div class="fclock2" id="fclock">
           <div class="task" data-zh="正在進行：<b>論文第三章</b>" data-th="กำลังทำ &lt;b&gt;วิทยานิพนธ์ บทที่ 3&lt;/b&gt;">Working on <b>Thesis, chapter 3</b></div>
           <div class="ring"><div><span class="big" id="fbig">25:00</span><span class="fdots"><i class="d"></i><i></i><i></i><i></i></span></div></div>
@@ -958,25 +915,140 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
         <label><span class="lbl"><span data-zh="不透明度" data-th="ความทึบ">Opacity</span> <output id="fopv">100%</output></span><input type="range" id="fop" min="30" max="100" step="5" value="100"></label>
       </div>
     </div>
-  </div></section>
+    </div>
+  </details></div></section>
 
-  <section class="sec" id="ml-stickers"><div class="wrap">
+  <!-- the looks -->
+  <section class="sec" id="ml-looks"><div class="wrap ml-two">
+    <div class="ml-pic">
+      <div class="shotframe tilt-l"><img id="mlLook" loading="lazy" alt="" width="1650" height="1080"></div>
+      <div class="ml-ctl"><div class="seg" role="group" aria-label="Style" id="mlLooks"><button type="button" data-mlst="f" data-zh="拍貼機" data-th="ตู้สติกเกอร์">Purikura</button><button type="button" data-mlst="i" data-zh="Y2K emo" data-th="Y2K">Y2K emo</button><button type="button" data-mlst="m" data-zh="Whimsical" data-th="Whimsical">Whimsical</button></div>
+        <div class="seg" role="group" aria-label="Light or dark"><button type="button" data-mldm="light" aria-label="Light"><i data-lucide="sun" class="ic"></i></button><button type="button" data-mldm="dark" aria-label="Dark"><i data-lucide="moon" class="ic"></i></button></div></div>
+    </div>
+    <div class="ml-txt">
+      <span class="kick" data-zh="照你的喜好" data-th="แต่งให้เป็นแบบของคุณ">Make it yours</span>
+      <h2 data-zh="10 種風格，淺色或深色" data-th="10 สไตล์ ทั้งสว่างและมืด">Ten looks, light or dark</h2>
+      <ul class="ml-lines">
+        <li data-zh="10 種風格、6 種配色，從拍貼機到 Y2K emo 和 Whimsical。" data-th="10 สไตล์ 6 ธีมสี ตั้งแต่ตู้สติกเกอร์ไปจนถึง Y2K และ Whimsical">Ten styles and six colour themes, from Purikura to Y2K emo and Whimsical.</li>
+        <li data-zh="塗鴉：卡片後面一層淡淡的桌布，或角落的小貼紙。" data-th="ดูเดิล: วอลเปเปอร์จาง ๆ หลังการ์ด หรือสติกเกอร์เล็ก ๆ ที่มุม">Doodles: a quiet wallpaper behind the cards, or little stickers on the corners.</li>
+      </ul>
+    </div>
+    <div class="dood-pair" role="group" aria-label="Doodles" data-zh-aria="塗鴉" data-th-aria="ดูเดิล"><figure><img id="mlDq" loading="lazy" alt="" width="1650" height="1080"><figcaption data-zh="安靜桌布" data-th="วอลเปเปอร์เงียบ ๆ">Quiet wallpaper</figcaption></figure><figure><img id="mlDc" loading="lazy" alt="" width="1650" height="1080"><figcaption data-zh="角落貼紙" data-th="สติกเกอร์มุมการ์ด">Corner stickers</figcaption></figure></div>
+  </div>
+  <div class="wrap" id="ml-demo"><details class="more ml-more"><summary><i data-lucide="eye" class="ic"></i><span data-zh="在這裡試試每一頁和每一種風格" data-th="ลองทุกหน้าและทุกสไตล์ได้ที่นี่">Try every page and style right here</span></summary>
+    <div id="ml-try" class="ml-fold">
+    <div class="sec-h"><span class="kick" data-zh="直接在這裡試" data-th="ลองเล่นได้ที่นี่เลย">Try it right here</span><h2 class="sparkle" data-zh="看看 App 長什麼樣子，換成你喜歡的風格" data-th="ดูแอปในสไตล์ที่คุณชอบ">See the app, in the style you like</h2><p data-zh="這是真的可以點的預覽。挑一頁、換風格、切換淺色或深色，就跟 App 裡的「設定 › 外觀」一樣。" data-th="นี่คือตัวอย่างที่กดเล่นได้จริง เลือกหน้า เปลี่ยนสไตล์ สลับโหมดสว่างหรือมืด เหมือนใน การตั้งค่า › หน้าตา ของแอปเลย">This is a real, clickable preview. Pick a page, change the style, switch light or dark, just like Settings › Look in the app.</p></div>
+    <div class="try3">
+      <div class="try-tabs" id="tryList" role="tablist"></div>
+      <div class="try-desc" id="tryDesc"></div>
+      <div class="screen"><iframe id="appFrame" title="ML WorkHelp preview" loading="lazy"></iframe>
+        <figure class="phone-shot"><picture><source srcset="demo/shot-today-dark.jpg" media="(prefers-color-scheme: dark)"><img src="demo/shot-today-light.jpg" alt="ML WorkHelp's Today page" data-zh-alt="ML WorkHelp 的「今天」頁" loading="lazy"></picture>
+          <figcaption data-zh="在 Mac 上就能在這裡試玩。" data-th="เปิดบน Mac เพื่อลองเล่นได้ที่นี่">Try it here on a Mac.</figcaption></figure></div>
+      <aside class="try-side">
+        <div><span class="lbl" data-zh="風格" data-th="สไตล์">Style</span><div class="styles" id="styleChips"></div></div>
+        <div><span class="lbl" data-zh="淺色或深色" data-th="สว่างหรือมืด">Light or dark</span><div class="seg" role="group" id="modeSeg"><button type="button" data-m="light"><i data-lucide="sun" class="ic"></i><span data-zh="淺色" data-th="สว่าง">Light</span></button><button type="button" data-m="dark"><i data-lucide="moon" class="ic"></i><span data-zh="深色" data-th="มืด">Dark</span></button></div></div>
+        <div><span class="lbl" data-zh="顏色" data-th="สี">Colours</span><div class="dots" id="themeDots"></div></div>
+        <p class="side-tip" data-zh="小提示：預覽裡的按鈕都能點，在桌面夥伴頁按右鍵試試看。" data-th="ทิป: ปุ่มในตัวอย่างกดได้จริงนะ ในหน้าเพื่อนบนเดสก์ท็อป ลองคลิกขวาดูสิ">Tip: the buttons in the preview work too. On Desktop buddy, try a right-click.</p>
+      </aside>
+      <p class="cap try-cap" data-zh="預覽裡的貼圖取自 <b>Blumoon</b>、<b>otter</b>、<b>NGMin</b>、<b>Lyrac</b> 的照片（已獲授權）；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。休息影片的縮圖來自 YouTube 上的 GMMTV OFFICIAL。" data-th="สติกเกอร์ในตัวอย่างนี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;otter&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;Lyrac&lt;/b&gt; (ได้รับอนุญาตแล้ว) ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab) ภาพปกวิดีโอช่วงพักมาจาก GMMTV OFFICIAL บน YouTube">Stickers in this preview are made from photos by <b>Blumoon</b>, <b>otter</b>, <b>NGMin</b> and <b>Lyrac</b>, used with permission; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab). Break-video thumbnails are from GMMTV OFFICIAL on YouTube.</p>
+    </div>
+    </div>
+  </details></div></section>
+
+  <!-- the fan corner -->
+  <section class="sec band" id="ml-fan"><div class="wrap">
+    <div class="sec-h"><span class="kick" data-zh="給粉絲" data-th="เพื่อแฟน ๆ">For fans</span><h2 data-zh="為 MilkLove 粉絲而做" data-th="ทำมาเพื่อแฟน MilkLove">Made for MilkLove fans</h2><p data-zh="她們的作品、粉絲攝影師的照片、她們的聲音，還有一整盒徽章。" data-th="ซีรีส์ของพวกเธอ รูปจากช่างภาพแฟนคลับ เสียงของทั้งคู่ และเข็มกลัดอีกเต็มกล่อง">Their shows, photos by fan photographers, their voices, and a box of pins.</p></div>
+    <div class="series-band" role="list" aria-label="Their series" data-zh-aria="她們的作品" data-th-aria="ซีรีส์ของพวกเธอ" id="seriesBand"></div>
+    <div class="fan-grid">
+      <article class="print fan-card"><div class="fan-pic fan-lib"><img class="stk" src="assets/fan/fan-07.webp" alt="" loading="lazy"><img class="stk" src="assets/fan/fan-12.webp" alt="" loading="lazy"><img class="stk" src="assets/fan/fan-16.webp" alt="" loading="lazy"></div>
+        <h3 data-zh="粉絲攝影師的照片" data-th="รูปจากช่างภาพแฟนคลับ">Photos by fan photographers</h3><p data-zh="一整套用粉絲攝影師的照片做成的貼圖，每一張都標明是誰拍的。" data-th="คลังสติกเกอร์จากรูปของช่างภาพแฟนคลับ ทุกชิ้นบอกว่าเป็นรูปของใคร">A library of stickers from fan photographers' photos, each one credited.</p></article>
+      <article class="print fan-card"><div class="fan-pic fan-desk fan-ring"><img class="stk" src="assets/fan/kiu-together-2.webp" alt="" loading="lazy"><span class="bubble2 ring2"><span class="r-h"><i data-lucide="music-2" class="ic"></i>14:30</span><b data-zh="打給銀行" data-th="โทรหาธนาคาร">Call the bank</b><span data-zh="♪ Love 的聲音" data-th="♪ เสียงของเลิฟ">♪ Love's voice</span></span></div>
+        <h3 data-zh="Milk 和 Love 的鈴聲" data-th="เสียงเรียกเข้า Milk กับ Love">Milk &amp; Love ringtones</h3><p data-zh="提醒響起時是她們的聲音，休息時有 MilkLove 的影片陪你。" data-th="ตอนแจ้งเตือนเป็นเสียงของทั้งคู่ ตอนพักมีคลิป MilkLove อยู่เป็นเพื่อน">Their voices ring your reminders; MilkLove clips keep you company on breaks.</p></article>
+      <article class="print fan-card fan-play"><div class="fan-pic pg" id="pinPlay"><div class="pg-board" id="pinBoard" role="group" aria-label="Pins" data-zh-aria="徽章" data-th-aria="เข็มกลัด"></div><div class="pg-stage" id="pinStage" hidden></div></div>
+        <h3 data-zh="收集徽章" data-th="สะสมเข็มกลัด">Pins to collect</h3>
+        <ul class="ml-lines sm"><li data-zh="用 App 就會慢慢收到。" data-th="ใช้แอปไปเรื่อย ๆ ก็ได้เอง">You earn them just by using the app.</li><li data-zh="每一個都來自她們的作品。" data-th="ทุกอันมาจากซีรีส์ของพวกเธอ">Each one comes from their shows.</li><li data-zh="有些是秘密，有些要用粉絲活動的代碼解鎖。" data-th="บางอันเป็นความลับ บางอันปลดล็อกด้วยโค้ดจากงานแฟนมีต">Some are secret, and some open with a code from a fan event.</li></ul>
+        <p class="cap pg-tip" data-zh="點一個徽章，翻過來看看背面。" data-th="แตะเข็มกลัด แล้วพลิกดูด้านหลัง">Tap a pin, then turn it over.</p></article>
+      <article class="print fan-card"><div class="fan-pic fan-cards"><img src="assets/next/card-purikura-light-en-week.jpg" alt="" loading="lazy" width="880" height="620"><img src="assets/next/card-starry-dark-zh-day.jpg" alt="" loading="lazy" width="880" height="620"></div>
+        <h3 data-zh="裝飾你的卡片" data-th="ตกแต่งการ์ดของคุณ">Decorate your card</h3><p data-zh="把你的一週做成圖片，加上塗鴉再存下來。" data-th="ทำรูปสรุปสัปดาห์ ใส่ดูเดิล แล้วบันทึกเก็บไว้">Make a picture of your week, add doodles, save it.</p></article>
+    </div>
+    <p class="cap sec-cred" data-zh="這裡的貼圖取自 <b>Lyrac</b>、<b>Blumoon</b>、<b>otter</b>、<b>KIU</b> 的照片（已獲授權）；卡片照片：<b>NGMin</b>。滑鼠移到貼圖上，就知道是誰拍的。" data-th="สติกเกอร์ตรงนี้มาจากรูปของ &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;otter&lt;/b&gt; และ &lt;b&gt;KIU&lt;/b&gt; (ได้รับอนุญาตแล้ว) รูปบนการ์ด: &lt;b&gt;NGMin&lt;/b&gt; ชี้ที่สติกเกอร์เพื่อดูว่าเป็นรูปของใคร">Stickers here are from photos by <b>Lyrac</b>, <b>Blumoon</b>, <b>otter</b> and <b>KIU</b> (used with permission); card photo: <b>NGMin</b>. Point at a sticker to see whose photo it is.</p>
+  </div>
+  <div class="wrap"><details class="more ml-more"><summary><i data-lucide="sticker" class="ic"></i><span data-zh="玩玩看貼圖和桌面夥伴" data-th="ลองเล่นสติกเกอร์และเพื่อนบนเดสก์ท็อป">Play with the stickers and the desktop buddy</span></summary>
+    <div id="ml-buddy"><div id="ml-buddy-in"></div></div>
+    <div id="ml-stickers" class="ml-fold">
     <div class="sec-h"><span class="kick" data-zh="你的貼圖" data-th="สติกเกอร์ของคุณ">Your stickers</span><h2 class="sparkle" data-zh="用你自己的照片做貼圖" data-th="ทำสติกเกอร์จากรูปของคุณเอง">Make stickers from your own photos</h2><p data-zh="做好的貼圖會在桌面上走動、出現在專注全螢幕，收工時還會陪你一起慶祝。" data-th="สติกเกอร์ของคุณจะเดินเล่นบนเดสก์ท็อป โผล่บนหน้าจอโฟกัส และฉลองกับคุณตอนเลิกงาน">Your stickers walk on your desktop, show up on the focus screen, and celebrate with you when you're done for the day.</p></div>
     <div class="make">
-      <figure><div class="pic"><img id="mk-photo" src="assets/stickers/photo-1.jpg" alt=""></div><figcaption data-zh="你的照片<span>加入一張照片</span>" data-th="รูปของคุณ&lt;span&gt;เพิ่มรูปเข้ามา&lt;/span&gt;">Your photo<span>Add a photo</span></figcaption></figure>
+      <figure><div class="pic"><img loading="lazy" id="mk-photo" src="assets/stickers/photo-1.jpg" alt=""></div><figcaption data-zh="你的照片<span>加入一張照片</span>" data-th="รูปของคุณ&lt;span&gt;เพิ่มรูปเข้ามา&lt;/span&gt;">Your photo<span>Add a photo</span></figcaption></figure>
       <div class="arrow"><i data-lucide="arrow-right" class="ic"></i></div>
-      <figure><div class="pic cut"><img id="mk-auto" src="assets/stickers/auto-1.webp" alt=""></div><figcaption data-zh="自動去背<span>人物會自動被剪下來</span>" data-th="ตัดให้อัตโนมัติ&lt;span&gt;ไดคัตคนในรูปให้เอง&lt;/span&gt;">Cut out for you<span>The people are cut out automatically</span></figcaption></figure>
+      <figure><div class="pic cut"><img loading="lazy" id="mk-auto" src="assets/stickers/auto-1.webp" alt=""></div><figcaption data-zh="自動去背<span>人物會自動被剪下來</span>" data-th="ตัดให้อัตโนมัติ&lt;span&gt;ไดคัตคนในรูปให้เอง&lt;/span&gt;">Cut out for you<span>The people are cut out automatically</span></figcaption></figure>
       <div class="arrow"><i data-lucide="arrow-right" class="ic"></i></div>
-      <figure><div class="pic cut"><img id="mk-final" class="stk" src="assets/stickers/final-1.webp" alt=""></div><figcaption data-zh="手動修飾後的貼圖<span>擦除、還原、智慧邊緣、手動裁切</span>" data-th="เกลานิดหน่อย ได้สติกเกอร์&lt;span&gt;ลบ คืนค่า ขอบอัจฉริยะ หรือตัดเอง&lt;/span&gt;">After touch-ups: the sticker<span>Erase, Restore, Smart edges, or cut by hand</span></figcaption></figure>
+      <figure><div class="pic cut"><img loading="lazy" id="mk-final" class="stk" src="assets/stickers/final-1.webp" alt=""></div><figcaption data-zh="手動修飾後的貼圖<span>擦除、還原、智慧邊緣、手動裁切</span>" data-th="เกลานิดหน่อย ได้สติกเกอร์&lt;span&gt;ลบ คืนค่า ขอบอัจฉริยะ หรือตัดเอง&lt;/span&gt;">After touch-ups: the sticker<span>Erase, Restore, Smart edges, or cut by hand</span></figcaption></figure>
     </div>
-    <div class="mkpick"><span class="cap" data-zh="換一個範例：" data-th="ดูอีกตัวอย่าง:">Another example:</span><button type="button" data-mk="1" class="on"><img src="assets/stickers/photo-1.jpg" alt=""></button><button type="button" data-mk="2"><img src="assets/stickers/photo-2.jpg" alt=""></button><button type="button" data-mk="3"><img src="assets/stickers/photo-3.jpg" alt=""></button></div>
+    <div class="mkpick"><span class="cap" data-zh="換一個範例：" data-th="ดูอีกตัวอย่าง:">Another example:</span><button type="button" data-mk="1" class="on"><img loading="lazy" src="assets/stickers/photo-1.jpg" alt=""></button><button type="button" data-mk="2"><img loading="lazy" src="assets/stickers/photo-2.jpg" alt=""></button><button type="button" data-mk="3"><img loading="lazy" src="assets/stickers/photo-3.jpg" alt=""></button></div>
     <p class="cap" style="margin-top:12px" data-zh="範例照片和貼圖：alitasdepollos（@alitasdepollos0）拍攝，並在 App 裡手動修飾。" data-th="รูปและสติกเกอร์ตัวอย่างโดย alitasdepollos (@alitasdepollos0) เกลาในแอป">Example photos and stickers by alitasdepollos (@alitasdepollos0), touched up in the app.</p>
     <div class="note"><i data-lucide="shield-check" class="ic"></i><p><b data-zh="請尊重拍攝者" data-th="โปรดเคารพช่างภาพ">Please respect the photographers.</b> <span data-zh="請只加入你自己拍的、或已經取得授權的照片。貼圖只存在你的電腦裡，App 不會上傳或分享。在 App 裡製作的貼圖，也只能在 App 裡使用。" data-th="โปรดเพิ่มเฉพาะรูปที่คุณถ่ายเองหรือได้รับอนุญาตแล้ว สติกเกอร์อยู่ในเครื่องของคุณเท่านั้น แอปไม่อัปโหลดหรือแชร์ และสติกเกอร์ที่ทำในแอปใช้ได้เฉพาะในแอปเท่านั้น">Only add photos you took yourself or have permission to use. Your stickers stay on your computer; the app never uploads or shares them. Stickers made in the app can only be used in the app.</span></p></div>
+    </div>
+  </details></div></section>
+
+  <!-- Thai words -->
+  <section class="sec" id="ml-words"><div class="wrap ml-two rev">
+    <div class="ml-pic"><figure class="pola big"><img id="mlWords" loading="lazy" alt="Thai from the songs: ต่อไป, to pai, with the song it comes from" data-zh-alt="歌裡的泰文：ต่อไป（to pai），附上出自哪首歌" width="680" height="305"><figcaption data-zh="卡通 Muv：&lt;span class='nw'&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/span&gt;（@wanwannjeab）" data-th="ภาพการ์ตูน Muv โดย &lt;span class='nw'&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/span&gt; (@wanwannjeab)">Cartoon Muv by <span class="nw">หวานเจี๊ยบอุนยายม๋าไก่</span> (@wanwannjeab)</figcaption></figure></div>
+    <div class="ml-txt">
+      <span class="kick" data-zh="學一點泰文" data-th="เรียนภาษาไทยทีละนิด">Learn a little Thai</span>
+      <h2 data-zh="歌裡的泰文" data-th="ภาษาไทยจากเพลง">Thai from the songs</h2>
+      <ul class="ml-lines">
+        <li data-zh="「今天」頁面上有一個來自 Milk 和 Love 歌裡的單字，還告訴你出自哪首歌。" data-th="หน้าวันนี้มีคำจากเพลงของมิลค์กับเลิฟ พร้อมบอกว่ามาจากเพลงไหน">A word from Milk and Love's songs on your Today page, with the song it's from.</li>
+        <li data-zh="點一下看意思；選單裡也有今日泰文。" data-th="แตะเพื่อดูความหมาย และมีคำประจำวันอยู่ในเมนูด้วย">Tap to see what it means; the word of the day sits in the menu too.</li>
+      </ul>
+    </div>
   </div></section>
 
-  <div class="band"><div class="marquee" aria-hidden="true"><div class="mq-track"><img src="assets/fan/fan-15.webp" alt=""><img src="assets/fan/muv-app-look.webp" alt=""><img src="assets/fan/fan-16.webp" alt=""><img src="assets/fan/fan-17.webp" alt=""><img src="assets/fan/fan-18.webp" alt=""><img src="assets/fan/muv-muv-plain.webp" alt=""><img src="assets/fan/fan-19.webp" alt=""><img src="assets/fan/fan-20.webp" alt=""><img src="assets/fan/fan-05.webp" alt=""><img src="assets/fan/muv-w2-own.webp" alt=""><img src="assets/fan/fan-12.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""><img src="assets/fan/fan-15.webp" alt=""><img src="assets/fan/muv-app-look.webp" alt=""><img src="assets/fan/fan-16.webp" alt=""><img src="assets/fan/fan-17.webp" alt=""><img src="assets/fan/fan-18.webp" alt=""><img src="assets/fan/muv-muv-plain.webp" alt=""><img src="assets/fan/fan-19.webp" alt=""><img src="assets/fan/fan-20.webp" alt=""><img src="assets/fan/fan-05.webp" alt=""><img src="assets/fan/muv-w2-own.webp" alt=""><img src="assets/fan/fan-12.webp" alt=""><img src="assets/fan/fan-06.webp" alt=""></div></div>
-    <p class="cap wrap" data-zh="這一頁的貼圖取自 <b>Blumoon</b>、<b>Lyrac</b>、<b>NGMin</b>、<b>otter</b> 的照片（已獲授權）和 <b>alitasdepollos</b> 拍的照片；卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）。" data-th="สติกเกอร์ในหน้านี้ทำจากรูปของ &lt;b&gt;Blumoon&lt;/b&gt;, &lt;b&gt;Lyrac&lt;/b&gt;, &lt;b&gt;NGMin&lt;/b&gt; และ &lt;b&gt;otter&lt;/b&gt; (ได้รับอนุญาตแล้ว) และของ &lt;b&gt;alitasdepollos&lt;/b&gt; ภาพการ์ตูน Muv วาดโดย &lt;b&gt;หวานเจี๊ยบอุนยายม๋าไก่&lt;/b&gt; (@wanwannjeab)">Stickers on this page are made from photos by <b>Blumoon</b>, <b>Lyrac</b>, <b>NGMin</b> and <b>otter</b> (used with permission) and by <b>alitasdepollos</b>; cartoon Muv drawings by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab).</p></div>
-  <section class="sec" id="ml-get"><div class="wrap">
+  <!-- your data -->
+  <section class="sec" id="ml-data"><div class="wrap ml-two">
+    <div class="ml-pic"><div class="shotframe tilt-r"><img id="mlMonth" loading="lazy" alt="Data, Year: click a month and its numbers and days open under the chart" data-zh-alt="數據的年份頁：點一個月，圖表下方會出現那個月的數字和每一天" width="1100" height="570"></div></div>
+    <div class="ml-txt">
+      <span class="kick" data-zh="你的資料是你的" data-th="ข้อมูลของคุณเป็นของคุณ">Your data stays yours</span>
+      <h2 data-zh="你的每一週，只存在你的 Mac" data-th="ทุกสัปดาห์ของคุณ อยู่ใน Mac ของคุณเท่านั้น">Your weeks in numbers, on your Mac only</h2>
+      <ul class="ml-lines">
+        <li data-zh="週、月、年：點一個月，就能看到那個月的每一天。" data-th="สัปดาห์ เดือน ปี: แตะเดือนไหนก็เห็นทุกวันของเดือนนั้น">Week, month and year: click a month to see its days.</li>
+        <li data-zh="不用帳號、不追蹤。備份成一個檔案，在另一台 Mac 上也能還原。" data-th="ไม่ต้องมีบัญชี ไม่มีการติดตาม สำรองเป็นไฟล์เดียว แล้วกู้คืนบน Mac เครื่องอื่นได้">No account, no tracking. Back up to one file and restore it on another Mac.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap" id="ml-privacy"><details class="more ml-more"><summary><i data-lucide="shield-check" class="ic"></i><span data-zh="隱私的細節" data-th="รายละเอียดความเป็นส่วนตัว">Privacy in detail</span></summary>
+    <div class="ml-fold">
+    <div class="sec-h"><span class="kick" data-zh="隱私" data-th="ความเป็นส่วนตัว">Privacy</span><h2 class="sparkle" data-zh="你的工作資料只留在你的 Mac" data-th="งานของคุณอยู่ใน Mac ของคุณ">Your work stays on your Mac</h2><p data-zh="你的工作紀錄、提醒、照片和設定都只存在你的電腦裡。不用帳號，也不會追蹤你。唯一會離開你電腦的，是第一次打開 App 時填的 email，只用來通知你新版本。" data-th="บันทึกการทำงาน การแจ้งเตือน รูป และการตั้งค่าอยู่ในเครื่องของคุณ ไม่มีบัญชี ไม่มีการติดตาม สิ่งเดียวที่ออกจากเครื่องคืออีเมลที่ใส่ตอนเปิดแอปครั้งแรก ใช้แจ้งเวอร์ชันใหม่เท่านั้น">Your work log, reminders, photos and settings stay on your computer. There's no account and no tracking. The one thing that leaves your computer is the email you give when you first open the app, only to tell you about new versions.</p></div>
+    <div class="tiles">
+      <div class="tile"><span data-zh="帳號" data-th="บัญชี">Account</span><b data-zh="不需要" data-th="ไม่มี">None</b></div>
+      <div class="tile"><span data-zh="追蹤" data-th="การติดตาม">Tracking</span><b data-zh="沒有" data-th="ไม่มี">None</b></div>
+      <div class="tile"><span data-zh="工作紀錄和照片" data-th="บันทึกงานและรูป">Your work log and photos</span><b data-zh="只在你的 Mac" data-th="อยู่ใน Mac ของคุณเท่านั้น">Only on your Mac</b></div>
+      <div class="tile"><span data-zh="會離開 Mac 的資料" data-th="สิ่งที่ออกจาก Mac">What leaves your Mac</span><b data-zh="你的 email，用來通知你" data-th="อีเมลของคุณ เพื่อแจ้งข่าว">Your email, for news</b></div>
+      <div class="tile"><span data-zh="檢查更新" data-th="ตรวจหาอัปเดต">Update check</span><b data-zh="每天一次，可關閉" data-th="วันละครั้ง ปิดได้">Once a day, can be off</b></div>
+    </div>
+    </div>
+  </details></div></section>
+
+  <section class="sec" id="ml-photos"><div class="wrap">
+    <div class="sec-h"><span class="kick" data-zh="照片來源" data-th="เครดิตภาพ">Photos & credits</span><h2 class="sparkle" data-zh="謝謝這些攝影師和繪師" data-th="ขอบคุณช่างภาพและนักวาด">Thank you to the photographers and the artist</h2><p data-zh="Blumoon、Lyrac、NGMin、otter、KIU 和 PKYU 已經同意我們使用他們的照片，wanwannjeab 也同意我們使用卡通 Muv 插畫。在 App 裡點任何一張貼圖，就能看到原始照片和攝影師。" data-th="เราได้รับอนุญาตให้ใช้รูปของ Blumoon, Lyrac, NGMin, otter, KIU และ PKYU รวมถึงภาพการ์ตูนของ wanwannjeab ในแอป คลิกสติกเกอร์ไหนก็ได้เพื่อดูรูปต้นฉบับและคนถ่าย">We've been given permission to use photos by Blumoon, Lyrac, NGMin, otter, KIU and PKYU, and the cartoon drawings by wanwannjeab. In the app, click any sticker to see its original photo and who took it.</p></div>
+    <div class="people all">
+      <div class="print who ok" data-person="Blumoon"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Blumoon</b><a href="https://x.com/blumoonfoto" target="_blank" rel="noopener">@blumoonfoto</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok" data-person="Lyrac"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Lyrac</b><a href="https://x.com/loveminiheartph" target="_blank" rel="noopener">@loveminiheartph</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok" data-person="NGMin"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>NGMin</b><a href="https://x.com/ngmin" target="_blank" rel="noopener">@ngmin</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok" data-person="otter"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>otter</b><a href="https://x.com/Miiiichstabe" target="_blank" rel="noopener">@Miiiichstabe</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok" data-person="KIU"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>KIU</b><a href="https://x.com/kiu_628ML" target="_blank" rel="noopener">@kiu_628ML</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok" data-person="PKYU"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>PKYU</b><a href="https://x.com/pee_pumkin?s=20" target="_blank" rel="noopener">@pee_pumkin</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who ok" data-person="wanwannjeab"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="pen-tool" class="ic"></i></div><b>wanwannjeab</b><a href="https://x.com/wanwannjeab" target="_blank" rel="noopener">@wanwannjeab</a><span data-zh="卡通 Muv 插畫" data-th="ภาพการ์ตูน Muv">Cartoon Muv drawings</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>GMMTV</b><a href="https://x.com/GMMTV" target="_blank" rel="noopener">@GMMTV</a><span data-zh="官方照片" data-th="รูปออฟฟิเชียล">Official photos</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Milk</b><a href="https://x.com/panlyyy" target="_blank" rel="noopener">@panlyyy</a><span data-zh="她的貼文" data-th="โพสต์ของเธอ">Her posts</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Love</b><a href="https://x.com/loverrukk" target="_blank" rel="noopener">@loverrukk</a><span data-zh="她的貼文" data-th="โพสต์ของเธอ">Her posts</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>MilkPansaFamily</b><a href="https://x.com/milkfamily__" target="_blank" rel="noopener">@milkfamily__</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Sflove0523</b><a href="https://x.com/sflove0523" target="_blank" rel="noopener">@sflove0523</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
+      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>alitasdepollos</b><a href="https://x.com/alitasdepollos0" target="_blank" rel="noopener">@alitasdepollos0</a><span data-zh="照片和 Muv 插畫" data-th="รูปและภาพวาด Muv">Photos & Muv drawings</span></div>
+    </div>
+    <div class="note"><i data-lucide="info" class="ic"></i><p data-zh="其他照片我們有試著聯絡拍攝者，但還沒收到回覆。我們已經盡力找出並標註每張照片的拍攝者；如果有照片是你拍的，想修改標註或希望移除，隨時告訴我們，我們會在下一次更新時修改，並通知使用者。" data-th="สำหรับรูปอื่น ๆ เราพยายามติดต่อช่างภาพแล้วแต่ยังไม่ได้รับคำตอบ เราพยายามหาและให้เครดิตทุกคนอย่างเต็มที่ ถ้ารูปไหนเป็นของคุณและอยากแก้เครดิตหรือให้นำออก บอกเราได้ทุกเมื่อ เราจะแก้ในอัปเดตถัดไปและแจ้งผู้ใช้">For the other photos we tried to reach the photographers but haven't heard back. We've done our best to find and credit everyone; if a photo is yours and you'd like the credit changed or the photo removed, tell us any time and we'll fix it in the next update and let users know.</p></div>
+  </div></section>
+
+  <section class="sec band" id="ml-get"><div class="wrap">
     <div class="sec-h"><span class="kick" data-zh="下載" data-th="ดาวน์โหลด">Download</span><h2 class="sparkle" data-zh="下載 ML WorkHelp" data-th="ดาวน์โหลด ML WorkHelp">Get ML WorkHelp</h2></div>
     <div class="dl">
       <div class="print">
@@ -986,7 +1058,7 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
           <a class="btn btn-p" id="dlArm" href="#"><span><i data-lucide="apple" class="ic" style="vertical-align:-3px"></i> <span data-zh="搭載 Apple 晶片的 Mac" data-th="Mac ชิป Apple">Mac with Apple chip</span></span><small>M1 · M2 · M3 · M4</small></a>
           <a class="btn btn-s" id="dlIntel" href="#"><span><i data-lucide="cpu" class="ic" style="vertical-align:-3px"></i> <span data-zh="搭載 Intel 處理器的 Mac" data-th="Mac ชิป Intel">Mac with Intel chip</span></span><small>.dmg</small></a>
         </div>
-        <p class="cap" style="margin-top:12px" data-zh="不確定是哪一種？點左上角的蘋果 › 關於這台 Mac，看「晶片」那一行。Windows 版即將推出。" data-th="ไม่แน่ใจว่าแบบไหน? ไปที่เมนู Apple › เกี่ยวกับ Mac เครื่องนี้ แล้วดูที่ “ชิป” เวอร์ชัน Windows กำลังมา">Not sure which? Apple menu › About This Mac, and look at "Chip". Windows is coming.</p>
+        <p class="cap" style="margin-top:12px" data-zh="不確定是哪一種？點左上角的蘋果 › 關於這台 Mac，看「晶片」那一行。Mac 版現已推出・Windows 版即將到來。" data-th="ไม่แน่ใจว่าแบบไหน? ไปที่เมนู Apple › เกี่ยวกับ Mac เครื่องนี้ แล้วดูที่ “ชิป” Mac มีแล้ว · &lt;span class='nw'&gt;Windows เร็ว ๆ นี้&lt;/span&gt;">Not sure which? Apple menu › About This Mac, and look at "Chip". Mac now · Windows soon.</p>
         <details class="more" style="margin-top:14px"><summary><i data-lucide="history" class="ic"></i><span data-zh="版本紀錄" data-th="เวอร์ชันก่อนหน้า">Earlier versions</span></summary><div class="hist" id="hist"></div></details>
       </div>
       <div>
@@ -996,7 +1068,7 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
           <div class="step"><div><b data-zh="打開 App" data-th="เปิดแอป">Open the app</b><span data-zh="Mac 可能會說「未打開 ML WorkHelp」，先按「完成」。" data-th="macOS อาจแจ้งว่า “ไม่ได้เปิด ML WorkHelp” ให้กด “เสร็จสิ้น”">macOS may say “ML WorkHelp” Not Opened. Press Done.</span></div></div>
           <div class="step"><div><b data-zh="允許打開" data-th="อนุญาตให้เปิด">Allow it</b><span data-zh="到 <span class=kbd>系統設定 › 隱私權與安全性</span>，往下捲，按「強制打開」。（macOS 14 或更舊：在 App 上按右鍵，選「打開」。）" data-th="ไปที่ &lt;span class=&quot;kbd&quot;&gt;การตั้งค่าระบบ › ความเป็นส่วนตัวและความปลอดภัย&lt;/span&gt; เลื่อนลง แล้วกด “เปิดต่อไป” (macOS 14 หรือเก่ากว่า: คลิกขวาที่แอปแล้วเลือก “เปิด”)">Go to <span class="kbd">System Settings › Privacy & Security</span>, scroll down and press Open Anyway. (macOS 14 or older: right-click the app and choose Open.)</span></div></div>
           <div class="step"><div><b data-zh="選照片" data-th="เลือกรูป">Pick your photos</b><span data-zh="歡迎頁第 2 頁：選「完整貼圖庫」，照片會在 App 裡下載一次（約 320 MB），直接放好，不用解壓縮；或選「我自己加照片」。" data-th="หน้าต้อนรับหน้าที่ 2: เลือก “คลังสติกเกอร์ทั้งหมด” แล้วรูปจะดาวน์โหลดในแอปครั้งเดียว (ประมาณ 320 MB) วางให้เรียบร้อย ไม่ต้องแตกไฟล์ หรือเลือกใช้รูปของคุณเอง">On the second welcome page, pick the full sticker library: the photos download inside the app, once (about 320 MB), straight into place. Or start with your own.</span></div></div>
-          <div class="step"><div><b data-zh="跟 Milk 和 Love 打招呼" data-th="ทักทาย Milk กับ Love">Say hi to Milk & Love</b><span data-zh="選好計時方式和風格，Muv 會帶你逛一圈。" data-th="เลือกวิธีจับเวลาและสไตล์ แล้ว Muv จะพาเดินดูรอบ ๆ">Pick how you keep time and your style, then Muv shows you around.</span></div></div>
+          <div class="step"><div><b data-zh="跟 Milk 和 Love 打招呼" data-th="ทักทาย Milk กับ Love">Say hi to Milk & Love</b><span data-zh="選好計時方式和風格，Muv 會帶你逛一圈。" data-th="เลือกวิธีจับเวลาและสไตล์ แล้ว Muv จะพาคุณทัวร์แอป">Pick how you keep time and your style, then Muv shows you around.</span></div></div>
         </div>
         <div class="upd print">
           <h4><i data-lucide="refresh-cw" class="ic"></i><span data-zh="之後怎麼更新？" data-th="อัปเดตยังไง?">How do updates work?</span></h4>
@@ -1009,28 +1081,8 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
         <p class="cap" style="margin-top:12px" data-zh="每次更新後也可能要再允許一次。App 每天會讀取這個網頁上的一個小檔案看看有沒有新版本，不會送出任何關於你的資料，可以在「設定 › 關於與更新」關閉。" data-th="หลังอัปเดตแต่ละครั้งอาจต้องกดอนุญาตอีกรอบ แอปจะเช็กเวอร์ชันใหม่วันละครั้งโดยอ่านไฟล์เล็ก ๆ บนหน้านี้ ไม่มีการส่งข้อมูลอะไรของคุณ ปิดได้ที่ การตั้งค่า › เกี่ยวกับและอัปเดต">You may need to allow it again after each update. The app checks for a new version once a day by reading a small file on this page; nothing about you is sent. You can switch it off in Settings › About & updates.</p>
       </div>
     </div>
-  </div></section>
-
-  <section class="sec" id="ml-photos"><div class="wrap">
-    <div class="sec-h"><span class="kick" data-zh="照片來源" data-th="เครดิตภาพ">Photos & credits</span><h2 class="sparkle" data-zh="謝謝這些攝影師和繪師" data-th="ขอบคุณช่างภาพและนักวาด">Thank you to the photographers and the artist</h2><p data-zh="Blumoon、Lyrac、NGMin 和 otter 已經同意我們使用他們的照片，wanwannjeab 也同意我們使用卡通 Muv 插畫。在 App 裡點任何一張貼圖，就能看到原始照片和攝影師。" data-th="เราได้รับอนุญาตให้ใช้รูปของ Blumoon, Lyrac, NGMin และ otter รวมถึงภาพการ์ตูนของ wanwannjeab ในแอป คลิกสติกเกอร์ไหนก็ได้เพื่อดูรูปต้นฉบับและคนถ่าย">We've been given permission to use photos by Blumoon, Lyrac, NGMin and otter, and the cartoon drawings by wanwannjeab. In the app, click any sticker to see its original photo and who took it.</p></div>
-    <div class="people all">
-      <div class="print who ok" data-person="Blumoon"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Blumoon</b><a href="https://x.com/blumoonfoto" target="_blank" rel="noopener">@blumoonfoto</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who ok" data-person="Lyrac"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Lyrac</b><a href="https://x.com/loveminiheartph" target="_blank" rel="noopener">@loveminiheartph</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who ok" data-person="NGMin"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>NGMin</b><a href="https://x.com/ngmin" target="_blank" rel="noopener">@ngmin</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who ok" data-person="otter"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="camera" class="ic"></i></div><b>otter</b><a href="https://x.com/Miiiichstabe" target="_blank" rel="noopener">@Miiiichstabe</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who ok" data-person="wanwannjeab"><span class="okb" aria-hidden="true">✓</span><div class="av"><i data-lucide="pen-tool" class="ic"></i></div><b>wanwannjeab</b><a href="https://x.com/wanwannjeab" target="_blank" rel="noopener">@wanwannjeab</a><span data-zh="卡通 Muv 插畫" data-th="ภาพการ์ตูน Muv">Cartoon Muv drawings</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>GMMTV</b><a href="https://x.com/GMMTV" target="_blank" rel="noopener">@GMMTV</a><span data-zh="官方照片" data-th="รูปออฟฟิเชียล">Official photos</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Milk</b><a href="https://x.com/panlyyy" target="_blank" rel="noopener">@panlyyy</a><span data-zh="她的貼文" data-th="โพสต์ของเธอ">Her posts</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Love</b><a href="https://x.com/loverrukk" target="_blank" rel="noopener">@loverrukk</a><span data-zh="她的貼文" data-th="โพสต์ของเธอ">Her posts</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>MilkPansaFamily</b><a href="https://x.com/milkfamily__" target="_blank" rel="noopener">@milkfamily__</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>KIU</b><a href="https://x.com/kiu_628ML" target="_blank" rel="noopener">@kiu_628ML</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>Sflove0523</b><a href="https://x.com/sflove0523" target="_blank" rel="noopener">@sflove0523</a><span data-zh="照片" data-th="รูปภาพ">Photos</span></div>
-      <div class="print who"><div class="av"><i data-lucide="camera" class="ic"></i></div><b>alitasdepollos</b><a href="https://x.com/alitasdepollos0" target="_blank" rel="noopener">@alitasdepollos0</a><span data-zh="照片和 Muv 插畫" data-th="รูปและภาพวาด Muv">Photos & Muv drawings</span></div>
-    </div>
-    <div class="note"><i data-lucide="info" class="ic"></i><p data-zh="其他照片我們有試著聯絡拍攝者，但還沒收到回覆。我們已經盡力找出並標註每張照片的拍攝者；如果有照片是你拍的，想修改標註或希望移除，隨時告訴我們，我們會在下一次更新時修改，並通知使用者。" data-th="สำหรับรูปอื่น ๆ เราพยายามติดต่อช่างภาพแล้วแต่ยังไม่ได้รับคำตอบ เราพยายามหาและให้เครดิตทุกคนอย่างเต็มที่ ถ้ารูปไหนเป็นของคุณและอยากแก้เครดิตหรือให้นำออก บอกเราได้ทุกเมื่อ เราจะแก้ในอัปเดตถัดไปและแจ้งผู้ใช้">For the other photos we tried to reach the photographers but haven't heard back. We've done our best to find and credit everyone; if a photo is yours and you'd like the credit changed or the photo removed, tell us any time and we'll fix it in the next update and let users know.</p></div>
-  </div></section>
-
-  <section class="sec" id="ml-news"><div class="wrap news">
+    <details class="more ml-more" id="ml-news"><summary><i data-lucide="mail" class="ic"></i><span data-zh="新版本與重要通知，用 email 告訴你" data-th="รับข่าวเวอร์ชันใหม่และประกาศสำคัญทางอีเมล">Hear about new versions by email</span></summary>
+      <div class="news ml-fold">
     <div><span class="kick" data-zh="新版本通知" data-th="ข่าวทางอีเมล">News by email</span><h2 class="sparkle" style="font-size:clamp(28px,3.6vw,40px);font-weight:800" data-zh="新版本與重要通知" data-th="เวอร์ชันใหม่และประกาศสำคัญ">New versions & important notices</h2>
       <p class="muted" data-zh="ML WorkHelp 有新版本，或有需要你知道的事（例如權利人要求移除某張照片或貼圖）時，我們才會寫信給你。就這樣。" data-th="เราจะเขียนถึงคุณเมื่อ ML WorkHelp มีเวอร์ชันใหม่ หรือเมื่อมีเรื่องที่คุณต้องรู้ (เช่น เจ้าของสิทธิ์ขอให้นำภาพหรือสติกเกอร์ออก) แค่นั้น">We write when there's a new version of ML WorkHelp, or when there's something you need to know (for example, a rights holder asking for a photo or sticker to be removed). That's all.</p>
       <form class="form" id="sign"><input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email"><button class="btn btn-p" type="submit"><i data-lucide="bell" class="ic"></i><span data-zh="通知我" data-th="แจ้งฉันด้วย">Tell me</span></button></form>
@@ -1040,36 +1092,60 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
       <li><i data-lucide="check" class="ic"></i><span data-zh="只寄 ML WorkHelp 的消息，沒有廣告，也不會寄垃圾信。" data-th="เฉพาะเรื่อง ML WorkHelp ไม่มีโฆษณา ไม่มีสแปม">Only about ML WorkHelp. No ads, no spam.</span></li>
       <li><i data-lucide="check" class="ic"></i><span data-zh="絕不分享、出售或提供給任何人，也不會拿去做別的用途。" data-th="ไม่แชร์ ไม่ขาย ไม่ให้ใคร และไม่ใช้ทำอย่างอื่น">Never shared, sold or given to anyone, and never used for anything else.</span></li>
       <li><i data-lucide="check" class="ic"></i><span data-zh="隨時可以取消，每封信都有取消訂閱的連結。" data-th="ยกเลิกได้ทุกเมื่อ: ทุกอีเมลมีลิงก์ยกเลิกการรับ">Stop any time: every email has an unsubscribe link.</span></li></ul></div>
-  </div></section>
-
-  <section class="sec" id="ml-privacy"><div class="wrap">
-    <div class="sec-h"><span class="kick" data-zh="隱私" data-th="ความเป็นส่วนตัว">Privacy</span><h2 class="sparkle" data-zh="你的工作資料只留在你的 Mac" data-th="งานของคุณอยู่ใน Mac ของคุณ">Your work stays on your Mac</h2><p data-zh="你的工作紀錄、提醒、照片和設定都只存在你的電腦裡。不用帳號，也不會追蹤你。唯一會離開你電腦的，是第一次打開 App 時填的 email，只用來通知你新版本。" data-th="บันทึกการทำงาน การแจ้งเตือน รูป และการตั้งค่าอยู่ในเครื่องของคุณ ไม่มีบัญชี ไม่มีการติดตาม สิ่งเดียวที่ออกจากเครื่องคืออีเมลที่ใส่ตอนเปิดแอปครั้งแรก ใช้แจ้งเวอร์ชันใหม่เท่านั้น">Your work log, reminders, photos and settings stay on your computer. There's no account and no tracking. The one thing that leaves your computer is the email you give when you first open the app, only to tell you about new versions.</p></div>
-    <div class="tiles">
-      <div class="tile"><span data-zh="帳號" data-th="บัญชี">Account</span><b data-zh="不需要" data-th="ไม่มี">None</b></div>
-      <div class="tile"><span data-zh="追蹤" data-th="การติดตาม">Tracking</span><b data-zh="沒有" data-th="ไม่มี">None</b></div>
-      <div class="tile"><span data-zh="工作紀錄和照片" data-th="บันทึกงานและรูป">Your work log and photos</span><b data-zh="只在你的 Mac" data-th="อยู่ใน Mac ของคุณเท่านั้น">Only on your Mac</b></div>
-      <div class="tile"><span data-zh="會離開 Mac 的資料" data-th="สิ่งที่ออกจาก Mac">What leaves your Mac</span><b data-zh="你的 email，用來通知你" data-th="อีเมลของคุณ เพื่อแจ้งข่าว">Your email, for news</b></div>
-      <div class="tile"><span data-zh="檢查更新" data-th="ตรวจหาอัปเดต">Update check</span><b data-zh="每天一次，可關閉" data-th="วันละครั้ง ปิดได้">Once a day, can be off</b></div>
-    </div>
+      </div></details>
   </div></section>
 </div>
 
-<!-- ================= THAI MASCOT BUDDY ================= -->
+<!-- ================= THAI MASCOT BUDDY (prototype: direction A "Mascot parade" / B "Inside the editor", html[data-tmb]) ================= -->
 <div class="page" id="p-tmb">
-  <section><div class="wrap phero">
-    <div>
+  <section class="tmb-top"><div class="wrap">
+    <div class="tmb-intro">
       <span class="tag a"><i data-lucide="code-xml" class="ic"></i><span data-zh="VS Code 擴充功能" data-th="ส่วนขยาย VS Code">VS Code extension</span></span>
-      <h1 class="title-big" style="font-size:clamp(34px,4.8vw,54px);margin-top:12px;color:#6b57a8" data-zh="泰文單字和吉祥物夥伴，<em>就在 VS Code 裡</em>" data-th="คำศัพท์ภาษาไทยกับเพื่อนมาสคอต &lt;em&gt;ใน VS Code&lt;/em&gt;">Thai words and a mascot buddy, <em>right in VS Code</em></h1>
-      <p class="lead" data-zh="這是加進 VS Code 的擴充功能，不是 App。泰國人氣吉祥物會在編輯器周圍散步，每隔幾分鐘教你一個泰文單字，幫你計番茄鐘，時間到了也會提醒你休息。" data-th="ส่วนขยายที่เพิ่มใน VS Code ไม่ใช่แอป มาสคอตไทยยอดนิยมจะเดินรอบหน้าต่างโค้ด สอนคำไทยทุก ๆ ไม่กี่นาที จับเวลาโพโมโดโร่ และบอกเมื่อถึงเวลาพัก">An extension you add to VS Code, not an app. A popular Thai mascot walks round your editor, teaches you a Thai word every few minutes, keeps your Pomodoro and tells you when to rest.</p>
-      <div class="acts"><a class="btn btn-p" style="background:#6b57a8;box-shadow:inset 0 0 0 3px rgba(255,255,255,.4),0 5px 0 #43356f" href="https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp" target="_blank" rel="noopener"><i data-lucide="plus" class="ic"></i><span data-zh="到 VS Code 市集安裝" data-th="ติดตั้งจาก VS Code Marketplace">Get it on VS Code Marketplace</span></a><a class="btn btn-s" href="#tmb-get"><span data-zh="怎麼安裝" data-th="วิธีติดตั้ง">How to add it</span></a></div>
-      <div class="term"><code>code --install-extension alitasdepollos.thaimascotdevhelp</code><button type="button" id="copyCmd"><i data-lucide="copy" class="ic" style="width:14px;height:14px"></i><span data-zh="複製" data-th="คัดลอก">Copy</span></button></div>
-      <div class="badges"><span><i data-lucide="check" class="ic"></i><span data-zh="免費" data-th="ฟรี">Free</span></span><span><i data-lucide="check" class="ic"></i><span data-zh="不用帳號、不用註冊" data-th="ไม่ต้องมีบัญชี ไม่ต้องสมัคร">No account, no sign-up</span></span><span><i data-lucide="check" class="ic"></i><span data-zh="Kiro 版審核中" data-th="เวอร์ชัน Kiro รอตรวจสอบ">Kiro version in review</span></span></div>
+      <h1 class="title-big tmb-name">Thai Mascot Buddy</h1>
+      <p class="tmb-promise" data-zh="泰文單字和吉祥物夥伴，<em>就在 VS Code 裡</em>。" data-th="คำศัพท์ภาษาไทยกับเพื่อนมาสคอต <em>ใน VS Code</em>">Thai words and a mascot buddy, <em>right in VS Code</em>.</p>
+      <div class="acts">
+        <a class="btn btn-p tmb-btn" href="https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp" target="_blank" rel="noopener"><i data-lucide="plus" class="ic"></i><span data-zh="到 VS Code 市集安裝" data-th="ติดตั้งจาก VS Code Marketplace">Get it on the VS Code Marketplace</span></a>
+        <a class="btn btn-s" href="#tmb-special"><i data-lucide="sparkles" class="ic"></i><span data-zh="認識夥伴們" data-th="รู้จักเพื่อน ๆ">Meet the buddies</span></a>
+      </div>
+      <div class="badges"><span><i data-lucide="check" class="ic"></i><span data-zh="免費、不用帳號" data-th="ฟรี ไม่ต้องมีบัญชี">Free, no account</span></span><span><i data-lucide="check" class="ic"></i>English · <span class="zh-sys" lang="zh-Hant">繁體中文</span></span><span><i data-lucide="check" class="ic"></i><span data-zh="Mac（Windows 尚未測試）" data-th="Mac (ยังไม่ได้ทดสอบบน Windows)">Mac (Windows not tested yet)</span></span></div>
     </div>
-    <div class="art art-tmb tmb-hero">
-      <pre><span>// today: learn one Thai word</span>
-<b>const</b> word = <i>"ทำงาน"</i>; <span>// to work</span>
-<b>function</b> takeBreak() { … }</pre>
-      <div class="mascots"><img src="assets/devhelp/muvmuv.svg" alt=""><img src="assets/devhelp/lolo.svg" alt=""><img src="assets/devhelp/jewel.svg" alt=""><img src="assets/devhelp/lunar.svg" alt=""></div>
+
+    <!-- B · Inside the editor: a VS Code window with the panel, the buddy, the status bar and the pop-up -->
+    <div class="tmb-hero-b">
+      <div class="vs-fit" id="vsFit">
+        <div class="vs" id="vsWin" role="img" aria-label="VS Code with Thai Mascot Buddy: the panel in the Explorer with a Thai word card, a mascot walking on the editor's bottom edge, the work time and Pomodoro in the status bar, and a break pop-up" data-zh-aria="VS Code 裡的 Thai Mascot Buddy：檔案總管裡的面板和泰文單字卡、在編輯器底邊散步的吉祥物、狀態列的工作時間和番茄鐘，還有休息提示">
+          <div class="vs-title"><i></i><i></i><i></i><span>today.ts — my-project</span></div>
+          <div class="vs-body">
+            <div class="vs-act"><span class="on" data-ic="files"></span><span data-ic="search"></span><span data-ic="git-branch"></span><span data-ic="blocks"></span><span class="sp"></span><span data-ic="settings"></span></div>
+            <div class="vs-side">
+              <div class="vs-h">EXPLORER</div>
+              <div class="vs-tree"><b>⌄ MY-PROJECT</b><span>› src</span><span class="on">today.ts</span><span>README.md</span><span>package.json</span></div>
+              <div class="vs-view hot" data-hot="1"><div class="vs-h"><span>⌄ THAI MASCOT BUDDY</span><span class="vs-tools">⚙ ⋯</span></div><img loading="lazy" id="vsPanel" alt="" width="600" height="400"><b class="num n1"><em>1</em><span data-zh="面板" data-th="แพเนล">The panel</span></b></div>
+            </div>
+            <div class="vs-ed">
+              <div class="vs-tabs"><span class="on">today.ts</span><span>README.md</span></div>
+              <pre class="vs-code"><span class="ln"> 1</span><b>import</b> { buddy } <b>from</b> <i>"./buddy"</i>;
+<span class="ln"> 2</span>
+<span class="ln"> 3</span><u>// one Thai word a day</u>
+<span class="ln"> 4</span><b>const</b> word = { thai: <i>"ประชุม"</i>, say: <i>"bprà-chum"</i> };
+<span class="ln"> 5</span>
+<span class="ln"> 6</span><b>export function</b> <em>standUp</em>() {
+<span class="ln"> 7</span>  buddy.<em>celebrate</em>();   <u>// เก่งมาก · great job</u>
+<span class="ln"> 8</span>  <b>return</b> <i>`${word.thai} at 10:00`</i>;
+<span class="ln"> 9</span>}</pre>
+              <div class="vs-edge hot" data-hot="2" id="vsEdge"><b class="num n2"><em>2</em><span data-zh="散步的夥伴" data-th="เพื่อนเดินเล่น">The walking buddy</span></b></div>
+              <div class="vs-pop hot" data-hot="4" id="vsPop"><div class="vs-popfig" id="vsPopFig"></div><div class="vs-card"><b class="th">พักผ่อน</b><span class="rom">phák-phàwn</span><span class="en" data-zh="休息、放鬆" data-th="to rest">to rest</span><span class="nt" data-zh="你已經工作 52 分鐘了" data-th="You've worked 52 min">You've worked 52 min</span><span class="row"><i class="go" data-zh="休息一下" data-th="Take a break">Take a break</i><i data-zh="再 10 分鐘" data-th="10 more min">10 more min</i><i data-zh="略過" data-th="Skip">Skip</i></span></div><b class="num n4"><em>4</em><span data-zh="休息提示" data-th="ป๊อปอัปพัก">The break pop-up</span></b></div>
+            </div>
+          </div>
+          <div class="vs-status hot" data-hot="3"><span>⎇ main</span><span>⊗ 0  ⚠ 0</span><span class="sp"></span><span>🐾 47m</span><span>🍅 18:42</span><span class="th" id="vsWord">ประชุม bprà-chum</span><b class="num n3"><em>3</em><span data-zh="狀態列" data-th="แถบสถานะ">The status bar</span></b></div>
+        </div>
+      </div>
+      <div class="vs-cards" role="list">
+        <button type="button" class="vs-card2" data-show="1" role="listitem"><span class="vs-thumb vt1" aria-hidden="true"><img id="vtPanel" alt="" loading="lazy" width="600" height="400"></span><b class="n">1</b><span><b data-zh="面板" data-th="แพเนล">The panel</b><span class="g" data-zh="在檔案總管裡：一個場景、一個吉祥物，上面是泰文單字卡。點一下換場景。" data-th="อยู่ใน Explorer: มีฉาก มีมาสคอต และการ์ดคำไทยด้านบน แตะเพื่อเปลี่ยนฉาก">In the Explorer: a scene, a mascot and a Thai word card on top. Tap to change the scene.</span></span></button>
+        <button type="button" class="vs-card2" data-show="2" role="listitem"><span class="vs-thumb vt2" aria-hidden="true"><span class="vt-code">expect(standUp()).toContain(<i>"ประชุม"</i>);</span><img src="assets/tmb/clips/lunar.png" alt="" loading="lazy" width="132" height="164"><img src="assets/tmb/clips/wesley.png" alt="" loading="lazy" width="132" height="164"></span><b class="n">2</b><span><b data-zh="散步的夥伴" data-th="เพื่อนเดินเล่น">The walking buddy</b><span class="g" data-zh="沿著編輯器邊緣散步，會揮手、歡呼，還有自己的招牌動作。點一下試試看。" data-th="เดินตามขอบหน้าต่างโค้ด โบกมือ เชียร์ และมีท่าประจำตัว แตะเพื่อลองดู">Walks the editor's edges, waves, cheers, and has a special move of its own. Tap to try.</span></span></button>
+        <button type="button" class="vs-card2" data-show="3" role="listitem"><span class="vs-thumb vt3" aria-hidden="true"><span class="vt-st"><span>⎇ main</span><span class="sp"></span><span>🐾 47m</span><span>🍅 18:42</span><span class="th" id="vtWord">ประชุม bprà-chum</span></span></span><b class="n">3</b><span><b data-zh="狀態列" data-th="แถบสถานะ">The status bar</b><span class="g" data-zh="工作時間、番茄鐘倒數和今天的單字。點一下換下一個字。" data-th="เวลาทำงาน โพโมโดโร่ และคำของวันนี้ แตะเพื่อดูคำถัดไป">Your work time, the Pomodoro and the word of the moment. Tap for the next word.</span></span></button>
+        <button type="button" class="vs-card2" data-show="4" role="listitem"><span class="vs-thumb vt4" aria-hidden="true"><img src="assets/tmb/clips/muvmuv.png" alt="" loading="lazy" width="149" height="160"><span class="vt-card"><b class="th">พักผ่อน</b><span class="rom">phák-phàwn</span><span data-zh="休息、放鬆" data-th="to rest">to rest</span></span></span><b class="n">4</b><span><b data-zh="休息提示" data-th="ป๊อปอัปเตือนพัก">The break pop-up</b><span class="g" data-zh="該休息時，夥伴會從下面冒出來：休息一下、再 10 分鐘，或略過。" data-th="ถึงเวลาพัก เพื่อนจะโผล่ขึ้นมา: พักสักครู่ อีก 10 นาที หรือข้าม">At break time a buddy rises from the bottom: take a break, 10 more min, or skip.</span></span></button>
+      </div>
     </div>
   </div></section>
 
@@ -1077,94 +1153,160 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
     <div class="sn-row">
       <a href="#tmb-panel"><i data-lucide="panels-top-left" class="ic"></i><span data-zh="面板" data-th="แพเนล">The panel</span></a>
       <a href="#tmb-walk"><i data-lucide="footprints" class="ic"></i><span data-zh="散步的夥伴" data-th="เพื่อนเดินเล่น">The buddy</span></a>
-      <a href="#tmb-breaks"><i data-lucide="timer" class="ic"></i><span data-zh="番茄鐘與休息" data-th="โพโมโดโร่และพัก">Pomodoro &amp; breaks</span></a>
-      <a href="#tmb-mascots"><i data-lucide="smile" class="ic"></i><span data-zh="吉祥物" data-th="มาสคอต">Mascots</span></a>
-      <a href="#tmb-get"><i data-lucide="plus" class="ic"></i><span data-zh="加到 VS Code" data-th="เพิ่มใน VS Code">Add to VS Code</span></a>
+      <a href="#tmb-special"><i data-lucide="sparkles" class="ic"></i><span data-zh="招牌動作" data-th="ท่าประจำตัว">Special moves</span></a>
+      <a href="#tmb-words"><i data-lucide="languages" class="ic"></i><span data-zh="單字與番茄鐘" data-th="คำไทย &amp; พัก">Words &amp; Pomodoro</span></a>
+      <a href="#tmb-get"><i data-lucide="download" class="ic"></i><span data-zh="取得" data-th="ติดตั้ง">Get it</span></a>
     </div>
     <a class="sn-next" href="#" hidden><span class="sn-k" data-zh="下一段" data-th="ถัดไป">Next</span><b></b><i data-lucide="arrow-down" class="ic"></i></a>
   </div><div class="sn-bar" aria-hidden="true"><i></i></div></nav>
 
-  <section class="sec" id="tmb-panel"><div class="wrap two-col">
-    <div>
-      <div class="panelbox"><div class="ptitle">THAI MASCOT BUDDY</div><img id="pimg" src="assets/devhelp/panel-office.jpg" alt="" width="660" height="520"></div>
-      <div class="pthumbs"><button type="button" class="on" data-p="office" aria-label="Office"><img src="assets/devhelp/panel-office.jpg" alt=""></button><button type="button" data-p="cafe" aria-label="Café"><img src="assets/devhelp/panel-cafe.jpg" alt=""></button><button type="button" data-p="stage" aria-label="Stage"><img src="assets/devhelp/panel-stage.jpg" alt=""></button></div>
+  <!-- 1 · the panel -->
+  <section class="sec" id="tmb-panel"><div class="wrap two-col tmb-two">
+    <div class="pv">
+      <div class="pv-frame"><div class="pv-h"><span>⌄ THAI MASCOT BUDDY</span><span>⚙ ⋯</span></div><img loading="lazy" id="pvImg" alt="The Thai Mascot Buddy panel: a mascot in the office with a Thai word card on top" data-zh-alt="Thai Mascot Buddy 面板：辦公室裡的吉祥物，上方是泰文單字卡" width="600" height="400"></div>
+      <div class="pv-scenes" role="group" aria-label="Scenes" id="pvScenes"></div>
+      <div class="pv-sizes"><span class="lbl" data-zh="面板大小" data-th="ขนาดในแพเนล">Sizes in the panel</span><div class="seg" role="group" aria-label="Panel size" id="pvSizes"><button type="button" data-pvsize="compact" data-zh="小巧" data-th="กะทัดรัด">Compact</button><button type="button" data-pvsize="default" data-zh="預設" data-th="ค่าเริ่มต้น">Default</button><button type="button" data-pvsize="big" data-zh="大" data-th="ใหญ่">Big</button></div></div>
     </div>
     <div>
-      <h2 class="sparkle h2" data-zh="會換場景的面板，上方有泰文單字卡" data-th="แพเนลที่มีฉาก และการ์ดคำไทยด้านบน">A panel with a scene, and a Thai word on top</h2>
+      <span class="kick" data-zh="在檔案總管裡" data-th="อยู่ใน Explorer">In the Explorer</span>
+      <h2 class="h2" data-zh="會換場景的面板，上方有泰文單字卡" data-th="แพเนลที่มีฉาก และการ์ดคำไทยด้านบน">A panel with a scene, and a Thai word on top</h2>
       <ul class="pts">
-        <li data-zh="吉祥物每次出現在不同場景（辦公室、咖啡廳、鄭王廟、潑水節、粉絲見面會舞台⋯⋯共 14 個），做些小活動，有時還有朋友來玩。" data-th="มาสคอตในฉากที่ต่างกันไป (ออฟฟิศ คาเฟ่ วัดอรุณ สงกรานต์ เวทีแฟนมีท… รวม 14 ฉาก) ทำกิจกรรมเล็ก ๆ บางครั้งมีเพื่อนมาด้วย">A mascot in a different scene each time (the office, a café, Wat Arun, Songkran, the fanmeet stage… 14 in all), doing little activities, sometimes with friends.</li>
-        <li data-zh="上方的泰文單字卡會配合場景，附上念法；點一下換下一個字，已經會的字也可以標起來。" data-th="การ์ดคำไทยที่เข้ากับฉาก พร้อมวิธีอ่าน: คลิกเพื่อดูคำถัดไป หรือทำเครื่องหมายคำที่รู้แล้ว">A Thai word card that goes with the scene, with how to say it: click it for the next word, or mark the ones you already know.</li>
-        <li data-zh="面板就在檔案總管裡、你的檔案旁邊，下方顯示番茄鐘和今天的工作時間。" data-th="อยู่ใน Explorer ข้างไฟล์ของคุณ ด้านล่างมีโพโมโดโร่และเวลาทำงานวันนี้">It sits in the Explorer, next to your files, with your Pomodoro and today's work time underneath.</li>
+        <li data-zh="吉祥物每次出現在不同場景：辦公室、咖啡廳、鄭王廟、潑水節、粉絲見面會舞台⋯⋯一共 14 個。它會在那裡做些小事，多人場景還有朋友一起來。" data-th="มาสคอตอยู่ในฉากที่ต่างกันไปทุกครั้ง: ออฟฟิศ คาเฟ่ วัดอรุณ สงกรานต์ เวทีแฟนมีต… รวม 14 ฉาก ทำกิจกรรมเล็ก ๆ และในฉากหมู่ก็มีเพื่อนมาด้วย">A mascot in a different scene each time: the office, a café, Wat Arun, Songkran, the fanmeet stage… 14 in all. It does little things there, and friends join in the group scenes.</li>
+        <li data-zh="單字卡配合場景，附上念法。點一下換下一個字，已經會的字可以勾「✓ 我會了」。" data-th="การ์ดคำไทยเข้ากับฉาก พร้อมวิธีอ่าน แตะเพื่อดูคำถัดไป หรือติ๊ก ✓ รู้แล้ว สำหรับคำที่จำได้แล้ว">The word card goes with the scene and shows how to say it. Click it for the next word, or tick ✓ I know this.</li>
+        <li data-zh="面板就在檔案總管裡、你的檔案旁邊，下方是番茄鐘和今天的工作時間。" data-th="อยู่ใน Explorer ข้างไฟล์ของคุณ ด้านล่างมีโพโมโดโร่และเวลาทำงานวันนี้">It sits in the Explorer next to your files, with your Pomodoro and today's work time underneath.</li>
+        <li data-zh="面板大小：小巧、預設、大，或自己調整吉祥物、朋友、單字卡和字的大小。" data-th="ขนาด: กะทัดรัด ค่าเริ่มต้น ใหญ่ หรือปรับขนาดมาสคอต เพื่อน การ์ด และตัวอักษรเองก็ได้">Sizes: Compact, Default or Big, or your own mix of buddy, friends, card and text.</li>
       </ul>
+      <p class="cap" data-zh="面板的顏色跟著 VS Code 的淺色或深色主題。" data-th="สีของแพเนลเปลี่ยนตามธีมสว่างหรือมืดของ VS Code">The panel follows VS Code's light or dark theme.</p>
     </div>
   </div></section>
 
-  <section class="sec" id="tmb-walk"><div class="wrap two-col">
+  <!-- 2 · the walking buddy -->
+  <section class="sec" id="tmb-walk"><div class="wrap two-col tmb-two">
     <div>
-      <h2 class="sparkle h2" data-zh="一個夥伴在編輯器周圍散步" data-th="เพื่อนหนึ่งตัวเดินรอบหน้าต่างโค้ด">One buddy walks round your editor</h2>
+      <span class="kick" data-zh="在編輯器的邊上" data-th="บนขอบหน้าต่างโค้ด">On the editor's edges</span>
+      <h2 class="h2" data-zh="一個夥伴在編輯器周圍散步" data-th="เพื่อนหนึ่งตัวเดินรอบหน้าต่างโค้ด">One buddy walks round your editor</h2>
       <ul class="pts">
-        <li data-zh="沿著編輯器視窗的邊緣走，頭朝內：偶爾停下來比個手勢、突然衝一小段，你離開時會睡著，你回來時會跳起來。" data-th="เดินตามขอบหน้าต่างโค้ด หันหัวเข้าด้านใน: หยุดโชว์ท่าทาง วิ่งพุ่งบ้าง งีบเมื่อคุณไม่อยู่ และกระโดดเมื่อคุณกลับมา">Along the edges of the editor window, head pointing in: it shows off a gesture, makes the odd dash, naps when you're away and hops when you're back.</li>
-        <li data-zh="點它會說一個泰文單字，也可以把它拎起來放到任何一邊。" data-th="คลิกเพื่อดูคำไทย หยิบขึ้นมาแล้ววางที่ขอบไหนก็ได้">Click it for a Thai word; pick it up and drop it on any edge.</li>
-        <li data-zh="要吉祥物還是小動物、要多大，都由你決定。" data-th="มาสคอตหรือสัตว์: คุณเลือกเอง และปรับขนาดได้">A mascot or the animals: you choose, and how big.</li>
+        <li data-zh="沿著編輯器視窗的四邊走，頭朝內：偶爾比個手勢、衝一小段、坐下來休息，你離開時會睡著，回來時會跟你打招呼。" data-th="เดินตามขอบทั้งสี่ด้านของหน้าต่างโค้ด หันหัวเข้าด้านใน: โชว์ท่าทาง วิ่งพุ่งบ้าง นั่งพัก งีบตอนคุณไม่อยู่ และทักทายเมื่อคุณกลับมา">It walks the edges of the editor window, head pointing in: a gesture now and then, the odd dash, a sit-down, a nap while you're away and a hello when you're back.</li>
+        <li data-zh="點它看一個泰文單字，拖到任何一邊；按右鍵還有選單：單字、招牌動作、番茄鐘、休息、倒數、換誰散步、大小。" data-th="คลิกเพื่อดูคำไทย ลากไปวางที่ขอบไหนก็ได้ คลิกขวาเปิดเมนู: คำไทย ท่าประจำตัว โพโมโดโร่ พัก นับถอยหลัง เปลี่ยนตัวที่เดิน และขนาด">Click it for a Thai word, drag it to any edge, right-click for its menu: a word, its special move, the Pomodoro, a break, a countdown, who walks, its size.</li>
+        <li data-zh="它會對你寫程式的狀況有反應，還附上一個泰文單字。每種反應都能關掉，夜間安靜時段讓晚上清靜一點。" data-th="มันตอบสนองกับการเขียนโค้ดของคุณ พร้อมคำไทยหนึ่งคำ ปิดแต่ละอย่างได้ และมีช่วงเวลาเงียบตอนกลางคืน">It reacts to your coding, with a Thai word to go with it. Each reaction can be turned off, and quiet hours keep the night calm.</li>
       </ul>
+      <div class="rx" id="rxList" role="group" aria-label="Try a reaction" data-zh-aria="試試反應" data-th-aria="ลองดูปฏิกิริยา"></div>
     </div>
-    <div class="editor2" aria-hidden="true">
-      <div class="tb"><i></i><i></i><i></i></div>
-      <div class="sidep">THAI MASCOT BUDDY<img src="assets/devhelp/panel-office.jpg" alt=""></div>
-      <div class="code"><span class="c">// today's task</span>
-<span class="k">function</span> <span class="f">ship</span>() {
-  <span class="k">const</span> v = <span class="s">"1.0"</span>;
-  <span class="k">return</span> build(v);
-}</div>
-      <div class="status"><span>🐾 Thai Mascot Buddy</span><span>🍅 18:42</span><span>ทำงาน · to work</span></div>
-      <div class="walker"><img src="assets/devhelp/lunar.svg" alt=""></div>
-    </div>
-  </div></section>
-
-  <section class="sec" id="tmb-breaks"><div class="wrap two-col">
-    <div class="deskbg"><img src="assets/devhelp/break-popup.png" alt="" width="668" height="261"></div>
-    <div>
-      <h2 class="sparkle h2" data-zh="番茄鐘、休息提示和提醒" data-th="โพโมโดโร่ ป๊อปอัปพัก และแจ้งเตือน">Pomodoro, break pop-ups and reminders</h2>
-      <ul class="pts">
-        <li data-zh="番茄鐘：經典的 25 · 5 · 15，也能自訂長度；倒數會顯示在狀態列。" data-th="โพโมโดโร่: แบบคลาสสิก 25 · 5 · 15 หรือกำหนดเอง เวลานับถอยหลังอยู่บนแถบสถานะ">Pomodoro: the classic 25 · 5 · 15, or your own lengths; the countdown sits in the status bar.</li>
-        <li data-zh="不用番茄鐘時，狀態列會顯示工作時間，每 30–90 分鐘提醒你休息一次。" data-th="ถ้าไม่ใช้โพโมโดโร่: มีเวลาทำงานบนแถบสถานะ และเตือนให้พักทุก 30–90 นาที">Without the Pomodoro: your work time in the status bar, and a nudge to rest every 30–90 minutes.</li>
-        <li data-zh="休息時間到了，夥伴會跳出來，讓你選「休息一下」、「再 10 分鐘」或「略過」。" data-th="ถึงเวลาพัก เพื่อนจะโผล่ขึ้นมา: พักสักครู่ อีก 10 นาที หรือข้าม">At break time a buddy pops up: Take a break, 10 more min, or Skip.</li>
-        <li data-zh="提醒可以設單次、每天、平日或每隔幾分鐘，每則提醒都會附上一個相關的泰文單字。" data-th="แจ้งเตือนครั้งเดียว ทุกวัน เฉพาะวันธรรมดา หรือทุกไม่กี่นาที แต่ละอันมีคำไทยที่เกี่ยวข้อง">Reminders once, every day, on weekdays or every few minutes, each with a Thai word that goes with it.</li>
-      </ul>
+    <div class="wk">
+      <div class="wk-ed" id="wkEd" aria-label="A mascot walking round the edges of an editor" data-zh-aria="沿著編輯器四邊散步的吉祥物" data-th-aria="มาสคอตเดินรอบขอบหน้าต่างโค้ด" role="group">
+        <pre aria-hidden="true"><code><b>describe</b>(<i>"standUp"</i>, () =&gt; {
+  <b>it</b>(<i>"says the word"</i>, () =&gt; {
+    <em>expect</em>(standUp()).<em>toContain</em>(<i>"ประชุม"</i>);
+  });
+});
+<u>// ✓ 12 passed</u></code></pre>
+      </div>
+      <div class="wk-pick" id="wkPick" role="group" aria-label="Who walks" data-zh-aria="誰來散步" data-th-aria="ใครเดิน"></div>
+      <div class="wk-row"><div class="seg tmb-style" role="group" aria-label="Drawing style"><button type="button" data-tmbstyle="cartoon" data-zh="卡通" data-th="การ์ตูน">Cartoon</button><button type="button" data-tmbstyle="pixel" data-zh="像素" data-th="พิกเซล">Pixel</button></div>
+        <p class="cap" data-zh="也可以選小動物。在 Mac 上，夥伴會走在編輯器周圍，提示會出現在任何 App 上面。" data-th="จะเลือกสัตว์ก็ได้ บน Mac เพื่อนจะเดินรอบหน้าต่างโค้ด และป๊อปอัปจะขึ้นทับแอปไหนก็ได้">Or the animals. On a Mac the buddy walks round the editor, and the pop-ups show over any app.</p></div>
     </div>
   </div></section>
 
-  <section class="sec" id="tmb-mascots"><div class="wrap">
-    <div class="sec-h"><h2 class="sparkle" data-zh="挑一個你喜歡的吉祥物" data-th="เลือกมาสคอตที่คุณชอบ">Pick the mascot you like</h2><p data-zh="八個泰國人氣吉祥物，有卡通和像素兩種畫風，也可以選可愛的小動物。誰在編輯器周圍散步、誰在休息時跳出來、要多大，都能自己決定。" data-th="มาสคอตไทยยอดนิยมแปดตัว แบบการ์ตูนหรือพิกเซล หรือจะเลือกสัตว์น่ารักก็ได้ เลือกได้ว่าใครเดินรอบหน้าต่างโค้ด ใครโผล่มาตอนพัก และขนาดเท่าไร">Eight popular Thai mascots, in cartoon or pixel style, or a friendly animal. Choose who walks round your editor, who pops up at break time, and how big they are.</p></div>
-    <div class="mrow2"><img src="assets/devhelp/muvmuv.svg" alt=""><img src="assets/devhelp/lolo.svg" alt=""><img src="assets/devhelp/jewel.svg" alt=""><img src="assets/devhelp/lunar.svg" alt=""><img src="assets/devhelp/vimmy.svg" alt=""><img src="assets/devhelp/wesley.svg" alt=""><img src="assets/devhelp/goldie_brown.svg" alt=""><img src="assets/devhelp/any.svg" alt=""></div>
-    <div class="rights"><b data-zh="吉祥物的版權" data-th="ลิขสิทธิ์ของมาสคอต">Who the mascots belong to</b><br><span data-zh="這些吉祥物的原作屬於 GMMTV、Channel 3 和 LingLing Kwong，我們只是依照官方造型重新繪製，並不擁有它們。如果你是權利人，希望修改或移除，請寫信告訴我們。" data-th="มาสคอตต้นฉบับเป็นของ GMMTV, ช่อง 3 และ LingLing Kwong เราแค่วาดใหม่ตามภาพทางการ ไม่ได้เป็นเจ้าของ ถ้าคุณเป็นเจ้าของสิทธิ์และอยากให้แก้ไขหรือนำออก เขียนมาบอกเราได้เลย">The original mascots belong to GMMTV, Channel 3 and LingLing Kwong. We only redrew them, following the official art; we don't own them. If you're a rights holder and would like something changed or removed, please write to us.</span></div>
+  <!-- 3 · specials and costumes -->
+  <section class="sec band" id="tmb-special"><div class="wrap">
+    <div class="sec-h"><span class="kick" data-zh="招牌動作" data-th="ท่าประจำตัว">Special moves</span><h2 data-zh="每一隻都有自己的招牌動作" data-th="แต่ละตัวมีท่าประจำตัวของตัวเอง">Each one has a special move of its own</h2><p data-zh="Milk 和 Love 的小寶貝 MuvMuv，加上七個泰國人氣吉祥物，都照官方造型畫成，有卡通和像素兩種畫風，也可以選小動物。每一隻都會走路、呼吸、眨眼、揮手、歡呼、緊張，還會比讚。點一隻看看招牌動作。" data-th="MuvMuv ลูกน้อยของมิลค์กับเลิฟ และมาสคอตไทยยอดนิยมอีกเจ็ดตัว วาดตามแบบทางการ มีทั้งแบบการ์ตูนและพิกเซล หรือจะเลือกเป็นสัตว์ก็ได้ ทุกตัวเดิน หายใจ กะพริบตา โบกมือ เชียร์ ทำหน้ากังวล และยกนิ้วโป้งได้ แตะสักตัวเพื่อดูท่าประจำตัว">MuvMuv, Milk and Love's little one, and seven popular Thai mascots, drawn after their official art in cartoon or pixel style; or the animals. They walk, breathe, blink, wave, cheer, worry and give a thumbs-up. Tap one to see its special move.</p></div>
+    <div class="sp-bar"><div class="seg tmb-style" role="group" aria-label="Drawing style"><button type="button" data-tmbstyle="cartoon" data-zh="卡通" data-th="การ์ตูน">Cartoon</button><button type="button" data-tmbstyle="pixel" data-zh="像素" data-th="พิกเซล">Pixel</button></div></div>
+    <div class="sp-grid" id="spGrid"></div>
+    <span id="tmb-mascots" class="anchor" aria-hidden="true"></span>
+    <div class="rights tmb-rights">
+      <h3 data-zh="原作屬於誰" data-th="เป็นของใคร">Who they belong to</h3>
+      <p data-zh="這些吉祥物的原作屬於 GMMTV、Channel 3 和 LingLing Kwong，我們只是重新畫過。" data-th="มาสคอตต้นฉบับเป็นของ GMMTV, ช่อง 3 และ LingLing Kwong เราแค่วาดใหม่เท่านั้น">The original mascots belong to GMMTV, Channel 3 and LingLing Kwong; we only redrew them.</p>
+      <p data-zh="Thai Mascot Buddy 是 alitasdepollos 做的免費、非官方粉絲作品，獻給 MilkLove 和泰國 GL 的粉絲，和 GMMTV、Channel 3、LingLing Kwong 或藝人都沒有關係。圖和貼圖都只留在 Thai Mascot Buddy 裡，請不要拿出來用在別的地方。如果你是權利人，希望修改或移除，請寫信到 <a href='mailto:alitasdepollos01@gmail.com'>alitasdepollos01@gmail.com</a> 或 <a href='https://x.com/alitasdepollos0' rel='noopener'>@alitasdepollos0</a>。" data-th="Thai Mascot Buddy เป็นผลงานแฟนเมดที่ใช้ฟรีและไม่เป็นทางการของ alitasdepollos ทำเพื่อแฟน ๆ MilkLove และซีรีส์ GL ไทย ไม่เกี่ยวข้องกับ GMMTV, ช่อง 3, LingLing Kwong หรือศิลปิน ภาพวาดและสติกเกอร์อยู่ใน Thai Mascot Buddy เท่านั้น กรุณาอย่านำไปใช้ที่อื่น ถ้าคุณเป็นเจ้าของสิทธิ์และอยากให้แก้ไขหรือนำออก เขียนมาที่ <a href='mailto:alitasdepollos01@gmail.com'>alitasdepollos01@gmail.com</a> หรือ <a href='https://x.com/alitasdepollos0' rel='noopener'>@alitasdepollos0</a>">Thai Mascot Buddy is a free, unofficial fan project for MilkLove &amp; Thai GL fans by alitasdepollos, not connected with GMMTV, Channel 3, LingLing Kwong or the artists. The drawings and stickers stay inside Thai Mascot Buddy: please don't take them out to use elsewhere. If you're a rights holder and would like something changed or removed, write to <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> or <a href="https://x.com/alitasdepollos0" rel="noopener">@alitasdepollos0</a>.</p>
+    </div>
   </div></section>
 
-  <section class="sec" id="tmb-get"><div class="wrap">
-    <div class="sec-h"><h2 class="sparkle" data-zh="三個步驟加到 VS Code" data-th="เพิ่มใน VS Code ใน 3 ขั้นตอน">Add it to VS Code in three steps</h2><p data-zh="不用從這個網頁下載：直接從 VS Code 市集安裝，之後 VS Code 會自動幫你更新。" data-th="ไม่ต้องดาวน์โหลดจากหน้านี้ ติดตั้งจาก VS Code Marketplace แล้ว VS Code จะอัปเดตให้เอง">Nothing to download from this page: it comes from the VS Code Marketplace, and VS Code keeps it up to date.</p></div>
-    <div class="three steps">
-      <div class="step"><div><b data-zh="打開擴充功能" data-th="เปิด Extensions">Open Extensions</b><span data-zh="在 VS Code 左邊點方塊圖示，或按 ⇧⌘X / Ctrl+Shift+X。" data-th="ใน VS Code คลิกไอคอนสี่เหลี่ยมด้านซ้าย หรือกด ⇧⌘X / Ctrl+Shift+X">In VS Code, click the squares on the left, or press ⇧⌘X / Ctrl+Shift+X.</span></div></div>
-      <div class="step"><div><b data-zh="搜尋並安裝" data-th="ค้นหาแล้วติดตั้ง">Search and install</b><span data-zh="搜尋 Thai Mascot Buddy，按下安裝。" data-th="ค้นหา Thai Mascot Buddy แล้วกดติดตั้ง">Search for Thai Mascot Buddy and click Install.</span></div></div>
-      <div class="step"><div><b data-zh="打聲招呼" data-th="ทักทายกันหน่อย">Say hello</b><span data-zh="面板會出現在檔案總管，夥伴也開始散步了。" data-th="แพเนลจะขึ้นใน Explorer และเพื่อนจะเริ่มเดิน">The panel appears in the Explorer, and the buddy starts walking.</span></div></div>
+  <!-- 4 · Thai words and the Pomodoro -->
+  <section class="sec" id="tmb-words"><div class="wrap">
+    <div class="sec-h"><span class="kick" data-zh="一邊工作一邊學" data-th="ทำงานไปเรียนไป">Learn while you work</span><h2 data-zh="泰文單字、番茄鐘和休息" data-th="คำไทย โพโมโดโร่ และเวลาพัก">Thai words, the Pomodoro and your breaks</h2></div>
+    <div class="tw-grid">
+      <article class="print tw">
+        <div class="wcard" id="wCard" aria-live="polite"></div>
+        <div class="tw-btns"><button type="button" class="btn btn-s btn-sm" id="wNext"><i data-lucide="refresh-cw" class="ic"></i><span data-zh="下一個字" data-th="คำถัดไป">Next word</span></button><button type="button" class="btn btn-s btn-sm" id="wQuiz" aria-pressed="false"><i data-lucide="eye-off" class="ic"></i><span data-zh="測驗模式" data-th="โหมดทายคำ">Quiz mode</span></button></div>
+        <h3 data-zh="一次一個泰文單字" data-th="คำไทยทีละคำ">A Thai word, little and often</h3>
+        <ul class="pts">
+          <li data-zh="從入門到進階四個程度，還有配合每個場景的單字。" data-th="สี่ระดับ ตั้งแต่เริ่มต้นจนถึงขั้นสูง และคำที่เข้ากับแต่ละฉาก">Four levels, beginner to advanced, and words that go with each scene.</li>
+          <li data-zh="12 個日常主題：工作、食物、心情、時間、追星用語⋯⋯" data-th="12 หัวข้อในชีวิตประจำวัน: งาน อาหาร ความรู้สึก เวลา ภาษาแฟนคลับ…">12 everyday topics: work, food, feelings, time, fan talk…</li>
+          <li data-zh="狀態列也有單字：滑鼠移上去看意思，點一下換一個。測驗模式會先把意思遮起來。" data-th="คำไทยอยู่บนแถบสถานะด้วย: ชี้เพื่อดูความหมาย คลิกเพื่อเปลี่ยนคำ โหมดทายคำจะซ่อนความหมายไว้ก่อน">The word sits in the status bar too: point at it for the meaning, click for another. Quiz mode hides the meaning until you click.</li>
+          <li data-zh="意思可以用英文或繁體中文顯示。" data-th="ความหมายเป็นภาษาอังกฤษหรือจีนตัวเต็ม">Meanings in English or <span class="zh-sys" lang="zh-Hant">繁體中文</span>.</li>
+        </ul>
+      </article>
+      <article class="print tw">
+        <div class="pomo" id="pomo">
+          <div class="pomo-scr" id="pomoScr"><div class="pomo-fig" id="pomoFig"></div><div class="pomo-card" id="pomoCard" hidden><b class="th">พักผ่อน</b><span class="rom">phák-phàwn</span><span class="en" data-zh="休息、放鬆" data-th="to rest">to rest</span><span class="nt" data-zh="你已經工作 52 分鐘了" data-th="You've worked 52 min">You've worked 52 min</span><span class="row"><i class="go" data-zh="休息一下" data-th="Take a break">Take a break</i><i data-zh="再 10 分鐘" data-th="10 more min">10 more min</i><i data-zh="略過" data-th="Skip">Skip</i></span></div></div>
+          <div class="pomo-bar" aria-hidden="true"><span>🐾 52m</span><span class="sp"></span><span>🍅 <b id="pomoT">24:59</b></span></div>
+        </div>
+        <div class="tw-btns"><button type="button" class="btn btn-s btn-sm" id="popBtn"><i data-lucide="coffee" class="ic"></i><span data-zh="看看休息提示" data-th="ดูป๊อปอัปเตือนพัก">Show the break pop-up</span></button></div>
+        <h3 data-zh="番茄鐘、休息提示和提醒" data-th="โพโมโดโร่ ป๊อปอัปพัก และแจ้งเตือน">Pomodoro, break pop-ups and reminders</h3>
+        <ul class="pts">
+          <li data-zh="番茄鐘：經典的 25 · 5 · 15，也能自訂長度；倒數顯示在狀態列，一輪結束時夥伴會幫你歡呼。" data-th="โพโมโดโร่: แบบคลาสสิก 25 · 5 · 15 หรือกำหนดเอง นับถอยหลังบนแถบสถานะ และเพื่อนจะเชียร์เมื่อจบรอบ">Pomodoro: the classic 25 · 5 · 15, or your own lengths, counting down in the status bar; the buddy cheers when a round is done.</li>
+          <li data-zh="🐾 旁邊是你從上次休息到現在的工作時間；離開 5 分鐘或鎖定螢幕就算休息。" data-th="ข้าง 🐾 คือเวลาที่ทำงานมาตั้งแต่พักครั้งล่าสุด ไม่อยู่ 5 นาทีหรือล็อกหน้าจอนับเป็นการพัก">Next to the 🐾: how long you've worked since your last break. Five minutes away or a locked screen counts as a break.</li>
+          <li data-zh="每工作 30 到 90 分鐘，夥伴會跳出來：休息一下、再 10 分鐘，或略過。" data-th="ทุก 30–90 นาที เพื่อนจะโผล่ขึ้นมา: พักสักครู่ อีก 10 นาที หรือข้าม">Every 30–90 minutes of work a buddy pops up: Take a break, 10 more min, or Skip.</li>
+          <li data-zh="提醒可以設單次、每天、平日或每隔幾分鐘，每則都附上一個相關的泰文單字；還有倒數計時。" data-th="แจ้งเตือนครั้งเดียว ทุกวัน วันธรรมดา หรือทุกไม่กี่นาที แต่ละอันมีคำไทยที่เข้ากัน และมีนับถอยหลังด้วย">Reminders once, every day, on weekdays or every few minutes, each with a Thai word that goes with it; and a countdown.</li>
+        </ul>
+      </article>
     </div>
-    <p class="cap" style="margin-top:12px" data-zh="需要 VS Code 1.85 以上。Kiro：Kiro 版本目前審核中。" data-th="ต้องใช้ VS Code 1.85 ขึ้นไป Kiro: เวอร์ชัน Kiro อยู่ระหว่างตรวจสอบ">Needs VS Code 1.85 or later. Kiro: our Kiro version is in review.</p>
+    <div class="tw-also"><span data-zh="還有" data-th="และยังมี">Also</span>
+      <span class="chipx"><i data-lucide="settings" class="ic"></i><span data-zh="設定集中在一頁：夥伴、面板、泰文單字、番茄鐘與休息、提醒" data-th="ตั้งค่าในที่เดียว: เพื่อน แพเนล คำไทย โพโมโดโร่และพัก แจ้งเตือน">Settings in one place: Buddies, Panel, Thai words, Pomodoro &amp; breaks, Reminders</span></span>
+      <span class="chipx"><i data-lucide="hand" class="ic"></i><span data-zh="三頁的歡迎畫面" data-th="หน้าต้อนรับสามหน้า">A three-page welcome</span></span>
+      <span class="chipx"><i data-lucide="languages" class="ic"></i><span>English · <span class="zh-sys" lang="zh-Hant">繁體中文</span></span></span>
+      <span class="chipx"><i data-lucide="moon" class="ic"></i><span data-zh="跟著 VS Code 的淺色或深色" data-th="สว่างหรือมืดตาม VS Code">Light or dark, as VS Code is</span></span>
+    </div>
+  </div></section>
+
+
+  <!-- 6 · get it -->
+  <section class="sec band" id="tmb-get"><div class="wrap">
+    <div class="sec-h"><span class="kick" data-zh="免費" data-th="ฟรี">Free</span><h2 data-zh="加到 VS Code" data-th="เพิ่มใน VS Code">Add it to VS Code</h2><p data-zh="Thai Mascot Buddy 已經在 VS Code 市集上：一鍵安裝，之後 VS Code 會自動幫你更新。" data-th="Thai Mascot Buddy อยู่ใน VS Code Marketplace แล้ว ติดตั้งได้ในคลิกเดียว และ VS Code จะอัปเดตให้เอง">Thai Mascot Buddy is on the VS Code Marketplace: install it in one click, and VS Code keeps it up to date.</p></div>
+    <div class="get-grid">
+      <article class="print get-card">
+        <div class="get-v"><span class="tag a"><i data-lucide="package" class="ic"></i><span data-zh="市集版本" data-th="เวอร์ชันใน Marketplace">On the Marketplace</span> <b id="tmbVer">1.2.1</b></span><span class="muted small" data-zh="2026 年 10 月 25 日" data-th="25 ต.ค. 2026">25 Oct 2026</span></div>
+        <a class="btn btn-p tmb-btn get-dl" href="https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp" target="_blank" rel="noopener"><i data-lucide="plus" class="ic"></i><span data-zh="到 VS Code 市集安裝" data-th="ติดตั้งจาก VS Code Marketplace">Get it on the VS Code Marketplace</span></a>
+        <div class="term"><code id="tmbCmd">code --install-extension alitasdepollos.thaimascotdevhelp</code><button type="button" id="copyCmd"><i data-lucide="copy" class="ic" style="width:14px;height:14px"></i><span data-zh="複製" data-th="คัดลอก">Copy</span></button></div>
+        <p class="get-alt"><a id="tmbDl" href="https://marketplace.visualstudio.com/_apis/public/gallery/publishers/alitasdepollos/vsextensions/thaimascotdevhelp/1.2.1/vspackage" download="alitasdepollos.thaimascotdevhelp-1.2.1.vsix"><i data-lucide="download" class="ic"></i><span data-zh="或下載 .vsix 檔（1.2.1）" data-th="หรือดาวน์โหลดไฟล์ .vsix (1.2.1)">Or download the .vsix file (1.2.1)</span></a><span class="g" data-zh="然後在擴充功能按「⋯」›「從 VSIX 安裝⋯」。這樣裝的不會自動更新。" data-th="แล้วใน Extensions กด ⋯ › Install from VSIX… แบบนี้จะไม่อัปเดตเอง">Then in Extensions: ⋯ › Install from VSIX…. Installed this way, it won't update by itself.</span></p>
+        <ul class="get-st">
+          <li><i data-lucide="clock" class="ic"></i><span data-zh="Kiro、Cursor 和其他編輯器：即將透過 Open VSX 推出" data-th="Kiro, Cursor และเอดิเตอร์อื่น ๆ: เร็ว ๆ นี้ผ่าน Open VSX">Kiro, Cursor and other editors: coming via Open VSX</span></li>
+          <li><i data-lucide="check" class="ic"></i><span data-zh="Mac：全部功能" data-th="Mac: ใช้ได้ทุกอย่าง">Mac: everything</span></li>
+          <li><i data-lucide="circle-help" class="ic"></i><span data-zh="Windows：尚未測試" data-th="Windows: ยังไม่ได้ทดสอบ">Windows: not tested yet</span></li>
+          <li><i data-lucide="check" class="ic"></i><span data-zh="需要 VS Code 1.85 以上" data-th="ต้องใช้ VS Code 1.85 ขึ้นไป">Needs VS Code 1.85 or later</span></li>
+        </ul>
+      </article>
+      <div class="three steps get-steps">
+        <div class="step"><div><b data-zh="打開擴充功能" data-th="เปิด Extensions">Open Extensions</b><span data-zh="在 VS Code 左邊點方塊圖示，或按 ⇧⌘X / Ctrl+Shift+X。" data-th="ใน VS Code คลิกไอคอนสี่เหลี่ยมด้านซ้าย หรือกด ⇧⌘X / Ctrl+Shift+X">In VS Code, click the squares on the left, or press ⇧⌘X / Ctrl+Shift+X.</span></div></div>
+        <div class="step"><div><b data-zh="搜尋並安裝" data-th="ค้นหาแล้วติดตั้ง">Search and install</b><span data-zh="搜尋 Thai Mascot Buddy，按下安裝。也可以在終端機貼上左邊那一行。" data-th="ค้นหา Thai Mascot Buddy แล้วกดติดตั้ง หรือวางคำสั่งทางซ้ายใน Terminal ก็ได้">Search for Thai Mascot Buddy and click Install. Or paste the line on the left in Terminal.</span></div></div>
+        <div class="step"><div><b data-zh="打聲招呼" data-th="ทักทายกันหน่อย">Say hello</b><span data-zh="簡短的歡迎畫面會問你語言，和誰在編輯器周圍散步。接著面板出現在檔案總管，夥伴就開始散步了。" data-th="หน้าต้อนรับสั้น ๆ จะถามภาษาและตัวที่จะเดินรอบหน้าต่างโค้ด จากนั้นแพเนลจะขึ้นใน Explorer และเพื่อนจะเริ่มเดิน">A short welcome asks your language and who walks round your editor. Then the panel appears in the Explorer and the buddy starts walking.</span></div></div>
+      </div>
+    </div>
   </div></section>
 
   <section class="sec"><div class="wrap faq">
-    <div class="sec-h"><h2 class="sparkle" data-zh="常見問題" data-th="คำถามที่พบบ่อย">Questions</h2></div>
+    <div class="sec-h"><h2 data-zh="常見問題" data-th="คำถามที่พบบ่อย">Questions</h2></div>
     <details><summary data-zh="它是 App 嗎？" data-th="เป็นแอปไหม?">Is it an app?</summary><p data-zh="不是，它是擴充功能，裝在 VS Code 裡，只有開著 VS Code 時才會運作。" data-th="ไม่ใช่ เป็นส่วนขยายที่อยู่ใน VS Code และทำงานเฉพาะตอนเปิด VS Code">No, it's an extension. It lives inside VS Code and runs only while VS Code is open.</p></details>
     <details><summary data-zh="需要搭配 ML WorkHelp 嗎？" data-th="ต้องใช้คู่กับ ML WorkHelp ไหม?">Does it need ML WorkHelp?</summary><p data-zh="不用，兩個是分開的，不共用任何東西。" data-th="ไม่ต้อง ทั้งสองแยกกันและไม่แชร์อะไรกัน">No. They're separate and don't share anything.</p></details>
-    <details><summary data-zh="Kiro 可以用嗎？" data-th="ใช้กับ Kiro ได้ไหม?">What about Kiro?</summary><p data-zh="Kiro 版本目前審核中，在那之前只支援 VS Code。" data-th="เวอร์ชัน Kiro กำลังรอการตรวจสอบ ตอนนี้ใช้ได้เฉพาะ VS Code">Our Kiro version is in review. Until then, it's VS Code only.</p></details>
+    <details><summary data-zh="Windows 可以用嗎？" data-th="ใช้กับ Windows ได้ไหม?">What about Windows?</summary><p data-zh="目前只在 Mac 上測試過。Windows 上讓夥伴走出面板的小幫手還沒測試，所以還不能保證。" data-th="ตอนนี้ทดสอบแล้วบน Mac เท่านั้น ตัวช่วยที่ให้เพื่อนเดินนอกแพเนลบน Windows ยังไม่ได้ทดสอบ เลยยังรับประกันไม่ได้">So far it's tested on a Mac only. On Windows, the helper that lets the buddy walk outside the panel hasn't been tested yet, so we can't promise it works.</p></details>
     <details><summary data-zh="怎麼移除？" data-th="ลบออกอย่างไร?">How do I remove it?</summary><p data-zh="擴充功能 › Thai Mascot Buddy › 解除安裝。" data-th="Extensions › Thai Mascot Buddy › Uninstall">Extensions › Thai Mascot Buddy › Uninstall.</p></details>
-    <details><summary data-zh="隱私" data-th="ความเป็นส่วนตัว">Privacy</summary><p data-zh="不用帳號、不用註冊、不會讀你的程式碼，也不會送出任何資料。" data-th="ไม่มีบัญชี ไม่ต้องสมัคร ไม่อ่านโค้ดของคุณ และไม่ส่งอะไรออนไลน์">No account, no sign-up, it doesn't read your code, and it sends nothing online.</p></details>
+    <details><summary data-zh="隱私" data-th="ความเป็นส่วนตัว">Privacy</summary><p data-zh="不用帳號、不用註冊，也不會送出任何資料。為了對你寫程式的狀況有反應，它只會注意電腦上發生的事（存了檔、問題面板有幾個錯誤、測試指令有沒有通過、你 commit 了），不會讀取或保存你的程式碼。" data-th="ไม่มีบัญชี ไม่ต้องสมัคร และไม่ส่งอะไรออนไลน์ เพื่อจะตอบสนองกับการเขียนโค้ด มันแค่สังเกตสิ่งที่เกิดในเครื่องของคุณ (บันทึกไฟล์ จำนวนข้อผิดพลาดใน Problems คำสั่งทดสอบผ่านหรือไม่ การ commit) ไม่อ่านและไม่เก็บโค้ดของคุณ">No account, no sign-up, and nothing is sent online. To react to your coding it only notices things on your computer (a file saved, how many errors Problems shows, whether a test command passed, a commit); it doesn't read or keep your code.</p></details>
   </div></section>
 </div>
 </main>
 
 
-<footer><div class="wrap">
-  <p data-zh="© alitasdepollos · ML WorkHelp 和 Thai Mascot Buddy 是非官方的粉絲作品。" data-th="© alitasdepollos · ML WorkHelp และ Thai Mascot Buddy เป็นผลงานแฟนเมดที่ไม่เป็นทางการ">© alitasdepollos · ML WorkHelp and Thai Mascot Buddy are unofficial fan projects.</p>
-  <p><span data-zh="聯絡我們：" data-th="ติดต่อ:">Contact:</span> <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> · <a href="https://x.com/alitasdepollos0" target="_blank" rel="noopener">@alitasdepollos0</a></p>
+<footer><div class="wrap foot">
+  <div class="foot-rights">
+    <a class="logo" href="#home"><img src="assets/heart.svg" alt="" width="30" height="30" loading="lazy"><span>ML WorkHelp<small>&amp; Thai Mascot Buddy</small></span></a>
+    <p data-zh="ML WorkHelp 和 Thai Mascot Buddy 是 alitasdepollos 做的免費、非官方粉絲作品，並非 GMMTV、Channel 3、LingLing Kwong、Milk 或 Love 製作，也和他們沒有關係。" data-th="ML WorkHelp และ Thai Mascot Buddy เป็นผลงานแฟนเมดที่ใช้ฟรีและไม่เป็นทางการของ alitasdepollos ไม่ได้จัดทำโดยหรือเกี่ยวข้องกับ GMMTV, ช่อง 3, LingLing Kwong, มิลค์ หรือเลิฟ">ML WorkHelp and Thai Mascot Buddy are free, unofficial fan projects by alitasdepollos, not made by or connected with GMMTV, Channel 3, LingLing Kwong, Milk or Love.</p>
+    <p data-zh="每張照片都屬於它的拍攝者，App 裡都有標明。吉祥物的原作屬於 GMMTV、Channel 3 和 LingLing Kwong，我們只是重新繪製。" data-th="ทุกภาพเป็นของช่างภาพเจ้าของภาพ และมีเครดิตในแอป มาสคอตต้นฉบับเป็นของ GMMTV, ช่อง 3 และ LingLing Kwong เราแค่วาดใหม่เท่านั้น">Every photo belongs to its photographer, credited in the app. The original mascots belong to GMMTV, Channel 3 and LingLing Kwong; we only redrew them.</p>
+  </div>
+  <div class="foot-links">
+    <nav aria-label="Pages" data-zh-label="頁面" data-th-label="หน้า"><a href="#home" data-zh="首頁" data-th="หน้าแรก">Home</a><a href="#ml">ML WorkHelp</a><a href="#tmb">Thai Mascot Buddy</a></nav>
+    <p><span data-zh="聯絡我們：" data-th="ติดต่อ:">Contact:</span> <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> · <a href="https://x.com/alitasdepollos0" target="_blank" rel="noopener">@alitasdepollos0</a></p>
+    <p class="foot-th" data-zh="ไทย 版還在測試（beta），歡迎<a href='mailto:alitasdepollos01@gmail.com'>寫信</a>幫我們校對泰文。" data-th="ภาษาไทยยังเป็นเวอร์ชันทดลอง (beta) ช่วยเราตรวจคำแปลได้ทาง<a href='mailto:alitasdepollos01@gmail.com'>อีเมล</a> ขอบคุณค่ะ">ไทย is in beta: <a href="mailto:alitasdepollos01@gmail.com">help us proofread the Thai</a>.</p>
+    <p class="small">© alitasdepollos</p>
+  </div>
 </div></footer>
 
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
@@ -1278,13 +1420,8 @@ document.getElementById("fop").addEventListener("input", (e) => { fs.op = Number
   const big = document.getElementById("fbig"), ring = fclock.querySelector(".ring");
   const tick = () => { big.textContent = `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`; ring.style.setProperty("--p", (100 * (1500 - left) / 1500).toFixed(2)); left = left > 0 ? left - 1 : 1500; };
   tick(); setInterval(tick, 1000);
-  setInterval(() => { n++; const ph = fsd.querySelectorAll(".ph"); ph.forEach((p, i) => p.classList.toggle("on", i === n % ph.length)); fsd.querySelector(".fstk").src = `assets/focus/sticker-${(n % 3) + 1}.png`; }, 7000);
+  setInterval(() => { if (matchMedia("(prefers-reduced-motion: reduce)").matches) return; n++; const ph = fsd.querySelectorAll(".ph"); ph.forEach((p, i) => p.classList.toggle("on", i === n % ph.length)); fsd.querySelector(".fstk").src = `assets/focus/sticker-${(n % 3) + 1}.png`; }, 7000);
 }
-/* Thai Mascot Buddy: switch the panel's scene */
-document.querySelectorAll(".pthumbs [data-p]").forEach((b) => b.addEventListener("click", () => {
-  document.querySelectorAll(".pthumbs [data-p]").forEach((x) => x.classList.toggle("on", x === b));
-  document.getElementById("pimg").src = `assets/devhelp/panel-${b.dataset.p}.jpg`;
-}));
 /* stickers: three of your own examples */
 document.querySelectorAll("[data-mk]").forEach((b) => b.addEventListener("click", () => {
   document.querySelectorAll("[data-mk]").forEach((x) => x.classList.toggle("on", x === b));
@@ -1309,10 +1446,14 @@ function drawDl() {
 const thWords = typeof Intl !== "undefined" && Intl.Segmenter ? new Intl.Segmenter("th", { granularity: "word" }) : null;
 function glue(html) {
   if (lang === "zh") {
-    const m = html.match(/([^<>]{4})([。．！？：；，、）」』）]*)$/);
-    return m && !/\s/.test(m[1]) && /^[\u3400-\u9fff]/.test(m[1]) ? html.slice(0, m.index) + `<span class="nw">${m[1]}${m[2]}</span>` : html;
+    const deco = html.match(/\s*[✦♡]\s*$/); if (deco) return glue(html.slice(0, deco.index)) + "\u00a0" + deco[0].trim(); // (the mark stays with the last word)
+    const ct = html.match(/<\/(em|b|i|span)>$/); if (ct && !/class="nw"/.test(html.slice(-40))) return glue(html.slice(0, ct.index)) + ct[0]; // (…<em>words</em>)
+    const m = html.match(/([\u3400-\u9fff][^<>\s，。、：；「」]{1,3})([。．！？：；，、）」』）]*)$/); // (the last 2–4 characters stay together)
+    return m ? html.slice(0, m.index) + `<span class="nw">${m[1]}${m[2]}</span>` : html;
   }
   if (lang === "th" && thWords) {
+    const deco = html.match(/\s*[✦♡]\s*$/); if (deco) { const g = glue(html.slice(0, deco.index)); return g.endsWith("</span>") ? g.slice(0, -7) + deco[0].replace(/^\s+/, "\u00a0") + "</span>" : g + deco[0]; }
+    const ct = html.match(/<\/[a-z]+>$/); if (ct) return glue(html.slice(0, ct.index)) + ct[0]; // (…<em>words</em>)
     const m = html.match(/([^<>\s]+)$/); if (!m || !/[\u0E00-\u0E7F]/.test(m[1])) return html;
     const w = [...thWords.segment(m[1])].map((x) => x.segment); if (w.length < 2) return html;
     const tail = w.slice(-2).join(""); if (tail.length > 16) return html;
@@ -1320,7 +1461,7 @@ function glue(html) {
   }
   return html;
 }
-const PLAIN = "p, li, h1, h2, h3, figcaption, summary, .note p span, .step span, .tile b";
+const PLAIN = "p, li, h1, h2, h3, figcaption, summary, summary > span, .vs-card2 .g, .tmb-promise, .note p span, .step span, .tile b, .g, .chipx > span, .get-st span, .lbl, .tag > span, .badges span";
 
 /* the email sign-up (Buttondown): only news about ML WorkHelp */
 document.getElementById("sign").addEventListener("submit", async (e) => {
@@ -1332,19 +1473,33 @@ document.getElementById("sign").addEventListener("submit", async (e) => {
 });
 
 /* links from before the redo (the app's update check opens #download) */
-const OLD = { download: "ml-get", day: "ml-try", photos: "ml-photos", news: "ml-news", versions: "ml-get", privacy: "ml-privacy", two: "home", which: "home",
-  devhelp: "tmb", "devhelp-get": "tmb-get", "ml-home": "ml", "tmb-home": "tmb", stickers: "ml-stickers", focus: "ml-focus", "ml-day": "ml-try", "ml-rem": "ml-try", "ml-buddy": "ml-try", "ml-data": "ml-try" };
+const OLD = { download: "ml-get", day: "ml-looks", photos: "ml-photos", news: "ml-news", versions: "ml-get", privacy: "ml-privacy", two: "home", which: "home",
+  devhelp: "tmb", "devhelp-get": "tmb-get", "ml-home": "ml", "tmb-home": "tmb", stickers: "ml-stickers", focus: "ml-focus", "ml-day": "ml-try", "ml-rem": "ml-try", "ml-data": "ml-data", "tmb-breaks": "tmb-words", "ml-next": "ml-looks" };
 { const id = location.hash.slice(1); if (OLD[id]) history.replaceState(null, "", "#" + OLD[id]); }
 
 /* pages, language, theme */
 const PAGE_OF = (id) => id.startsWith("ml") ? "ml" : id.startsWith("tmb") ? "tmb" : "home";
+const MARKET = "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp";
+function drawCta(pg) {
+  const a = document.getElementById("topCta"); if (!a) return;
+  const tmb = pg === "tmb";
+  a.classList.toggle("tmb-cta", tmb);
+  a.href = tmb ? MARKET : "#ml-get";
+  if (tmb) { a.target = "_blank"; a.rel = "noopener"; } else { a.removeAttribute("target"); a.removeAttribute("rel"); }
+  a.innerHTML = tmb ? `<i data-lucide="plus" class="ic"></i><span>${T("Add to VS Code", "加到 VS Code", "เพิ่มใน VS Code")}</span>` : `<i data-lucide="download" class="ic"></i><span>${T("Download", "下載", "ดาวน์โหลด")}</span>`;
+  window.lucide?.createIcons();
+}
 function route() {
   const id = (location.hash || "#home").slice(1) || "home";
   const pg = PAGE_OF(id);
+  document.documentElement.dataset.page = pg;
+  drawCta(pg);
+  document.querySelectorAll(`#p-${pg} img[data-hero]`).forEach((i) => { i.loading = "eager"; });
   document.querySelectorAll(".page").forEach((p) => p.classList.toggle("on", p.id === "p-" + pg));
   document.querySelectorAll(".nav a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.p === pg) || a.setAttribute("aria-current", a.dataset.p === pg ? "page" : "false"));
   document.querySelectorAll(".nav a").forEach((a) => { if (a.dataset.p === pg) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
   const el = document.getElementById(id);
+  for (let d = el && el.closest("details"); d; d = d.parentElement && d.parentElement.closest("details")) d.open = true; // (a link into a folded "more" opens it)
   if (el && !["home", "ml", "tmb"].includes(id)) requestAnimationFrame(() => el.scrollIntoView({ behavior: "instant", block: "start" })); else scrollTo(0, 0);
 }
 function applyLang() {
@@ -1352,18 +1507,19 @@ function applyLang() {
   document.querySelectorAll("[data-zh]").forEach((e) => { if (e.dataset.en == null) e.dataset.en = e.innerHTML; const t = lang === "zh" ? e.dataset.zh : lang === "th" ? (e.dataset.th || e.dataset.en) : e.dataset.en; e.innerHTML = e.matches(PLAIN) ? glue(t) : t; });
   document.getElementById("thnote").hidden = lang !== "th";
   document.querySelectorAll("[data-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
-  drawTry(); drawQuiz(); buildFocus(); drawDl(); window.drawFeatures?.();
+  drawTry(); drawQuiz(); buildFocus(); drawDl(); window.drawFeatures?.(); window.drawTmb?.(); window.drawNext?.(); drawCta(PAGE_OF((location.hash || "#home").slice(1) || "home"));
   document.querySelectorAll(".subnav").forEach((n) => { n.setAttribute("aria-label", T("On this page", n.dataset.zhLabel, n.dataset.thLabel)); n.__redraw?.(); });
   lucide.createIcons();
 }
 function applyTheme() {
   document.documentElement.dataset.theme = theme;
   document.querySelectorAll("[data-sitetheme]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.sitetheme === theme)));
+  window.tmbTheme?.(); window.drawNext?.();
 }
 document.addEventListener("click", (e) => {
   const b = e.target.closest("button"); if (!b) return;
   const d = b.dataset;
-  if (d.look) { look = d.look; try { localStorage.setItem("site-look", look); } catch {} applyLook(); return; }
+  if (d.look) { lookPick = d.look; const u = new URL(location.href); u.searchParams.set("look", lookPick); history.replaceState(null, "", u); applyLook(); window.tmbTheme?.(); window.drawNext?.(); return; }
   if (d.lang) { lang = d.lang; try { localStorage.setItem("site-lang", lang); } catch {} applyLang(); }
   else if (d.sitetheme) { theme = d.sitetheme; app.mode = theme; try { localStorage.setItem("site-theme", theme); } catch {} applyTheme(); applyLook(); drawTry(); }
   else if (d.try) { app.page = d.try; drawTry(); }
@@ -1371,7 +1527,8 @@ document.addEventListener("click", (e) => {
   else if (d.m) { app.mode = d.m; drawTry(); }
   else if (d.theme) { app.theme = d.theme; drawTry(); }
   else if (d.q) { quiz = d.q; drawQuiz(); }
-  else if (b.id === "copyCmd") { navigator.clipboard?.writeText("code --install-extension alitasdepollos.thaimascotdevhelp"); b.querySelector("span").textContent = T("Copied", "已複製"); }
+  else if (b.id === "mqPause") { const on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(on)); b.closest(".mq-band").classList.toggle("paused", on); b.setAttribute("aria-label", on ? T("Play the stickers", "播放貼圖", "เล่นสติกเกอร์") : T("Pause the stickers", "暫停貼圖", "หยุดสติกเกอร์")); b.innerHTML = `<i data-lucide="${on ? "play" : "pause"}" class="ic"></i>`; lucide.createIcons(); }
+  else if (b.id === "copyCmd") { navigator.clipboard?.writeText(document.getElementById("tmbCmd").textContent).catch(() => {}); b.querySelector("span").textContent = T("Copied", "已複製", "คัดลอกแล้ว"); }
 });
 /* The section tracker (both pages): where you are, what's next, how far down; a chip click scrolls there smoothly
    (instantly with reduced motion) without the router's jump, and moves focus to the section for keyboard users. */
@@ -1394,7 +1551,7 @@ function tracker(nav) {
     cur = i;
     links.forEach((a, k) => { a.classList.toggle("on", k === i); if (k === i) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current"); });
     const n = links[i + 1];
-    next.hidden = !n;
+    next.hidden = !n || (innerWidth >= 900 && row.scrollWidth > row.clientWidth + 2);
     if (n) { next.href = n.getAttribute("href"); next.querySelector("b").textContent = label(n); next.setAttribute("aria-label", T("Next section: ", "下一段：", "ส่วนถัดไป: ") + label(n)); }
     const on = links[Math.max(0, i)];
     if (row.scrollWidth > row.clientWidth + 2) row.scrollTo({ left: on.offsetLeft - row.offsetLeft - (row.clientWidth - on.offsetWidth) / 2, behavior: REDUCE.matches ? "auto" : "smooth" });
@@ -1433,8 +1590,9 @@ TRACKERS.forEach((n) => { const r = n.querySelector(".sn-row"), end = () => r.cl
 TRACKERS.forEach(tracker);
 addEventListener("hashchange", () => TRACKERS.forEach((n) => requestAnimationFrame(() => n.__redraw?.())));
 addEventListener("hashchange", route);
-let look = "scrapbook"; try { look = localStorage.getItem("site-look") || look; } catch {}
-function applyLook() { look = theme === "dark" ? "stage" : "scrapbook"; document.documentElement.dataset.look = look; document.querySelectorAll("[data-look]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.look === look))); }
+let look = "scrapbook";
+let lookPick = new URLSearchParams(location.search).get("look"); if (!["scrapbook", "stage"].includes(lookPick)) lookPick = null; // (?look= for screenshots; otherwise light = Scrapbook, dark = Concert night)
+function applyLook() { look = lookPick || (theme === "dark" ? "stage" : "scrapbook"); document.documentElement.dataset.look = look; document.querySelectorAll("[data-look]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.look === look))); }
 applyLook(); applyTheme(); applyLang(); route();
 fetch("latest.json", { cache: "no-store" }).then((r) => r.json()).then((j) => { LATEST = j; drawDl(); }).catch(() => {});
 /* The photographers' and artist's profile pictures on their cards: only for those who said yes (credits/credits.json,
@@ -1442,15 +1600,20 @@ fetch("latest.json", { cache: "no-store" }).then((r) => r.json()).then((j) => { 
 fetch("credits/credits.json", { cache: "no-store" }).then((r) => r.json()).then((c) => {
   for (const card of document.querySelectorAll(".who[data-person]")) {
     const f = c.people?.[card.dataset.person]?.avatar;
-    if (typeof f === "string" && /^[\w.-]+\.(jpe?g|png|webp)$/i.test(f)) card.querySelector(".av").innerHTML = `<img src="credits/avatars/${f}" alt="">`;
+    if (typeof f === "string" && /^[\w.-]+\.(jpe?g|png|webp)$/i.test(f)) card.querySelector(".av").innerHTML = `<img src="credits/avatars/${f}" alt="" loading="lazy">`;
   }
 }).catch(() => {});
 </script>
+<script src="assets/tmb/tmb.js"></script>
+<script src="assets/pins/pin-plates.js"></script>
+<script src="assets/pins/pin-back.js"></script>
+<script src="assets/pins/pin3d.js"></script>
+<script src="assets/next/next.js"></script>
 <div class="credit-tip" id="creditTip" role="tooltip"></div>
 <script>
 /* Point at any sticker or photo on this page: whose photo (or drawing) it is. */
 (function () {
-  const WHO = {"assets/fan/fan-01.webp": "Blumoon", "assets/fan/fan-02.webp": "Blumoon", "assets/fan/fan-03.webp": "Blumoon", "assets/fan/fan-04.webp": "Lyrac", "assets/fan/fan-05.webp": "Blumoon", "assets/fan/fan-06.webp": "NGMin", "assets/fan/fan-07.webp": "Lyrac", "assets/fan/fan-08.webp": "Blumoon", "assets/fan/fan-09.webp": "NGMin", "assets/fan/fan-10.webp": "NGMin", "assets/fan/fan-11.webp": "Lyrac", "assets/fan/fan-12.webp": "Blumoon", "assets/fan/fan-13.webp": "Lyrac", "assets/fan/fan-14.webp": "Blumoon", "assets/fan/fan-15.webp": "Blumoon", "assets/fan/fan-16.webp": "otter", "assets/fan/fan-17.webp": "otter", "assets/fan/fan-18.webp": "otter", "assets/fan/fan-19.webp": "NGMin", "assets/fan/fan-20.webp": "Blumoon", "assets/fan/muv-muv-baby.webp": "@wanwannjeab", "assets/fan/muv-muv-cartoon.webp": "@wanwannjeab", "assets/fan/muv-muv-heart.webp": "@wanwannjeab", "assets/fan/muv-muv-plain.webp": "@wanwannjeab", "assets/fan/muv-w2-own.webp": "alitasdepollos", "assets/fan/muv-w3-keep.webp": "alitasdepollos", "assets/fan/muv-app-look.webp": "alitasdepollos", "assets/stickers/photo-1.jpg": "alitasdepollos", "assets/stickers/auto-1.webp": "alitasdepollos", "assets/stickers/final-1.webp": "alitasdepollos", "assets/focus/sticker-1.png": "alitasdepollos", "assets/stickers/photo-2.jpg": "alitasdepollos", "assets/stickers/auto-2.webp": "alitasdepollos", "assets/stickers/final-2.webp": "alitasdepollos", "assets/focus/sticker-2.png": "alitasdepollos", "assets/stickers/photo-3.jpg": "alitasdepollos", "assets/stickers/auto-3.webp": "alitasdepollos", "assets/stickers/final-3.webp": "alitasdepollos", "assets/focus/sticker-3.png": "alitasdepollos", "assets/focus/blumoon-1.jpg": "Blumoon", "assets/focus/blumoon-2.jpg": "Blumoon", "assets/focus/blumoon-3.jpg": "Blumoon", "assets/focus/blumoon-4.jpg": "Blumoon", "assets/focus/blumoon-5.jpg": "Blumoon"};
+  const WHO = {"assets/fan/kiu-milk-1.webp": "KIU", "assets/fan/kiu-milk-2.webp": "KIU", "assets/fan/kiu-love-1.webp": "KIU", "assets/fan/kiu-love-2.webp": "KIU", "assets/fan/kiu-together-1.webp": "KIU", "assets/fan/kiu-together-2.webp": "KIU", "assets/fan/fan-01.webp": "Blumoon", "assets/fan/fan-02.webp": "Blumoon", "assets/fan/fan-03.webp": "Blumoon", "assets/fan/fan-04.webp": "Lyrac", "assets/fan/fan-05.webp": "Blumoon", "assets/fan/fan-06.webp": "NGMin", "assets/fan/fan-07.webp": "Lyrac", "assets/fan/fan-08.webp": "Blumoon", "assets/fan/fan-09.webp": "NGMin", "assets/fan/fan-10.webp": "NGMin", "assets/fan/fan-11.webp": "Lyrac", "assets/fan/fan-12.webp": "Blumoon", "assets/fan/fan-13.webp": "Lyrac", "assets/fan/fan-14.webp": "Blumoon", "assets/fan/fan-15.webp": "Blumoon", "assets/fan/fan-16.webp": "otter", "assets/fan/fan-17.webp": "otter", "assets/fan/fan-18.webp": "otter", "assets/fan/fan-19.webp": "NGMin", "assets/fan/fan-20.webp": "Blumoon", "assets/fan/muv-muv-baby.webp": "@wanwannjeab", "assets/fan/muv-muv-cartoon.webp": "@wanwannjeab", "assets/fan/muv-muv-heart.webp": "@wanwannjeab", "assets/fan/muv-muv-plain.webp": "@wanwannjeab", "assets/fan/muv-w2-own.webp": "alitasdepollos", "assets/fan/muv-w3-keep.webp": "alitasdepollos", "assets/fan/muv-app-look.webp": "alitasdepollos", "assets/stickers/photo-1.jpg": "alitasdepollos", "assets/stickers/auto-1.webp": "alitasdepollos", "assets/stickers/final-1.webp": "alitasdepollos", "assets/focus/sticker-1.png": "alitasdepollos", "assets/stickers/photo-2.jpg": "alitasdepollos", "assets/stickers/auto-2.webp": "alitasdepollos", "assets/stickers/final-2.webp": "alitasdepollos", "assets/focus/sticker-2.png": "alitasdepollos", "assets/stickers/photo-3.jpg": "alitasdepollos", "assets/stickers/auto-3.webp": "alitasdepollos", "assets/stickers/final-3.webp": "alitasdepollos", "assets/focus/sticker-3.png": "alitasdepollos", "assets/focus/blumoon-1.jpg": "Blumoon", "assets/focus/blumoon-2.jpg": "Blumoon", "assets/focus/blumoon-3.jpg": "Blumoon", "assets/focus/blumoon-4.jpg": "Blumoon", "assets/focus/blumoon-5.jpg": "Blumoon"};
   const tip = document.getElementById("creditTip");
   const credit = (img) => {
     const src = (img.getAttribute("src") || "").replace(/^\.\//, ""), by = WHO[src] || window.MLWH_WHO?.[src];

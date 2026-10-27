@@ -1,0 +1,36 @@
+/* CSS 3D pins (assets/pin3d.js). At rest a pin is just its picture; the 3D layers (thickness, light, back) are only built while
+   the pointer is on it or it's turned over, so a board of 61 pins costs nothing until you touch one. */
+.p3d { position: relative; display: block; width: 100%; height: 100%; perspective: 600px; --p3d-thick: 3px; --px: 50; --py: 50; --sx: 0; --sy: 0; }
+.p3d-tilt, .p3d-flip { position: absolute; inset: 0; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
+.p3d-tilt { transition: transform .45s cubic-bezier(.2, .8, .3, 1); }
+.p3d.p3d-moving .p3d-tilt { transition: transform .08s linear; }
+.p3d-on .p3d-tilt { will-change: transform; }   /* keeps its raster scale while leaning (no re-raster every frame) */
+.p3d-flip { transition: transform .75s cubic-bezier(.3, 1.3, .45, 1); }
+.p3d.is-flipped .p3d-flip { transform: rotateY(180deg); }
+.p3d-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; isolation: isolate; }
+.p3d-face > img, .p3d-face > .pback, .p3d-face .pback > img { width: 100%; height: 100%; display: block; }
+.p3d-face > .pback { line-height: 0; }
+.p3d-on .p3d-front { transform: translateZ(calc(var(--p3d-thick) / 2)); }
+.p3d-back { transform: rotateY(180deg) translateZ(calc(var(--p3d-thick) / 2)); }
+.p3d-edge { position: absolute; inset: 0; pointer-events: none; }
+.p3d-edge > img { width: 100%; height: 100%; display: block; filter: brightness(.6) saturate(.8); }
+.p3d-edge.from-back > img { transform: scaleX(-1); }
+/* the light: a soft band that slides with the tilt and a glint under the pointer, both cut to the pin's own shape.
+   Each on its own layer (will-change) so moving them never re-rasterises the pin (measured: 2 s → 0.03 s of raster per 5 s). */
+.p3d-sheen { position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+.p3d-band, .p3d-glint { position: absolute; will-change: transform; }
+.p3d-band { top: -50%; left: -100%; width: 300%; height: 200%; mix-blend-mode: soft-light; opacity: .9;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, .25) 46%, rgba(255, 255, 255, .7) 50%, rgba(255, 255, 255, .25) 54%, transparent 60%);
+  transform: translateX(calc((var(--px) - 50) * .9%)); }
+.p3d-glint { left: -30%; top: -30%; width: 60%; height: 60%; border-radius: 50%; mix-blend-mode: overlay; opacity: .8;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .8), rgba(255, 255, 255, 0));
+  transform: translate(calc(var(--px) * 1.6%), calc(var(--py) * 1.6%)); }
+.p3d-back .p3d-sheen { opacity: .45; }   /* keep the engraving readable */
+.p3d-shadow { position: absolute; inset: 8%; pointer-events: none; opacity: .3; filter: brightness(0) blur(4px);
+  transform: translate(calc(var(--sx) * 1px + 2px), calc(var(--sy) * 1px + 5px)); transition: transform .45s; }
+.p3d-shadow > img { width: 100%; height: 100%; display: block; }
+.p3d[role="button"] { cursor: pointer; }
+.p3d[role="button"]:focus-visible { outline: 2px dashed currentColor; outline-offset: 4px; border-radius: 30%; }
+html[data-prm="1"] .p3d-flip, html[data-prm="1"] .p3d-tilt, html[data-prm="1"] .p3d-shadow { transition: none; }
+@media (prefers-reduced-motion: reduce) { .p3d-flip, .p3d-tilt, .p3d-shadow { transition: none; } }

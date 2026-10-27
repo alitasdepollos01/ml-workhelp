@@ -1,1 +1,7 @@
 assets/huninn.woff2: jf open 粉圓 (jf open huninn) 2.1, SIL Open Font License 1.1 (demo/fonts/OFL.txt), https://github.com/justfont/open-huninn-font
+  The page itself loads assets/fonts/huninn-site.woff2: the same font cut down to the Chinese characters the site uses
+  (python3 tools/subset-fonts.py; run it again after changing Chinese text). Only fetched for Chinese text (unicode-range).
+assets/fonts/mitr-thai-500.woff2, mitr-thai-600.woff2: Mitr by Cadson Demak, SIL Open Font License 1.1, https://fonts.google.com/specimen/Mitr
+assets/fonts/anuphan-thai-var.woff2: Anuphan by Cadson Demak, SIL Open Font License 1.1, https://fonts.google.com/specimen/Anuphan
+assets/fonts/sriracha-thai.woff2: Sriracha by Cadson Demak, SIL Open Font License 1.1, https://fonts.google.com/specimen/Sriracha
+  (the three Thai files are Google Fonts' own Thai subsets, self-hosted; only fetched for Thai text, by unicode-range)
