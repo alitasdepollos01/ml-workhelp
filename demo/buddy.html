@@ -43,7 +43,7 @@ html[data-mode="dark"] .win { background: rgba(50, 46, 56, .75); }
   const q = (location.search ? location.search.slice(1) + "&" : "") + "pace=still&";
   const $ = (id) => document.getElementById(id);
   $("cap").textContent = T("Your desktop (pretend)", "你的桌面（示意）", "เดสก์ท็อปของคุณ (จำลอง)");
-  $("lbl").textContent = T("Right-click the buddy: its card", "在夥伴上按右鍵：它的小卡", "คลิกขวาที่เพื่อน: การ์ดของเพื่อน");
+  $("lbl").textContent = T("Right-click the buddy: its card", "在夥伴身上按右鍵，就會打開小卡", "คลิกขวาที่เพื่อน: การ์ดของเพื่อน");
   $("hint").innerHTML = T("<b>On your desktop</b><span>Milk and Love stroll along the bottom of your screen, with what you're working on and your next reminder underneath. Click them for a Thai word; drag them anywhere.</span><span>Their card: take a break, the focus screen, remind me, done for today, and who's on your desktop.</span>",
     "<b>在你的桌面上</b><span>Milk 和 Love 在螢幕下方走來走去，下面寫著你正在做的事和下一個提醒。點她們看泰文單字，也能拖到任何地方。</span><span>小卡上有：休息一下、專注全螢幕、提醒我、收工，還有桌面上要放誰。</span>",
     "<b>บนเดสก์ท็อปของคุณ</b><span>Milk กับ Love เดินเล่นด้านล่างจอ ข้างใต้บอกงานที่ทำอยู่และการแจ้งเตือนถัดไป คลิกเพื่อดูคำไทย ลากไปไหนก็ได้</span><span>การ์ดของเพื่อน: พักสักหน่อย หน้าจอโฟกัส เตือนฉัน เลิกงาน และเลือกว่าใครอยู่บนเดสก์ท็อป</span>");
