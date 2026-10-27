@@ -1,20 +1,37 @@
 {
-  "version": "1.2.0",
-  "released": "2026-10-25",
+  "version": "1.3.0",
+  "released": "2026-10-28",
   "download": "https://alitasdepollos01.github.io/ml-workhelp/#download",
   "files": {
-    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.2.0/ML.WorkHelp-1.2.0-arm64.dmg",
-    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.2.0/ML.WorkHelp-1.2.0.dmg",
+    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.0/ML.WorkHelp-1.3.0-arm64.dmg",
+    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.0/ML.WorkHelp-1.3.0.dmg",
     "windows": null,
     "vscode": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp"
   },
+  "sizes": {
+    "mac-arm64": 187543072,
+    "mac-x64": 193177322
+  },
   "notes": {
-    "en": "A whole new look with 8 styles; reminders and breaks as a card on any screen, held while you focus; a calmer buddy; Milk and Love's voices as ringtones; picture cards; every sticker shows its credit; a new sticker maker; and a smaller download (the photos download once, inside the app).",
-    "zh": "整個 App 換新風格（8 種可選）；提醒和休息會在任何螢幕跳出小卡片，專注時先等等；夥伴可以更悠閒；Milk 和 Love 的聲音當鈴聲；做成圖片；每張貼圖都看得到來源；新的貼圖工具；下載變小了（照片在 App 裡下載一次）。",
-    "th": "โฉมใหม่ทั้งแอปกับ 8 สไตล์; แจ้งเตือนและพักเด้งเป็นการ์ดบนจอไหนก็ได้ และรอไว้ตอนโฟกัส; เพื่อนเดินสบาย ๆ ได้; เสียง Milk กับ Love เป็นเสียงเตือน; ทำเป็นรูป; ทุกสติกเกอร์บอกเครดิต; ตัวทำสติกเกอร์ใหม่; และดาวน์โหลดเล็กลง (รูปดาวน์โหลดในแอปครั้งเดียว)"
+    "en": "Two new styles (ten in all) and doodles from the shows; 61 pins to collect as you work; decorate your picture cards; back up everything to one file and restore it on a new Mac; new photos and credit fixes without reinstalling; the Desktop buddy page; reminder cards on any screen; Milk and Love ringtones; and a smaller download (the photos download once, inside the app).",
+    "zh": "兩種新風格（一共 10 種）和作品裡的塗鴉；工作時就能慢慢收集的 61 個徽章；圖卡可以裝飾；全部備份成一個檔案，換新 Mac 也能還原；新照片和標註修正不用重新安裝；「桌面夥伴」專頁；提醒小卡片在任何螢幕都會跳出來；Milk 和 Love 的鈴聲；安裝檔也變小了（照片在 App 裡下載一次）。",
+    "th": "สไตล์ใหม่สองแบบ (รวมเป็น 10 สไตล์) และดูเดิลจากซีรีส์ เข็มกลัด 61 ชิ้นให้สะสมระหว่างทำงาน ตกแต่งการ์ดรูปได้ สำรองทุกอย่างเป็นไฟล์เดียวแล้วกู้คืนบน Mac เครื่องใหม่ได้ รูปใหม่และการแก้เครดิตมาเองโดยไม่ต้องติดตั้งใหม่ หน้าเพื่อนบนเดสก์ท็อป การ์ดแจ้งเตือนบนจอไหนก็ได้ เสียงเรียกเข้าของ Milk กับ Love และไฟล์ติดตั้งที่เล็กลง (รูปดาวน์โหลดในแอปครั้งเดียว)"
   },
   "min": "0.1.0",
   "history": [
+    {
+      "version": "1.3.0",
+      "date": "2026-10-28",
+      "beta": true,
+      "en": "Two new styles, Y2K emo and Whimsical. Doodles from the shows: a quiet wallpaper, corner stickers or off, in your style's own look or one you pick. Pins: 61 to collect in Fan corner › Pins, from the work you already do, with tiers, secret pins, three birthdays and codes from fan events; wear your favourite on the desktop buddy's card. Decorate your picture cards with doodles and pins. Data: click a month in a year and its days open under the chart; the month calendar has a column for each week; click a task to see the days you did it. Back up everything to one file and restore it on a new Mac. New photos, pins and credit fixes arrive without reinstalling (new photos ask first). Your own photos on the focus screen. Also in this version: the Desktop buddy page, with everything about the buddy in one place; a small card at the top right of your screen for reminders when the buddy is hidden; a calmer buddy; Milk and Love ringtones; picture cards of your week; profile pictures on the credit cards; and a smaller download, with the photos fetched once on the first start. Fixed: work past midnight is logged day by day; the focus clock shows this stretch with today's total; the buddy's Take a break and Remind me work on every screen.",
+      "zh": "兩種新風格：Y2K emo 和 Whimsical。作品裡的塗鴉：安靜的壁紙、角落貼紙或關掉，畫風跟著風格，也可以自己挑。徽章：在「粉絲角落 › 徽章」收集 61 個，平常工作就會拿到，有等級、祕密徽章、三個生日，還有粉絲活動的兌換碼；最喜歡的那個可以別在桌面夥伴的卡片上。圖卡可以用塗鴉和徽章裝飾。數據：看一年時點一個月，那個月的每一天就在圖表下面展開；月曆多了每週一欄；點一件事，就能看到做它的那幾天。全部備份成一個檔案，換新 Mac 也能還原。新照片、新徽章和標註修正不用重新安裝（新照片會先問你）。專注全螢幕可以放你自己的照片。這一版也有：「桌面夥伴」頁面，夥伴的一切都在同一頁；夥伴收起來時，提醒會變成螢幕右上角的小卡片；更悠閒的夥伴；Milk 和 Love 的鈴聲；把你這一週做成圖卡；照片來源卡片上的頭像；還有更小的安裝檔，照片在第一次打開時下載一次就好。修正：過了午夜的工作會分成兩天記；專注時鐘顯示這一段和今天的總時數；夥伴卡片上的「休息一下」和「提醒我」在每個螢幕都能用。",
+      "th": "สไตล์ใหม่สองแบบ Y2K และ Whimsical ดูเดิลจากซีรีส์: วอลเปเปอร์เบา ๆ สติกเกอร์ตามมุม หรือปิด ใช้แบบของสไตล์นั้นหรือเลือกเอง เข็มกลัด: สะสม 61 ชิ้นใน มุมแฟนคลับ › เข็มกลัด จากงานที่คุณทำอยู่แล้ว มีระดับ เข็มกลัดลับ วันเกิดสามวัน และโค้ดจากงานแฟนมีต ติดชิ้นโปรดไว้บนการ์ดของเพื่อนบนเดสก์ท็อปได้ ตกแต่งการ์ดรูปด้วยดูเดิลและเข็มกลัด สถิติ: ดูทั้งปีแล้วคลิกเดือน วันในเดือนนั้นจะเปิดใต้กราฟ ปฏิทินรายเดือนมีคอลัมน์รายสัปดาห์ คลิกงานเพื่อดูว่าทำวันไหนบ้าง สำรองทุกอย่างเป็นไฟล์เดียวและกู้คืนบน Mac เครื่องใหม่ได้ รูปใหม่ เข็มกลัดใหม่ และการแก้เครดิตมาได้โดยไม่ต้องติดตั้งใหม่ (รูปใหม่จะถามก่อน) ใส่รูปของคุณเองในหน้าจอโฟกัสได้ ในเวอร์ชันนี้ยังมี: หน้าเพื่อนบนเดสก์ท็อป รวมทุกอย่างของเพื่อนไว้ที่เดียว การ์ดเล็ก ๆ มุมขวาบนของจอสำหรับการแจ้งเตือนตอนซ่อนเพื่อนไว้ เพื่อนที่ใจเย็นขึ้น เสียงเรียกจากมิ้ลค์และเลิฟ การ์ดรูปสรุปสัปดาห์ของคุณ รูปโปรไฟล์บนการ์ดเครดิต และไฟล์ติดตั้งที่เล็กลง รูปจะดาวน์โหลดครั้งเดียวตอนเปิดแอปครั้งแรก แก้ไข: งานที่เลยเที่ยงคืนบันทึกแยกเป็นรายวัน นาฬิกาโฟกัสแสดงช่วงนี้พร้อมยอดรวมของวันนี้ ปุ่ม “พักสักครู่” และ “เตือนฉัน” บนการ์ดของเพื่อนใช้ได้ทุกจอ",
+      "short": {
+        "en": "Two new styles, doodles from the shows, pins to collect, backups, and new photos without reinstalling.",
+        "zh": "兩種新風格、作品裡的塗鴉、可以收集的徽章、備份，還有不用重裝就能拿到的新照片。",
+        "th": "สไตล์ใหม่สองแบบ ดูเดิลจากซีรีส์ เข็มกลัดให้สะสม การสำรองข้อมูล และรูปใหม่ที่ไม่ต้องติดตั้งใหม่"
+      }
+    },
     {
       "version": "1.2.0",
       "date": "2026-10-25",
@@ -25,7 +42,8 @@
         "en": "A new look (8 styles), a Desktop buddy page, pop-up cards on any screen, a calmer buddy, Milk & Love ringtones and a smaller download.",
         "zh": "新風格（8 種）、桌面夥伴專頁、任何螢幕都能跳出的小卡片、更悠閒的夥伴、Milk 和 Love 的鈴聲，下載也變小了。",
         "th": "โฉมใหม่ (8 สไตล์) หน้าเพื่อนบนเดสก์ท็อป การ์ดเด้งบนจอไหนก็ได้ เพื่อนที่สบาย ๆ ขึ้น เสียงเตือน Milk กับ Love และดาวน์โหลดเล็กลง"
-      }
+      },
+      "beta": true
     },
     {
       "version": "1.1.0",
@@ -37,7 +55,8 @@
         "en": "A small card when you right-click the buddy, a shorter menu, and update news from your buddy.",
         "zh": "按右鍵出現的小卡片、更短的選單，有新版本時夥伴會告訴你。",
         "th": "การ์ดเล็กเมื่อคลิกขวาที่เพื่อน เมนูที่สั้นลง และเพื่อนบอกข่าวเวอร์ชันใหม่"
-      }
+      },
+      "beta": true
     },
     {
       "version": "1.0.1",
@@ -49,7 +68,8 @@
         "en": "Help: the title in the middle, with a bigger sticker above it.",
         "zh": "幫助頁：標題置中，貼圖放大放在標題上方。",
         "th": "หน้าความช่วยเหลือ: หัวข้ออยู่ตรงกลาง พร้อมสติกเกอร์ที่ใหญ่ขึ้นด้านบน"
-      }
+      },
+      "beta": true
     },
     {
       "version": "1.0.0",
@@ -61,7 +81,8 @@
         "en": "A focus screen, reminders you just type, a new Data page (Summary, Analysis, Calendar), credits for your own photos, and Thai (beta).",
         "zh": "專注全螢幕、打字就能加的提醒、全新的數據頁（總覽、分析、日曆）、為自己的照片標註拍攝者，以及泰文（測試版）。",
         "th": "หน้าจอโฟกัส แจ้งเตือนแค่พิมพ์ หน้าสถิติใหม่ (สรุป การวิเคราะห์ ปฏิทิน) เครดิตรูปของคุณเอง และภาษาไทย (beta)"
-      }
+      },
+      "beta": true
     },
     {
       "version": "0.2.0",
@@ -73,7 +94,8 @@
         "en": "Week, month and year data, an editable calendar, the reminder sound and the menu-bar timer.",
         "zh": "週、月、年的數據，可以修改的日曆，提醒音效和選單列計時。",
         "th": "สถิติรายสัปดาห์ เดือน ปี ปฏิทินที่แก้ไขได้ เสียงแจ้งเตือน และตัวจับเวลาบนแถบเมนู"
-      }
+      },
+      "beta": true
     },
     {
       "version": "0.1.0",
@@ -85,7 +107,8 @@
         "en": "The first version.",
         "zh": "第一版。",
         "th": "เวอร์ชันแรก"
-      }
+      },
+      "beta": true
     }
   ],
   "signup": {
@@ -100,6 +123,9 @@
     "version": "1.0.8",
     "marketplace": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp",
     "kiro": "in review"
+  },
+  "content": {
+    "url": "https://alitasdepollos01.github.io/ml-workhelp/content.json"
   },
   "credits": {
     "version": 6,

@@ -1,0 +1,28 @@
+{
+ "version": 1,
+ "photos": {
+  "id": "51bbb0cabc",
+  "version": 2,
+  "photos": 1013,
+  "full": {
+   "url": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/photos-51bbb0cabc/ML-WorkHelp-photos-51bbb0cabc.tar",
+   "size": 469519872,
+   "sha256": "4c3fef7cb2adae0f639b349ccfb4d25ffd7687d856fda0b94a114d1342e9e5d0"
+  },
+  "from": {
+   "39ebe650ab": {
+    "url": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/photos-51bbb0cabc/ML-WorkHelp-photos-51bbb0cabc-from-39ebe650ab.tar",
+    "size": 142476288,
+    "sha256": "f6197c49476771bcdf69a0c6bbdc14f4317136f24d3ab26278f1a2cc3e98a621",
+    "photos": 283,
+    "stickers": 335,
+    "manifest": "addon.json"
+   }
+  },
+  "minApp": "1.3.0"
+ },
+ "credits": {
+  "version": 6,
+  "url": "https://alitasdepollos01.github.io/ml-workhelp/credits/credits.json"
+ }
+}
