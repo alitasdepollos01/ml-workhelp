@@ -290,7 +290,7 @@ function fillCap(root) {
   const p = root.querySelector(".cred-cap"); if (!p) return;
   const by = new Set([...root.querySelectorAll("img")].map((i) => WHO[i.getAttribute("src")]).filter(Boolean));
   for (const k of Object.keys(WHOIMG)) for (const set of WHOIMG[k]) for (const s of set) if (root.id === "ml-buddy-in" && WHO[s]) by.add(WHO[s]); // (every look the buddy can take)
-  const perm = ["Blumoon", "Lyrac", "NGMin", "otter"].filter((n) => by.has(n)).map((n) => `<b>${n}</b>`);
+  const perm = ["Blumoon", "Lyrac", "NGMin", "otter", "KIU", "PKYU"].filter((n) => by.has(n)).map((n) => `<b>${n}</b>`);
   const own = by.has("alitasdepollos"), muv = by.has("@wanwannjeab");
   const muvTxt = T("cartoon Muv drawing by <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab)", "卡通 Muv 插畫：<b>หวานเจี๊ยบอุนยายม๋าไก่</b>（@wanwannjeab）", "ภาพการ์ตูน Muv วาดโดย <b>หวานเจี๊ยบอุนยายม๋าไก่</b> (@wanwannjeab)");
   let s = "";
