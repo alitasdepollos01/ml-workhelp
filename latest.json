@@ -133,9 +133,8 @@
   },
   "devhelp": {
     "name": "Thai Mascot Buddy",
-    "version": "1.0.8",
-    "marketplace": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp",
-    "kiro": "in review"
+    "version": "1.2.2",
+    "marketplace": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp"
   },
   "content": {
     "url": "https://alitasdepollos01.github.io/ml-workhelp/content.json"
