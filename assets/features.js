@@ -93,7 +93,7 @@ const TK = {
   calls: ["They step aside during calls", "通話時會先躲起來", "ตอนคุยสายหรือประชุมจะหลบไปก่อน"],
   lively: ["As lively or as calm as you like", "活潑或安靜，你決定", "จะให้ซนหรือนิ่งก็เลือกได้"],
   focusT: ["A focus screen for reading and paper work", "看書、手寫時用專注全螢幕", "หน้าจอโฟกัส ตอนอ่านหนังสือหรือทำงานบนกระดาษ"],
-  remT: ["Reminders pop up on the screen you're using", "提醒會在你正在用的螢幕跳出來", "การแจ้งเตือนเด้งบนจอที่คุณใช้อยู่"],
+  remT: ["Reminders pop up on the screen you're using, with a chime or Milk and Love's voices", "提醒會在你正在用的螢幕跳出來，用鈴聲叫你，也可以換成 Milk 和 Love 的聲音", "การแจ้งเตือนเด้งบนจอที่คุณใช้อยู่ พร้อมเสียงกริ่ง หรือจะเป็นเสียงของ Milk กับ Love ก็ได้"],
   dataT: ["Your week, month and year in numbers", "每週、每月、每年的工作數據", "สถิติรายสัปดาห์ เดือน และปี"],
   credT: ["Every sticker shows whose photo it is", "每張貼圖都標明是誰拍的", "ทุกสติกเกอร์บอกว่าเป็นรูปของใคร"],
 };
