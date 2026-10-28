@@ -7,6 +7,7 @@
 import { T, tx, h, css, call, api, load, pinArt, backSrc, backLines, nameOf, tierLabel, unit, progress, saysAt, quoted, whoWhere,
   date, dayDate, LOC, fmt, svgIcon, ensureCss, SERIES } from "./pins-common.js";
 import { pageTop } from "./app-common.js";
+import { pageSeen } from "./pins-moment.js";
 import { attach as lean } from "./pin3d.js";
 import { stage as heroStage, preload as heroPreload } from "./pin-hero.js";
 
@@ -132,7 +133,7 @@ export async function renderPins(main, { redraw, ask }) {
   main.addEventListener("mouseover", tipShow); main.addEventListener("focusin", tipShow);
   main.addEventListener("mouseleave", () => { tip.hidden = true; }); main.addEventListener("focusout", () => { tip.hidden = true; });
   if (ask?.pin) setTimeout(() => openPin(ask.pin, redraw), 200);
-  if (sum.unseen?.length || sum.note) call("seen");   // the page has shown them
+  if (sum.unseen?.length || sum.note) pageSeen();   // the page has shown them (not the pins whose moments are still queued)
 }
 
 // ---- a pin's card ----

@@ -282,7 +282,8 @@ export async function openPicture(o) {
     const t = setupCanvas(cvTop);
     zones = { text: z.text, sticker: z.sticker, credit: drawCredits(t.c, op) };
     lastHas = !!op.decoLine;
-    stage.dataset.credit = lastHas ? "1" : "0";
+    // (whether the design line shows; not "data-credit", which app.js turns into a hover credit: the card already prints it)
+    stage.dataset.decoCredit = lastHas ? "1" : "0";
     stage.setAttribute("aria-label", [op.model.kicker, op.model.big, ...(op.model.lines || []), op.photoLine, op.decoLine].filter(Boolean).join(" · "));
   }
   async function redrawCard() {
@@ -621,7 +622,7 @@ export async function openPicture(o) {
 
   // for the tests (and the integrator's preview)
   window.__mlwhCardDeco = {
-    state: () => ({ step: S.step, kind: S.kind, n: items().length, items: JSON.parse(snap()), credit: stage.dataset.credit === "1", clean: sticker.clean, tray: trayDoodles(), pins: trayPins(), tiles: box.querySelectorAll(".deco-tile").length }),
+    state: () => ({ step: S.step, kind: S.kind, n: items().length, items: JSON.parse(snap()), credit: stage.dataset.decoCredit === "1", clean: sticker.clean, tray: trayDoodles(), pins: trayPins(), tiles: box.querySelectorAll(".deco-tile").length }),
     add: (motif, style = "auto") => add({ motif, style }), go, kind: (k) => kinds.querySelector(`button:nth-child(${o.kinds.findIndex(([x]) => x === k) + 1})`)?.click(),
     png: async () => { const cv = await renderPng(2); try { return { w: cv.width, h: cv.height, url: cv.toDataURL("image/png") }; } catch { return { w: cv.width, h: cv.height, url: null }; } },
     close,

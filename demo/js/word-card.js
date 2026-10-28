@@ -1,4 +1,4 @@
-// A Thai word from the songs, in the app window: the little "word of the day" at the bottom of the
+// A Thai word (from the songs or everyday life), in the app window: the little "word of the day" at the bottom of the
 // menu (one a day, the same all day), and the card on Today (tap it for the meaning, again for a new
 // word). Both come from the cards the buddies use (deck.js), from the library.
 
@@ -19,7 +19,7 @@ export async function wordOfDay() {
 
 /** The menu's little card: Thai, the sound, the meaning; click → Today, where the big card is. */
 export function wordMini(onClick) {
-  const b = el("button", { type: "button", className: "wordmini", title: L("Thai from the songs", "歌裡的泰文") });
+  const b = el("button", { type: "button", className: "wordmini", title: L("Thai from songs and daily life", "歌裡和生活裡的泰文") });
   b.addEventListener("click", onClick);
   wordOfDay().then((w) => {
     if (!w) { b.remove(); return; }
@@ -37,7 +37,7 @@ export function wordCard() {
     if (!w) { card.remove(); return; }
     shown = w;
     card.replaceChildren(
-      el("h3", { textContent: L("Thai from the songs", "歌裡的泰文") }),
+      el("h3", { textContent: L("Thai from songs and daily life", "歌裡和生活裡的泰文") }),
       el("span", { className: "wc-th", lang: "th", textContent: w.th }),
       el("span", { className: "wc-rom", textContent: w.rom }),
       el("div", { className: "wc-mean" + (open ? "" : " hidden"), textContent: open ? w.en.replace(/\s{2,}.*$/, "") : L("Tap to see what it means", "點一下看意思") }),

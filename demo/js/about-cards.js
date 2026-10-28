@@ -390,9 +390,44 @@ export function yourDataCard() {
   }, sub(backupSubs));
 }
 
+// =====================================================================================================================
+// "Open source in the app": the projects and fonts inside it, with their licences, as on the website (#ml-oss), word for
+// word and in the same order. Names, licences and links must match app/shared/open-source.js (test/credit-people-test.js
+// checks this list and the website's). Collapsed; view-only; the links open in your browser (main.js sends https links
+// out, as with the photographers' X links). Shown everywhere, the website's demo too.
+// =====================================================================================================================
+export function openSourceCard() {
+  const font = () => T("Font", "字型", "ฟอนต์");
+  const OSS = [
+    { name: "Electron", licence: "MIT", url: "https://github.com/electron/electron", what: T("The app's frame, with Chromium and Node.js inside", "App 的外殼，裡面有 Chromium 和 Node.js", "โครงของแอป มี Chromium และ Node.js อยู่ข้างใน") },
+    { name: "three.js", licence: "MIT", url: "https://github.com/mrdoob/three.js", what: T("A pin's 3D view", "徽章的 3D 畫面", "ภาพ 3 มิติของเข็มกลัด") },
+    { name: "Lucide", licence: "ISC", url: "https://github.com/lucide-icons/lucide", what: T("Line icons", "線條圖示", "ไอคอนเส้น") },
+    { name: "electron-builder", licence: "MIT", url: "https://github.com/electron-userland/electron-builder", what: T("Makes the .dmg", "把 App 打包成 .dmg 安裝檔", "สร้างไฟล์ .dmg") },
+    { name: "jf open 粉圓 (Huninn)", licence: "SIL OFL 1.1", url: "https://github.com/justfont/open-huninn-font", what: font() },
+    { name: "源泉圓體 (GenSen Rounded)", licence: "SIL OFL 1.1", url: "https://github.com/ButTaiwan/gensen-font", what: font() },
+    { name: "寒蟬全圓體 (ChillRound)", licence: "SIL OFL 1.1", url: "https://github.com/Warren2060/ChillRound", what: font() },
+    { name: "辰宇落雁體 (ChenYu Luoyan)", licence: "SIL OFL 1.1", url: "https://github.com/Chenyu-otf/chenyuluoyan_thin", what: font() },
+    { name: "俐方體11號 (Cubic 11)", licence: "SIL OFL 1.1", url: "https://github.com/ACh-K/Cubic-11", what: font() },
+    { name: "Noto Sans TC", licence: "SIL OFL 1.1", url: "https://github.com/notofonts/noto-cjk", what: font() },
+    { name: "Noto Sans Thai", licence: "SIL OFL 1.1", url: "https://github.com/notofonts/thai", what: font() },
+    { name: "LINE Seed", licence: "SIL OFL 1.1", url: "https://github.com/line/seed", what: font() },
+    { name: "寒蟬圓黑體 (Chiron GoRound TC)", licence: "SIL OFL 1.1", url: "https://github.com/google/fonts/tree/main/ofl/chirongoroundtc", what: font() },
+    { name: "Google Fonts", licence: "SIL OFL 1.1", url: "https://github.com/google/fonts", what: "Fredoka, Nunito, Mali, DM Sans, Plus Jakarta Sans, Bricolage Grotesque, Itim, Outfit, Kanit, Baloo 2, Sriracha, VT323, IBM Plex Sans, Chakra Petch, DM Serif Display, Caveat, Lilita One, Lily Script One, Lobster Two, Mitr" },
+    { name: "Permanent Marker", licence: "Apache 2.0", url: "https://github.com/google/fonts/tree/main/apache/permanentmarker", what: font() },
+  ];
+  return el("section", { className: "card oss-card" }, el("details", { className: "oss-det" },
+    el("summary", {}, el("h3", { textContent: T("Open source in the app", "App 用到的開源軟體", "ซอฟต์แวร์โอเพนซอร์สในแอป") })),
+    el("p", { className: "muted small", textContent: T("ML WorkHelp is made with these open-source projects: thank you to everyone behind them. Each one links to its GitHub, with its licence beside it.",
+      "ML WorkHelp 是用這些開源專案做成的，謝謝每一位作者。每一項都連到它的 GitHub，授權條款寫在旁邊。",
+      "ML WorkHelp สร้างขึ้นด้วยโปรเจกต์โอเพนซอร์สเหล่านี้ ขอบคุณผู้สร้างทุกคน แต่ละรายการลิงก์ไปที่ GitHub และมีสัญญาอนุญาตกำกับไว้") }),
+    el("ul", { className: "oss-list" }, OSS.map((o) => el("li", {},
+      el("a", { href: o.url, target: "_blank", rel: "noopener", textContent: o.name }), el("span", { className: "oss-lic", textContent: o.licence }),
+      el("span", { className: "muted small", textContent: o.what }))))));
+}
+
 /** The About group's line on the Settings home page (the prototype's aboutSum): what it has, and what it says now. */
 export function aboutHas() {
-  return T("Version, updates, backup & restore, notices, tours, start at login, uninstall", "版本、更新、備份與還原、通知、導覽、登入時打開、解除安裝", "เวอร์ชัน อัปเดต สำรองและกู้คืน การแจ้งเตือน ทัวร์ เปิดตอนล็อกอิน ถอนการติดตั้ง");
+  return T("Version, updates, backup & restore, notices, tours, start at login, uninstall, open source", "版本、更新、備份與還原、通知、導覽、登入時打開、解除安裝、開源軟體", "เวอร์ชัน อัปเดต สำรองและกู้คืน การแจ้งเตือน ทัวร์ เปิดตอนล็อกอิน ถอนการติดตั้ง ซอฟต์แวร์โอเพนซอร์ส");
 }
 
 // =====================================================================================================================

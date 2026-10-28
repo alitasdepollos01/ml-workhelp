@@ -21,7 +21,7 @@ const ALL = [
   { tab: "today", find: ["#nav"], t: ["Everything is here", "東西都在這裡"],
     p: ["One window for everything, with its tabs down the left. Open it any time from the menu bar icon, or right-click the buddy.",
       "所有東西都在這一個視窗，分頁在左邊。隨時可以從選單列的圖示打開，或在夥伴上按右鍵。"] },
-  { tab: "today", find: [".nav-h-work", "#nav .nav-h:not(.nav-h-work)"], t: ["Work corner, Fan corner", "工作角落、粉絲角落"],
+  { tab: "today", find: [".nav-h-work", "#nav [data-tab=today]", "#nav .nav-h:not(.nav-h-work)", "#nav [data-tab=credits]"], t: ["Work corner, Fan corner", "工作角落、粉絲角落"],
     p: ["The menu has two parts: Work corner (Today, Reminders, Data) and Fan corner (Stickers, Pins, the desktop buddy and photo credits). Settings is at the bottom.",
       "選單分成兩塊：工作角落（今天、提醒、數據）和粉絲角落（貼圖、徽章、桌面夥伴和照片來源）。設定在最下面。"] },
   { tab: "buddy", find: [".bp-hero"], scroll: "start", t: ["Desktop buddy", "桌面夥伴"],
@@ -36,17 +36,22 @@ const ALL = [
         "時鐘算的是正在做的事（點名字可以換）。大按鈕永遠是下一步：「休息一下」，回來按「我回來了」。「收工」會把做到現在的時間記進去，結束今天。"]
       : ["Pick what the round is for, then Start a round. Each round counts as today's work; its break starts by itself. Any break, one screen: change what it is and how long. Done for today counts the round so far.",
         "選好這一輪要做什麼，按「開始一輪」。每一輪都算進今天的工作，結束會自動休息。不管什麼休息都是同一個畫面，可以改種類和長度。「收工」會把這一輪做到現在的時間算進去。"] },
-  { tab: "today", find: [".now-card .focus-btn"], t: ["Focus screen", "專注全螢幕"],
-    p: ["Reading, or working away from the computer? The clock fills the screen: the big number is this stretch, today's total is under it. Behind it, the photographers' photos, your own, or both. Esc closes it.",
-      "要看書、不在電腦前工作？時鐘放大到整個螢幕：大數字是這一段，下面是今天的總時數。後面可以放攝影師的照片、你自己的照片，或兩種都放。按 Esc 關閉。"] },
+  // (the card has the button while you work or between rounds; before the day starts, on a break or after Done for
+  // today it doesn't: then Muv points at the card and says where the button comes)
+  { tab: "today", find: [".now-card .focus-btn"], or: [".now-card"], t: ["Focus screen", "專注全螢幕"],
+    p: () => (document.querySelector(".now-card .focus-btn")
+      ? ["Press this to open the focus screen, for reading or work away from the computer. The clock fills the screen: the big number is this stretch, today's total is under it, with the photographers' photos, your own, or both behind it. Esc closes it. It's also on the card you get when you right-click the buddy.",
+        "按這裡就能打開專注全螢幕，看書、不在電腦前工作的時候用。時鐘會放大到整個螢幕：大數字是這一段，下面是今天的總時數，後面可以放攝影師的照片、你自己的照片，或兩種都放。按 Esc 關閉。在夥伴上按右鍵，跳出來的小卡片上也有這個按鈕。"]
+      : ["The focus screen is for reading or work away from the computer: the clock fills the screen. Once you're working, this card has a Focus screen button: press it to open the focus screen. It's also on the card you get when you right-click the buddy. Esc closes it.",
+        "專注全螢幕是給看書、不在電腦前工作的時候用的：時鐘會放大到整個螢幕。開始工作後，這張卡片上會有「專注全螢幕」按鈕，按下去就會打開。在夥伴上按右鍵，跳出來的小卡片上也有這個按鈕。按 Esc 關閉。"]) },
   { tab: "today", when: () => doodlesOn(), find: [".today-top-band"], t: ["Doodles", "塗鴉"],
     p: ["The little drawings are doodles from the shows MilkLove were in: one by each page's title, and a faint wallpaper behind the cards. Too much? Settings › Look & menu bar › Doodles: corner stickers, or off.",
       "這些小圖是 MilkLove 演過的作品裡的塗鴉：每一頁標題旁邊一個，卡片後面還有淡淡的壁紙。覺得太多？到「設定 › 外觀與選單列 › 塗鴉」改成角落貼紙，或關掉。"] },
   { tab: "today", find: [".focus-box"], t: ["Focus of the day", "本日主題"],
     p: ["Write the one thing today is about here: click and type. Data's calendar shows each day's. Point at any sticker in the app to see whose photo it is.", "在這裡寫下今天最想完成的那件事：點一下直接打字。「數據」的日曆會列出每天的主題。滑鼠移到 App 裡任何一張貼圖上，就能看到是誰的照片。"] },
-  { tab: "today", find: [".word-card"], t: ["Thai from the songs", "歌裡的泰文"],
-    p: ["A word from MilkLove's songs: tap the card to see what it means, and again for the next word. The same word of the day sits at the bottom of the menu.",
-      "MilkLove 歌裡的一個泰文字：點一下卡片看意思，再點一次換下一個字。今天的單字也會放在選單最下面。"] },
+  { tab: "today", find: [".word-card"], t: ["Thai from songs and daily life", "歌裡和生活裡的泰文"],
+    p: ["A Thai word from the songs or from everyday life, easy to advanced: tap the card to see what it means, and again for the next word. The same word of the day sits at the bottom of the menu.",
+      "一個泰文字，可能來自歌裡，也可能是生活裡常用的，從簡單到進階都有：點一下卡片看意思，再點一次換下一個字。今天的單字也會放在選單最下面。"] },
   { tab: "today", find: [".entries"], t: ["Your day, stretch by stretch", "你今天的每一段時間"],
     p: ["Everything you do goes in here by itself: a timeline, and a line for each part. Click one to change it; click a dashed gap to add time you forgot. Pomodoro rounds are marked with a tomato.",
       "你做的每件事都會自動記在這裡：一條時間軸，每一段一行。點一段就能改；點虛線的空白就能補登忘了記的時間。番茄鐘的那幾輪會標上番茄。"] },
@@ -57,13 +62,16 @@ const ALL = [
     p: ["A week, a month or a year, in three tabs: Summary (the numbers and one chart), Analysis (where the time went, when you work, how focused) and Calendar (each day: click one to see and change it). Want a closer look? Muv shows you each part in a minute.",
       "看一週、一個月或一年，三個分頁：總覽（數字和一張圖）、分析（時間花在哪裡、什麼時候工作、專注得怎麼樣）和日曆（每一天，點一天就能看和改）。想仔細看看嗎？Muv 帶你一個一個看，大概 1 分鐘。"],
     action: [["Show me Data", "帶我看數據"], "data"] },
+  { tab: "week", ask: { tab: "sum", range: "week" }, find: ["main .share-btn"], t: ["Make a picture", "存成圖片"],
+    p: ["Make a picture turns your week, month or year into a little card to save and share: pick one of six kinds and a sticker. Then decorate it with doodles and the pins you've earned, and download it.",
+      "按「存成圖片」，就能把這一週、這個月或這一年做成一張小卡片，存下來分享：六種樣式任選，再挑一張貼圖。還可以用塗鴉和你拿到的徽章裝飾，最後下載下來。"] },
   { tab: "settings", ask: { group: null }, find: ["main .page"], scroll: "start", t: ["Settings", "設定"],
     p: ["A tile for each group, saying what it's set to; under them, a short list of what's worth setting, each one click away. The search finds any setting. Want a closer look? Muv shows you each group in a minute.",
       "每個主題一個方塊，寫著目前的設定；下面是「設定小清單」，值得設定的幾件事，點一下就到。搜尋可以找到任何一個設定。想仔細看看嗎？Muv 帶你一個一個看，大概 1 分鐘。"],
     action: [["Show me Settings", "帶我看設定"], "settings"] },
   { tab: "stickers", find: ["main iframe"], t: ["Your own stickers", "你自己的貼圖"],
     p: ["Add your own photos, say who they're from, and sort the cut-outs into Milk, Love, Together or Others. Click any sticker to see its original photo and who took it. Photos: click one of yours to change its credit or delete it. The app's own photos are only to look at.", "加入你自己的照片、標註來自誰，再把去背的貼圖分到 Milk、Love、同框或其他。點任何一張貼圖，就能看到原始照片和拍攝者。「照片」分頁：點你自己的照片，可以改標註或刪除。App 內建的照片只能看。"] },
-  { tab: "today", when: () => hasPins(), find: [".pins-nav", "#nav [data-tab=pins]"], t: ["Pins", "徽章"],
+  { tab: "today", when: () => hasPins(), find: ["#nav [data-tab=pins]"], t: ["Pins", "徽章"],
     p: () => [`In Fan corner: ${pinTotal()} pins to collect. They come with the work you already do, and nothing is ever taken away. Want a look? Muv shows you the Pins page in a minute.`,
       `粉絲角落裡有 ${pinTotal()} 個徽章可以收集。照平常工作就會拿到，拿到的也不會被收回。想看看嗎？Muv 帶你逛一下徽章頁，大概 1 分鐘。`],
     action: [["Show me Pins", "帶我看徽章"], "pins"] },
@@ -76,7 +84,7 @@ const ALL = [
 // The Data tour: the bar, the three tabs, and what's on each (Data › Show me Data).
 const DATA = [
   { tab: "week", ask: { tab: "sum", range: "week" }, find: ["main .dbar"], t: ["Which week, month or year", "看哪一週、哪個月、哪一年"],
-    p: ["Week, month or year; ‹ › for the one before or after. Make a picture saves a little card of it (six kinds, with a sticker you pick, and doodles and pins to decorate it); Export CSV saves it as a spreadsheet. The bar stays at the top as you scroll.", "週、月或年，用 ‹ › 看前一個、後一個。「做成圖片」會存一張小卡片（六種樣式，貼圖自己挑，還能用塗鴉和徽章裝飾）；「匯出 CSV」會存成試算表。往下捲，這條也一直在最上面。"] },
+    p: ["Week, month or year; ‹ › for the one before or after. Make a picture saves a little card of it (six kinds, with a sticker you pick, and doodles and pins to decorate it); Export CSV saves it as a spreadsheet. The bar stays at the top as you scroll.", "週、月或年，用 ‹ › 看前一個、後一個。「存成圖片」會存一張小卡片（六種樣式，貼圖自己挑，還能用塗鴉和徽章裝飾）；「匯出 CSV」會存成試算表。往下捲，這條也一直在最上面。"] },
   { tab: "week", ask: { tab: "sum", range: "week" }, find: ["main .dtabs"], t: ["Three tabs", "三個分頁"],
     p: ["Summary: the numbers at a glance. Analysis: a closer look at how you work. Calendar: each day, and what you did (to change). All three show the same week.", "總覽：一眼看數字。分析：仔細看你怎麼工作。日曆：每一天做了什麼（還能改）。三個分頁都是同一週。"] },
   { tab: "week", ask: { tab: "sum", range: "week" }, find: ["main .dtiles"], t: ["The numbers", "數字"],
@@ -227,6 +235,7 @@ function show(i) {
     if (t || ++tries > 25) {
       clearInterval(on.wait);
       t?.scrollIntoView({ block: step.scroll || "nearest" });
+      if (typeof step.p === "function") text.textContent = say(step.p()); // (words that depend on what's there: the focus screen's button)
       place();
       next.focus();
     }

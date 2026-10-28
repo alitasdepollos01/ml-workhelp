@@ -38,7 +38,7 @@ const SECTIONS = () => [
     [L("How do I fix a past day?", "怎麼修改以前的紀錄？"),
       L("Data › Calendar, click the day: its timeline opens. Click a part to change it, or a dashed gap to add time you forgot.", "「數據 › 日曆」點那一天，就會打開那天的時間軸。點一段可以改，點虛線的空白可以補登。")],
     [L("How do I decorate a picture card?", "圖卡要怎麼裝飾？"),
-      L("Data › Make a picture, pick a card, then Decorate: add up to 6 doodles and pins you've collected, and drag, resize or turn each one. With anything on it, the card gets a small credit line for the doodles and pins. Download saves it.", "「數據 › 做成圖片」選一張卡片，再按「裝飾」：最多放 6 個塗鴉和你收集到的徽章，每個都能拖曳、縮放或旋轉。只要有放東西，卡片上就會多一行小小的塗鴉與徽章設計標註。按「下載」就能存起來。")]] },
+      L("Data › Make a picture, pick a card, then Decorate: add up to 6 doodles and pins you've collected, and drag, resize or turn each one. With anything on it, the card gets a small credit line for the doodles and pins. Download saves it.", "「數據 › 存成圖片」選一張卡片，再按「裝飾」：最多放 6 個塗鴉和你收集到的徽章，每個都能拖曳、縮放或旋轉。只要有放東西，卡片上就會多一行小小的塗鴉與徽章設計標註。按「下載」就能存起來。")]] },
   { id: "look", t: L("Looks & doodles", "外觀與塗鴉"), qa: [
     [L("How do I turn the doodles off?", "怎麼把塗鴉關掉？"),
       L("Settings › Look & menu bar › Doodles › Off. Or keep them, quieter: pick Quiet wallpaper and move Wallpaper strength down (light and dark each have their own slider; Reset to balanced puts them back). Corner stickers puts a few on the corners of the cards instead.", "「設定 › 外觀與選單列 › 塗鴉 › 關」。想留著但淡一點：選「安靜的壁紙」，再把「壁紙濃淡」調低（淺色、深色各一條滑桿；按「回到平衡值」就能還原）。選「角落貼紙」，就只在卡片角落貼幾個。")]] },
@@ -80,7 +80,7 @@ const SECTIONS = () => [
       L("No. Your work log, reminders, pins, photos and stickers stay on your Mac, and backups are files you keep yourself. The app only reads small files on its own page, to see if there's a new version or new photos and pins (switch that off in Settings › About & updates). Data › Export CSV saves a copy for you.", "不會。工作紀錄、提醒、徽章、照片和貼圖都只存在你的 Mac 裡，備份也是你自己收著的檔案。App 只會讀取自己網頁上的幾個小檔案，看看有沒有新版本、新照片或新徽章（可以在「設定 › 關於與更新」關掉）。「數據 › 匯出 CSV」可以自己存一份。")]] },
   { id: "lang", t: L("Languages", "語言"), qa: [
     [L("How do I change the language?", "怎麼換語言？"),
-      L("Settings › Look & menu bar: English, Traditional Chinese or Thai.", "「設定 › 外觀與選單列」：英文、繁體中文或泰文。")]] },
+      L("Settings › Look & menu bar: English, Traditional Chinese or Thai.", "「設定 › 外觀與選單列」：英文、繁中(TW)或泰文。")]] },
 ].filter((s) => !s.when || s.when());
 
 const KINDS = () => [L("A question", "問題"), L("Something isn't working", "有東西不正常"), L("An idea", "建議"), L("A photo credit or removal", "照片標註或下架"), L("Help with the Thai translation", "協助泰文翻譯")];
@@ -126,7 +126,10 @@ export function renderHelp(main, { ask } = {}) {
     none.hidden = shown > 0;
   }
   search.addEventListener("input", filter);
-  main.append(el("section", { className: "card help-card" }, search, jump, list, none));
+  // (after the last question: where to report a problem, the same line as Settings › About & updates; opens in the browser)
+  const gh = el("p", { className: "muted help-gh" }, L("Found a problem or have an idea? ", "遇到問題或有想法？"),
+    el("a", { className: "gh-link", href: "https://github.com/alitasdepollos01/ml-workhelp/issues", target: "_blank", rel: "noopener", textContent: L("Tell us on GitHub.", "到 GitHub 告訴我們。") }));
+  main.append(el("section", { className: "card help-card" }, search, jump, list, none, gh));
   if (ask?.section) requestAnimationFrame(() => jump.querySelector(`[data-sec="${ask.section}"]`)?.click());
   // Email us: your mail app opens with it written, the app's version and the Mac added. Other ways under it.
   const kind = el("select", { "aria-label": L("What it's about", "關於什麼") }, KINDS().map((k) => new Option(k)));

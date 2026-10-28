@@ -4,6 +4,7 @@ window.__memfs = { readFileSync: (f) => { if (!(f in __memfsFiles)) throw new Er
 window.__mlwhWork = (function () {
 const module = { exports: {} };
 const require = (n) => ({ fs: window.__memfs, path: { join: (...a) => a.join("/") } })[n];
+const process = { platform: "darwin", env: {} }; // (a Mac, as the website's demo shows)
 // The work clock and reminders. Kept by the desktop app rather than a page, so
 // they carry on while the desktop buddy is put away, the photos are reloaded or
 // the app restarts.
@@ -97,7 +98,8 @@ const WORK_TYPES = [
   { id: "meet", emoji: "👥", label: "Meetings & calls", zh: "會議與通話", color: "#6fb7a8" },
   { id: "create", emoji: "🎨", label: "Creative", zh: "創作", color: "#b5d98c" },
   { id: "admin", emoji: "🗂️", label: "Admin & errands", zh: "行政雜事", color: "#a9bfae" },
-  { id: "thai", emoji: "🇹🇭", label: "Thai practice", zh: "泰文練習", color: "#7fbfd0" },
+  // (Windows has no flag pictures: 🇹🇭 shows as the letters "TH" there, so its Thai practice starts with the elephant)
+  { id: "thai", emoji: process.platform === "win32" ? "🐘" : "🇹🇭", label: "Thai practice", zh: "泰文練習", color: "#7fbfd0" },
 ];
 
 /** Local date, "2026-10-15". */

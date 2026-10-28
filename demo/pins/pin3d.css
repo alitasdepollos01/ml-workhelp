@@ -1,1 +1,62 @@
-/* The Pins page isn't part of the website demo. */
+/* Pins: the CSS 3D pin (js/pin3d.js), the engraved back (js/pin-back.js) and the hero pin's stage (js/pin-hero.js).
+   At rest a pin is just its picture; the 3D layers (thickness, light, back) are built only while the pointer is on it
+   or it's turned over, so a board of 61 pins costs nothing until you touch one. Used by the app window and the buddy card. */
+.p3d { position: relative; display: block; width: 100%; height: 100%; perspective: 600px; --p3d-thick: 3px; --px: 50; --py: 50; --sx: 0; --sy: 0; }
+.p3d-tilt, .p3d-flip { position: absolute; inset: 0; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
+.p3d-tilt { transition: transform .45s cubic-bezier(.2, .8, .3, 1); }
+.p3d.p3d-moving .p3d-tilt { transition: transform .08s linear; }
+.p3d-on .p3d-tilt { will-change: transform; }   /* keeps its raster scale while leaning (no re-raster every frame) */
+.p3d-flip { transition: transform .75s cubic-bezier(.3, 1.3, .45, 1); }
+.p3d.is-flipped .p3d-flip { transform: rotateY(180deg); }
+.p3d-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; isolation: isolate; }
+.p3d-face > img, .p3d-face > .pback, .p3d-face .pback > img { width: 100%; height: 100%; display: block; }
+.p3d-face > .pback { line-height: 0; }
+.p3d-on .p3d-front { transform: translateZ(calc(var(--p3d-thick) / 2)); }
+.p3d-back { transform: rotateY(180deg) translateZ(calc(var(--p3d-thick) / 2)); }
+.p3d-edge { position: absolute; inset: 0; pointer-events: none; }
+.p3d-edge > img { width: 100%; height: 100%; display: block; filter: brightness(.6) saturate(.8); }
+.p3d-edge.from-back > img { transform: scaleX(-1); }
+/* the light: a soft band that slides with the tilt and a glint under the pointer, both cut to the pin's own shape.
+   Each on its own layer (will-change) so moving them never re-rasterises the pin (measured: 2 s → 0.03 s of raster per 5 s). */
+.p3d-sheen { position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+.p3d-band, .p3d-glint { position: absolute; will-change: transform; }
+.p3d-band { top: -50%; left: -100%; width: 300%; height: 200%; mix-blend-mode: soft-light; opacity: .9;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, .25) 46%, rgba(255, 255, 255, .7) 50%, rgba(255, 255, 255, .25) 54%, transparent 60%);
+  transform: translateX(calc((var(--px) - 50) * .9%)); }
+.p3d-glint { left: -30%; top: -30%; width: 60%; height: 60%; border-radius: 50%; mix-blend-mode: overlay; opacity: .8;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .8), rgba(255, 255, 255, 0));
+  transform: translate(calc(var(--px) * 1.6%), calc(var(--py) * 1.6%)); }
+.p3d-back .p3d-sheen { opacity: .45; }   /* keep the engraving readable */
+.p3d-shadow { position: absolute; inset: 8%; pointer-events: none; opacity: .3; filter: brightness(0) blur(4px);
+  transform: translate(calc(var(--sx) * 1px + 2px), calc(var(--sy) * 1px + 5px)); transition: transform .45s; }
+.p3d-shadow > img { width: 100%; height: 100%; display: block; }
+.p3d[role="button"] { cursor: pointer; }
+.p3d[role="button"]:focus-visible { outline: 2px dashed currentColor; outline-offset: 4px; border-radius: 30%; }
+html[data-prm="1"] .p3d-flip, html[data-prm="1"] .p3d-tilt, html[data-prm="1"] .p3d-shadow { transition: none; }
+@media (prefers-reduced-motion: reduce) { .p3d-flip, .p3d-tilt, .p3d-shadow { transition: none; } }
+
+/* the engraving laid over a pin's back */
+.pback { position: relative; display: inline-block; line-height: 0; }
+.pback img { width: 100%; height: 100%; display: block; }
+.pplate { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; text-align: center; overflow: hidden;
+  color: #3d3a44; font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans Thai", "Helvetica Neue", Arial, sans-serif; font-weight: 700; line-height: 1.08;
+  text-shadow: 0 .06em 0 rgba(255, 255, 255, .5); overflow-wrap: break-word; word-break: normal; line-break: auto; hyphens: auto; padding: 0 3%; box-sizing: border-box; letter-spacing: .01em; }
+.pplate .l1 { display: block; font-size: 1em; text-transform: none; }
+.pplate .l2 { display: block; font-size: .72em; font-weight: 600; opacity: .85; margin-top: .12em; }
+.pplate .l3 { display: block; font-size: .6em; font-weight: 600; opacity: .65; margin-top: .1em; letter-spacing: .04em; }
+.pplate .gone { display: none; }
+
+/* the hero pin: a real 3D pin on a quiet stage (an opened pin) or on its own (the earning moment) */
+.ph-host { position: relative; width: 100%; height: 100%; }
+.ph-host > canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.ph-host > canvas:active { cursor: grabbing; }
+.ph-host > .p3d { position: absolute; inset: 6%; width: auto; height: auto; }   /* the CSS pin, when 3D isn't available */
+.ph-host.ph-loading::after { content: ""; position: absolute; inset: 30%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 255, 255, .35), transparent); animation: ph-pulse 1s ease-in-out infinite alternate; }
+@keyframes ph-pulse { to { opacity: .3; } }
+/* the stage for an opened pin: no box, just soft light on the card's own background and a shadow under the pin (light and dark follow the app) */
+.ph-stage { position: relative; width: 100%; max-width: 220px; aspect-ratio: 1; margin: 0 auto;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--primary, #ff8db6) 16%, var(--control-bg, #fff)), transparent); }
+.ph-stage::after { content: ""; position: absolute; left: 26%; right: 26%; bottom: 7%; height: 7%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)); }
+.ph-stage > .ph-host { position: absolute; inset: 0; width: auto; height: auto; z-index: 1; }

@@ -30,6 +30,8 @@ body.appwin { --away: #d9ddd6; --soft: color-mix(in srgb, var(--focus) 14%, var(
 .appwin .deco { position: absolute; pointer-events: none; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .12)); object-fit: contain; }
 .appwin .clickable { cursor: pointer; }
 .appwin a { color: var(--primary, var(--desk-ink)); font-weight: 600; }
+.appwin a.gh-link { text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; } /* (the GitHub line: clearly a link) */
+.appwin .help-gh { margin: 10px 0 0; }
 
 /* Today */
 .appwin .focus-row { display: flex; align-items: center; gap: 8px; background: var(--pink-soft); border-radius: 12px; padding: 6px 10px; margin-left: 130px; min-height: 52px; }
@@ -118,6 +120,29 @@ body.appwin { --away: #d9ddd6; --soft: color-mix(in srgb, var(--focus) 14%, var(
 .appwin .catrow input:hover, .appwin .catrow input:focus { border-color: var(--line); background: var(--control-bg); }
 .appwin .newcat { display: flex; gap: 6px; }
 .appwin .newcat input { flex: 1; font: inherit; border: 1px dashed var(--line); border-radius: 8px; padding: 4px 8px; background: transparent; color: var(--desk-ink); }
+.appwin .newcat-box { display: grid; gap: 4px; margin-top: 8px; }
+/* a category's symbol: a button with the symbol and ▾, the grid of symbols under it (app-common.js symbolButton) */
+.sym-pick { position: relative; display: inline-flex; flex: none; }
+.appwin .sym-btn { display: inline-flex; align-items: center; gap: 3px; height: 30px; min-width: 0; font: inherit; line-height: 1; border: 1px solid var(--line); border-radius: 8px; padding: 0 5px 0 6px; background: var(--control-bg); color: var(--desk-ink); cursor: pointer; box-shadow: none; }
+.appwin .sym-btn .sym-now { font-size: 18px; }
+.appwin .catrow .sym-btn { background: transparent; }
+.appwin .sym-btn:hover, .appwin .sym-btn[aria-expanded="true"] { border-color: var(--primary); background: var(--control-bg); }
+.sym-caret { font-size: 10px; opacity: .6; }
+.sym-pop { position: absolute; z-index: 40; top: calc(100% + 4px); left: 0; width: 300px; max-width: calc(100vw - 40px); background: var(--control-bg); color: var(--desk-ink); border: 1px solid var(--line); border-radius: 12px; padding: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, .18); }
+.sym-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 3px; }
+.sym-grid .sym { font: inherit; font-size: 19px; line-height: 1; height: 34px; border: 1.5px solid transparent; border-radius: 8px; background: transparent; cursor: pointer; padding: 0; box-shadow: none; }
+.sym-grid .sym:hover { background: var(--soft); }
+.sym-grid .sym[aria-pressed="true"] { border-color: var(--primary); background: var(--soft); }
+/* "＋ New category…" from a menu: the small window (app-common.js askCategory) */
+dialog.cat-ask { border: 0; border-radius: 18px; padding: 18px 20px 14px; width: min(400px, calc(100vw - 32px)); background: var(--control-bg); color: var(--desk-ink); box-shadow: 0 20px 60px rgba(0, 0, 0, .3); }
+dialog.cat-ask[open] { display: grid; gap: 8px; }
+dialog.cat-ask::backdrop { background: rgba(20, 30, 24, .4); }
+dialog.cat-ask h3 { margin: 0; }
+dialog.cat-ask p { margin: 0; }
+dialog.cat-ask .newcat-wrap { display: grid; gap: 6px; }
+dialog.cat-ask .newcat { display: flex; gap: 6px; }
+dialog.cat-ask .newcat input { flex: 1; min-width: 0; font: inherit; border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; background: transparent; color: var(--desk-ink); }
+.cat-ask-btns { display: flex; justify-content: flex-end; }
 .appwin .look-card > .deco { right: 12px; bottom: 0; height: calc(100% - 24px); max-height: 150px; width: auto; max-width: 120px; object-fit: contain; object-position: bottom right; }
 @media (max-width: 760px) { .appwin .look-card { padding-right: 16px; } .appwin .look-card > .deco { display: none; } }
 .appwin .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -1014,6 +1039,7 @@ html[data-style="f"] .appwin main .page-sub h2::after { content: none; }
 .appwin .credit-note.please-note { background: var(--sk-card, var(--control-bg)); border-style: dashed; }
 .appwin .credit-note.please-note h3 { margin: 0; }
 .appwin .whose-card .sticker-strip { gap: 10px; }
+.appwin .credit-doodles { margin: -4px 2px 0; font-size: 13px; text-align: center; }
 .appwin .whose-card .sticker-strip img { height: 112px; border-radius: 12px; transition: transform .15s; }
 .appwin .whose-card .sticker-strip img:hover { transform: translateY(-3px) rotate(-1.5deg); }
 

@@ -152,6 +152,12 @@ function drawChoices(c) {
 }
 
 window.__mlwhQuick = { last: () => last, draw, buddyDoodle }; // (for the tests)
-host.onCommand((cmd, arg) => { if (cmd === "quick") draw(arg); else if (cmd === "quick-choices") drawChoices(arg); });
+// (opening again: the window is reused, and when it comes back into focus Chromium can hand focus to the new pin,
+// which then shows its ring; unless you pressed Tab, the focus goes back to the card itself)
+let tabbed = false;
+addEventListener("keydown", (e) => { if (e.key === "Tab") tabbed = true; }, true);
+const homeFocus = () => { if (!tabbed && document.activeElement?.closest?.(".qp-pin")) document.getElementById("qp").focus({ preventScroll: true }); };
+addEventListener("focus", () => { homeFocus(); requestAnimationFrame(homeFocus); });
+host.onCommand((cmd, arg) => { if (cmd === "quick") { tabbed = false; draw(arg); document.getElementById("qp").focus({ preventScroll: true }); requestAnimationFrame(homeFocus); }  /* (focus on the card itself, so no ring shows on open; Tab still reaches the pin and buttons) */ else if (cmd === "quick-choices") drawChoices(arg); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") host.quick.act("close"); });
 host.quick.ready();

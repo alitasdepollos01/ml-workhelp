@@ -146,6 +146,24 @@
     if (key === "breakEvery") work.setBreakEvery?.(Number(value));
     saveS(); later(tellWork);
   };
+  // ---- the Pins page: the views the app's engine gave (build.js: three pins earned, the rest by their rule) ----
+  const PD = DATA.pins || null, PDAY = 864e5;
+  const pinSet = Object.assign({ view: "board", cat: "all", buddyPin: null }, store("pins") || {});
+  const pinView = (v) => { if (!v || !v.earned) return v; const at = Date.now() - (v.ago || 0) * PDAY; return { ...v, at, hist: (v.hist || []).map((x) => ({ ...x, at })) }; };
+  const pinById = (id) => pinView((PD?.list || []).find((v) => v.id === id) || null);
+  const buddyPin = () => { const v = pinSet.buddyPin && pinById(pinSet.buddyPin); return v && v.earned ? { id: v.id, tier: v.tier, tierId: v.tierId, name: v.name?.[lang] || v.name?.en || "" } : null; };
+  const PIN_CALLS = {
+    catalogue: () => PD.catalogue, list: () => PD.list.map(pinView), detail: (id) => pinById(String(id)),
+    nextUp: (n = 3) => PD.nextUp.slice(0, Math.max(1, Math.min(10, Number(n) || 3))),
+    summary: () => ({ ...PD.summary, settings: { ...PD.summary.settings, ...pinSet }, buddyPin: buddyPin() }),
+    visibleDoodles: () => PD.visible, specialDays: () => PD.summary.special, counters: () => ({}),
+    streak: () => ({ ...(PD.summary.streak || { now: 0, best: 0 }), days: [], forgiven: [] }),
+    setSetting: (k, v) => { if (k === "buddyPin") return PIN_CALLS.wear(v); if (!["view", "cat"].includes(k)) return false; pinSet[k] = v; store("pins", pinSet); return true; },
+    wear: (id) => { if (id != null && id !== "" && !pinById(String(id))?.earned) return false; pinSet.buddyPin = id || null; store("pins", pinSet); later(() => onCommand?.("quick", quickModel())); return true; },
+    seen: () => true, note: () => true,
+  };
+  const pinsHost = PD && { call: async (action, ...args) => (PIN_CALLS[action] ? PIN_CALLS[action](...args) : null), code: async () => ({ ok: false }), note: async () => true, reset: async () => ({ ok: false }) };
+
   const people = DATA.people || {}, order = DATA.order || [], contact = DATA.contact || { mail: "alitasdepollos01@gmail.com", x: "@alitasdepollos0", xUrl: "https://x.com/alitasdepollos0" };
 
   window.MLHost = {
@@ -169,7 +187,7 @@
     apple: async (action) => (action === "status" ? { access: "none", on: false } : null),
     settingText: setText, deskWindow: () => {}, quick: { act: quickAct, size: (h) => up({ mlwhQuickSize: h }), ready: () => later(() => onCommand?.("quick", quickModel())) },
     remind: { act: () => up({ mlwhRemind: "close" }), size: (h) => up({ mlwhRemindSize: h }), ready: () => later(() => onCommand?.("cards", demoCards())) },
-    workClock: () => {}, systems: () => {},
+    workClock: () => {}, systems: () => {}, pins: pinsHost || undefined,
     setup: {
       info: async () => ({ os: "mac", seeds: { full: DATA.counts || { milk: 290, love: 287, together: 256, others: 26 } }, pack: { state: "idle", size: 3.2e8, photos: 743 },
         existing: { milk: 0, love: 0, together: 0, others: 0 }, folder: "", library: null, setupDone: false, contact: { email: "", sent: false } }),
@@ -207,6 +225,7 @@
       who: S.deskWho || "pair", whoTitle: T("On my desktop", "桌面上是", "บนเดสก์ท็อป"), whoHint: T("tap again for another sticker", "再點一次換一張", "แตะอีกครั้งเพื่อเปลี่ยนสติกเกอร์"),
       whoOpts: [["pair", T("Both, side by side", "並排", "ทั้งคู่ เคียงกัน")], ["together", T("Together", "同框", "คู่กัน")], ["milk", "Milk"], ["love", "Love"], ["others", T("Others", "其他", "อื่น ๆ")]],
       small: [b("hide", "hide", T("Hide", "隱藏", "ซ่อน"), true), b("app", "app", T("Open app", "打開 App", "เปิดแอป")), b("settings", "settings", T("Settings", "設定", "การตั้งค่า"))],
+      buddyPin: buddyPin(),
     };
   }
   function quickAct(id) {

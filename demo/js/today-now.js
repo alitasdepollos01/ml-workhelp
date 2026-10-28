@@ -4,12 +4,13 @@
 // MilkLove video under it; it goes in the log as one entry. 收工 logs what's going on and
 // celebrates with stickers from the buddies' own.
 
-import { L, el, host, work, state, clock, pad, catName, catOf, breakCats, catSelect, toast, enterKey, deco } from "./app-common.js";
+import { L, el, host, work, state, clock, pad, catName, catOf, breakCats, catSelect, symbolButton, toast, enterKey, deco } from "./app-common.js";
 import { openFocus } from "./focus-screen.js";
 import { breakCard, lengthsPicker, pomoInfo } from "./tab-pomodoro.js";
 
 const TOMATO_BREAK = "pomodoro";
 let ticker = 0, statusAt = 0, picker = null; // picker: "task" | "new-task" | "new-kind" (open, kept through redraws)
+let kindSym = "🌿"; // (a new kind of break: the symbol picked, kept through redraws)
 const mmss = (ms) => { const s = Math.max(0, Math.round(ms / 1000)); return s >= 3600 ? `${Math.floor(s / 3600)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}` : `${Math.floor(s / 60)}:${pad(s % 60)}`; };
 const hmLong = (ms) => { const m = Math.floor(Math.max(0, ms) / 60e3); return m >= 60 ? L(`${Math.floor(m / 60)} h ${pad(m % 60)} min`, `${Math.floor(m / 60)} 小時 ${pad(m % 60)} 分`) : L(`${m} min`, `${m} 分鐘`); };
 /** append(), leaving out what isn't there (append writes null out as "null"). */
@@ -247,12 +248,13 @@ export function nowCard(st, { redraw }) {
       const chips = el("div", { className: "row-flex chips" }, el("span", { className: "muted small lead", textContent: L("This break", "這次休息") }),
         kinds.map((c) => btn(catName(c, true), () => { work.act("set-break", `:${c.id}`); }, "chip" + (c.id === b.kind ? " on" : ""))));
       if (picker === "new-kind") {
-        const emoji = el("input", { type: "text", maxLength: 4, placeholder: "🐶", style: "width:52px", "aria-label": L("Emoji", "表情符號") });
+        const emoji = symbolButton("break", kindSym, (sy) => { kindSym = sy; });
         const name = el("input", { type: "text", maxLength: 40, placeholder: L("e.g. Walk the dog", "例如：遛狗"), style: "width:130px", "aria-label": L("Name", "名稱") });
         const add = btn(L("Add", "新增"), async () => {
           const label = name.value.trim();
           picker = null;
-          if (label) { const c = await work.call("saveCategory", "break", { emoji: emoji.value.trim() || "🌿", label, zh: label, minutes: 10 }); if (c?.id) work.act("set-break", `:${c.id}`); toast(L(`Added "${label}"`, `已新增「${label}」`)); }
+          if (label) { const c = await work.call("saveCategory", "break", { emoji: kindSym, label, zh: label, minutes: 10 }); if (c?.id) work.act("set-break", `:${c.id}`); toast(L(`Added "${label}"`, `已新增「${label}」`)); }
+          kindSym = "🌿";
           redraw();
         }, "btn small primary");
         name.addEventListener("keydown", (e) => { if (enterKey(e)) add.click(); });

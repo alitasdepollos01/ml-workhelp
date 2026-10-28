@@ -5,7 +5,7 @@
 // "Find a setting" searches all of them.
 
 import { stylePicker } from "./style-pick.js";
-import { L, el, host, work, state, deco, toast, saveCategoryFromText, enterKey, thaiNote, pageTop, pageSub } from "./app-common.js";
+import { L, el, host, work, state, deco, toast, newCatRow, symbolButton, enterKey, thaiNote, pageTop, pageSub } from "./app-common.js";
 import { connectCard, known } from "./connect.js";
 import { lengthsPicker } from "./tab-pomodoro.js";
 import { startTour } from "./tour.js";
@@ -169,7 +169,7 @@ function GROUPS() {
   const k = known();
   return [
     { id: "look", title: L("Look & menu bar", "外觀與選單列"), words: "theme colour language dark light menu bar doodles wallpaper 顏色 語言 深色 淺色 選單列 塗鴉 壁紙",
-      sum: [theme, { zh: "繁體中文", th: "ไทย" }[host.lang] || "English", { system: L("like my Mac", "跟系統一樣"), light: L("light", "淺色"), dark: L("dark", "深色") }[st.appearance || "system"]].filter(Boolean).join(" · "),
+      sum: [theme, { zh: "繁中(TW)", th: "ไทย" }[host.lang] || "English", { system: L("like my Mac", "跟系統一樣"), light: L("light", "淺色"), dark: L("dark", "深色") }[st.appearance || "system"]].filter(Boolean).join(" · "),
       has: L("Colour, language, light or dark, the menu bar", "顏色、語言、深淺色、選單列"), draw: lookGroup },
     pinsCard(), // (1.3.0, track B2: Settings › Pins, a page of its own)
     { id: "keep", title: L("Keeping time & the day", "計時與每天的節奏"), words: "keep time pomodoro break reminder video goal weekend start day focus screen full reading away 計時 番茄鐘 休息 提醒 影片 目標 週末 每天開始 專注 全螢幕 看書",
@@ -181,7 +181,7 @@ function GROUPS() {
     { id: "cats", title: L("Categories", "分類"), words: "categories work break kinds colours photo sources credits photographers 分類 工作 休息 顏色 照片來源 標註 攝影",
       sum: L(`${(st.workTypes || []).length} kinds of work · ${(st.breakTypes || []).length} of break`, `工作 ${(st.workTypes || []).length} 種 · 休息 ${(st.breakTypes || []).length} 種`),
       has: L("Kinds of work and break: names, colours, usual minutes; who your photos are from", "工作分類、休息種類（名字、顏色、預設分鐘）；照片來源"), draw: catsGroup },
-    { id: "about", title: L("About & updates", "關於與更新"), words: "version update email tour login uninstall credits backup restore delete zip weekly photos pack 版本 更新 通知 導覽 登入 解除安裝 照片來源 備份 還原 刪除 每週 照片 更新包",
+    { id: "about", title: L("About & updates", "關於與更新"), words: "version update email tour login uninstall credits backup restore delete zip weekly photos pack open source licence license fonts 開源 授權 字型 版本 更新 通知 導覽 登入 解除安裝 照片來源 備份 還原 刪除 每週 照片 更新包",
       sum: [st.version || "", st.update ? L(`${st.update.version} is out`, `新版本 ${st.update.version}`) : st.updateAsked ? L("up to date", "已是最新版本") : ""].filter(Boolean).join(" · "),
       has: aboutHas(), draw: aboutGroup },
   ];
@@ -285,7 +285,7 @@ function lookGroup(main, redraw) {
       b.addEventListener("click", () => { host.setTheme(t.id); setTimeout(redraw, 80); });
       return b;
     }))),
-    row("Language / 語言 / ภาษา", "", seg([["en", "English"], ["zh", "繁體中文"], ["th", "ไทย (beta)"]], host.lang, (v) => host.setLang(v), "Language / 語言 / ภาษา"), thaiNote()),
+    row("Language / 語言 / ภาษา", "", seg([["en", "English"], ["zh", "繁中(TW)"], ["th", "ไทย (beta)"]], host.lang, (v) => host.setLang(v), "Language / 語言 / ภาษา"), thaiNote()),
     st.appearance ? row(L("Light or dark", "淺色或深色"), "",
       seg([["system", L("Like my Mac", "跟系統一樣")], ["light", L("Light", "淺色")], ["dark", L("Dark", "深色")]], st.appearance, (v) => { state.st.appearance = v; host.settingText("appearance", v); setTimeout(redraw, 60); }, L("Light or dark", "淺色或深色"))) : null);
   main.append(host.styles ? el("div", { className: "look2" },
@@ -431,14 +431,15 @@ function remGroup(main, redraw, go) {
 
 function catsGroup(main, redraw = () => {}) {
   const st = state.st || {};
+  // (Settings isn't redrawn by the app's status news: after an add or a remove, the list is drawn again from the app's own)
+  const fresh = async () => { try { state.st = (await work.status()) || state.st; } catch { /* the list as it was */ } redraw(); };
   const catBox = (kind) => {
     const list = kind === "work" ? st.workTypes || [] : st.breakTypes || [];
     return el("div", { className: "cats" }, list.map((c) => {
-      const e = el("input", { type: "text", className: "e", value: c.emoji, maxLength: 4, "aria-label": L("Emoji", "表情符號") });
+      const e = symbolButton(kind, c.emoji, (sy) => save({ emoji: sy }));
       const l = el("input", { type: "text", className: "l", value: L(c.label, c.zh || c.label), maxLength: 40, "aria-label": L("Name", "名稱") });
       const col = el("input", { type: "color", value: c.color || "#cccccc", "aria-label": L("Colour", "顏色") });
       const save = async (ch) => { await work.call("saveCategory", kind, { id: c.id, ...ch }); toast(L("Saved", "已儲存")); };
-      e.addEventListener("change", () => save({ emoji: e.value }));
       l.addEventListener("change", () => save(host.lang === "zh" ? { zh: l.value } : { label: l.value }));
       col.addEventListener("change", () => save({ color: col.value }));
       const row = el("div", { className: "catrow" }, e, l, col);
@@ -448,18 +449,15 @@ function catsGroup(main, redraw = () => {}) {
         row.append(m, el("span", { className: "muted", textContent: L("min", "分鐘") }));
       }
       const del = el("button", { type: "button", className: "del", textContent: "✕", "aria-label": L(`Remove ${c.label}`, `移除「${c.zh || c.label}」`), title: L("Remove (its time moves to the first one)", "移除（時間會併到第一個分類）") });
-      del.addEventListener("click", async () => { if (list.length <= 1) return; if (!confirm(L(`Remove “${L(c.label, c.zh)}”? Its time moves to the first category.`, `要移除「${c.zh || c.label}」嗎？它的時間會併到第一個分類。`))) return; await work.call("removeCategory", kind, c.id); toast(L("Removed", "已移除")); });
+      del.addEventListener("click", async () => { if (list.length <= 1) return; if (!confirm(L(`Remove “${L(c.label, c.zh)}”? Its time moves to the first category.`, `要移除「${c.zh || c.label}」嗎？它的時間會併到第一個分類。`))) return; await work.call("removeCategory", kind, c.id); toast(L("Removed", "已移除")); fresh(); });
       row.append(del);
       return row;
     }));
   };
-  const newCat = (kind) => {
-    const i = el("input", { type: "text", placeholder: kind === "work" ? L("＋ New work category (e.g. 🧪 Lab)", "＋ 新增工作分類（例如 🧪 實驗）") : L("＋ New kind of break (e.g. 🐶 Walk the dog)", "＋ 新增休息種類（例如 🐶 遛狗）"), "aria-label": L("New category", "新分類") });
-    const b = el("button", { type: "button", className: "btn small", textContent: L("Add", "新增") });
-    const add = async () => { if (i.value.trim()) { await saveCategoryFromText(kind, i.value); i.value = ""; } };
-    b.addEventListener("click", add); i.addEventListener("keydown", (e) => { if (enterKey(e)) add(); });
-    return el("div", { className: "newcat" }, i, b);
-  };
+  const newCat = (kind) => el("div", { className: "newcat-box" },
+    el("b", { className: "small", textContent: kind === "work" ? L("Add a work category", "新增工作分類") : L("Add a kind of break", "新增休息種類") }),
+    newCatRow(kind, () => fresh()),
+    el("span", { className: "muted small", textContent: L("Pick a symbol with ▾, then give it a name.", "先按 ▾ 選一個符號，再取個名字。") }));
   main.append(el("section", { className: "card cats-card" }, el("h3", { textContent: L(`Work categories (${(st.workTypes || []).length})`, `工作分類（${(st.workTypes || []).length}）`) }), catBox("work"), newCat("work"),
     el("p", { className: "muted", textContent: L("A task keeps the category you gave it last; change it any time in Today. Data uses these colours.", "每件事會記住你上次選的分類；隨時可以到「今天」修改。「數據」用的就是這些顏色。") })),
     el("section", { className: "card cats-card brk" }, el("h3", { textContent: L(`Kinds of break (${(st.breakTypes || []).length})`, `休息種類（${(st.breakTypes || []).length}）`) }), catBox("break"), newCat("break")));
@@ -530,6 +528,9 @@ function aboutGroup(main, redraw, go) {
       el("b", { textContent: st.contact.email || L("(not given yet)", "（還沒填寫）") }),
       st.contact.email && !st.contact.sent ? el("span", { className: "muted", textContent: L("(saved; sent once we can)", "（已記下，連上網路就會送出）") }) : null,
       btn(st.contact.email ? L("Change…", "更改⋯") : L("Add…", "填寫⋯"), () => host.openTool("welcome", { only: "contact" })))) : null,
+    // (1.3.x) Where to report a problem: the issues page opens in the browser (main.js sends https links out, as with the X links)
+    el("p", { className: "muted" }, L("Found a problem or have an idea? ", "遇到問題或有想法？"),
+      el("a", { className: "gh-link", href: "https://github.com/alitasdepollos01/ml-workhelp/issues", target: "_blank", rel: "noopener", textContent: L("Tell us on GitHub.", "到 GitHub 告訴我們。") })),
     st.version ? field(L("The app's page (downloads, news)", "App 網頁（下載、最新消息）"), btn(L("Open", "打開"), () => host.settingText("openPage", "page"))) : null));
   main.append(el("section", { className: "card tours-card" }, el("h3", { textContent: L("Tours", "導覽") }),
     field(L("A tour of this window, with Muv", "讓 Muv 帶你看看這個視窗"), btn(L("Show me around", "帶我看看"), () => go("today", { tour: true }))),
@@ -544,6 +545,7 @@ function aboutGroup(main, redraw, go) {
       : btn(L("Get the full library…", "加上完整貼圖庫⋯"), () => host.openTool("welcome", { only: "photos" }))),
     field(L("Photo credits", "照片來源"), btn(L("Open Photo credits →", "打開「照片來源」→"), () => go("credits"))),
     field(L("Uninstall ML WorkHelp", "解除安裝 ML WorkHelp"), (() => { const b = btn(L("Uninstall…", "解除安裝⋯"), () => host.uninstall()); b.classList.add("danger"); return b; })())));
+  main.append(openSourceCard()); // (Open source in the app: collapsed, last)
 }
 
 // ---- Settings › About & updates: "Updates" and "Backup & restore" (track D, plan WP5/WP6) ---------------------------
@@ -552,7 +554,7 @@ function aboutGroup(main, redraw, go) {
 // To wire (integrator): in aboutGroup(), `main.append(...[updatesCard(), yourDataCard()].filter(Boolean))` first;
 // the old "Version and notices" card keeps only the email and the app's page, renamed "Notices" (the version line,
 // Check now and "once a day" are in Updates now). See app/desktop/backup-ipc.md.
-import { updatesCard as aboutUpdatesCard, yourDataCard as aboutDataCard, aboutHas } from "./about-cards.js";
+import { updatesCard as aboutUpdatesCard, yourDataCard as aboutDataCard, aboutHas, openSourceCard } from "./about-cards.js";
 /** "Updates": the version (and the red dot for a new one), new photos and stickers (ask / automatic / never), small updates. */
 function updatesCard() { return aboutUpdatesCard(); }
 /** "Backup & restore": Back up now, every week, Restore, Reset pins (when pins.js is in), Delete everything. */
@@ -567,7 +569,7 @@ export function lookCard() {
  * Settings › Pins, a page of its own (track B2; the integrator puts pinsCard() in GROUPS(), after Look, and
  * ["pins", "Pins", "徽章"] in app.js's SUB.settings): the earning moment (celebrate / a quiet note / nothing; celebrating is always Classic); the pin
  * on the desktop buddy card; the special-days reminder; a code from a fan event; how pins are counted (the clock-out
- * time, which lives in Keeping time › Goals; special days; not-yet pins; counted on this Mac; Reset pins, which lives
+ * time, which lives in Keeping time › Goals; special days; not-yet pins; counted on this computer; Reset pins, which lives
  * in Backup & restore). Settings are the pins engine's own (pins.json › settings), set with MLHost.pins.call("setSetting").
  */
 export function pinsCard() {
@@ -622,10 +624,10 @@ function pinsGroup(main, redraw, go) {
     row(T3("Your clock-out time", "你的收工時間", "เวลาเลิกงานของคุณ"), T3("MUVMUV's milk counts the days you press Done for today by then", "MUVMUV 的牛奶會記下你在這個時間前按「收工」的天數", "นมของเมิฟเมิฟนับวันที่คุณกด \"เลิกงานวันนี้\" ก่อนเวลานี้"),
       el("b", { className: "pp-clockout", textContent: /^\d{2}:\d{2}$/.test(st.clockOut || "") ? st.clockOut : "19:00" }), toKeep),
     el("p", { className: "pp-line" }, el("b", { textContent: T3("Special days: ", "特別的日子：", "วันพิเศษ: ") }),
-      T3("a special day counts when you open the app or work on any day of that week (from the birthday on), by your Mac's own clock.", "從生日那天起的一週內，任何一天打開 App 或工作都算，以你 Mac 的時間為準。", "นับเมื่อเปิดแอปหรือทำงานวันไหนก็ได้ในสัปดาห์นั้น (นับจากวันเกิด) ตามเวลาในเครื่อง Mac ของคุณ")),
+      T3("a special day counts when you open the app or work on any day of that week (from the birthday on), by your computer's own clock.", "從生日那天起的一週內，任何一天打開 App 或工作都算，以你電腦的時間為準。", "นับเมื่อเปิดแอปหรือทำงานวันไหนก็ได้ในสัปดาห์นั้น (นับจากวันเกิด) ตามเวลาในคอมพิวเตอร์ของคุณ")),
     el("p", { className: "pp-line" }, el("b", { textContent: T3("Not-yet pins: ", "還沒拿到的徽章：", "เข็มกลัดที่ยังไม่ได้: ") }),
       T3("they show how to get them, but not what they look like: a grey silhouette with the rule. A few are secret, with only a hint.", "會顯示怎麼拿，但不顯示長相：灰色剪影加上規則。有幾個是祕密，只有提示。", "จะบอกวิธีได้ แต่ไม่บอกหน้าตา เป็นเงาสีเทากับกติกา มีบางอันเป็นความลับ มีแค่คำใบ้")),
-    note(T3("Pins are counted on this Mac from your own work log; nothing is sent anywhere. They're kept with your data, so updates, reinstalls and backups keep them.", "徽章是用這台 Mac 上你自己的工作紀錄算出來的，不會傳到任何地方。徽章和你的資料存在一起，更新、重新安裝和備份都不會不見。", "เข็มกลัดนับจากบันทึกงานของคุณบนเครื่องนี้ ไม่มีการส่งออก เก็บไว้กับข้อมูลของคุณ อัปเดต ติดตั้งใหม่ หรือสำรองข้อมูลก็ยังอยู่")),
+    note(T3("Pins are counted on this computer from your own work log; nothing is sent anywhere. They're kept with your data, so updates, reinstalls and backups keep them.", "徽章是用這台電腦上你自己的工作紀錄算出來的，不會傳到任何地方。徽章和你的資料存在一起，更新、重新安裝和備份都不會不見。", "เข็มกลัดนับจากบันทึกงานของคุณบนเครื่องนี้ ไม่มีการส่งออก เก็บไว้กับข้อมูลของคุณ อัปเดต ติดตั้งใหม่ หรือสำรองข้อมูลก็ยังอยู่")),
     el("div", { className: "row-flex pp-btns" }, toReset)));
 
   // what needs the collection: the buddy card's choices

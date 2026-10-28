@@ -53,28 +53,119 @@ export const catName = (c, short = false) => {
 };
 export const catColor = (kind, id) => catOf(kind, id)?.color || (kind === "away" ? "var(--away)" : "#cfd8cf");
 
-/** A category menu; "＋ New category…" asks for one and adds it. */
+/**
+ * The symbols a category can have: plain Unicode emoji that the system's own emoji font draws on a Mac and on
+ * Windows 10/11 alike (no flags: Windows shows those as two letters; no ZWJ sequences or skin tones; nothing newer
+ * than Emoji 11). Work ones first, then break ones.
+ */
+export const CAT_SYMBOLS = {
+  work: ["💻", "📚", "📧", "👥", "🎨", "🗂️", "📝", "📊", "🧪", "💡", "🎯", "🛠️", "📞", "🎧", "📷", "🎬", "🎵", "✏️", "📖", "🧠", "💼", "🏠", "🗣️", "🧾", "⚙️", "🚀", "🐘", "⭐"],
+  break: ["☕", "🍜", "🎮", "🧘", "😴", "🍅", "💬", "🚽", "🌸", "🌿", "🐶", "🏃", "🛒", "🧹", "❤️", "🎤"],
+};
+const symbolsFor = (kind) => (kind === "break" ? [...CAT_SYMBOLS.break, ...CAT_SYMBOLS.work] : [...CAT_SYMBOLS.work, ...CAT_SYMBOLS.break]);
+const DEFAULT_SYMBOL = { work: "⭐", break: "🌸" };
+
+/** The symbols as a grid of buttons; onPick(symbol). The one in use is pressed. */
+export function symbolGrid(kind, value, onPick) {
+  const g = el("div", { className: "sym-grid", role: "group", "aria-label": L("Symbol", "符號") });
+  const list = symbolsFor(kind);
+  if (value && !list.includes(value)) list.unshift(value);   // (one typed in before: still shown, and picked)
+  for (const sy of list) {
+    const b = el("button", { type: "button", className: "sym", textContent: sy, "aria-pressed": String(sy === value), title: sy });
+    b.addEventListener("click", () => { g.querySelectorAll(".sym").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); onPick(sy); });
+    g.append(b);
+  }
+  return g;
+}
+/** A category's symbol as a button (the symbol and ▾); a click opens the grid under it. onPick(symbol). */
+export function symbolButton(kind, value, onPick) {
+  const wrap = el("span", { className: "sym-pick" });
+  const b = el("button", { type: "button", className: "sym-btn", "aria-haspopup": "true", "aria-expanded": "false",
+    title: L("Choose a symbol", "選一個符號"), "aria-label": L("Choose a symbol", "選一個符號") }, el("span", { className: "sym-now", textContent: value || DEFAULT_SYMBOL[kind] || "⭐" }), el("span", { className: "sym-caret", textContent: "▾", "aria-hidden": "true" }));
+  let pop = null;
+  const close = () => { pop?.remove(); pop = null; b.setAttribute("aria-expanded", "false"); document.removeEventListener("pointerdown", away, true); };
+  const away = (e) => { if (!wrap.contains(e.target)) close(); };
+  b.addEventListener("click", () => {
+    if (pop) return close();
+    pop = el("div", { className: "sym-pop" }, symbolGrid(kind, b.querySelector(".sym-now").textContent, (sy) => { b.querySelector(".sym-now").textContent = sy; close(); b.focus(); onPick(sy); }));
+    pop.addEventListener("keydown", (e) => { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); b.focus(); } });
+    wrap.append(pop); b.setAttribute("aria-expanded", "true");
+    document.addEventListener("pointerdown", away, true);
+    pop.querySelector('.sym[aria-pressed="true"]')?.focus();
+  });
+  wrap.append(b);
+  return wrap;
+}
+
+/**
+ * Adding a category: [symbol ▾] [name] [Add], or with grid: true the symbols laid out above the name (the small window).
+ * onAdded(category) after it's saved. (A name that starts with an emoji uses that one, when no symbol was picked.)
+ */
+export function newCatRow(kind, onAdded, { focus = false, grid = false } = {}) {
+  let picked = null;
+  const sym = grid ? symbolGrid(kind, DEFAULT_SYMBOL[kind], (sy) => { picked = sy; }) : symbolButton(kind, DEFAULT_SYMBOL[kind], (sy) => { picked = sy; });
+  const i = el("input", { type: "text", className: "newcat-name", maxLength: 40, placeholder: kind === "work" ? L("Name, e.g. Lab", "名稱，例如：實驗") : L("Name, e.g. Walk the dog", "名稱，例如：遛狗"),
+    "aria-label": kind === "work" ? L("New category", "新分類") : L("New kind of break", "新的休息種類") });
+  const b = el("button", { type: "button", className: "btn small primary", textContent: L("Add", "新增") });
+  const add = async () => {
+    if (!i.value.trim() || b.disabled) { i.focus(); return; }
+    b.disabled = true;
+    try { const c = await saveCategoryFromText(kind, i.value, picked); if (c) { i.value = ""; picked = null; const now = sym.querySelector(".sym-now"); if (now) now.textContent = DEFAULT_SYMBOL[kind]; onAdded?.(c); } }
+    finally { b.disabled = false; }
+  };
+  b.addEventListener("click", add); i.addEventListener("keydown", (e) => { if (enterKey(e)) add(); });
+  if (focus) queueMicrotask(() => i.focus());
+  if (grid) return el("div", { className: "newcat-wrap" }, el("span", { className: "muted small", textContent: L("Symbol", "符號") }), sym, el("div", { className: "newcat" }, i, b));
+  return el("div", { className: "newcat" }, sym, i, b);
+}
+
+/** "＋ New category…" from a menu: a small window to add one (symbol and name). → the new category, or null. */
+export function askCategory(kind) {
+  return new Promise((resolve) => {
+    let done = null;
+    const d = el("dialog", { className: "cat-ask", "aria-label": kind === "work" ? L("New category", "新分類") : L("New kind of break", "新的休息種類") });
+    const cancel = el("button", { type: "button", className: "btn small linkish", textContent: L("Cancel", "取消") });
+    cancel.addEventListener("click", () => d.close());
+    d.append(el("h3", { textContent: kind === "work" ? L("New category", "新分類") : L("New kind of break", "新的休息種類") }),
+      el("p", { className: "muted small", textContent: L("Pick a symbol, then give it a name.", "先選一個符號，再取個名字。") }),
+      newCatRow(kind, (c) => { done = c; d.close(); }, { focus: true, grid: true }), el("div", { className: "cat-ask-btns" }, cancel));
+    d.addEventListener("close", () => { d.remove(); resolve(done); });
+    document.body.append(d);
+    d.showModal();
+    d.querySelector(".newcat-name")?.focus();
+  });
+}
+
+/** A category menu; "＋ New category…" opens the small window to add one, and picks it. */
 export function catSelect(kind, value, onChange, { blank = null } = {}) {
   const s = el("select", { className: "cat-select" });
   if (blank) s.append(new Option(blank, ""));
   for (const c of kind === "work" ? workCats() : breakCats()) s.append(new Option(catName(c), c.id));
-  s.append(new Option(L("＋ New category…", "＋ 新增分類⋯"), "__new"));
+  const NEW = new Option(L("＋ New category…", "＋ 新增分類⋯"), "__new");
+  s.append(NEW);
   s.value = value ?? (blank ? "" : s.options[0]?.value);
+  let was = s.value;
   s.addEventListener("change", async () => {
-    if (s.value !== "__new") return onChange(s.value);
-    const text = prompt(L("New category (you can start it with an emoji):", "新分類名稱（開頭可以加個表情符號）："));
-    if (!text) { s.value = value ?? ""; return; }
-    const c = await saveCategoryFromText(kind, text);
-    if (c) onChange(c.id);
+    if (s.value !== "__new") { was = s.value; return onChange(s.value); }
+    // (window.prompt() isn't there in the app or a webview: it gave nothing, so the menu just went back)
+    const c = await askCategory(kind);
+    if (!c?.id) { s.value = was; return; }
+    s.insertBefore(new Option(catName(c), c.id), NEW);
+    s.value = was = c.id;
+    onChange(c.id);
   });
   return s;
 }
 
-export async function saveCategoryFromText(kind, text) {
-  const m = text.trim().match(/^(\p{Extended_Pictographic}️?)\s*(.*)$/u);
-  const label = (m ? m[2] : text).trim();
+/** Save a new category from its name (and a symbol picked, or an emoji the name starts with). → the category, or null. */
+export async function saveCategoryFromText(kind, text, symbol = null) {
+  const m = String(text || "").trim().match(/^(\p{Extended_Pictographic}️?)\s*(.*)$/u);
+  const label = (m ? m[2] : String(text || "")).trim();
   if (!label) return null;
-  const c = await work.call("saveCategory", kind, { emoji: m ? m[1] : undefined, label, zh: label });
+  const c = await work.call("saveCategory", kind, { emoji: symbol || (m ? m[1] : DEFAULT_SYMBOL[kind]), label, zh: label });
+  if (!c?.id) return null;
+  // (the page's list knows it at once: the status the app sends after it may come later)
+  if (state.st) { const k = kind === "work" ? "workTypes" : "breakTypes"; state.st = { ...state.st, [k]: [...(state.st[k] || []).filter((x) => x.id !== c.id), c] }; }
   toast(L(`Added “${label}”`, `已新增「${label}」`));
   return c;
 }

@@ -4,7 +4,7 @@
    data-style (VS Code, a browser) nothing here applies.
      a Sticker Book · b Milk Tea Clay · c Clean Pastel · d Fan Zine Pop
      e Concert Night · f Purikura (the default) · g Retro Desktop · h Fan Magazine
-   Fonts: fonts/ (SIL Open Font License, see fonts/README.txt). */
+   Fonts: fonts/ (SIL Open Font License; Permanent Marker is Apache 2.0, see fonts/README.txt). */
 
 @import url("fonts/latin.css");
 @font-face { font-family: "ML Huninn"; src: url(fonts/huninn.woff2) format("woff2"); font-display: swap; }

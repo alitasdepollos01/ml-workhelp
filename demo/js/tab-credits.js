@@ -2,10 +2,12 @@
 // can't tell exactly), how to ask for credit or removal, and any sticker's
 // original photo, watermark and all (also from a buddy's right-click menu).
 
-import { L, el, host, toast, modal } from "./app-common.js";
+import { L, zh, th, el, host, toast, modal } from "./app-common.js";
 import { pageTop } from "./app-common.js";
 
 let data = null;
+/** Thai written in place (as on the website), not looked up. */
+const T3 = (en, z, t) => (zh ? z : th ? t : en);
 const enc = (s) => String(s).split("/").map(encodeURIComponent).join("/");
 const stickerUrl = (s) => `photos/stickers/${s.set}/${enc(s.name)}`;
 const photoUrl = (src) => `photos/shuffle/${enc(src)}`;
@@ -44,8 +46,9 @@ export async function renderCredits(main, { ask }) {
   // Everyone whose photos (or drawings) are in the app: the same card each; the ones who gave permission first.
   const featured = new Set(FEATURED.map(([k]) => k));
   const SHORT = { Milk: "Milk", Love: "Love", wanwannjeab: "wanwannjeab", alitasdepollo: "alitasdepollos" };
-  const what = (k) => k === "wanwannjeab" ? L("Cartoon Muv drawings", "卡通 Muv 插畫") : k === "GMMTV" ? L("Official photos", "官方照片") : k === "Milk" || k === "Love" ? L("Her posts", "她的貼文")
-    : k === "alitasdepollo" ? L("Photos & Muv drawings", "照片和 Muv 插畫") : L("Photos", "照片");
+  // (a role written in app/shared/credit-people.js wins: wanwannjeab's cartoon Muv drawings, alitasdepollos' own photos and drawings)
+  const role = (r) => { const t = L(r[0], r[1]); return zh || th ? t : t.charAt(0).toUpperCase() + t.slice(1); };
+  const what = (k) => data.people[k].role ? role(data.people[k].role) : k === "GMMTV" ? L("Official photos", "官方照片") : k === "Milk" || k === "Love" ? L("Her posts", "她的貼文") : L("Photos", "照片");
   const all = [...FEATURED.map(([k]) => k), ...data.order.filter((k) => !featured.has(k))].filter((k) => data.people[k]);
   main.append(el("section", { className: "credit-cards all" }, all.map((k) => { const p = data.people[k];
     return el("div", { className: "credit-card" + (featured.has(k) ? " ok" : "") },
@@ -53,6 +56,8 @@ export async function renderCredits(main, { ask }) {
       el("span", { className: "cc-ic" + (p.avatar ? " has-pic" : "") }, p.avatar ? el("img", { src: p.avatar, alt: "" }) : svg(k === "wanwannjeab" ? "draw" : "photo")), el("b", { textContent: SHORT[k] || p.name }),
       p.url ? el("a", { href: p.url, target: "_blank", rel: "noopener", textContent: p.handle }) : null,
       el("span", { className: "muted", textContent: what(k) })); })));
+  // (the website's line, word for word)
+  main.append(el("p", { className: "muted credit-doodles", textContent: T3("Doodles and pins by alitasdepollos", "塗鴉和徽章：alitasdepollos", "ดูเดิลและเข็มกลัด: alitasdepollos") }));
   main.append(el("section", { className: "credit-note" }, el("b", { textContent: "ⓘ" }),
     el("p", {}, L("For the other photos we tried to reach the photographers but haven't heard back. We've done our best to find and credit everyone; if a photo is yours and you'd like the credit changed or the photo removed, tell us any time at ",
       "其他照片我們都試著聯絡過攝影師，但還沒有收到回覆。我們已經盡力找出並標註每一位；如果其中有你的照片，想更改標註或希望移除，隨時告訴我們："),

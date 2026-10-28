@@ -87,7 +87,7 @@ const tierIdOf = (v, k) => v.tiers[Math.max(0, Math.min(v.tiers.length - 1, k))]
 export function pinArt(v, k = Math.max(0, v.tier), cls = "") {
   const img = new Image(); img.alt = ""; img.draggable = false; img.decoding = "async";
   if (v.earned) img.src = `${BASE}${tierIdOf(v, k)}/${encodeURIComponent(v.id)}.svg`;
-  else { img.src = v.locked === "secret" ? `${BASE}sil/secret.svg` : `${BASE}sil/${tierIdOf(v, k)}/${encodeURIComponent(v.id)}.svg`; img.classList.add("sil"); }
+  else { img.src = `${BASE}sil/locked.svg`; /* (the website's demo: one plain pin for every pin not earned) */ img.classList.add("sil"); }
   if (cls) img.classList.add(...cls.split(/\s+/).filter(Boolean));
   img.dataset.pinArt = v.id;
   return img;

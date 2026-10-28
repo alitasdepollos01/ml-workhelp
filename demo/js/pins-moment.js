@@ -2,7 +2,9 @@
 // line. Settings › Pins picks celebrate (Classic: two stickers and confetti, as when you reach your goal), a quiet
 // note, or nothing. (Doodles burst / One sticker below are no longer offered: only an explicit opts.anim, from the
 // tests and the preview shots, reaches them; the saved setting is always classic.) Also: the code's reveal, the quiet notes, and what comes from
-// the app (pinsEvent: earned / tier-up / backfill / code / wear / reset), shown once and then marked seen.
+// the app (pinsEvent: earned / tier-up / backfill / code / wear / reset). Pins earned together queue up: each one gets
+// its own moment, one after another, and is marked seen only once its moment has played (see "the queue" below). Pins
+// from a code (event source "code") never go one by one: one reveal for the whole unlock, after the queued moments.
 import { T, tx, h, css, call, api, load, cat, ensureCat, pinArt, backSrc, backLines, nameOf, tierLabel, tierName, unit, saysAt, quoted, whoWhere, date, reduced, ensureCss, SERIES } from "./pins-common.js";
 import { backEl, fitBacks } from "./pin-back.js";
 import { mount as heroMount, canUse as heroCan } from "./pin-hero.js";
@@ -54,7 +56,8 @@ const KICK = () => ({ 1: T("Your pin got its silver rim", "你的徽章換上銀
 
 /**
  * The moment for news ([{ id, tier, first }], the first one big, "…and N more" for the rest).
- * opts: { celebrate: big|quiet|none (default: the settings), anim: classic (default) | burst | together (tests only) }, demo: true (Settings' "Show me").
+ * opts: { celebrate: big|quiet|none (default: the settings), anim: classic (default) | burst | together (tests only) }, demo: true (Settings' "Show me"),
+ * step: { at, of } (the queue: "Pin 2 of 3", and "Later" says "Next pin" while more wait), confetti: false (the queue's quick run, after its first).
  */
 export async function celebrate(news, opts = {}) {
   if (!news?.length) return null;
@@ -92,10 +95,11 @@ export async function celebrate(news, opts = {}) {
       tile(cnt || T("So far", "目前", "ตอนนี้"), v.counter ? unit(v.counter, Math.max(v.value ?? 0, v.t[k] ?? 0)) : tierLabel(v, k)),
       tile(T("Tier", "等級", "ระดับ"), tierLabel(v, k)),
       tile(T("Next", "下一個", "ถัดไป"), nxt ? tierName(nxt.tierId) : T("All done", "全部完成", "ครบแล้ว"), nxt ? unit(v.counter, nxt.at) : "")),
+    opts.step?.of > 1 ? h("p", { className: "muted small pc-step", textContent: T(`Pin ${opts.step.at} of ${opts.step.of}`, `第 ${opts.step.at} 個徽章，共 ${opts.step.of} 個`, `เข็มกลัดอันที่ ${opts.step.at} จาก ${opts.step.of}`) }) : null,
     more > 0 ? h("p", { className: "muted small", textContent: T(`…and ${more} more on your board`, `……徽章板上還有 ${more} 個新的`, `…และอีก ${more} อันบนบอร์ด`) }) : null,
     h("div", { className: "row-flex cbtns" },
       h("button", { type: "button", className: "btn primary big pc-go", textContent: T("Pin it to the board", "別到徽章板上", "ติดลงบอร์ด") }),
-      h("button", { type: "button", className: "btn pc-later", textContent: T("Later", "晚點再看", "ไว้ทีหลัง") }))].filter(Boolean));   // (append() would write "null")
+      h("button", { type: "button", className: "btn pc-later", textContent: opts.step && opts.step.at < opts.step.of ? T("Next pin", "下一個", "อันถัดไป") : T("Later", "晚點再看", "ไว้ทีหลัง") }))].filter(Boolean));   // (append() would write "null")
   box.append(inner);
   const close = () => box.remove();
   box.addEventListener("click", (e) => { if (e.target === box || e.target.closest(".pc-later")) close(); if (e.target.closest(".pc-go")) { close(); if (!opts.demo) goPins(v.id); } });
@@ -105,7 +109,7 @@ export async function celebrate(news, opts = {}) {
   whenGone(box, () => stage.hero?.destroy?.());
   box.querySelector(".pc-go").focus();
   setTimeout(() => box.classList.add("settled"), 2600);   // drop the animation layers once it has played
-  if (!RM && anim === "classic") confetti();
+  if (!RM && anim === "classic" && opts.confetti !== false) confetti();
   return box;
 }
 function confetti() {
@@ -137,29 +141,52 @@ export async function toast(n) {
   document.body.append(t); setTimeout(() => t.classList.add("out"), 5200); setTimeout(() => t.remove(), 5800);
 }
 
-/** A code worked: what it unlocked, series by series. r: the engine's answer { seriesId, tier, news }. */
+/**
+ * A code worked: ONE Classic moment for everything it unlocked (never a moment per pin). The card says "Unlocked with
+ * your code", the series and how many ("Bad Buddy · 9 pins"; "61 pins" for a code that gives everything), and lays the
+ * pins out together, each at the tier it came at, its name underneath (the grid scrolls inside the card when there are
+ * many); one confetti burst; "Pin them to the board" / "Later". r: { seriesId ("*": everything), tier, news: [{ id, tier }] }.
+ * The queue plays it (codeReveal below) and marks every one of its pins seen when it closes.
+ */
 export async function reveal(r) {
-  ensureCss();
-  document.querySelector(".pins-reveal")?.remove();
+  const news = (r?.news || []).filter((n) => n?.id);
+  if (!news.length) return null;
+  ensureCss(); await ensureCat();
+  document.querySelector(".pins-cele")?.remove();
   const data = await load(); if (!data) return null;
-  const SER = SERIES(), sr0 = SER.find((x) => x.id === r.seriesId);
-  const title = r.seriesId === "*" ? T("Everything unlocked", "全部解鎖了", "ปลดล็อกทั้งหมดแล้ว") : T(`${tx(sr0)} unlocked`, `${tx(sr0)} 解鎖了`, `ปลดล็อก ${tx(sr0)} แล้ว`);
-  const TN = { all: T("every tier", "所有等級", "ทุกระดับ"), plain: T("their first tier", "第一個等級", "ระดับแรก"), silver: tierName("silver"), gold: tierName("gold"), gem: tierName("gem") };
-  const news = r.news || [];
-  const box = h("div", { className: "pins-reveal" + (reduced() ? " rm" : ""), role: "dialog", "aria-modal": "true", "aria-label": title });
-  let i = 0;
-  const sets = SER.map((sr) => ({ sr, ns: news.filter((n) => data.byId.get(n.id)?.series === sr.id) })).filter((x) => x.ns.length);
-  box.append(h("div", { className: "rv-box card" }, h("h2", { textContent: title }),
-    h("p", { className: "muted", textContent: T(`${news.length} pins on your board, at ${TN[r.tier] || TN.plain}.`, `${news.length} 個徽章已放上徽章板（${TN[r.tier] || TN.plain}）。`, `บอร์ดมีเข็มกลัด ${news.length} อัน ${TN[r.tier] || TN.plain}`)
-      + (r.tier === "all" ? "" : " " + T("Higher tiers still come with your work.", "更高的等級，還是要靠你的工作慢慢累積。", "ระดับที่สูงขึ้นยังได้จากงานของคุณ")) }),
-    h("div", { className: "rv-sets" }, sets.map(({ sr, ns }) => css(h("div", { className: "rv-set" }, h("b", {}, tx(sr), " ", h("span", { className: "muted small", textContent: String(ns.length) })),
-      h("div", { className: "rv-pins" }, ns.map((n) => { const v = data.byId.get(n.id); return css(h("span", { title: `${nameOf(v)} · ${tierLabel(v, n.tier)}` }, pinArt(v, Math.min(n.tier, v.tier))), { "--i": i++ }); }))), { "--c": sr.color }))),
-    h("div", { className: "row-flex cbtns" }, h("button", { type: "button", className: "btn primary rv-go", textContent: T("See them on the board", "去徽章板看看", "ไปดูที่บอร์ด") }),
-      h("button", { type: "button", className: "btn rv-x", textContent: T("Close", "關閉", "ปิด") }))));
+  const pinsOf = news.map((n) => ({ n, v: data.byId.get(n.id) })).filter((x) => x.v && x.v.earned);
+  if (!pinsOf.length) return null;
+  const sr = r.seriesId && r.seriesId !== "*" ? SERIES().find((x) => x.id === r.seriesId) : null, N = pinsOf.length;
+  const count = N === 1 ? T("1 pin", "1 個徽章", "เข็มกลัด 1 อัน") : T(`${N} pins`, `${N} 個徽章`, `เข็มกลัด ${N} อัน`);
+  const title = sr ? `${tx(sr)} · ${count}` : count;
+  const TN = { all: T("at every tier", "所有等級", "ทุกระดับ"), plain: T("at their first tier", "第一個等級", "ระดับแรก"), silver: tierName("silver"), gold: tierName("gold"), gem: tierName("gem") };
+  const at = TN[r.tier] || TN.plain;
+  const line = T(`On your board, ${at}.`, `都放上徽章板了（${at}）。`, `อยู่บนบอร์ดแล้ว ${at}`) + (r.tier === "all" ? "" : " " + T("Higher tiers still come with your work.", "更高的等級，還是要靠你的工作慢慢累積。", "ระดับที่สูงขึ้นยังได้จากงานของคุณ"));
+  const pics = await stickers(), RM = reduced();
+  const box = h("div", { className: "cele pins-cele pins-reveal anim-classic" + (RM ? " rm" : ""), role: "dialog", "aria-modal": "true", "aria-label": T("Unlocked with your code", "用兌換碼解鎖了", "ปลดล็อกด้วยโค้ดของคุณ") });
+  const inner = h("div", { className: "box" });
+  if (pics.together) inner.append(h("img", { className: "cs top", src: pics.together, alt: "" })); else box.classList.add("no-top");
+  if (pics.milk) inner.append(h("img", { className: "cs left", src: pics.milk, alt: "" }));
+  if (pics.love) inner.append(h("img", { className: "cs right", src: pics.love, alt: "" }));
+  const grid = h("div", { className: "pr-grid", role: "list", tabIndex: 0, "aria-label": title });
+  pinsOf.forEach(({ n, v }, i) => { const k = Math.min(n.tier ?? v.tier, v.tier);
+    grid.append(css(h("div", { className: "pr-pin", role: "listitem", title: `${nameOf(v)} · ${tierLabel(v, k)}`, "data-pin": v.id, "data-tier": v.tiers[k] }, pinArt(v, k), h("span", { textContent: nameOf(v) })), { "--i": Math.min(i, 14) })); });
+  inner.append(
+    h("span", { className: "pc-kicker", textContent: T("Unlocked with your code", "用兌換碼解鎖了", "ปลดล็อกด้วยโค้ดของคุณ") }),
+    h("h2", { textContent: title }),
+    h("p", { className: "muted small pr-line", textContent: line }),
+    grid,
+    h("div", { className: "row-flex cbtns" },
+      h("button", { type: "button", className: "btn primary big pc-go", textContent: T("Pin them to the board", "全部別到徽章板上", "ติดทั้งหมดลงบอร์ด") }),
+      h("button", { type: "button", className: "btn pc-later", textContent: T("Later", "晚點再看", "ไว้ทีหลัง") })));
+  box.append(inner);
   const close = () => box.remove();
-  box.addEventListener("click", (e) => { if (e.target === box || e.target.closest(".rv-x")) close(); if (e.target.closest(".rv-go")) { close(); goPins(); } });
+  box.addEventListener("click", (e) => { if (e.target === box || e.target.closest(".pc-later")) close(); if (e.target.closest(".pc-go")) { close(); goPins(); } });
   box.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
-  document.body.append(box); box.querySelector(".rv-go").focus();
+  document.body.append(box);
+  box.querySelector(".pc-go").focus();
+  setTimeout(() => box.classList.add("settled"), 2600);
+  if (!RM) confetti();
   return box;
 }
 
@@ -181,13 +208,14 @@ export function codeMessage(r, data) {
     unavailable: T("Codes can't be used in this copy of the app.", "這個版本的 App 還不能用兌換碼。", "แอปเวอร์ชันนี้ยังใช้โค้ดไม่ได้"),
   }[r.reason] || T("That code doesn't work. Check the letters?", "這組兌換碼不能用，要不要再檢查一下字母？", "โค้ดนี้ใช้ไม่ได้ ลองเช็กตัวอักษรอีกทีนะ") };
 }
-/** Enter a code: the engine checks it (5 tries a minute, offline); a code that works shows its reveal. → the message. */
+/** Enter a code: the engine checks it (5 tries a minute, offline); a code that works gets its one reveal, after any
+ *  pin moments already waiting. → the message (at once, the reveal follows). */
 export async function enterCode(raw) {
   const a = api(); if (!a) return codeMessage({ ok: false, reason: "unavailable" });
   await ensureCat();
   let r = null; try { r = await a.code(String(raw || "").trim()); } catch { r = null; }
   const m = codeMessage(r);
-  if (r?.ok) { await reveal(r); call("seen"); redrawPins(); }
+  if (r?.ok) { codeReveal(r); redrawPins(); }
   return m;
 }
 
@@ -195,7 +223,7 @@ export async function enterCode(raw) {
 // A moment that comes while a tour is on screen (or within a second of it being asked for: the first start opens the
 // window's tour 0.4 s after the window) waits until the tour is gone (Done, Skip or Esc), then plays. Only the app's
 // moments wait (pinsEvent, pinsWake); Settings › Pins "Show me" calls celebrate() itself and plays at once.
-// (The queue lives in this module, so switching pages in the tour keeps it; nothing is marked seen until it plays.)
+// (The queue lives in this module, so switching pages keeps it; nothing is marked seen until it plays.)
 const tourUp = () => !!document.querySelector(".tour-block");
 let held = 0;
 async function afterTour(since = Date.now()) {
@@ -211,6 +239,86 @@ async function afterTour(since = Date.now()) {
 /** For the tests: a moment is waiting for the tour. */
 export const momentHeld = () => held > 0;
 
+// ---- the queue: every pin earned gets its own moment, one after another ----
+// Pins often come together (a new install's welcome gift and its series pin; a day that completes several rules; a set
+// reward right after its pin). Each one plays its own Classic moment; the next starts when the one on screen is closed
+// (its button, Later/Next pin, Esc, or "Pin it to the board", which opens the board and the rest still follow). More than
+// MANY in one go: a quick run instead, each moment stays QUICK ms and the next takes its place by itself (confetti on the
+// first only; 10 pins ≈ 21 s), the last one stays until it's closed. A pin is marked seen (pins.js seen({ id, tier })) only
+// once its moment has played, so a reload or a quit mid-queue brings the rest back next time (pinsWake).
+const MANY = 4, QUICK = 2100, GAP = 600, QUICK_GAP = 200;
+let queue = [], playing = false, woke = false;
+const played = new Set();   // "id:tier" played in this window (the wake-up skips them: an event may have brought them first)
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const gone = (el) => new Promise((r) => (el.isConnected ? whenGone(el, r) : r()));
+/** Add news to the queue (one per pin: its highest tier) and play it. */
+function enqueue(items) {
+  for (const n of items || []) {
+    if (!n?.id) continue;
+    const o = queue.find((q) => !q.code && q.id === n.id);
+    if (o) { o.tier = Math.max(o.tier, n.tier ?? 0); o.first = o.first || !!n.first; }
+    else queue.push({ id: n.id, tier: n.tier ?? 0, first: !!n.first });
+  }
+  return play();
+}
+// A code's pins never go one by one: the whole unlock is one item, its reveal, played after whatever is already queued.
+// (The window that entered the code hears it twice, from enterCode's answer and from the engine's "code" event: once.)
+const codesQueued = new Set();
+function codeReveal(r) {
+  const news = (r?.news || []).filter((n) => n?.id).map((n) => ({ id: n.id, tier: n.tier ?? 0 }));
+  if (!news.length) return;
+  const key = r.code || news.map((n) => `${n.id}:${n.tier}`).join(",");
+  if (codesQueued.has(key)) return;
+  codesQueued.add(key);
+  queue.push({ code: { seriesId: r.seriesId, tier: r.tier, news } });
+  return play();
+}
+async function play() {
+  if (playing) return;
+  playing = true;
+  try {
+    let i = 0, of = 0;
+    const pinsLeft = () => queue.filter((q) => !q.code).length;
+    while (queue.length) {
+      await afterTour(0);                                        // a tour opened mid-queue: after it
+      while (document.querySelector(".pins-cele")) await sleep(300);   // a "Show me" on screen: after it
+      if (tourUp()) continue;
+      const n = queue.shift();
+      if (n.code) {                                              // a code's one reveal; all its pins seen when it closes
+        let box = null;
+        try { box = await reveal(n.code); } catch (e) { console.error("pin code reveal:", e); }
+        if (box) await gone(box);
+        for (const x of n.code.news) { played.add(`${x.id}:${x.tier}`); await call("seen", { id: x.id, tier: x.tier }); }
+        redrawPins();
+        i = 0; of = 0;                                           // (pins after it count again from 1)
+        if (queue.length) await sleep(GAP);
+        continue;
+      }
+      of = Math.max(of, i + 1 + pinsLeft());
+      const quick = of > MANY;
+      let box = null;
+      try { box = await celebrate([n], { step: of > 1 ? { at: i + 1, of } : null, confetti: !quick || i === 0 }); } catch (e) { console.error("pin moment:", e); }
+      if (box) {
+        // (a quick run moves on by itself to the next pin; the last pin, or one before a code's reveal, stays)
+        if (quick && queue[0] && !queue[0].code) { await Promise.race([gone(box), sleep(QUICK)]); box.remove(); }
+        else await gone(box);
+      }
+      played.add(`${n.id}:${n.tier}`);
+      await call("seen", { id: n.id, tier: n.tier });
+      redrawPins();
+      i++;
+      if (queue.length) await sleep(quick && !queue[0].code ? QUICK_GAP : GAP);
+    }
+  } finally { playing = false; }
+}
+/** A moment is on screen or waiting (for the tests, and for the Pins page: it leaves the queue's pins unseen). */
+export const momentsPending = () => playing || queue.length > 0 || pending.length > 0 || held > 0;
+/** The Pins page has been drawn: what it shows is seen, except the pins whose moments are still to play. */
+export function pageSeen() {
+  if (!woke || momentsPending()) return call("seen", "note");
+  return call("seen");
+}
+
 // ---- what the app says (main.js → "command", "pins-event") ----
 let pending = [], timer = 0;
 /** app.js: host.onCommand → cmd === "pins-event" → pinsEvent(arg). */
@@ -220,22 +328,33 @@ export function pinsEvent(ev) {
     pending.push({ id: ev.id, tier: ev.tier, first: ev.kind === "earned" });
     clearTimeout(timer);
     const since = Date.now();
-    timer = setTimeout(async () => { await afterTour(since); const news = pending; pending = []; if (!news.length) return; await celebrate(news); call("seen"); redrawPins(); }, 600);   // (a set reward follows its pin: one moment)
+    // (news that comes together is gathered for 0.6 s, so the queue knows how many: "Pin 1 of 3")
+    timer = setTimeout(async () => { const news = pending; pending = []; if (!news.length) return; await afterTour(since); enqueue(news); }, 600);
   } else if (ev.kind === "backfill") {
     backfillNote(ev.n);
-  } else if (["code", "wear", "reset", "forgiven", "special-day"].includes(ev.kind)) redrawPins();
+  } else if (ev.kind === "code" || ev.source === "code") {
+    // a code's unlock: one reveal for all of it, after the moments already waiting (never per-pin moments)
+    redrawPins();
+    if (ev.news?.length) codeReveal(ev);
+  } else if (["wear", "reset", "forgiven", "special-day"].includes(ev.kind)) { if (ev.kind === "reset") { played.clear(); codesQueued.clear(); } redrawPins(); }
 }
 function backfillNote(n) {
   if (!n) return;
   toast({ text: T(`${n} pins from your past work are on your board.`, `你過去的工作換來了 ${n} 個徽章，已經放上徽章板。`, `งานที่ผ่านมาของคุณได้เข็มกลัด ${n} อัน อยู่บนบอร์ดแล้ว`), go: () => goPins(), goLabel: T("See them", "去看看", "ไปดู") });
-  call("seen");
+  call("seen", "note");
 }
 /** app.js, once at start: the moments that came while the window was closed (and the first start's back-fill), once. */
 export async function pinsWake() {
   if (!api()) return;
-  const s = await call("summary"); if (!s) return;
+  const s = await call("summary"); if (!s) { woke = true; return; }
   if (s.note?.kind === "backfill") backfillNote(s.note.n);
-  const fresh = (s.unseen || []).filter((u) => !(s.note?.kind === "backfill" && u.at <= (s.note.at || 0)));
-  if (fresh.length && !fresh.every((u) => u.code)) { await afterTour(); await celebrate(fresh.filter((u) => !u.code).map((u) => ({ id: u.id, tier: u.tier, first: u.tier === 0 }))); }
-  if (s.note || (s.unseen || []).length) call("seen");
+  else if (s.note) call("seen", "note");
+  const unseen = s.unseen || [], old = (u) => u.code || (s.note?.kind === "backfill" && u.at <= (s.note.at || 0));
+  // (a code's pins had their reveal, and the back-fill its note: seen; the rest get their moments)
+  for (const u of unseen.filter(old)) await call("seen", { id: u.id, tier: u.tier });
+  const fresh = unseen.filter((u) => !old(u) && !played.has(`${u.id}:${u.tier ?? 0}`)).map((u) => ({ id: u.id, tier: u.tier ?? 0, first: (u.tier ?? 0) === 0 }));
+  woke = true;
+  if (!fresh.length) return;
+  await afterTour();
+  enqueue(fresh);
 }

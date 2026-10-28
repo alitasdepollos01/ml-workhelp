@@ -20,6 +20,7 @@ html[lang="th"] body.quick { font-family: var(--thai); }
 .qp .row { display: flex; justify-content: space-between; gap: 2px; border-top: 1px solid var(--control-line); padding-top: 8px; }
 .qp .row button { font: inherit; font-size: 11px; border: 0; background: none; color: var(--desk-muted); cursor: pointer; display: grid; justify-items: center; gap: 2px; padding: 3px 2px; border-radius: 8px; flex: 1; min-width: 0; }
 .qp .row button svg { width: 18px; height: 18px; }
+.qp:focus { outline: none; }
 .qp button:hover, .qp button:focus-visible, .qp .task .n:hover { background: color-mix(in srgb, #efa3ba 22%, var(--control-bg)); outline: none; }
 .qp .sub::after { content: " ›"; color: var(--desk-muted); }
 

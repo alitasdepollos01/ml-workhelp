@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128"><title>Hello, MilkLove pin</title><defs><linearGradient id="mllogogm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff6c9"/><stop offset=".38" stop-color="#d9a628"/><stop offset=".55" stop-color="#ffe48a"/><stop offset="1" stop-color="#9a660a"/></linearGradient>
+<linearGradient id="mllogogl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0b0"/><stop offset="1" stop-color="#a8730f"/></linearGradient>
+<filter id="mllogogsil" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="1.9" result="d"/><feFlood flood-color="#fff"/><feComposite in2="d" operator="in"/></filter>
+<filter id="mllogogsh" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="1.9" result="d"/><feOffset dx=".9" dy="1.9"/><feGaussianBlur stdDeviation="1.1"/><feFlood flood-color="#1a0d14" flood-opacity=".38"/><feComposite in2="d" operator="in"/><feOffset dx=".9" dy="1.9"/><feGaussianBlur stdDeviation="1"/></filter>
+<filter id="mllogogin" x="-30%" y="-30%" width="160%" height="160%"><feFlood flood-color="#fff"/><feComposite in2="SourceAlpha" operator="in"/></filter>
+<clipPath id="mllogogc"><circle cx="32" cy="32" r="26.6"/></clipPath>
+<g id="mllogoga"><g transform="translate(32 32) scale(1.13) translate(-32.01 -31.43)"><g stroke="#3b2531" stroke-linejoin="round" stroke-linecap="round"><path d="M10.03 24.41 A12.1 13.18 0 0 1 32.49 17.6 A11.66 12.7 0 0 1 53.98 24.41 A1.78 1.78 0 0 1 50.43 24.41 A8.1 9.15 0 0 0 34.22 24.41 A1.78 1.78 0 0 1 30.67 24.41 A8.55 9.63 0 0 0 13.58 24.41 A1.78 1.78 0 0 1 10.03 24.41 Z" fill="#a6dc7a" stroke-width="0.7"/><path d="M10.52 29.54 L30.88 51.12 A1.66 1.66 0 0 0 33.3 51.11 L42.11 41.61 L39.68 39.36 L32.07 47.55 L12.93 27.27 Z M43.83 34.9 L42.1 36.76 L44.53 39.01 L46.26 37.15 Z M50.9 27.27 L46.19 32.36 L48.62 34.61 L53.33 29.53 Z" fill="#ff8db6" stroke-width="0.7"/></g></g></g>
+<mask id="mllogogrm" maskUnits="userSpaceOnUse" x="-8" y="-8" width="80" height="80"><use href="#mllogoga" filter="url(#mllogogsil)"/></mask>
+<mask id="mllogogam" maskUnits="userSpaceOnUse" x="-8" y="-8" width="80" height="80"><use href="#mllogoga" filter="url(#mllogogin)"/></mask>
+<linearGradient id="mllogogsheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".42" stop-color="#fff" stop-opacity=".08"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>
+</defs>
+<use href="#mllogoga" filter="url(#mllogogsh)"/>
+<rect x="-8" y="-8" width="80" height="80" fill="url(#mllogogm)" mask="url(#mllogogrm)"/>
+<g transform="translate(32 32) scale(1.13) translate(-32.01 -31.43)"><g stroke="url(#mllogogl)" stroke-linejoin="round" stroke-linecap="round"><path d="M10.03 24.41 A12.1 13.18 0 0 1 32.49 17.6 A11.66 12.7 0 0 1 53.98 24.41 A1.78 1.78 0 0 1 50.43 24.41 A8.1 9.15 0 0 0 34.22 24.41 A1.78 1.78 0 0 1 30.67 24.41 A8.55 9.63 0 0 0 13.58 24.41 A1.78 1.78 0 0 1 10.03 24.41 Z" fill="#a6dc7a" stroke-width="0.56"/><path d="M10.52 29.54 L30.88 51.12 A1.66 1.66 0 0 0 33.3 51.11 L42.11 41.61 L39.68 39.36 L32.07 47.55 L12.93 27.27 Z M43.83 34.9 L42.1 36.76 L44.53 39.01 L46.26 37.15 Z M50.9 27.27 L46.19 32.36 L48.62 34.61 L53.33 29.53 Z" fill="#ff8db6" stroke-width="0.56"/></g></g>
+<rect x="-8" y="-8" width="80" height="80" fill="url(#mllogogsheen)" mask="url(#mllogogam)" opacity="0.9"/>
+<path d="M10 24 C14 14 22 9 30 8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity="0.47" mask="url(#mllogogam)"/>
+
+<path transform="translate(48.75 14.25) scale(0.9)" d="M0-3C.3-.8.8-.3 3 0 .8.3.3.8 0 3-.3.8-.8.3-3 0-.8-.3-.3-.8 0-3Z" fill="#fff" opacity="0.95"/><path transform="translate(14 50) scale(0.6)" d="M0-3C.3-.8.8-.3 3 0 .8.3.3.8 0 3-.3.8-.8.3-3 0-.8-.3-.3-.8 0-3Z" fill="#fff" opacity="0.8"/>
+
+</svg>
