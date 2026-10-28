@@ -150,6 +150,8 @@ const B = {
 const WORDS = [["บางที", "bang thi", ["sometimes; maybe", "有時候；也許", "sometimes; maybe"]], ["ใกล้", "klai", ["near", "靠近", "near"]], ["ทำงาน", "tham-ngaan", ["to work", "工作", "to work"]]];
 const WHOIMG = { pair: [[IMG.milk, IMG.love], [IMG.milk2, IMG.love2], [IMG.milk3, IMG.love3]], tog: [[IMG.tog], [IMG.tog2]], milk: [[IMG.milk2], [IMG.milk], [IMG.milk3]], love: [[IMG.love2], [IMG.love], [IMG.love3]], others: [[IMG.muv], [IMG.muv2]] };
 const SIZES = [96, 124, 152, 180];
+// (reduced motion: they stand still until you pick a pace yourself; then they move as you picked)
+let motionOk = !REDUCED;
 const bs = { who: "pair", alt: 0, size: 1, pace: REDUCED ? "still" : "calm", thai: true, hide: null, scr: "main", fx: 0.62, fy: 0.985, dir: 1, card: false, bubble: -1, word: 2 };
 
 function buddyBlock() {
@@ -240,8 +242,8 @@ function loop(t) {
   const gap = { lively: 0, calm: 6500, calmer: 15000, still: Infinity }[bs.pace];
   let walking = bs.pace === "lively" || t < walkUntil;
   if (!walking && gap !== Infinity && t > nextWalk) { walkUntil = t + 3200; nextWalk = t + 3200 + gap; walking = true; if (Math.random() < 0.4) bs.dir *= -1; }
-  buddy.classList.toggle("walk", walking && !REDUCED);
-  if (!walking || REDUCED) return;
+  buddy.classList.toggle("walk", walking && motionOk);
+  if (!walking || !motionOk) return;
   const b = scrBox(bs.scr); if (!b) return;
   bs.fx += bs.dir * 38 * dt / b.w;
   if (bs.fx > 0.86) { bs.fx = 0.86; bs.dir = -1; } if (bs.fx < 0.14) { bs.fx = 0.14; bs.dir = 1; }
@@ -317,7 +319,7 @@ document.addEventListener("click", (e) => {
   const b = e.target.closest("#ml-buddy-in button"); if (!b) return; const d = b.dataset;
   if (d.who) { if (bs.who === d.who) bs.alt++; else { bs.who = d.who; bs.alt = 0; } const keep = !card.hidden; drawBuddy(); if (keep) openCard(true); return; }
   if (d.size) { bs.size = +d.size; drawBuddy(); return; }
-  if (d.pace) { bs.pace = d.pace; nextWalk = 0; drawBuddy(); return; }
+  if (d.pace) { bs.pace = d.pace; nextWalk = 0; if (REDUCED) { motionOk = true; document.getElementById("ml-buddy-in").dataset.motion = "on"; } drawBuddy(); return; }
   if (d.thai) { bs.thai = d.thai === "1"; bs.bubble = 0; drawBuddy(); return; }
   if (d.hide !== undefined) { bs.hide = d.hide || null; bs.card = false; drawBuddy(); return; }
   if (d.act === "click") { if (bs.hide) { bs.hide = null; drawBuddy(); } showBubble(); return; }

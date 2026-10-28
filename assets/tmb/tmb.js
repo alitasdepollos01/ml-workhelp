@@ -3,7 +3,8 @@
    per mascot x cartoon/pixel x move, recorded from the extension's own rig by tools/record-rig.js and packed by
    tools/pack-rig.py); no vector art and no rig code ship with the page. A clip's strip loads only when it's first played.
    Uses the page's T() and lang. Nothing moves while it's off screen, the tab is hidden or the page isn't shown;
-   with reduced motion every mascot is a still picture (its first frame) and nobody walks. */
+   with reduced motion every mascot is a still picture (its first frame) and nobody walks, until you click one: then
+   it plays that move once (the special moves keep their Play button). */
 (function () {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -92,8 +93,8 @@
       return true;
     }
     frame(i) { this.img.style.backgroundPosition = `${this.n > 1 ? (i / (this.n - 1)) * 100 : 0}% 0`; }
-    play(n) {
-      if (REDUCE) return false;
+    play(n, you) {   // (you: a click of yours; with reduced motion only that plays, once)
+      if (REDUCE && !you) return false;
       if (n === "hop") { this.el.classList.remove("hop"); void this.el.offsetWidth; this.el.classList.add("hop"); return true; }
       if (n === "walk" || n === "idle" || n === "sit" || n === "sleep") { this.base = n; this.show(n); return true; }
       this.show(n, true); this.busyUntil = performance.now() + 4000; // (until it's loaded and known)
@@ -102,7 +103,7 @@
     // a tick of the page's 30 fps loop: next frame of the clip; a one-off that's done goes back to the base
     tick(moving) {
       if (!this.clip) { if (!this.req) this.show(REDUCE ? "idle" : moving ? "walk" : this.base === "walk" ? "idle" : this.base); return; }
-      if (REDUCE) return;
+      if (REDUCE && !this.busy) return;
       const want = this.busy ? this.clip : moving ? "walk" : this.base === "walk" ? "idle" : this.base;
       if (want !== this.clip) { this.show(want); return; }
       this.f += this.fps / FPS;
@@ -158,7 +159,7 @@
     const box = $("wkEd"); if (!box) return;
     const f = WK.fig = new Fig(box, WK.id, { k: 1.55, button: true });
     f.base = "walk";
-    f.el.addEventListener("click", () => { const w = pick(WORDS); f.play("wave"); card(box, f, wordHtml(w)); WK.pause = 70; });
+    f.el.addEventListener("click", () => { const w = pick(WORDS); f.play("wave", true); card(box, f, wordHtml(w)); WK.pause = 70; });
     const pos = () => {
       const W = box.clientWidth, H = box.clientHeight, w = f.w, h = f.h;
       const a = W - w, b = H - w, P = 2 * a + 2 * b;
@@ -186,7 +187,7 @@
     pickEl.addEventListener("click", (e) => {
       const b = e.target.closest("[data-wk]"); if (!b) return;
       WK.id = b.dataset.wk; pickEl.querySelectorAll("[data-wk]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-      f.base = "walk"; f.set(WK.id, ""); pos(); f.play("wave"); WK.pause = 50; drawLabels();
+      f.base = "walk"; f.set(WK.id, ""); pos(); f.play("wave", true); WK.pause = 50; drawLabels();
     });
   }
   // what it does when… (the extension's words.js REACTIONS: the Thai word and its meanings)
@@ -207,8 +208,8 @@
   document.addEventListener("click", (e) => {
     const b = e.target.closest("[data-rx]"); if (!b || !WK.fig) return;
     const r = RX.find((x) => x[0] === b.dataset.rx), f = WK.fig, box = $("wkEd");
-    if (r[3] === "sit" || r[3] === "sleep") { f.play(r[3]); WK.pause = 110; setTimeout(() => { f.play("walk"); }, 3600); }
-    else { f.play(r[3]); WK.pause = r[3] === "hop" ? 25 : 75; }
+    if (r[3] === "sit" || r[3] === "sleep") { f.play(r[3], true); WK.pause = 110; setTimeout(() => { f.play("walk", true); }, 3600); }
+    else { f.play(r[3], true); WK.pause = r[3] === "hop" ? 25 : 75; }
     card(box, f, wordHtml(r[4]), 3000);
   });
 
@@ -226,20 +227,19 @@
       const id = b.dataset.sp, f = SP[id] = new Fig(b, id, { k: 2.3 });
       const put = () => { f.x = (b.clientWidth - f.w) / 2; f.y = b.clientHeight - f.h - 6; f.place(); };
       put(); new ResizeObserver(put).observe(b);
-      b.addEventListener("click", () => { f.play("special"); });
+      b.addEventListener("click", () => { f.play("special", true); });
       scene(b, () => f.tick(false));
     });
     grid.addEventListener("click", (e) => {
       const b = e.target.closest("[data-cos]"); if (!b) return;
       const on = b.getAttribute("aria-pressed") !== "true", f = SP[b.dataset.cos];
-      b.setAttribute("aria-pressed", String(on)); f.wear(on ? b.dataset.c : ""); if (!REDUCE) setTimeout(() => f.play("special"), 50);
+      b.setAttribute("aria-pressed", String(on)); f.wear(on ? b.dataset.c : ""); setTimeout(() => f.play("special", true), 50);
     });
   }
   function drawSpecials() {
     document.querySelectorAll("[data-mv]").forEach((p) => { const id = p.dataset.mv; p.innerHTML = `${esc(T("Special move: ", "招牌動作：", "ท่าประจำตัว: "))}<b>${G(esc(special(id)))}</b>`; });
     document.querySelectorAll("[data-own]").forEach((s) => { const o = owner(s.dataset.own); s.textContent = T(o[0], o[1], o[2]); });
-    document.querySelectorAll(".sp-st [data-t=play]").forEach((s) => { s.textContent = REDUCE ? "" : T("Play", "播放", "เล่น"); });
-    document.querySelectorAll(".sp-st .play").forEach((s) => { s.hidden = REDUCE; });
+    document.querySelectorAll(".sp-st [data-t=play]").forEach((s) => { s.textContent = T("Play", "播放", "เล่น"); });
     document.querySelectorAll("[data-sp]").forEach((b) => b.setAttribute("aria-label", `${NAME(b.dataset.sp)}: ${T("play its special move", "播放招牌動作", "เล่นท่าประจำตัว")}, ${special(b.dataset.sp)}`));
     document.querySelectorAll("[data-cos]").forEach((b) => {
       const c = MS[b.dataset.cos].cos;
@@ -309,7 +309,7 @@
       ["mouseleave", "blur"].forEach((ev) => c.addEventListener(ev, () => hot(n, false)));
       c.addEventListener("click", () => {
         if (n === "1") { const i = SCENES.findIndex((s) => s[0] === VS.scene); VS.scene = SCENES[(i + 1) % SCENES.length][0]; $("vsPanel").src = panelSrc(VS.scene); const vt = $("vtPanel"); if (vt) vt.src = panelSrc(VS.scene); }
-        if (n === "2") { f.play("special"); VS.pause = 90; }
+        if (n === "2") { f.play("special", true); VS.pause = 90; }
         if (n === "3") { VS.word = (VS.word + 1) % VSWORDS.length; $("vsWord").textContent = VSWORDS[VS.word].join(" "); const vw = $("vtWord"); if (vw) vw.textContent = VSWORDS[VS.word].join(" "); }
         if ((n === "2" || n === "4") && !REDUCE) { const t = c.querySelector(".vs-thumb"); if (t) { t.classList.remove("go"); void t.offsetWidth; t.classList.add("go"); } }
         if (n === "4") { showPop(true); popAt = performance.now() + 7000; }

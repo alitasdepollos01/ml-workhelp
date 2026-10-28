@@ -92,7 +92,6 @@ html[data-look="stage"] .top .btn.tmb-cta { background: linear-gradient(120deg, 
 .mq-band.paused .mq-track { animation-play-state: paused; }
 .mq-pause { position: absolute; z-index: 2; right: max(16px, calc((100vw - 1160px) / 2 + 20px)); top: 10px; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line-strong); background: var(--surface); color: var(--ink-2); display: grid; place-items: center; cursor: pointer; }
 .mq-pause .ic { width: 16px; height: 16px; }
-@media (prefers-reduced-motion: reduce) { .mq-pause { display: none; } }
 /* "Made by a fan": one card in three parts, no half-empty boxes */
 #about .three { gap: 0; background: var(--surface); border: 1.5px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
 #about .three .print { border: 0; border-radius: 0; box-shadow: none; background: none; padding: 22px 24px; }

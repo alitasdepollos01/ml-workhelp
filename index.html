@@ -413,7 +413,6 @@ body { background: var(--bg) radial-gradient(color-mix(in oklab, var(--a) 16%, t
 .marquee:hover .mq-track { animation-play-state: paused; }
 @keyframes mq { to { transform: translateX(-50%); } }
 .mq-band.mq-off .mq-track { animation-play-state: paused; } /* (off screen: the band waits where it was) */
-@media (prefers-reduced-motion: reduce) { .mq-track { animation: none; } }
 .band .cap { text-align: center; margin-top: 6px; }
 .hero-cred { margin-top: -6px; }
 .pola { position: absolute; margin: 0; width: 34%; background: #fff; padding: 8px 8px 30px; border-radius: 6px; box-shadow: 0 14px 30px -14px rgba(60,20,40,.45); z-index: 1; }
@@ -691,7 +690,7 @@ html[data-look="stage"] :is(#ml-does, #ml-buddy) .bd-set h3 em { color: #1b0f22;
 :is(#ml-does, #ml-buddy) [data-act="screen"] { display: none !important; }
 }
 @media (prefers-reduced-motion: reduce) {
-:is(#ml-does, #ml-buddy) .bd-buddy.walk .bd-imgs img { animation: none; }
+:is(#ml-does, #ml-buddy) :not([data-motion="on"]) > .bd .bd-buddy.walk .bd-imgs img { animation: none; } /* (a pace you picked yourself: they walk) */
 }
 :is(#ml-does, #ml-buddy) .bd-stage { overflow: clip; padding: 4px; margin: -4px; }
 :is(#ml-does, #ml-buddy) .fa-card.big .scene { flex: 1 1 auto; height: auto; min-height: 300px; }
@@ -1577,7 +1576,7 @@ document.addEventListener("click", (e) => {
   else if (d.m) { app.mode = d.m; drawTry(); }
   else if (d.theme) { app.theme = d.theme; drawTry(); }
   else if (d.q) { quiz = d.q; drawQuiz(); }
-  else if (b.id === "mqPause") { const on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(on)); b.closest(".mq-band").classList.toggle("paused", on); b.setAttribute("aria-label", on ? T("Play the stickers", "播放貼圖", "เล่นสติกเกอร์") : T("Pause the stickers", "暫停貼圖", "หยุดสติกเกอร์")); b.innerHTML = `<i data-lucide="${on ? "play" : "pause"}" class="ic"></i>`; lucide.createIcons(); }
+  else if (b.id === "mqPause") mqSet(b, b.getAttribute("aria-pressed") !== "true");
   else if (b.id === "copyCmd") { navigator.clipboard?.writeText(document.getElementById("tmbCmd").textContent).catch(() => {}); b.querySelector("span").textContent = T("Copied", "已複製", "คัดลอกแล้ว"); }
 });
 /* The section tracker (both pages): where you are, what's next, how far down; a chip click scrolls there smoothly
@@ -1638,7 +1637,9 @@ const TRACKERS = [...document.querySelectorAll(".subnav")];
 }
 TRACKERS.forEach((n) => { const r = n.querySelector(".sn-row"), end = () => r.classList.toggle("at-end", r.scrollLeft + r.clientWidth >= r.scrollWidth - 4); r.addEventListener("scroll", end, { passive: true }); addEventListener("resize", end); setTimeout(end, 300); });
 TRACKERS.forEach(tracker);
-/* the sticker band moves only while it's on screen */
+/* the sticker band moves only while it's on screen; with reduced motion it starts paused, its Play button there to start it */
+function mqSet(b, on) { b.setAttribute("aria-pressed", String(on)); b.closest(".mq-band").classList.toggle("paused", on); b.setAttribute("aria-label", on ? T("Play the stickers", "播放貼圖", "เล่นสติกเกอร์") : T("Pause the stickers", "暫停貼圖", "หยุดสติกเกอร์")); b.innerHTML = `<i data-lucide="${on ? "play" : "pause"}" class="ic"></i>`; lucide.createIcons(); }
+if (REDUCE.matches) document.querySelectorAll(".mq-pause").forEach((b) => mqSet(b, true));
 document.querySelectorAll(".mq-band").forEach((b) => { if ("IntersectionObserver" in window) new IntersectionObserver((es) => b.classList.toggle("mq-off", !es.some((e) => e.isIntersecting))).observe(b); });
 addEventListener("hashchange", () => TRACKERS.forEach((n) => requestAnimationFrame(() => n.__redraw?.())));
 addEventListener("hashchange", route);
