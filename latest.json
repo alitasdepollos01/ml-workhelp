@@ -1,24 +1,37 @@
 {
-  "version": "1.3.1",
-  "released": "2026-10-28",
+  "version": "1.3.2",
+  "released": "2026-10-29",
   "download": "https://alitasdepollos01.github.io/ml-workhelp/#download",
   "files": {
-    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.1/ML.WorkHelp-1.3.1-arm64.dmg",
-    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.1/ML.WorkHelp-1.3.1.dmg",
+    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.2/ML.WorkHelp-1.3.2-arm64.dmg",
+    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.2/ML.WorkHelp-1.3.2.dmg",
     "windows": null,
     "vscode": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp"
   },
   "sizes": {
-    "mac-arm64": 190262425,
-    "mac-x64": 195901907
+    "mac-arm64": 190268161,
+    "mac-x64": 195933828
   },
   "notes": {
-    "en": "Each pin gets its own moment, codes open in one reveal, easier categories, and the buddies wait for the welcome.",
-    "zh": "每個徽章都有自己的出場、兌換碼一次全部亮相、分類更好用，夥伴也會等歡迎結束再出來。",
-    "th": "เข็มกลัดแต่ละอันมีช่วงเวลาของตัวเอง โค้ดปลดล็อกในครั้งเดียว หมวดหมู่ใช้ง่ายขึ้น และเพื่อนจะรอให้หน้ายินดีต้อนรับจบก่อน"
+    "en": "The Thai word card now counts towards pins, and Cross the Line comes from a Thai word a day.",
+    "zh": "泰文單字卡也算進徽章了，「越線」就靠每天打開一個泰文單字。",
+    "th": "การ์ดคำศัพท์ภาษาไทยนับรวมในเข็มกลัดแล้ว และ \"ข้ามเส้น\" ได้จากการเปิดดูคำไทยวันละคำ"
   },
   "min": "0.1.0",
   "history": [
+    {
+      "version": "1.3.2",
+      "date": "2026-10-29",
+      "beta": true,
+      "en": "The Thai word card now counts towards pins. Cross the Line (Girl Rules) is earned by opening a Thai word on different days. Uses less memory: the right-click card and the reminder card close a minute after they hide; the Chinese fonts load only for Chinese text; the focus screen and pin moments draw with one layer less.",
+      "zh": "泰文單字卡現在也算進徽章了。「越線」（女生規則：禁愛遊戲）改成在不同的日子打開泰文單字就能拿到。更省記憶體：右鍵卡片和提醒卡片收起來一分鐘後就會關掉；中文字型只在有中文時才載入；專注全螢幕和徽章動畫少用一個圖層。",
+      "th": "การ์ดคำศัพท์ภาษาไทยนับรวมในเข็มกลัดแล้ว เข็มกลัด \"ข้ามเส้น\" (กฎหลัก…ห้ามรักเธอ) ได้จากการเปิดดูคำไทยในวันต่าง ๆ ใช้หน่วยความจำน้อยลง: การ์ดคลิกขวาและการ์ดแจ้งเตือนจะปิดหลังซ่อนไปหนึ่งนาที ฟอนต์ภาษาจีนโหลดเฉพาะตอนมีข้อความภาษาจีน หน้าจอโฟกัสกับช่วงเวลาได้เข็มกลัดใช้เลเยอร์น้อยลงหนึ่งชั้น",
+      "short": {
+        "en": "The Thai word card now counts towards pins, and Cross the Line comes from a Thai word a day.",
+        "zh": "泰文單字卡也算進徽章了，「越線」就靠每天打開一個泰文單字。",
+        "th": "การ์ดคำศัพท์ภาษาไทยนับรวมในเข็มกลัดแล้ว และ \"ข้ามเส้น\" ได้จากการเปิดดูคำไทยวันละคำ"
+      }
+    },
     {
       "version": "1.3.1",
       "date": "2026-10-28",
