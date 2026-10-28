@@ -228,8 +228,13 @@ function placeCard() {
   card.style.left = Math.max(6, Math.min(sw - cw - 6, left)) + "px";
   card.style.top = Math.max(6, Math.min(sh - ch - 6, top)) + "px";
 }
+// Frames only while the buddy's desktop is on screen and the tab is in front (an IntersectionObserver starts it again):
+// off screen it costs nothing, and the page's frames stay free for the demo next to it.
+let raf = 0, seen = !("IntersectionObserver" in window);
 function loop(t) {
-  requestAnimationFrame(loop);
+  raf = 0;
+  if (!seen || document.hidden) { last = 0; buddy?.classList.remove("walk"); return; }
+  raf = requestAnimationFrame(loop);
   const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t;
   if (bs.hide || drag || !buddy || document.hidden) return;
   const gap = { lively: 0, calm: 6500, calmer: 15000, still: Infinity }[bs.pace];
@@ -323,10 +328,17 @@ addEventListener("resize", () => place());
 addEventListener("hashchange", () => requestAnimationFrame(place)); // (the ML page shown: the buddy finds its feet)
 if (document.fonts) document.fonts.ready.then(() => place());
 let started = false;
+const run = () => { if (started && !raf && seen && !document.hidden) raf = requestAnimationFrame(loop); };
+document.addEventListener("visibilitychange", run);
 /** Draw both (index.html's applyLang calls this, then makes the icons). */
 window.drawFeatures = () => {
   drawDoes(); drawBuddy();
   requestAnimationFrame(place);
-  if (!started) { started = true; requestAnimationFrame(loop); }
+  if (!started) {
+    started = true;
+    const box = document.getElementById("ml-buddy-in");
+    if (box && !seen) new IntersectionObserver((es) => { seen = es.some((e) => e.isIntersecting); run(); }, { rootMargin: "120px" }).observe(box);
+    run();
+  }
 };
 })();

@@ -133,13 +133,18 @@
   const scenes = [];
   function scene(el, tick) {
     const s = { el, tick, seen: false, on: () => s.seen && el.offsetParent !== null && !document.hidden };
-    if ("IntersectionObserver" in window) new IntersectionObserver((es) => { s.seen = es.some((e) => e.isIntersecting); }, { rootMargin: "80px" }).observe(el); else s.seen = true;
+    if ("IntersectionObserver" in window) new IntersectionObserver((es) => { s.seen = es.some((e) => e.isIntersecting); kick(); }, { rootMargin: "80px" }).observe(el); else s.seen = true;
     scenes.push(s);
     return s;
   }
-  let last = 0, acc = 0;
+  // (frames only while a scene is on screen: none at all on the ML page or scrolled past them; a scene coming into view starts it)
+  let last = 0, acc = 0, raf = 0, going = false;
+  const kick = () => { if (going && !raf && scenes.some((s) => s.on())) raf = requestAnimationFrame(loop); };
+  document.addEventListener("visibilitychange", kick);
   function loop(t) {
-    requestAnimationFrame(loop);
+    raf = 0;
+    if (!scenes.some((s) => s.on())) { last = 0; return; }
+    raf = requestAnimationFrame(loop);
     if (!last) last = t;
     acc += Math.min(200, t - last); last = t;
     if (acc < 1000 / FPS) return;
@@ -177,7 +182,7 @@
       pos(); f.tick(moving);
     });
     const pickEl = $("wkPick");
-    pickEl.innerHTML = ORDER.map((id) => `<button type="button" data-wk="${id}" aria-pressed="${id === WK.id}" title="${esc(NAME(id))}" aria-label="${esc(NAME(id))}"><img src="assets/tmb/clips/${id}.png" alt=""></button>`).join("");
+    pickEl.innerHTML = ORDER.map((id) => `<button type="button" data-wk="${id}" aria-pressed="${id === WK.id}" title="${esc(NAME(id))}" aria-label="${esc(NAME(id))}"><img src="assets/tmb/clips/${id}.png" alt="" loading="lazy"></button>`).join("");
     pickEl.addEventListener("click", (e) => {
       const b = e.target.closest("[data-wk]"); if (!b) return;
       WK.id = b.dataset.wk; pickEl.querySelectorAll("[data-wk]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
@@ -371,6 +376,6 @@
     CL = j;
     specials(); walker(); editor(); pomodoro();
     window.tmbTheme(); window.drawTmb();
-    requestAnimationFrame(loop);
+    going = true; kick();
   }).catch((e) => { console.warn("Thai Mascot Buddy clips didn't load", e); window.tmbTheme(); window.drawTmb(); });
 })();

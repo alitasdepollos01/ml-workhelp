@@ -101,6 +101,7 @@ section.sec { padding: 64px 0; }
 .stk:hover { transform: rotate(-3deg) scale(1.06); }
 .page { display: none; }
 .page.on { display: block; }
+body:not(:has(.page.on)) > footer { visibility: hidden; } /* (until the router shows a page: no footer flashing at the top) */
 
 /* ---- home ---- */
 .hero { padding: 56px 0 30px; text-align: center; }
@@ -411,6 +412,7 @@ body { background: var(--bg) radial-gradient(color-mix(in oklab, var(--a) 16%, t
 .mq-track img:nth-child(odd) { transform: rotate(-4deg); } .mq-track img:nth-child(3n) { transform: rotate(5deg) translateY(-8px); }
 .marquee:hover .mq-track { animation-play-state: paused; }
 @keyframes mq { to { transform: translateX(-50%); } }
+.mq-band.mq-off .mq-track { animation-play-state: paused; } /* (off screen: the band waits where it was) */
 @media (prefers-reduced-motion: reduce) { .mq-track { animation: none; } }
 .band .cap { text-align: center; margin-top: 6px; }
 .hero-cred { margin-top: -6px; }
@@ -1374,7 +1376,16 @@ const frame = document.getElementById("appFrame");
 const screenBox = frame.parentElement, wide = matchMedia("(min-width: 600px)");
 const fitFrame = () => { const k = screenBox.clientWidth / 1100; if (!k) return; frame.style.transform = `scale(${k})`; frame.style.height = Math.round(screenBox.clientHeight / k) + "px"; };
 new ResizeObserver(fitFrame).observe(screenBox);
-const loadFrame = () => { if (wide.matches && !frame.getAttribute("src")) frame.src = `demo/app.html?embed=1&lang=${lang}&dm=${app.mode === "dark" ? "dark" : "light"}`; };
+// (the demo runs only while its fold is open: opening it loads the demo, closing it unloads it, so its clock and pictures
+//  cost nothing on the rest of the page; opened again, it comes back on the page and style picked here)
+const fold = frame.closest("details");
+let frameOn = false;
+const loadFrame = () => {
+  if (!wide.matches || !fold.open || frameOn) return;
+  const file = app.page === "buddy" ? "buddy.html" : "app.html", tab = app.page === "data" ? "week" : app.page;
+  frameOn = true; frame.src = `demo/${file}?embed=1&lang=${lang}&dm=${app.mode === "dark" ? "dark" : "light"}${file === "app.html" && tab !== "today" ? "#" + encodeURIComponent(JSON.stringify({ tab })) : ""}`;
+};
+fold.addEventListener("toggle", () => { if (fold.open) loadFrame(); else if (frameOn) { frameOn = false; sentPage = null; frame.src = "about:blank"; } });
 wide.addEventListener?.("change", loadFrame);
 // (the page only when it changed: a style or light/dark doesn't move you to another page)
 let sentPage = null;
@@ -1448,11 +1459,12 @@ function buildFocus() {
 document.querySelectorAll(".fctl2 .fseg").forEach((g) => g.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { fs[g.dataset.k] = b.dataset.v; drawFocus(); } }));
 document.getElementById("fsize").addEventListener("input", (e) => { fs.size = Number(e.target.value); drawFocus(); });
 document.getElementById("fop").addEventListener("input", (e) => { fs.op = Number(e.target.value); drawFocus(); });
-{ let left = 25 * 60 - 48, n = 0;
+{ let left = 25 * 60 - 48, n = 0, seen = !("IntersectionObserver" in window);
+  if (!seen) new IntersectionObserver((es) => { seen = es.some((e) => e.isIntersecting); }, { rootMargin: "100px" }).observe(fsd); // (off screen: the clock and the photos wait)
   const big = document.getElementById("fbig"), ring = fclock.querySelector(".ring");
-  const tick = () => { big.textContent = `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`; ring.style.setProperty("--p", (100 * (1500 - left) / 1500).toFixed(2)); left = left > 0 ? left - 1 : 1500; };
-  tick(); setInterval(tick, 1000);
-  setInterval(() => { if (matchMedia("(prefers-reduced-motion: reduce)").matches) return; n++; const ph = fsd.querySelectorAll(".ph"); ph.forEach((p, i) => p.classList.toggle("on", i === n % ph.length)); fsd.querySelector(".fstk").src = `assets/focus/sticker-${(n % 3) + 1}.png`; }, 7000);
+  const tick = (now) => { if (!seen && !now) return; big.textContent = `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`; ring.style.setProperty("--p", (100 * (1500 - left) / 1500).toFixed(2)); left = left > 0 ? left - 1 : 1500; };
+  tick(true); setInterval(() => tick(), 1000);
+  setInterval(() => { if (!seen || document.hidden || matchMedia("(prefers-reduced-motion: reduce)").matches) return; n++; const ph = fsd.querySelectorAll(".ph"); ph.forEach((p, i) => p.classList.toggle("on", i === n % ph.length)); fsd.querySelector(".fstk").src = `assets/focus/sticker-${(n % 3) + 1}.png`; }, 7000);
 }
 /* stickers: three of your own examples */
 document.querySelectorAll("[data-mk]").forEach((b) => b.addEventListener("click", () => {
@@ -1626,6 +1638,8 @@ const TRACKERS = [...document.querySelectorAll(".subnav")];
 }
 TRACKERS.forEach((n) => { const r = n.querySelector(".sn-row"), end = () => r.classList.toggle("at-end", r.scrollLeft + r.clientWidth >= r.scrollWidth - 4); r.addEventListener("scroll", end, { passive: true }); addEventListener("resize", end); setTimeout(end, 300); });
 TRACKERS.forEach(tracker);
+/* the sticker band moves only while it's on screen */
+document.querySelectorAll(".mq-band").forEach((b) => { if ("IntersectionObserver" in window) new IntersectionObserver((es) => b.classList.toggle("mq-off", !es.some((e) => e.isIntersecting))).observe(b); });
 addEventListener("hashchange", () => TRACKERS.forEach((n) => requestAnimationFrame(() => n.__redraw?.())));
 addEventListener("hashchange", route);
 let look = "scrapbook";
