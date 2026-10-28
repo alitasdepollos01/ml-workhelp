@@ -1,24 +1,37 @@
 {
-  "version": "1.3.0",
+  "version": "1.3.1",
   "released": "2026-10-28",
   "download": "https://alitasdepollos01.github.io/ml-workhelp/#download",
   "files": {
-    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.0/ML.WorkHelp-1.3.0-arm64.dmg",
-    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.0/ML.WorkHelp-1.3.0.dmg",
+    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.1/ML.WorkHelp-1.3.1-arm64.dmg",
+    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.1/ML.WorkHelp-1.3.1.dmg",
     "windows": null,
     "vscode": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp"
   },
   "sizes": {
-    "mac-arm64": 187536854,
-    "mac-x64": 193177533
+    "mac-arm64": 190262425,
+    "mac-x64": 195901907
   },
   "notes": {
-    "en": "Two new styles (ten in all) and doodles from the shows; 61 pins to collect as you work; decorate your picture cards; back up everything to one file and restore it on a new Mac; new photos and credit fixes without reinstalling; the Desktop buddy page; reminder cards on any screen; Milk and Love ringtones; and a smaller download (the photos download once, inside the app).",
-    "zh": "兩種新風格（一共 10 種）和她們作品裡的塗鴉；邊工作邊收集的 61 個徽章；可以裝飾的圖卡；全部備份成一個檔案，換新 Mac 也能還原；新照片和標註修正不用重新安裝；「桌面夥伴」專頁；提醒小卡片在任何螢幕都會跳出來；Milk 和 Love 的鈴聲；安裝檔也變小了（照片改在 App 裡下載一次就好）。",
-    "th": "สไตล์ใหม่สองแบบ (รวมเป็น 10 สไตล์) และดูเดิลจากซีรีส์ เข็มกลัด 61 ชิ้นให้สะสมระหว่างทำงาน ตกแต่งการ์ดรูปได้ สำรองทุกอย่างเป็นไฟล์เดียวแล้วกู้คืนบน Mac เครื่องใหม่ได้ รูปใหม่และการแก้เครดิตมาเองโดยไม่ต้องติดตั้งใหม่ หน้าเพื่อนบนเดสก์ท็อป การ์ดแจ้งเตือนบนจอไหนก็ได้ เสียงเรียกเข้าของ Milk กับ Love และไฟล์ติดตั้งที่เล็กลง (รูปดาวน์โหลดในแอปครั้งเดียว)"
+    "en": "Each pin gets its own moment, codes open in one reveal, easier categories, and the buddies wait for the welcome.",
+    "zh": "每個徽章都有自己的出場、兌換碼一次全部亮相、分類更好用，夥伴也會等歡迎結束再出來。",
+    "th": "เข็มกลัดแต่ละอันมีช่วงเวลาของตัวเอง โค้ดปลดล็อกในครั้งเดียว หมวดหมู่ใช้ง่ายขึ้น และเพื่อนจะรอให้หน้ายินดีต้อนรับจบก่อน"
   },
   "min": "0.1.0",
   "history": [
+    {
+      "version": "1.3.1",
+      "date": "2026-10-28",
+      "beta": true,
+      "en": "Pins earned together now each get their own moment, one after the other, and a code unlocks all its pins in one reveal. Categories: a new one shows at once, a symbol picker (with symbols that work on Windows too), and \"New category…\" on Today works. The picture card no longer shows a credit when you point at it, and the pins you've earned can go on your picture cards (Make a picture › Pins). The desktop buddies wait until the welcome and the tour are done. The tours point at the right things, with how to open the focus screen and a step for Make a picture. Right-clicking the buddy over a full-screen app no longer switches to another desktop. Photo credits name each photographer's role; Settings › About & updates lists the open-source projects inside the app, and their licence texts come with it. \"Tell us on GitHub\" in About & updates and Help. The word card is \"Thai from songs and daily life\". The language option reads 繁中(TW). The wallpaper is described for what it is: a faint wallpaper with little easter eggs from the shows; off for a clean background. Y2K emo hangs three little round doodles down the menu edge.",
+      "zh": "一起拿到的徽章，現在一個一個輪流出場；兌換碼解鎖的徽章，一次全部亮相。分類：新增後馬上出現，有符號可以挑（Windows 也顯示得出來），「今天」的「新增分類⋯」也能用了。圖卡上指著時不再跳出照片來源，拿到的徽章也能貼上你的圖卡（存成圖片 › 徽章）。桌面夥伴會等歡迎和導覽結束才出來。導覽重新對準了該看的地方，加上怎麼打開專注全螢幕和「存成圖片」的一步。在全螢幕 App 上對夥伴按右鍵，不會再跳到別的桌面。照片來源標出每位攝影師的角色；「設定 › 關於與更新」列出 App 用到的開源軟體，授權文字也一起附上。「關於與更新」和「幫助」多了「到 GitHub 告訴我們」。單字卡叫「歌裡和生活裡的泰文」。語言選項顯示「繁中(TW)」。壁紙說得更清楚：藏著小彩蛋的壁紙，想要乾淨的背景也可以關掉。Y2K emo 的選單邊多了三個圓圓的小塗鴉。",
+      "th": "เข็มกลัดที่ได้พร้อมกันจะขึ้นมาทีละอัน แต่ละอันมีช่วงเวลาของตัวเอง และโค้ดจะปลดล็อกเข็มกลัดทั้งหมดในครั้งเดียว หมวดหมู่: เพิ่มแล้วขึ้นทันที มีที่เลือกสัญลักษณ์ (ใช้ได้บน Windows ด้วย) และ \"เพิ่มหมวดหมู่…\" ในหน้าวันนี้ใช้ได้แล้ว การ์ดรูปไม่ขึ้นเครดิตตอนชี้แล้ว และเข็มกลัดที่ได้แล้วติดลงบนการ์ดรูปได้ (ทำเป็นรูปภาพ › เข็มกลัด) เพื่อนบนเดสก์ท็อปจะรอให้หน้ายินดีต้อนรับและทัวร์จบก่อน ทัวร์ชี้ถูกที่ขึ้น มีวิธีเปิดหน้าจอโฟกัสและขั้นตอนทำเป็นรูป คลิกขวาที่เพื่อนตอนแอปเต็มจอไม่สลับไปเดสก์ท็อปอื่นแล้ว เครดิตรูปบอกบทบาทของช่างภาพแต่ละคน การตั้งค่า › เกี่ยวกับและอัปเดต มีรายชื่อซอฟต์แวร์โอเพนซอร์สในแอปพร้อมข้อความสัญญาอนุญาต \"บอกเราได้ที่ GitHub\" อยู่ในเกี่ยวกับและอัปเดต และในความช่วยเหลือ การ์ดคำศัพท์ชื่อ \"ภาษาไทยจากเพลงและชีวิตประจำวัน\" ตัวเลือกภาษาแสดงเป็น 繁中(TW) และอธิบายวอลเปเปอร์ให้ชัดขึ้น: วอลเปเปอร์จาง ๆ ที่ซ่อนของเซอร์ไพรส์เล็ก ๆ จากซีรีส์ ถ้าอยากได้พื้นหลังสะอาด ๆ ก็ปิดได้ สไตล์ Y2K มีดูเดิลกลม ๆ เล็ก ๆ สามอันห้อยลงข้างเมนู",
+      "short": {
+        "en": "Each pin gets its own moment, codes open in one reveal, easier categories, and the buddies wait for the welcome.",
+        "zh": "每個徽章都有自己的出場、兌換碼一次全部亮相、分類更好用，夥伴也會等歡迎結束再出來。",
+        "th": "เข็มกลัดแต่ละอันมีช่วงเวลาของตัวเอง โค้ดปลดล็อกในครั้งเดียว หมวดหมู่ใช้ง่ายขึ้น และเพื่อนจะรอให้หน้ายินดีต้อนรับจบก่อน"
+      }
+    },
     {
       "version": "1.3.0",
       "date": "2026-10-28",
