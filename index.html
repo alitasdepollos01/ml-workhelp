@@ -199,22 +199,22 @@ details.more summary::-webkit-details-marker { display: none; }
 .monitor .neck { width: 16%; height: 34px; background: linear-gradient(#cfd4d1, #b5bbb7); clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%); }
 .monitor .foot { width: 34%; height: 9px; border-radius: 6px 6px 3px 3px; background: #c4cac6; }
 :root[data-theme="dark"] .monitor .neck { background: linear-gradient(#4a504d, #3b403e); } :root[data-theme="dark"] .monitor .foot { background: #444a47; }
-.fsd { --ring: #f7b8cf; --track: #3a3236; --inner: #101614; --digits: #b5ead7; --s: 1; --op: 1; position: relative; aspect-ratio: 16/10; border-radius: 8px; overflow: hidden; background: #0e1311; container-type: size; }
+.fsd { --ring: #f7b8cf; --track: #3a3236; --inner: #101614; --digits: #b5ead7; --s: 1; --op: 1; --u: 4px; position: relative; aspect-ratio: 16/10; border-radius: 8px; overflow: hidden; background: #0e1311; isolation: isolate; }
 .fsd.soft { background: #f6f1ec; }
 .fsd .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.6s ease; }
 .fsd.bg-photos .ph.on { opacity: 1; } .fsd.soft.bg-photos .ph.on { opacity: .55; }
 .fsd .fstk { position: absolute; bottom: 0; height: 26%; display: none; animation: edge 26s linear infinite; }
 .fsd.bg-sticker .fstk { display: block; }
 @keyframes edge { 0% { left: 2%; transform: scaleX(1); } 48% { left: 82%; transform: scaleX(1); } 50% { left: 82%; transform: scaleX(-1); } 98% { left: 2%; transform: scaleX(-1); } 100% { left: 2%; transform: scaleX(1); } }
-.fclock2 { position: absolute; z-index: 2; inset: 8% 6%; display: flex; flex-direction: column; gap: 2.2cqh; justify-content: var(--v, center); align-items: var(--h, center); text-align: center; opacity: var(--op); }
-.fclock2 .task, .fclock2 .sub { color: #c3ccc6; font-size: 3.4cqh; text-shadow: 0 2px 10px rgba(0,0,0,.5); } .fclock2 .task b { color: #fff; }
+.fclock2 { position: absolute; z-index: 2; inset: 8% 6%; display: flex; flex-direction: column; gap: calc(2.2 * var(--u)); justify-content: var(--v, center); align-items: var(--h, center); text-align: center; opacity: var(--op); }
+.fclock2 .task, .fclock2 .sub { color: #c3ccc6; font-size: calc(3.4 * var(--u)); text-shadow: 0 2px 10px rgba(0,0,0,.5); } .fclock2 .task b { color: #fff; }
 .fsd.soft .fclock2 .task, .fsd.soft .fclock2 .sub { color: #7d716b; text-shadow: none; } .fsd.soft .fclock2 .task b { color: #3b3330; }
 /* #fsd in front: the Does section's small ".ring" mock (:is(#ml-does, #ml-buddy) .ring, 92px) would win otherwise. Size scales the ring, its thickness and the time, as the app's --fs-size does */
-#fsd .fclock2 .ring { width: min(calc(44cqh * var(--s)), 68cqh); aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center; background: conic-gradient(var(--ring) calc(var(--p, 0) * 1%), var(--track) 0); flex: none; }
-#fsd .fclock2 .ring::before { content: ""; position: absolute; inset: calc(1.2cqh * var(--s)); border-radius: 50%; background: var(--inner); }
-#fsd .fclock2 .ring > div { position: relative; display: grid; justify-items: center; gap: 1.4cqh; }
-.fclock2 .big { font: 700 calc(11cqh * var(--s))/1 var(--font-h); font-variant-numeric: tabular-nums; letter-spacing: -.02em; color: var(--digits); }
-.fdots { display: flex; gap: 1cqh; } .fdots i { width: 1.8cqh; aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--ring); } .fdots i.d { background: var(--ring); }
+#fsd .fclock2 .ring { width: var(--rw, min(calc(44 * var(--u) * var(--s)), calc(68 * var(--u)))); aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center; background: conic-gradient(var(--ring) calc(var(--p, 0) * 1%), var(--track) 0); flex: none; }
+#fsd .fclock2 .ring::before { content: ""; position: absolute; inset: var(--ri, calc(1.2 * var(--u) * var(--s))); border-radius: 50%; background: var(--inner); }
+#fsd .fclock2 .ring > div { position: relative; display: grid; justify-items: center; gap: calc(1.4 * var(--u) * var(--s)); }
+.fclock2 .big { font: 700 calc(11 * var(--u) * var(--s))/1 var(--font-h); font-variant-numeric: tabular-nums; letter-spacing: -.02em; color: var(--digits); }
+.fdots { display: flex; gap: max(3px, calc(1 * var(--u) * var(--s))); } .fdots i { width: max(6px, calc(1.8 * var(--u) * var(--s))); aspect-ratio: 1; border-radius: 50%; border: max(1px, calc(.32 * var(--u) * var(--s))) solid var(--ring); } .fdots i.d { background: var(--ring); }
 .fsd.filled .fdots i { border-color: var(--digits); } .fsd.filled .fdots i.d { background: var(--digits); }
 .fctl2 { background: var(--surface); border: 1.5px solid var(--line); border-radius: 18px; padding: 14px; display: grid; gap: 12px; font-size: 13px; box-shadow: var(--shadow-sm); }
 .fctl2 .lbl { display: flex; justify-content: space-between; color: var(--muted); font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
@@ -1420,8 +1420,14 @@ const fsd = document.getElementById("fsd"), fclock = document.getElementById("fc
 const li = () => ({ en: 0, zh: 1, th: 2 }[lang]);
 function drawFocus() {
   const Lk = LOOKS.find((l) => l[0] === fs.look), c = Lk[2], soft = fs.back === "soft", filled = fs.mid === "filled", set = (k, v) => fsd.style.setProperty(k, v);
+/* the screen's 1% height as px (not cqh) and the ring in even whole px, so each size draws a clean, centred ring */
+function sizeFocus() {
+  const u = fsd.clientHeight / 100, s = fs.size / 100; if (!u) return;
+  fsd.style.setProperty("--u", u.toFixed(3) + "px"); fsd.style.setProperty("--rw", Math.round(Math.min(44 * s, 68) * u / 2) * 2 + "px"); fsd.style.setProperty("--ri", Math.max(2, Math.round(1.2 * s * u)) + "px");
+}
+if (window.ResizeObserver) new ResizeObserver(sizeFocus).observe(fsd);
   set("--ring", c.ring); set("--track", soft ? "rgba(60, 40, 30, .12)" : c.track); set("--inner", filled ? c.digits : soft ? "#fffaf6" : c.inner);
-  set("--digits", filled || soft ? c.ink : c.digits); set("--s", fs.size / 100); set("--op", fs.op / 100);
+  set("--digits", filled || soft ? c.ink : c.digits); set("--s", fs.size / 100); set("--op", fs.op / 100); sizeFocus();
   const al = ["flex-start", "center", "flex-end"]; fclock.style.setProperty("--h", al[fs.place % 3]); fclock.style.setProperty("--v", al[Math.floor(fs.place / 3)]);
   fsd.className = `fsd bg-${fs.bg}${soft ? " soft" : ""}${filled ? " filled" : ""}`;
   document.querySelectorAll(".fctl2 .fseg").forEach((g) => g.querySelectorAll("button").forEach((b) => b.classList.toggle("on", fs[g.dataset.k] === b.dataset.v)));
