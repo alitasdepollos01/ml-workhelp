@@ -16,7 +16,7 @@
   const MS = {
     muvmuv: { name: "MuvMuv", sp: ["Milk sip", "喝一口牛奶", "จิบนม"], cos: ["fanmeet", "Fan-meet robe and headset", "見面會長袍和耳麥", "เสื้อคลุมแฟนมีตกับไมค์เฮดเซ็ต"] },
     lunar: { name: "Lunar", sp: ["Egg hop and heart eyes", "蛋殼跳跳、愛心眼", "กระโดดออกจากเปลือกไข่ ตาเป็นรูปหัวใจ"], cos: ["easter", "Easter bunny ears", "復活節兔耳朵", "หูกระต่ายอีสเตอร์"] },
-    any: { name: "Any", sp: ["Hitch-up", "拉好燈籠褲", "ดึงกางเกงบลูมเมอร์ให้เข้าที่"] },
+    any: { name: "Any", sp: ["Durian smoothie", "榴槤冰沙", "สมูทตี้ทุเรียน"] },
     jewel: { name: "Jewel", sp: ["Roller fix and bow flick", "整理髮捲、甩甩蝴蝶結", "จัดโรลม้วนผม แล้วสะบัดโบว์"] },
     vimmy: { name: "Vimmy", sp: ["Bee buzz", "小蜜蜂嗡嗡飛", "ผึ้งน้อยบินหึ่ง ๆ"] },
     wesley: { name: "Wesley", sp: ["Egg wobble", "蛋蛋搖一搖", "ไข่โยกเยก"] },
