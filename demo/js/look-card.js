@@ -71,7 +71,7 @@ export function doodlesCard() {
     sec.replaceChildren(
       el("h3", { textContent: T("Doodles", "塗鴉", "ดูเดิล") }),
       field(T("Doodles", "塗鴉", "ดูเดิล"), "", choices([
-        ["wall", T("Quiet wallpaper", "安靜的壁紙", "วอลเปเปอร์เบา ๆ"), T("A faint wallpaper and a doodle by each title", "淡淡的壁紙，標題旁一個小塗鴉", "วอลเปเปอร์จาง ๆ กับดูเดิลข้างหัวข้อ")],
+        ["wall", T("Quiet wallpaper", "安靜的壁紙", "วอลเปเปอร์เบา ๆ"), T("A faint wallpaper with little easter eggs from the shows, and a doodle by each title; pick Off for a clean background", "淡淡的壁紙裡藏著小彩蛋，標題旁一個小塗鴉；想要乾淨的背景就選「關」", "วอลเปเปอร์จาง ๆ ที่ซ่อนของเซอร์ไพรส์เล็ก ๆ จากซีรีส์ กับดูเดิลข้างหัวข้อ ถ้าอยากได้พื้นหลังสะอาด ๆ ให้เลือกปิด")],
         ["corners", T("Corner stickers", "角落貼紙", "สติกเกอร์ตามมุม"), T("On the cards' corners and in the menu", "貼在卡片角落和選單上", "ติดตามมุมการ์ดและในเมนู")],
         ["off", T("Off", "關", "ปิด"), T("No doodles", "不要塗鴉", "ไม่มีดูเดิล")]], look.doodles, (v) => save({ doodles: v }), T("Doodles", "塗鴉", "ดูเดิล"))),
       el("div", { className: "dd-dim" + (off ? " off" : "") },
