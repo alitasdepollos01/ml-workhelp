@@ -1329,6 +1329,7 @@ html { scroll-padding-top: calc(var(--top-h, 64px) + var(--sub-h, 62px) + 10px);
     <nav aria-label="Pages" data-zh-label="頁面" data-th-label="หน้า"><a href="#home" data-zh="首頁" data-th="หน้าแรก">Home</a><a href="#ml">ML WorkHelp</a><a href="#tmb">Thai Mascot Buddy</a></nav>
     <p><span data-zh="聯絡我們：" data-th="ติดต่อ:">Contact:</span> <a href="mailto:alitasdepollos01@gmail.com">alitasdepollos01@gmail.com</a> · <a href="https://x.com/alitasdepollos0" target="_blank" rel="noopener">@alitasdepollos0</a></p>
     <p class="foot-th" data-zh="ไทย 版還在測試（beta），歡迎<a href='mailto:alitasdepollos01@gmail.com'>寫信</a>幫我們校對泰文。" data-th="ภาษาไทยยังเป็นเวอร์ชันทดลอง (beta) ช่วยเราตรวจคำแปลได้ทาง<a href='mailto:alitasdepollos01@gmail.com'>อีเมล</a> ขอบคุณค่ะ">ไทย is in beta: <a href="mailto:alitasdepollos01@gmail.com">help us proofread the Thai</a>.</p>
+    <p class="small" data-zh="造訪人數用 GoatCounter 匿名統計：沒有 cookie，也不保留個人資料。" data-th="นับจำนวนผู้เข้าชมแบบไม่ระบุตัวตนด้วย GoatCounter ไม่ใช้คุกกี้ และไม่เก็บข้อมูลส่วนตัว">Visits are counted anonymously with GoatCounter: no cookies, no personal data kept.</p>
     <p class="small">© alitasdepollos</p>
   </div>
 </div></footer>
@@ -1643,6 +1644,8 @@ if (REDUCE.matches) document.querySelectorAll(".mq-pause").forEach((b) => mqSet(
 document.querySelectorAll(".mq-band").forEach((b) => { if ("IntersectionObserver" in window) new IntersectionObserver((es) => b.classList.toggle("mq-off", !es.some((e) => e.isIntersecting))).observe(b); });
 addEventListener("hashchange", () => TRACKERS.forEach((n) => requestAnimationFrame(() => n.__redraw?.())));
 addEventListener("hashchange", route);
+let gcLast = location.pathname + location.hash; // (the first view is counted by count.js itself)
+addEventListener("hashchange", () => { const p = location.pathname + location.hash; if (p === gcLast) return; gcLast = p; window.goatcounter?.count?.({ path: p }); }); // (page switches by hash do not reload: count each one, so #ml and #tmb show apart)
 let look = "scrapbook";
 let lookPick = new URLSearchParams(location.search).get("look"); if (!["scrapbook", "stage"].includes(lookPick)) lookPick = null; // (?look= for screenshots; otherwise light = Scrapbook, dark = Concert night)
 function applyLook() { look = lookPick || (theme === "dark" ? "stage" : "scrapbook"); document.documentElement.dataset.look = look; document.querySelectorAll("[data-look]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.look === look))); }
@@ -1684,5 +1687,7 @@ fetch("credits/credits.json", { cache: "no-store" }).then((r) => r.json()).then(
   document.addEventListener("pointerdown", () => tip.classList.remove("on"));
 })();
 </script>
+<script>window.goatcounter = { path: function () { return location.pathname + location.hash; } };</script>
+<script data-goatcounter="https://alitasdepollos.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
