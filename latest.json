@@ -1,24 +1,40 @@
 {
-  "version": "1.3.2",
-  "released": "2026-10-29",
+  "version": "1.3.3",
+  "released": "2026-11-0X",
   "download": "https://alitasdepollos01.github.io/ml-workhelp/#download",
   "files": {
-    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.2/ML.WorkHelp-1.3.2-arm64.dmg",
-    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.2/ML.WorkHelp-1.3.2.dmg",
-    "windows": null,
+    "mac-arm64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.3/ML.WorkHelp-1.3.3-arm64.dmg",
+    "mac-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.3/ML.WorkHelp-1.3.3.dmg",
+    "win-x64": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.3/ML-WorkHelp-1.3.3-win-x64.exe",
+    "windows": "https://github.com/alitasdepollos01/ml-workhelp/releases/download/v1.3.3/ML-WorkHelp-1.3.3-win-x64.exe",
     "vscode": "https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp"
   },
   "sizes": {
-    "mac-arm64": 190268161,
-    "mac-x64": 195933828
+    "mac-arm64": 190268727,
+    "mac-x64": 195960712,
+    "win-x64": 0
   },
+  "_todo": "Before release: set released and history[0].date (2026-11-0X); sizes.win-x64 = the .exe's bytes (0 hides the MB on the page); sizes.mac-* are build 18's dmgs (190268727 / 195960712), swap them if build 19 replaces 18; then delete this _todo key and copy this file into index.html's inline LATEST.",
   "notes": {
-    "en": "The Thai word card now counts towards pins, and Cross the Line comes from a Thai word a day.",
-    "zh": "泰文單字卡也算進徽章了，「越線」就靠每天打開一個泰文單字。",
-    "th": "การ์ดคำศัพท์ภาษาไทยนับรวมในเข็มกลัดแล้ว และ \"ข้ามเส้น\" ได้จากการเปิดดูคำไทยวันละคำ"
+    "en": "The Word of the day line stays inside its card, and a calendar you can't write to no longer stops calendar sync.",
+    "zh": "「今日泰文」的讀音和意思不會再跑出卡片外，唯讀的行事曆也不會再卡住同步了。",
+    "th": "คำอ่านกับความหมายของคำประจำวันอยู่ในการ์ดแล้ว และปฏิทินที่แก้ไม่ได้จะไม่ทำให้การซิงก์สะดุดอีก"
   },
   "min": "0.1.0",
   "history": [
+    {
+      "version": "1.3.3",
+      "date": "2026-11-0X",
+      "beta": true,
+      "en": "The Word of the day card in the menu keeps its sound-and-meaning line inside the card, in every style. A calendar you can't write to (a holiday, birthday or shared calendar) no longer stops calendar sync: the other events still sync, and editing or deleting one of its events tells you that calendar can't be changed from here. In the Whimsical style, the title ribbon on Today's Thai word card now stretches to fit the title, and the Pomodoro's \"Back: start round\" button stays red. After the photo pack downloads, the Stickers tab and the buddy pages fill in right away, with no need to reopen them.",
+      "zh": "選單裡的「今日泰文」卡片，讀音和意思那一行現在不管哪種風格都會好好待在卡片裡。沒辦法修改的行事曆（像是節日、生日或別人分享的行事曆）不會再讓行事曆同步卡住了：其他活動照樣同步，編輯或刪除這種行事曆裡的活動時，也會告訴你這個行事曆沒辦法從這裡修改。在 Whimsical 風格裡，「今天」頁泰文單字卡的標題緞帶現在會跟著標題的長度延伸，番茄鐘的「回來了，開始下一輪」按鈕也會一直是紅色的。照片包下載完成後，「貼圖」分頁和桌面夥伴的頁面會馬上出現照片，不用再重新打開。",
+      "th": "การ์ดคำประจำวันในเมนู บรรทัดคำอ่านกับความหมายจะอยู่ในการ์ดเสมอแล้ว ไม่ว่าจะใช้สไตล์ไหน ปฏิทินที่แก้ไม่ได้ (เช่น ปฏิทินวันหยุด วันเกิด หรือปฏิทินที่คนอื่นแชร์มา) จะไม่ทำให้การซิงก์ปฏิทินสะดุดอีกแล้ว: กิจกรรมอื่นยังซิงก์ตามปกติ และเวลาแก้หรือลบกิจกรรมในปฏิทินนั้น แอปจะบอกว่าปฏิทินนี้แก้จากตรงนี้ไม่ได้ ในสไตล์ Whimsical ริบบิ้นหัวข้อของการ์ดคำศัพท์ภาษาไทยในหน้าวันนี้จะยืดตามความยาวของหัวข้อแล้ว และปุ่ม \"กลับมาแล้ว เริ่มรอบถัดไป\" ของโพโมโดโร่จะเป็นสีแดงเสมอ หลังดาวน์โหลดแพ็กรูปเสร็จ แท็บสติกเกอร์และหน้าเพื่อนบนเดสก์ท็อปจะแสดงรูปทันที ไม่ต้องเปิดใหม่",
+      "short": {
+        "en": "The Word of the day line stays inside its card, and a calendar you can't write to no longer stops calendar sync.",
+        "zh": "「今日泰文」的讀音和意思不會再跑出卡片外，唯讀的行事曆也不會再卡住同步了。",
+        "th": "คำอ่านกับความหมายของคำประจำวันอยู่ในการ์ดแล้ว และปฏิทินที่แก้ไม่ได้จะไม่ทำให้การซิงก์สะดุดอีก"
+      }
+    },
     {
       "version": "1.3.2",
       "date": "2026-10-29",

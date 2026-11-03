@@ -5,6 +5,9 @@ A MilkLove buddy for your work day: desktop buddies, a work clock, the Pomodoro,
 
 **下載 / Download:** https://alitasdepollos01.github.io/ml-workhelp/ (or the latest release on this page)
 
+macOS 13 以上（Apple 晶片或 Intel，.dmg）・Windows 10 或 11（64 位元，.exe，測試版，沒有數位簽章：第一次打開時按「其他資訊」›「仍要執行」）。
+macOS 13 or later (Apple chip or Intel, .dmg) · Windows 10 or 11 (64-bit, .exe, beta; not signed, so the first time press More info › Run anyway).
+
 **Thai Mascot Buddy**（安裝 / install: https://marketplace.visualstudio.com/items?itemName=alitasdepollos.thaimascotdevhelp ）：加進 VS Code 的擴充功能（不是 App）：會換場景的面板和泰文單字卡、在編輯器周圍散步的夥伴、番茄鐘、休息提醒，還能挑你喜歡的泰國人氣吉祥物。Kiro 版本審核中。
 An extension for VS Code (not an app): a panel with changing scenes and Thai word cards, a buddy walking round your editor, a Pomodoro, break reminders, and the popular Thai mascot of your choice. The Kiro version is in review.
 
