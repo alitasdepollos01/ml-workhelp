@@ -75,7 +75,7 @@ const F = {
 const ALL = [
   ["layers", ["Categories & a daily goal", "分類和每日目標", "หมวดงานและเป้าหมายรายวัน"], ["See your time by kind of work, and how close you are to today's goal.", "看看時間花在哪一類工作，離今天的目標還差多少。", "ดูว่าใช้เวลากับงานแต่ละแบบเท่าไร และใกล้เป้าหมายของวันนี้แค่ไหน"]],
   ["calendar-days", ["A calendar you can edit", "可以修改的日曆", "ปฏิทินที่แก้ไขได้"], ["Forgot to start the clock? Fix the day afterwards.", "忘了開始計時？之後再補上就好。", "ลืมกดจับเวลา? แก้ย้อนหลังได้"]],
-  ["refresh-cw", ["Apple sync", "和 Apple 同步", "ซิงก์กับ Apple"], ["Reminders and events can sync with Apple's apps if you like.", "想要的話，提醒和活動也能和 Apple 的 App 同步。", "แจ้งเตือนและกิจกรรมซิงก์กับแอปของ Apple ได้ ถ้าต้องการ"]],
+  ["refresh-cw", ["Apple sync", "和 Apple 同步", "ซิงก์กับ Apple"], ["On a Mac, reminders and events can sync with Apple's apps if you like.", "用 Mac 的話，提醒和活動也可以和 Apple 的 App 同步。", "บน Mac แจ้งเตือนและกิจกรรมซิงก์กับแอปของ Apple ได้ ถ้าต้องการ"]],
   ["party-popper", ["Done for today", "收工", "เลิกงาน"], ["Call it a day and your stickers celebrate with you.", "按下收工，你的貼圖會陪你一起慶祝。", "กดเลิกงาน แล้วสติกเกอร์ของคุณจะฉลองไปด้วยกัน"]],
   ["layout-panel-left", ["Work corner & Fan corner", "工作角落和粉絲角落", "มุมทำงานกับมุมแฟนคลับ"], ["The menu keeps your work and your fan things apart.", "選單把工作和追星的東西分開放。", "เมนูแยกเรื่องงานกับเรื่องแฟนคลับไว้คนละมุม"]],
   ["cloud-download", ["New photos and words by themselves", "新照片和單字自動送到", "รูปกับคำใหม่มาเอง"], ["More photos, pins and words arrive with no reinstall.", "更多照片、徽章和單字會自己送到，不用重新安裝。", "รูป เข็มกลัด และคำใหม่ ๆ มาเองโดยไม่ต้องติดตั้งใหม่"]],
